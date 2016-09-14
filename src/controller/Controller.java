@@ -46,17 +46,16 @@ public class Controller {
      */
     public void loadGame(javafx.event.ActionEvent event) {
 
-        File gameFile = null;
-        while (gameFile != null) {
-            FileChooser fileChooser = new FileChooser();
-            // add .txt extension filter
-            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
-            fileChooser.getExtensionFilters().add(extFilter);
-            // Set title and launch
-            fileChooser.setTitle("Open Resource File");
-            gameFile = fileChooser.showOpenDialog(null);
+        FileChooser fileChooser = new FileChooser();
+        // add .txt extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+        // Set title and launch
+        fileChooser.setTitle("Open Resource File");
+        File gameFile = fileChooser.showOpenDialog(null);
+        if (gameFile != null) {
+            new GameLoader(gameFile);
         }
-        new GameLoader(gameFile);
     }
 
 

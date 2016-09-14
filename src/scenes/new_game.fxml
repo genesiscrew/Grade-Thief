@@ -28,9 +28,10 @@
 
       <Button layoutX="135.0" layoutY="135.0" mnemonicParsing="false" onAction="#backClickedFromSettings" style="-fx-background-color: transparent;">
          <graphic>
-            <ImageView />
+            <ImageView image="$backImage" />
          </graphic>
       </Button>
+
       <Text fontSmoothingType="LCD" layoutX="292.0" layoutY="392.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of players">
          <font>
             <Font name="Avenir Next Regular" size="24.0" />
