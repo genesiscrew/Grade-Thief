@@ -7,7 +7,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import model.GameLoader;
 
+import java.io.File;
 import java.io.IOException;
 
 
@@ -20,6 +22,7 @@ public class Controller {
 
     /**
      * Called when the NewGame button is selected
+     *
      * @param event
      */
     public void newGame(javafx.event.ActionEvent event) {
@@ -38,18 +41,28 @@ public class Controller {
 
     /**
      * Called when the LoadGame button is selected
+     *
      * @param event
      */
     public void loadGame(javafx.event.ActionEvent event) {
 
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        fileChooser.showOpenDialog(null);
+        File gameFile = null;
+        while (gameFile != null) {
+            FileChooser fileChooser = new FileChooser();
+            // add .txt extension filter
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+            fileChooser.getExtensionFilters().add(extFilter);
+            // Set title and launch
+            fileChooser.setTitle("Open Resource File");
+            gameFile = fileChooser.showOpenDialog(null);
+        }
+        new GameLoader(gameFile);
     }
 
 
     /**
      * Called when the Settings button is selected
+     *
      * @param event
      */
     public void settings(javafx.event.ActionEvent event) {
@@ -68,6 +81,7 @@ public class Controller {
 
     /**
      * Called when the BackButton button is selected from the settings view
+     *
      * @param event
      */
     public void backClickedFromSettings(ActionEvent event) {
