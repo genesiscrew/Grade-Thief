@@ -10,7 +10,7 @@
 <?import javafx.scene.image.Image?>
 <AnchorPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <children>
-      <Button layoutX="410.0" layoutY="483.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="180.0" text="Start Game" />
+      <Button layoutX="410.0" layoutY="483.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="180.0" text="Start Game" onAction="#newGame"/>
       <Text fill="#3091ff" layoutX="316.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New Game">
          <font>
             <Font size="72.0" />

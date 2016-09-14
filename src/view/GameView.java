@@ -2,6 +2,7 @@ package view;
 
 /**
  * @Author Adam Wareing
+ * This is the view where the actual game is played.
  */
 public class GameView {
 
@@ -12,6 +13,7 @@ public class GameView {
         this.playersName = playersName;
         this.numberOfPlayers = numberOfPlayers;
     }
+
 
 
 

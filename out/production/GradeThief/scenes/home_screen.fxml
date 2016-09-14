@@ -7,7 +7,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
     <children>
-        <Button id="newGameButton" fx:id="new_game_button" layoutX="396.0" layoutY="400.0" maxHeight="50.0" maxWidth="100.0" minWidth="250.0" mnemonicParsing="false" onAction="#newGame" prefHeight="50.0" prefWidth="250.0" text="New">
+        <Button id="newGameButton" fx:id="new_game_button" layoutX="396.0" layoutY="400.0" maxHeight="50.0" maxWidth="100.0" minWidth="250.0" mnemonicParsing="false" onAction="#setupGame" prefHeight="50.0" prefWidth="250.0" text="New">
             <font>
                 <Font name="Avenir Next Regular" size="24.0" />
             </font>
