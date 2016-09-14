@@ -1,11 +1,13 @@
-package sample;
+package view;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
 
@@ -27,18 +29,13 @@ public class Controller {
     }
 
     public void loadGame(javafx.event.ActionEvent event) {
-        Node node = (Node) event.getSource();
-        Stage stage = (Stage) node.getScene().getWindow();
-        Parent root = null;
-        try {
-            root = new FXMLLoader().load(getClass().getResource("/scenes/settings.fxml"));
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+
+        // TODO Open file chooser and load the game
+//        FileChooser fileChooser = new FileChooser();
+//        fileChooser.setTitle("Open Resource File");
+//        fileChooser.showOpenDialog(null);
     }
+
 
     public void settings(javafx.event.ActionEvent event) {
         Node node = (Node) event.getSource();
@@ -54,7 +51,7 @@ public class Controller {
         stage.show();
     }
 
-    public void backClickedFromSettings(ActionEvent event){
+    public void backClickedFromSettings(ActionEvent event) {
         Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
         Parent root = null;
@@ -67,7 +64,6 @@ public class Controller {
         stage.setScene(scene);
         stage.show();
     }
-
 
 
 }
