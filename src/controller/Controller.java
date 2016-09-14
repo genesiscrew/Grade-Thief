@@ -1,4 +1,4 @@
-package view;
+package controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -11,9 +11,17 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 
+/**
+ * @Author Adam Wareing
+ * This is the controller that handles logic from when buttons are clicked
+ */
 public class Controller {
 
 
+    /**
+     * Called when the NewGame button is selected
+     * @param event
+     */
     public void newGame(javafx.event.ActionEvent event) {
         Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
@@ -28,15 +36,22 @@ public class Controller {
         stage.show();
     }
 
+    /**
+     * Called when the LoadGame button is selected
+     * @param event
+     */
     public void loadGame(javafx.event.ActionEvent event) {
 
-        // TODO Open file chooser and load the game
-//        FileChooser fileChooser = new FileChooser();
-//        fileChooser.setTitle("Open Resource File");
-//        fileChooser.showOpenDialog(null);
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        fileChooser.showOpenDialog(null);
     }
 
 
+    /**
+     * Called when the Settings button is selected
+     * @param event
+     */
     public void settings(javafx.event.ActionEvent event) {
         Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
@@ -51,6 +66,10 @@ public class Controller {
         stage.show();
     }
 
+    /**
+     * Called when the BackButton button is selected from the settings view
+     * @param event
+     */
     public void backClickedFromSettings(ActionEvent event) {
         Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
@@ -64,6 +83,4 @@ public class Controller {
         stage.setScene(scene);
         stage.show();
     }
-
-
 }

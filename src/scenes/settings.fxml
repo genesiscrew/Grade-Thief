@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.image.Image?>
-<AnchorPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.Controller">
+<AnchorPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <children>
       <CheckBox alignment="TOP_LEFT" layoutX="444.0" layoutY="338.0" mnemonicParsing="false" text="Sound">
          <font>
