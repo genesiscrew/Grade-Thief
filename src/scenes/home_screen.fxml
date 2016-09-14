@@ -17,7 +17,7 @@
                 <Font name="Avenir Next Regular" size="24.0" />
             </font>
         </Button>
-        <Button id="settingsButton" fx:id="settings_button" layoutX="397.0" layoutY="540.0" maxHeight="250.0" maxWidth="250.0" minHeight="50.0" minWidth="250.0" mnemonicParsing="false" onAction="#newGame" prefHeight="50.0" prefWidth="250.0" text="Settings">
+        <Button id="settingsButton" fx:id="settings_button" layoutX="397.0" layoutY="540.0" maxHeight="250.0" maxWidth="250.0" minHeight="50.0" minWidth="250.0" mnemonicParsing="false" onAction="#settings" prefHeight="50.0" prefWidth="250.0" text="Settings">
             <font>
                 <Font name="Avenir Next Regular" size="24.0" />
             </font>

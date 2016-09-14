@@ -30,7 +30,7 @@ public class Controller {
         Stage stage = (Stage) node.getScene().getWindow();
         Parent root = null;
         try {
-            root = new FXMLLoader().load(getClass().getResource("/scenes/settings.fxml"));
+            root = new FXMLLoader().load(getClass().getResource("/scenes/new_game.fxml"));
         } catch (IOException e1) {
             e1.printStackTrace();
         }
