@@ -1,7 +1,11 @@
 package game.floor;
 
 import items.Door;
-
+/**
+*
+* Author: Stefan
+*
+*/
 public class DoorTile implements Tile  {
 
 	Door door;
