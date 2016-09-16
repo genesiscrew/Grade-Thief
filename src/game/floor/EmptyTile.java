@@ -1,10 +1,15 @@
 package game.floor;
 
+import characters.Guard;
+import items.Keys;
+import model.Character;
+
 public class EmptyTile implements Tile {
 
 	Location location;
 	boolean occupied = false;
 	Object o;
+	private String name = "-";
 
 	@Override
 	public Location tileLocation() {
@@ -24,10 +29,47 @@ public class EmptyTile implements Tile {
 		this.location = l;
 
 	}
-
+/**
+ * adds an object to the tile e.g. player, key etc.
+ * @param any object
+ */
 	public void addObjecttoTile(Object o){
 		this.o = o;
 		occupied = true;
+		if (o instanceof Guard) {
+			this.name = "G";
+		}
+		else if (o instanceof Character) {
+			this.name = ((Character) o).getName();
+		}
+		else if (o instanceof Keys) {
+			this.name = ((Keys) o).itemType();
+		}
+
+
+	}
+	/**
+	 * this is a helper method to debug game logic and print updated game board
+	 * @return
+	 */
+	public String getName() {
+
+		return this.name;
+	}
+	/**
+	 * this method returns the object that is contained in tile
+	 * @return
+	 */
+	public Object getObjectonTile(){
+
+		return this.o;
+	}
+/*
+ * this method removes all objects contained in tile
+ */
+	public void resetEmptyTile() {
+		this.o = null;
+		this.name = "-";
 
 	}
 

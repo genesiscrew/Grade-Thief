@@ -130,9 +130,11 @@ public class Controller {
 		// create new gaurd object
 				Distance dist = new Distance(1);
 				Guard gaurd1 = new Guard(0, "guard1");
+		
 				// set gaurd's location on map
 				gaurd1.setCharacterLocation(0, 7);
 				((EmptyTile)game.getGameMap().getTileMap()[0][7]).addObjecttoTile(gaurd1);
+				game.drawBoard();
 
 
 				// create a thread for the guard, so that he can move within map independent of player
@@ -142,11 +144,23 @@ public class Controller {
 				    	// move the guard in a fixed loop, once he reaches certain coordinate on the Map, change destination
 				    	//if () {}
 				    	// gaurd will keep moving
-				    	while (gaurd1.checkforIntruder(game)){
+				    	int count = 0;
+				    	while (/*gaurd1.checkforIntruder(game)*/ count < 6){
 				    	// update direction of guard based on hardcoded route through Tilemap
 				    	Direction dir = new Direction(Dir.EAST);
+				    	//move the guard to new location
+				    	//remove gaurd as object from previous empty tile
+				    	((EmptyTile)game.getGameMap().getTileMap()[gaurd1.getCharacterLocation().row()]
+						    	[gaurd1.getCharacterLocation().column()]).resetEmptyTile();
 				    	gaurd1.move(dir, dist);
+				    	// add the gaurd as object to the new empty tile
+				    	((EmptyTile)game.getGameMap().getTileMap()[gaurd1.getCharacterLocation().row()]
+				    	[gaurd1.getCharacterLocation().column()]).addObjecttoTile(gaurd1);
+				    	
+				    	
+				    	// draw board intp console for debugging purposes
 				    	game.drawBoard();
+				    	count++;
 				    	}
 
 

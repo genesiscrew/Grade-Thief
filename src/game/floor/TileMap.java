@@ -4,7 +4,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
+
 
 import items.Door;
 
@@ -19,7 +22,7 @@ public class TileMap {
 
 		return this.TileMapper;
 	}
-
+/*
 	public Tile[][] createTileMap(String f) {
 		String map = convertFileToTileString(f);
 		return convertStringToTileMap(map);
@@ -78,22 +81,25 @@ public class TileMap {
 
 							Location loc = new Location(x,y);
 
-						if (c == 'w') {
+						if (c == '*') {
 							WallTile w = new WallTile();
 							w.setLocation(loc);
 							TileMapper[x][y] = w;
-						} else if ( c == 'x') {
+							System.out.println(w.getName());
+						} else if ( c == '-') {
 							EmptyTile e = new EmptyTile();
 							e.setLocation(loc);
 							TileMapper[x][y] = e;
-						} else if ( c == 'd') {
+							System.out.println(e.getName());
+						} else if ( c == 'D') {
 							DoorTile d = new DoorTile();
 							d.setLocation(loc);
 							d.setDoor(Door.getDoor(code)); // gets the door with the given code
 							TileMapper[x][y] = d;
+							System.out.println(d.getName());
 						}
 
-						//System.out.println(c);
+					
 
 						count++;
 				}
@@ -102,4 +108,73 @@ public class TileMap {
 					return TileMapper;
 
 	}
+	*/
+	public  Tile[][] createTileMap(String filename) throws IOException {
+		//read the door location data
+	
+
+
+		FileReader fr = new FileReader(filename);
+		BufferedReader br = new BufferedReader(fr);
+		ArrayList<String> lines = new ArrayList<String>();
+		int width = -1;
+		String line;
+		int counter = 0;
+		while((!(line = br.readLine()).isEmpty())) {
+			counter++;
+			System.out.println(line);
+			lines.add(line);
+
+			// now sanity check
+
+			if(width == -1) {
+				width = line.length();
+			} else if(width != line.length()) {
+				throw new IllegalArgumentException("Input file \"" + filename + "\" is malformed; line " + lines.size() + " incorrect width.");
+			}
+		}
+
+
+		TileMapper = new Tile[width][lines.size()];
+		
+		for(int y=0;y!=lines.size();++y) {
+			line = lines.get(y);
+
+			for(int x=0;x!=width;++x) {
+				Location loc = new Location(x,y);
+				char c = line.charAt(x);
+				switch (c) {
+					case '-' :
+						EmptyTile e = new EmptyTile();
+						e.setLocation(loc);
+						TileMapper[x][y] = e;
+						break;			
+					case '*' :
+						WallTile w = new WallTile();
+						w.setLocation(loc);
+						TileMapper[x][y] = w;
+						break;
+					case 'D' :
+						DoorTile d = new DoorTile();
+						d.setLocation(loc);
+						d.setDoor(Door.getDoor(001)); // gets the door with the given code
+						TileMapper[x][y] = d;
+						break;
+				
+
+
+				}
+
+
+			}
+
+
+		}
+
+
+        
+		return TileMapper;
+	}
+
+
 }

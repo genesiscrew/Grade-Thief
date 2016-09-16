@@ -4,7 +4,7 @@ public class Keys extends Item implements Interactable, Movable {
 
 	String description = " a key";
 	public int keyID;
-	public String itemType = "Key";
+	public String itemType = "K";
 
 	public String itemType() {
 		return itemType;

@@ -33,22 +33,24 @@ public class Guard extends Character {
 	}
 
 	@Override
+	/**
+	 * this method moves the guard along and hardcoded path
+	 */
 	public void move(Direction dir, Distance d) {
 		this.dir = dir;
         // moves the guard one tile forward based on its direction
-			if (dir.equals(Dir.EAST)) {
-
+			if (dir.getDirection().equals(Dir.EAST)) {
 				this.setCharacterLocation(this.getCharacterLocation().row()+1,this.getCharacterLocation().column());
 
-			} else if (dir.equals(Dir.WEST)) {
+			} else if (dir.getDirection().equals(Dir.WEST)) {
 
 				this.setCharacterLocation(this.getCharacterLocation().row()-1,this.getCharacterLocation().column());
 
-			} else if (dir.equals(Dir.NORTH)) {
+			} else if (dir.getDirection().equals(Dir.NORTH)) {
 
 				this.setCharacterLocation(this.getCharacterLocation().row(),this.getCharacterLocation().column()+1);
 
-			} else if (dir.equals(Dir.SOUTH)) {
+			} else if (dir.getDirection().equals(Dir.SOUTH)) {
 
 				this.setCharacterLocation(this.getCharacterLocation().row(),this.getCharacterLocation().column()-1);
 
@@ -57,6 +59,7 @@ public class Guard extends Character {
 
 
 	}
+
 
 	public Boolean checkforIntruder(Game game) {
 		if (dir.equals(Dir.EAST)) {

@@ -34,4 +34,10 @@ public class DoorTile implements Tile  {
 
 	}
 
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return "D";
+	}
+
 }

@@ -17,6 +17,16 @@ public class Character {
 		this.name = name;
 
 	}
+	/**
+	 * helper method to help with debugging game logic and printing players name on board
+	 * @return
+	 */
+	public String getName() {
+		
+		return this.name;
+	}
+	
+	
 
 
 
