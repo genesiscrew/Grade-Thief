@@ -2,11 +2,15 @@ package items;
 
 public class Distance {
 
-	Distance d;
+	int d;
 
-	public int distance(int distance) {
+	public int getDistance() {
 		// do something
-		return distance;
+		return d;
+	}
+	public Distance(int distance) {
+
+		this.d = distance;
 	}
 
 }

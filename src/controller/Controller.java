@@ -12,6 +12,12 @@ import model.GameLoader;
 import java.io.File;
 import java.io.IOException;
 
+import characters.Guard;
+import items.Direction;
+import items.Direction.Dir;
+import items.Distance;
+import items.GameObject;
+
 
 /**
  * @Author Adam Wareing
@@ -111,4 +117,37 @@ public class Controller {
         stage.setScene(scene);
         stage.show();
     }
+
+	public static void main(String[] args) {
+		// create new game object
+		GameObject game = new GameObject();
+
+		//load game map from text file
+
+		// create new gaurd object
+				Distance dist = new Distance(1);
+				Guard gaurd1 = new Guard(1, "guard1");
+
+				// create a thread for the guard, so that he can move within map independent of player
+
+				Thread guardThread = new Thread() {
+				    public void run() {
+				    	// move the guard in a fixed loop, once he reaches certain coordinate on the Map, change destination
+				    	//if () {}
+				    	// gaurd will keep moving
+				    	while (gaurd1.checkforIntruder(game)){
+				    	// update direction of guard based on location on map
+				    	Direction dir = new Direction(Dir.EAST);
+				    	gaurd1.move(dir, dist);
+				    	}
+
+
+
+				    }
+				};
+
+
+
+	}
+
 }

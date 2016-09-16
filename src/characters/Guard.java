@@ -1,10 +1,12 @@
 package characters;
 
+import game.floor.EmptyTile;
 import game.floor.Location;
 import items.Direction;
 import items.Direction.Dir;
 import items.Distance;
 import items.GameObject;
+import model.Game;
 
 public class Guard extends Character {
 
@@ -56,11 +58,11 @@ public class Guard extends Character {
 
 	}
 
-	public Boolean checkforIntruder(GameObject game) {
+	public Boolean checkforIntruder(Game game) {
 		if (dir.equals(Dir.EAST)) {
 			for (int i = 0; i < 6; i++) {
-				if (game.getGameMap().getTiles()[p.row() + i][p.column()] instanceof EmptyTile
-						&& game.getGameMap().getTiles()[p.row() + i][p.column()].isOccupied()) {
+				if (game.getGameMap().getTileMap()[this.getCharacterLocation().row() + i][this.getCharacterLocation().column()] instanceof EmptyTile
+						&& game.getGameMap().getTileMap()[this.getCharacterLocation().row() + i][this.getCharacterLocation().column()].occupied()) {
 					// we have found an intruder
 					return true;
 
@@ -69,8 +71,8 @@ public class Guard extends Character {
 
 		} else if (dir.equals(Dir.WEST)) {
 			for (int i = 0; i < 6; i++) {
-				if (game.getGameMap().getTiles()[p.row() - i][p.column()] instanceof EmptyTile
-						&& game.getGameMap().getTiles()[p.row() + i][p.column()].isOccupied()) {
+				if (game.getGameMap().getTileMap()[this.getCharacterLocation().row() - i][this.getCharacterLocation().column()] instanceof EmptyTile
+						&& game.getGameMap().getTileMap()[this.getCharacterLocation().row() + i][this.getCharacterLocation().column()].occupied()) {
 					// we have found an intruder
 					return true;
 
@@ -79,8 +81,8 @@ public class Guard extends Character {
 
 		} else if (dir.equals(Dir.NORTH)) {
 			for (int i = 0; i < 6; i++) {
-				if (game.getGameMap().getTiles()[p.row() + i][p.column()] instanceof EmptyTile
-						&& game.getGameMap().getTiles()[p.row()][p.column()+1].isOccupied()) {
+				if (game.getGameMap().getTileMap()[this.getCharacterLocation().row() + i][this.getCharacterLocation().column()] instanceof EmptyTile
+						&& game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this.getCharacterLocation().column()+1].occupied()) {
 					// we have found an intruder
 					return true;
 
@@ -89,8 +91,8 @@ public class Guard extends Character {
 
 		} else if (dir.equals(Dir.SOUTH)) {
 			for (int i = 0; i < 6; i++) {
-				if (game.getGameMap().getTiles()[p.row() + i][p.column()] instanceof EmptyTile
-						&& game.getGameMap().getTiles()[p.row()][p.column()-1].isOccupied()) {
+				if (game.getGameMap().getTileMap()[this.getCharacterLocation().row() + i][this.getCharacterLocation().column()] instanceof EmptyTile
+						&& game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this.getCharacterLocation().column()-1].occupied()) {
 					// we have found an intruder
 					return true;
 
