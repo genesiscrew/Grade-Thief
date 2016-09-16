@@ -9,10 +9,15 @@ import java.util.Scanner;
 import items.Door;
 
 public class TileMap {
-	Tile[][] TileMap;
+	Tile[][] TileMapper;
 
 	public TileMap(Tile[][] TileMap) {
-		this.TileMap = TileMap;
+		this.TileMapper = TileMap;
+	}
+
+	public Tile[][]  getTileMap() {
+
+		return this.TileMapper;
 	}
 
 	public Tile[][] createTileMap(String f) {
@@ -60,7 +65,7 @@ public class TileMap {
 		//int height = s.nextInt();
 		s.close();
 
-		Tile[][] TileMapper = new Tile[width][height];
+		TileMapper = new Tile[width][height];
 		Tiles = Tiles.substring(Tiles.indexOf('.') + 1); // concatenate dimensions now that is is loaded
 
 		int count = 0;

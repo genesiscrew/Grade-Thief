@@ -33,7 +33,7 @@ public class Guard extends Character {
 	@Override
 	public void move(Direction dir, Distance d) {
 		this.dir = dir;
-        // moves the gaurd one tile forward based on its direction
+        // moves the guard one tile forward based on its direction
 			if (dir.equals(Dir.EAST)) {
 
 				this.setCharacterLocation(this.getCharacterLocation().row()+1,this.getCharacterLocation().column());
@@ -53,6 +53,51 @@ public class Guard extends Character {
 			}
 
 
+
+	}
+
+	public Boolean checkforIntruder(GameObject game) {
+		if (dir.equals(Dir.EAST)) {
+			for (int i = 0; i < 6; i++) {
+				if (game.getGameMap().getTiles()[p.row() + i][p.column()] instanceof EmptyTile
+						&& game.getGameMap().getTiles()[p.row() + i][p.column()].isOccupied()) {
+					// we have found an intruder
+					return true;
+
+				}
+			}
+
+		} else if (dir.equals(Dir.WEST)) {
+			for (int i = 0; i < 6; i++) {
+				if (game.getGameMap().getTiles()[p.row() - i][p.column()] instanceof EmptyTile
+						&& game.getGameMap().getTiles()[p.row() + i][p.column()].isOccupied()) {
+					// we have found an intruder
+					return true;
+
+				}
+			}
+
+		} else if (dir.equals(Dir.NORTH)) {
+			for (int i = 0; i < 6; i++) {
+				if (game.getGameMap().getTiles()[p.row() + i][p.column()] instanceof EmptyTile
+						&& game.getGameMap().getTiles()[p.row()][p.column()+1].isOccupied()) {
+					// we have found an intruder
+					return true;
+
+				}
+			}
+
+		} else if (dir.equals(Dir.SOUTH)) {
+			for (int i = 0; i < 6; i++) {
+				if (game.getGameMap().getTiles()[p.row() + i][p.column()] instanceof EmptyTile
+						&& game.getGameMap().getTiles()[p.row()][p.column()-1].isOccupied()) {
+					// we have found an intruder
+					return true;
+
+				}
+			}
+
+		}
 
 	}
 

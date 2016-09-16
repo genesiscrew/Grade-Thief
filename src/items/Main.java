@@ -18,6 +18,11 @@ public class Main {
 		Container c = new Container(0, containedItems);
 		c.useItem();
 
+		// create new game object
+		GameObject game = new GameObject();
+
+		//load game map from text file
+
 
 
 	}
