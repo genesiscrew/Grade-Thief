@@ -20,7 +20,7 @@ public class DoorTile implements Tile  {
 	@Override
 	public Location tileLocation() {
 		// TODO Auto-generated method stub
-		return null;
+		return location;
 	}
 
 	@Override

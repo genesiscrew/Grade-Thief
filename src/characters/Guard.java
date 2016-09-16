@@ -100,6 +100,7 @@ public class Guard extends Character {
 			}
 
 		}
+		return false;
 
 	}
 

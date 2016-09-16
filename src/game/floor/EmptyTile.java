@@ -3,21 +3,31 @@ package game.floor;
 public class EmptyTile implements Tile {
 
 	Location location;
+	boolean occupied = false;
+	Object o;
 
 	@Override
 	public Location tileLocation() {
 		// TODO Auto-generated method stub
-		return null;
+		return location;
 	}
 
 	@Override
 	public boolean occupied() {
-		return false;
+		return occupied;
 	}
+
+
 
 	@Override
 	public void setLocation(Location l) {
 		this.location = l;
+
+	}
+
+	public void addObjecttoTile(Object o){
+		this.o = o;
+		occupied = true;
 
 	}
 

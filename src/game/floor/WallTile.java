@@ -7,7 +7,7 @@ public class WallTile implements Tile  {
 	@Override
 	public Location tileLocation() {
 		// TODO Auto-generated method stub
-		return null;
+		return location;
 	}
 
 	@Override

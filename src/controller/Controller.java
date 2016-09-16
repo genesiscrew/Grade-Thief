@@ -7,12 +7,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import model.Game;
 import model.GameLoader;
 
 import java.io.File;
 import java.io.IOException;
 
 import characters.Guard;
+import game.floor.EmptyTile;
 import items.Direction;
 import items.Direction.Dir;
 import items.Distance;
@@ -120,13 +122,18 @@ public class Controller {
 
 	public static void main(String[] args) {
 		// create new game object
-		GameObject game = new GameObject();
+		Game game = new Game();
 
 		//load game map from text file
 
+
 		// create new gaurd object
 				Distance dist = new Distance(1);
-				Guard gaurd1 = new Guard(1, "guard1");
+				Guard gaurd1 = new Guard(0, "guard1");
+				// set gaurd's location on map
+				gaurd1.setCharacterLocation(0, 7);
+				((EmptyTile)game.getGameMap().getTileMap()[0][7]).addObjecttoTile(gaurd1);
+
 
 				// create a thread for the guard, so that he can move within map independent of player
 
@@ -136,17 +143,18 @@ public class Controller {
 				    	//if () {}
 				    	// gaurd will keep moving
 				    	while (gaurd1.checkforIntruder(game)){
-				    	// update direction of guard based on location on map
+				    	// update direction of guard based on hardcoded route through Tilemap
 				    	Direction dir = new Direction(Dir.EAST);
 				    	gaurd1.move(dir, dist);
+				    	game.drawBoard();
 				    	}
 
 
 
 				    }
 				};
-
-
+          // start the guard movement, thread stops running when intruder caught
+          guardThread.start();
 
 	}
 
