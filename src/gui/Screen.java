@@ -69,6 +69,12 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		invisibleMouse();	
 		new GenerateTerrain();
 		Cubes.add(new Cube(0, -5, 0, 2, 2, 2, Color.red));
+
+		Cubes.add(new Cube(0, 20, 0, 10, 500, 100, Color.black));
+		Cubes.add(new Cube(500, 20, 0, 10, 500, 100, Color.black));
+		Cubes.add(new Cube(0, 20, 0, 500, 500, 100, Color.black));
+
+		
 		Prisms.add(new Prism(6, -5, 0, 2, 2, 2, Color.green));
 		Pyramids.add(new Pyramid(12, -5, 0, 2, 2, 2, Color.blue));
 		Cubes.add(new Cube(18, -5, 0, 2, 2, 2, Color.red));
@@ -358,7 +364,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
 		if(arg0.getButton() == MouseEvent.BUTTON3)
 			if(PolygonOver != null)
-				PolygonOver.seeThrough = true;
+				PolygonOver.seeThrough = false;
 	}
 
 	public void mouseReleased(MouseEvent arg0) {
