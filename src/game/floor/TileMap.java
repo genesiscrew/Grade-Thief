@@ -10,12 +10,20 @@ import items.Door;
 
 public class TileMap {
 	Tile[][] TileMap;
+	int TileMapWidth = 0;
+	int TileMapHeight = 0;
+	int optionalCode = -1; // default value of map does not contain a door
+
+	public int getMapWidth() { return TileMapWidth; }
+	public int getMapHeight() { return TileMapHeight; }
+	public int getOptionalCode() { return optionalCode; }
 
 	public TileMap(Tile[][] TileMap) {
 		this.TileMap = TileMap;
 	}
 
-	public Tile[][] createTileMap(String f) {
+
+	public TileMap createTileMap(String f) {
 		String map = convertFileToTileString(f);
 		return convertStringToTileMap(map);
 
@@ -42,7 +50,7 @@ public class TileMap {
 		return fileString;
 	}
 
-	public Tile[][] convertStringToTileMap(String Tiles) {
+	public TileMap convertStringToTileMap(String Tiles) {
 
 		Scanner s = new Scanner(Tiles);
 
@@ -54,13 +62,19 @@ public class TileMap {
 		int width = Integer.parseInt(s.nextLine());
 		int height = Integer.parseInt(s.nextLine());
 
-		System.out.println(code + " " + width + " " + height);
+
+		TileMap TileMapper = new TileMap(new Tile[width][height]);
+
+		 TileMapper.optionalCode = code;
+		TileMapper.TileMapWidth = width;
+		TileMapper.TileMapHeight = height;
+
+//		System.out.println(code + " " + width + " " + height);
 
 		//int width = s.nextInt();
 		//int height = s.nextInt();
 		s.close();
 
-		Tile[][] TileMapper = new Tile[width][height];
 		Tiles = Tiles.substring(Tiles.indexOf('.') + 1); // concatenate dimensions now that is is loaded
 
 		int count = 0;
@@ -72,20 +86,21 @@ public class TileMap {
 							char c = Tiles.charAt(count);
 
 							Location loc = new Location(x,y);
+						//	System.out.println(loc);
 
 						if (c == 'w') {
 							WallTile w = new WallTile();
 							w.setLocation(loc);
-							TileMapper[x][y] = w;
+							TileMapper.TileMap[x][y] = w;
 						} else if ( c == 'x') {
 							EmptyTile e = new EmptyTile();
 							e.setLocation(loc);
-							TileMapper[x][y] = e;
+							TileMapper.TileMap[x][y] = e;
 						} else if ( c == 'd') {
 							DoorTile d = new DoorTile();
 							d.setLocation(loc);
 							d.setDoor(Door.getDoor(code)); // gets the door with the given code
-							TileMapper[x][y] = d;
+							TileMapper.TileMap[x][y] = d;
 						}
 
 						//System.out.println(c);

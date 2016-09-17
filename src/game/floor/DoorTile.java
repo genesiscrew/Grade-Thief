@@ -19,8 +19,7 @@ public class DoorTile implements Tile  {
 
 	@Override
 	public Location tileLocation() {
-		// TODO Auto-generated method stub
-		return null;
+		return location;
 	}
 
 	@Override
@@ -34,4 +33,14 @@ public class DoorTile implements Tile  {
 
 	}
 
+	public String toString() {
+		return this.getClass().getSimpleName() + " " + location.toString();
+	}
+
+
+	@Override
+	public String name() {
+		// TODO Auto-generated method stub
+		return "D";
+	}
 }

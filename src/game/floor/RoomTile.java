@@ -1,6 +1,6 @@
 package game.floor;
 
-public class EmptyTile implements Tile {
+public class RoomTile implements Tile {
 
 	Location location;
 
@@ -19,15 +19,13 @@ public class EmptyTile implements Tile {
 		this.location = l;
 
 	}
-
-
-	public String toString() {
-		return this.getClass().getSimpleName() + " " + location.toString();
-	}
-
 	@Override
 	public String name() {
 		// TODO Auto-generated method stub
-		return "E";
+		return "R";
+	}
+
+	public String toString() {
+		return this.getClass().getSimpleName() + " " + location.toString();
 	}
 }

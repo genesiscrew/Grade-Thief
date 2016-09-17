@@ -7,6 +7,8 @@ public interface Tile {
 	public Location tileLocation();
 	public boolean occupied();
 	public void setLocation(Location l);
+	public String name(); // testing purposes
+
 
 
 }
