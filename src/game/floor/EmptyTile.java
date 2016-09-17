@@ -35,12 +35,14 @@ public class EmptyTile implements Tile {
  */
 	public void addObjecttoTile(Object o){
 		this.o = o;
-		occupied = true;
+
 		if (o instanceof Guard) {
 			this.name = "G";
+			occupied = true;
 		}
 		else if (o instanceof Character) {
 			this.name = ((Character) o).getName();
+			occupied = true;
 		}
 		else if (o instanceof Keys) {
 			this.name = ((Keys) o).itemType();

@@ -61,42 +61,47 @@ public class Guard extends Character {
 	}
 
 
-	public Boolean checkforIntruder(Game game) {
-		if (dir.equals(Dir.EAST)) {
+	public Boolean checkforIntruder(Game game, Direction dir) {
+		if (dir.getDirection().equals(Dir.EAST)) {
 			for (int i = 0; i < 6; i++) {
 				if (game.getGameMap().getTileMap()[this.getCharacterLocation().row() + i][this.getCharacterLocation().column()] instanceof EmptyTile
-						&& game.getGameMap().getTileMap()[this.getCharacterLocation().row() + i][this.getCharacterLocation().column()].occupied()) {
-					// we have found an intruder
+						&& game.getGameMap().getTileMap()[this.getCharacterLocation().row() + i][this.getCharacterLocation().column()].occupied()
+						&&  ((EmptyTile)game.getGameMap().getTileMap()[this.getCharacterLocation().row() + i][this.getCharacterLocation().column()]).getObjectonTile() instanceof model.Character) {
+					System.out.println("we have found an intruder");
 					return true;
 
 				}
 			}
 
-		} else if (dir.equals(Dir.WEST)) {
+		} else if (dir.getDirection().equals(Dir.WEST)) {
 			for (int i = 0; i < 6; i++) {
+				
 				if (game.getGameMap().getTileMap()[this.getCharacterLocation().row() - i][this.getCharacterLocation().column()] instanceof EmptyTile
-						&& game.getGameMap().getTileMap()[this.getCharacterLocation().row() + i][this.getCharacterLocation().column()].occupied()) {
-					// we have found an intruder
+						&& game.getGameMap().getTileMap()[this.getCharacterLocation().row() - i][this.getCharacterLocation().column()].occupied()
+						&& ((EmptyTile)game.getGameMap().getTileMap()[this.getCharacterLocation().row() - i][this.getCharacterLocation().column()]).getObjectonTile() instanceof model.Character) {
+					System.out.println("we have found an intruder");
 					return true;
 
 				}
 			}
 
-		} else if (dir.equals(Dir.NORTH)) {
+		} else if (dir.getDirection().equals(Dir.NORTH)) {
 			for (int i = 0; i < 6; i++) {
-				if (game.getGameMap().getTileMap()[this.getCharacterLocation().row() + i][this.getCharacterLocation().column()] instanceof EmptyTile
-						&& game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this.getCharacterLocation().column()+1].occupied()) {
-					// we have found an intruder
+				if (game.getGameMap().getTileMap()[this.getCharacterLocation().row() ][this.getCharacterLocation().column()+1] instanceof EmptyTile
+						&& game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this.getCharacterLocation().column()+1].occupied()
+						&& ((EmptyTile)game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this.getCharacterLocation().column()+1]).getObjectonTile() instanceof model.Character) {
+					System.out.println("we have found an intruder");
 					return true;
 
 				}
 			}
 
-		} else if (dir.equals(Dir.SOUTH)) {
+		} else if (dir.getDirection().equals(Dir.SOUTH)) {
 			for (int i = 0; i < 6; i++) {
-				if (game.getGameMap().getTileMap()[this.getCharacterLocation().row() + i][this.getCharacterLocation().column()] instanceof EmptyTile
-						&& game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this.getCharacterLocation().column()-1].occupied()) {
-					// we have found an intruder
+				if (game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this.getCharacterLocation().column()-i] instanceof EmptyTile
+						&& game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this.getCharacterLocation().column()-1].occupied()
+						&& ((EmptyTile)game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this.getCharacterLocation().column()-i]).getObjectonTile() instanceof model.Character) {
+					System.out.println("we have found an intruder");
 					return true;
 
 				}

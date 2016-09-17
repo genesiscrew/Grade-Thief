@@ -38,7 +38,9 @@ public class Game {
 		return board;
 
 	}
-
+/**
+ * for debugging purposes, draws map into console
+ */
 	public void drawBoard() {
 
 		int count = 0;
