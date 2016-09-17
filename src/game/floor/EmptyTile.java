@@ -1,6 +1,7 @@
 package game.floor;
 
 import characters.Guard;
+import characters.Player;
 import items.Keys;
 import model.Character;
 
@@ -40,8 +41,8 @@ public class EmptyTile implements Tile {
 			this.name = "G";
 			occupied = true;
 		}
-		else if (o instanceof Character) {
-			this.name = ((Character) o).getName();
+		else if (o instanceof Player) {
+			this.name = ((Player) o).getName();
 			occupied = true;
 		}
 		else if (o instanceof Keys) {

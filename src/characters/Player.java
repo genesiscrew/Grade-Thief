@@ -1,14 +1,18 @@
 package characters;
 
+import java.util.ArrayList;
+
 import game.floor.Location;
 import items.Direction;
 import items.Distance;
 import items.GameObject;
+import items.Item;
 
 public class Player extends Character {
 
 	Location characterLocation;
 	private boolean inRoom = false;
+	private ArrayList<Item> items = new ArrayList<Item>();
 
 
 
@@ -24,6 +28,8 @@ public class Player extends Character {
 
 	}
 
+
+
 	public Location getCharacterLocation() {
 		return super.getCharacterLocation();
 	}
@@ -38,10 +44,29 @@ public class Player extends Character {
 		// TODO Auto-generated method stub
 
 	}
-
+  /**
+   * this method specifies how the player can interact with his world
+   * two parameters, the object it wants to interact with, and the type of interaction
+   * e.g. player wants to view
+   */
 	@Override
 	public void objectInteraction(GameObject c) {
-		// TODO Auto-generated method stub
+
+
+	}
+    /**
+     *
+     * @returns the name of the player
+     */
+	public String getName() {
+		return super.characterName;
+	}
+	/**
+	 * adds an item to player's inventory
+	 * @param parameter is the item to add
+	 */
+	public void addToInventory(Item item){
+		this.items.add(item);
 
 	}
 

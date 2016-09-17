@@ -11,7 +11,7 @@ public class Character {
 	// player name
 	private String name;
 	// player item list
-	private ArrayList<Item> items = new ArrayList<Item>();
+
 
 	public Character(String name) {
 		this.name = name;
@@ -22,11 +22,11 @@ public class Character {
 	 * @return
 	 */
 	public String getName() {
-		
+
 		return this.name;
 	}
-	
-	
+
+
 
 
 

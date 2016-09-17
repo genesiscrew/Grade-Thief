@@ -15,11 +15,13 @@ import java.io.File;
 import java.io.IOException;
 
 import characters.Guard;
+import characters.Player;
 import game.floor.EmptyTile;
 import items.Direction;
 import items.Direction.Dir;
 import items.Distance;
 import items.GameObject;
+import items.Keys;
 
 /**
  * @Author Adam Wareing This is the controller that handles logic from when
@@ -124,101 +126,14 @@ public class Controller {
 		// load game map from text file
 
 		// create new gaurd object
-		Distance dist = new Distance(1);
-		Guard gaurd1 = new Guard(0, "guard1");
-		Guard guard2 = new Guard(1, "guard2");
-		Character player = new model.Character("H");
 
-		// set character location
-		gaurd1.setCharacterLocation(7, 7);
-		// add player object to map
-		((EmptyTile) game.getGameMap().getTileMap()[7][7]).addObjecttoTile(player);
-		game.drawBoard();
+		// setup guard for floor 1
+		game.setupGuards(1);
+		//set up player on map
+		game.setupPlayers();
 
-		// set gaurd's location
-		gaurd1.setCharacterLocation(0, 7);
-		guard2.setCharacterLocation(24, 7);
-		// add guard object to tile on map
-		((EmptyTile) game.getGameMap().getTileMap()[0][7]).addObjecttoTile(gaurd1);
-		game.drawBoard();
-		((EmptyTile) game.getGameMap().getTileMap()[24][7]).addObjecttoTile(guard2);
-		game.drawBoard();
 
-		// create a thread for the guard, so that he can move within map
-		// independent of player
 
-		Thread guardThread = new Thread() {
-			public void run() {
-				// move the guard in a fixed loop, once he reaches certain
-				// coordinate on the Map, change destination
-				// if () {}
-				// gaurd will keep moving
-				int count = 0;
-				Direction dir = new Direction(Dir.EAST);
-				while (!gaurd1.checkforIntruder(game, dir)) {
-					// update direction of guard based on hardcoded route
-					// through Tilemap
-					
-					// move the guard to new location
-					// remove gaurd as object from previous empty tile
-					((EmptyTile) game.getGameMap().getTileMap()[gaurd1.getCharacterLocation().row()][gaurd1
-							.getCharacterLocation().column()]).resetEmptyTile();
-					gaurd1.move(dir, dist);
-					try {
-						sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					// add the gaurd as object to the new empty tile
-					((EmptyTile) game.getGameMap().getTileMap()[gaurd1.getCharacterLocation().row()][gaurd1
-							.getCharacterLocation().column()]).addObjecttoTile(gaurd1);
-
-					// draw board intp console for debugging purposes
-					game.drawBoard();
-					count++;
-				}
-
-			}
-		};
-
-		Thread guardThread1 = new Thread() {
-			public void run() {
-				// move the guard in a fixed loop, once he reaches certain
-				// coordinate on the Map, change destination
-				// if () {}
-				// gaurd will keep moving
-				int count = 0;
-				Direction dir = new Direction(Dir.WEST);
-				while (!guard2.checkforIntruder(game,dir)) {
-					// update direction of guard based on hardcoded route
-					// through Tilemap
-					
-					// move the guard to new location
-					// remove gaurd as object from previous empty tile
-					((EmptyTile) game.getGameMap().getTileMap()[guard2.getCharacterLocation().row()][guard2
-							.getCharacterLocation().column()]).resetEmptyTile();
-					guard2.move(dir, dist);
-					try {
-						sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					// add the gaurd as object to the new empty tile
-					((EmptyTile) game.getGameMap().getTileMap()[guard2.getCharacterLocation().row()][guard2
-							.getCharacterLocation().column()]).addObjecttoTile(guard2);
-
-					// draw board intp console for debugging purposes
-					game.drawBoard();
-					count++;
-				}
-
-			}
-		};
-		// start the guard movement, thread stops running when intruder caught
-		guardThread.start();
-		guardThread1.start();
 
 	}
 

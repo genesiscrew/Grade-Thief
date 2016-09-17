@@ -66,7 +66,7 @@ public class Guard extends Character {
 			for (int i = 0; i < 6; i++) {
 				if (game.getGameMap().getTileMap()[this.getCharacterLocation().row() + i][this.getCharacterLocation().column()] instanceof EmptyTile
 						&& game.getGameMap().getTileMap()[this.getCharacterLocation().row() + i][this.getCharacterLocation().column()].occupied()
-						&&  ((EmptyTile)game.getGameMap().getTileMap()[this.getCharacterLocation().row() + i][this.getCharacterLocation().column()]).getObjectonTile() instanceof model.Character) {
+						&&  ((EmptyTile)game.getGameMap().getTileMap()[this.getCharacterLocation().row() + i][this.getCharacterLocation().column()]).getObjectonTile() instanceof Player) {
 					System.out.println("we have found an intruder");
 					return true;
 
@@ -78,7 +78,7 @@ public class Guard extends Character {
 				
 				if (game.getGameMap().getTileMap()[this.getCharacterLocation().row() - i][this.getCharacterLocation().column()] instanceof EmptyTile
 						&& game.getGameMap().getTileMap()[this.getCharacterLocation().row() - i][this.getCharacterLocation().column()].occupied()
-						&& ((EmptyTile)game.getGameMap().getTileMap()[this.getCharacterLocation().row() - i][this.getCharacterLocation().column()]).getObjectonTile() instanceof model.Character) {
+						&& ((EmptyTile)game.getGameMap().getTileMap()[this.getCharacterLocation().row() - i][this.getCharacterLocation().column()]).getObjectonTile() instanceof Player) {
 					System.out.println("we have found an intruder");
 					return true;
 
@@ -89,7 +89,7 @@ public class Guard extends Character {
 			for (int i = 0; i < 6; i++) {
 				if (game.getGameMap().getTileMap()[this.getCharacterLocation().row() ][this.getCharacterLocation().column()+1] instanceof EmptyTile
 						&& game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this.getCharacterLocation().column()+1].occupied()
-						&& ((EmptyTile)game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this.getCharacterLocation().column()+1]).getObjectonTile() instanceof model.Character) {
+						&& ((EmptyTile)game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this.getCharacterLocation().column()+1]).getObjectonTile() instanceof Player) {
 					System.out.println("we have found an intruder");
 					return true;
 
@@ -100,7 +100,7 @@ public class Guard extends Character {
 			for (int i = 0; i < 6; i++) {
 				if (game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this.getCharacterLocation().column()-i] instanceof EmptyTile
 						&& game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this.getCharacterLocation().column()-1].occupied()
-						&& ((EmptyTile)game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this.getCharacterLocation().column()-i]).getObjectonTile() instanceof model.Character) {
+						&& ((EmptyTile)game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this.getCharacterLocation().column()-i]).getObjectonTile() instanceof Player) {
 					System.out.println("we have found an intruder");
 					return true;
 

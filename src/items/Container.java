@@ -24,7 +24,7 @@ public class Container extends Item implements Interactable, Movable{
 
 	@Override
 	public void pickUp() {
-		// TODO Auto-generated method stub
+
 
 	}
 
