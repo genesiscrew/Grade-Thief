@@ -7,11 +7,12 @@ public abstract class GameObject {
 
 	public String itemType;
 	public int itemID;
+
 	public Location objectLocation;
 
 
-	public GameObject(int itemID) {
-	//	this.itemType = itemType;
+	public GameObject(int itemID, String itemType) {
+	    this.itemType = itemType;
 		this.itemID = itemID;
 	}
 

@@ -69,6 +69,14 @@ public class Player extends Character {
 		this.items.add(item);
 
 	}
+	/**
+	 *
+	 * @returns the player's inventory
+	 */
+	public ArrayList<Item> getInventory(){
+		return this.items;
+
+	}
 
 
 

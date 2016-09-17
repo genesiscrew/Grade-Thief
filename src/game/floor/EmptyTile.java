@@ -73,6 +73,7 @@ public class EmptyTile implements Tile {
 	public void resetEmptyTile() {
 		this.o = null;
 		this.name = "-";
+		occupied = false;
 
 	}
 

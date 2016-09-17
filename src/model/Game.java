@@ -66,10 +66,13 @@ public class Game {
 		}
 
 	}
-/**
- *
- * @param integer parameter specifying floorNumber where guards will be activated
- */
+
+	/**
+	 * this method sets up guards within the map
+	 * @param integer
+	 *            parameter specifying floorNumber where guards will be
+	 *            activated
+	 */
 	public void setupGuards(int floorNumber) {
 		Guard gaurd1 = new Guard(0, "guard1");
 		Guard guard2 = new Guard(1, "guard2");
@@ -78,16 +81,16 @@ public class Game {
 		// set character location
 		gaurd1.setCharacterLocation(7, 7);
 		// add player object to map
-		((EmptyTile)  Game.this.getGameMap().getTileMap()[7][7]).addObjecttoTile(player);
-		 Game.this.drawBoard();
+		((EmptyTile) Game.this.getGameMap().getTileMap()[7][7]).addObjecttoTile(player);
+		Game.this.drawBoard();
 
 		// set gaurd's location
 		gaurd1.setCharacterLocation(0, 7);
 		guard2.setCharacterLocation(24, 7);
 		// add guard object to tile on map
-		((EmptyTile)  Game.this.getGameMap().getTileMap()[0][7]).addObjecttoTile(gaurd1);
+		((EmptyTile) Game.this.getGameMap().getTileMap()[0][7]).addObjecttoTile(gaurd1);
 		drawBoard();
-		((EmptyTile)  Game.this.getGameMap().getTileMap()[24][7]).addObjecttoTile(guard2);
+		((EmptyTile) Game.this.getGameMap().getTileMap()[24][7]).addObjecttoTile(guard2);
 		drawBoard();
 
 		// create a thread for the guard, so that he can move within map
@@ -106,7 +109,7 @@ public class Game {
 
 					// move the guard to new location
 					// remove gaurd as object from previous empty tile
-					((EmptyTile)  Game.this.getGameMap().getTileMap()[gaurd1.getCharacterLocation().row()][gaurd1
+					((EmptyTile) Game.this.getGameMap().getTileMap()[gaurd1.getCharacterLocation().row()][gaurd1
 							.getCharacterLocation().column()]).resetEmptyTile();
 					gaurd1.move(dir, dist);
 					try {
@@ -116,11 +119,11 @@ public class Game {
 						e.printStackTrace();
 					}
 					// add the gaurd as object to the new empty tile
-					((EmptyTile)  Game.this.getGameMap().getTileMap()[gaurd1.getCharacterLocation().row()][gaurd1
+					((EmptyTile) Game.this.getGameMap().getTileMap()[gaurd1.getCharacterLocation().row()][gaurd1
 							.getCharacterLocation().column()]).addObjecttoTile(gaurd1);
 
 					// draw board intp console for debugging purposes
-					 Game.this.drawBoard();
+					Game.this.drawBoard();
 
 				}
 
@@ -151,11 +154,11 @@ public class Game {
 						e.printStackTrace();
 					}
 					// add the gaurd as object to the new empty tile
-					((EmptyTile)  Game.this.getGameMap().getTileMap()[guard2.getCharacterLocation().row()][guard2
+					((EmptyTile) Game.this.getGameMap().getTileMap()[guard2.getCharacterLocation().row()][guard2
 							.getCharacterLocation().column()]).addObjecttoTile(guard2);
 
 					// draw board intp console for debugging purposes
-					 Game.this.drawBoard();
+					Game.this.drawBoard();
 				}
 
 			}
@@ -166,69 +169,119 @@ public class Game {
 
 	}
 
-public void setupPlayers() {
-	// TODO Auto-generated method stub
+	public void setupPlayers() {
+		// TODO Auto-generated method stub
 
-}
-
-/**
- * this method checks whether a move to certain tile is valid
- * @param targetLocation parameter specifies the tile the player wants to move into
-
- * @return true/false
- */
-public boolean isValidMove(Location targetLocation){
-
-	return !this.getGameMap().getTileMap()[targetLocation.row()][targetLocation.column()].occupied()
-			&& this.getGameMap().getTileMap()[targetLocation.row()][targetLocation.column()] instanceof EmptyTile;
-
-
-}
-/**
- * method that checks if item is interactable
- * @param  parameter is item we need to check if can be interacted with
- * @return true/false
- */
-public boolean isInteractableItem(Item item){
-
-	return item instanceof Interactable;
-}
-/**
- * method that checks if item is movable
- * @param parameter is item we need to check if can be moved
- * @return true/false
- */
-public boolean isMovableItem(Item item){
-
-	return item instanceof Movable;
-}
-/**
- *
- * @param parameter is item we need to check if can be moved
- * @return true/false
- */
-public boolean isContainerItem(Item item){
-
-	return item instanceof Container;
-}
-
-public boolean pickupItem(Player player, Item item) {
-
-	if (this.isInteractableItem(item)) {
-		if (this.isContainerItem(item)) {
-			//item is a container so we do not pick it up, but we pick up anything thing(if any) it contains and leave container
-			// in game world
-		}
-		else {
-			//item is not a container so we pick it up and remove it from tile in game world
-			((EmptyTile)this.getGameMap().getTileMap()[item.getGameObjectLocation().row()][item.getGameObjectLocation().column()]).resetEmptyTile();
-
-
-		}
 	}
 
-	return false;
-}
+	/**
+	 * this method checks whether a move to certain tile is valid
+	 *
+	 * @param targetLocation
+	 *            parameter specifies the tile the player wants to move into
+	 *
+	 * @return true/false
+	 */
+	public boolean isValidMove(Location targetLocation) {
 
+		return !this.getGameMap().getTileMap()[targetLocation.row()][targetLocation.column()].occupied()
+				&& this.getGameMap().getTileMap()[targetLocation.row()][targetLocation.column()] instanceof EmptyTile;
+
+	}
+
+	/**
+	 * method that checks if item is interactable
+	 *
+	 * @param parameter
+	 *            is item we need to check if can be interacted with
+	 * @return true/false
+	 */
+	public boolean isInteractableItem(Item item) {
+
+		return item instanceof Interactable;
+	}
+
+	/**
+	 * method that checks if item is movable
+	 *
+	 * @param parameter
+	 *            is item we need to check if can be moved
+	 * @return true/false
+	 */
+	public boolean isMovableItem(Item item) {
+
+		return item instanceof Movable;
+	}
+
+	/**
+	 *
+	 * @param parameter
+	 *            is item we need to check if can be moved
+	 * @return true/false
+	 */
+	public boolean isContainerItem(Item item) {
+
+		return item instanceof Container;
+	}
+/**
+ *
+ * @param the player who wants to pick up an item
+ * @param the item the user wants to pick up
+ * @return
+ */
+	public boolean pickupItem(Player player, Item item) {
+
+		if (this.isInteractableItem(item)) {
+			if (this.isContainerItem(item)) {
+				// item is a container so we do not pick it up, but we pick up
+				// anything thing(if any) it contains and leave container
+				// in the game world
+				for (GameObject e : ((Container) item).getItems()) {
+					// only adds an item to user's inventory if the inventory is not full ie filled with less than 10 items
+					if (player.getInventory().size() < 11) {
+						player.addToInventory(item);
+						((Container) item).getItems().remove(item);
+					}
+				}
+
+			} else {
+				// item is not a container so we pick it up and remove it from
+				// tile in game world
+				((EmptyTile) this.getGameMap().getTileMap()[item.getGameObjectLocation().row()][item
+						.getGameObjectLocation().column()]).resetEmptyTile();
+				// only adds an item to user's inventory if the inventory is not full ie filled with less than 10 items
+				if (player.getInventory().size() < 11) {
+				player.addToInventory(item);
+				}
+
+			}
+		}
+
+		return false;
+	}
+	/**
+	 *
+	 * @the method returns a string that contains information about the item. e.g. if item is container,
+	 * it will return a string containing description of container and of items it has inside
+	 */
+	public String inspectItem(Item item) {
+        if (this.isContainerItem(item)) {
+        	// item is container so we list through all items within it
+        	if (((Container)item).getItems().isEmpty()) {
+        		return "This is a " + item.itemType() + ", it has no items inside it";
+
+        	}
+        	else {
+        		String output;
+        		output = "This is a " + item.itemType() + ", it has the following" + ((Container)item).getItems().size() + "inside it:\n";
+        		for (int i = 0; i < ((Container)item).getItems().size(); i++ ) {
+        			 output += "Item 1: " + ((Container)item).getItems().get(i).itemType + "\n";
+
+        		}
+             return output;
+        	}
+        }
+	 return "This is a " + item.itemType();
+	}
 
 }

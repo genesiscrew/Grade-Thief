@@ -1,7 +1,11 @@
 package items;
 
 import java.awt.Image;
-
+/**
+ * this class represents a map item,
+ * @author abubakhami
+ *
+ */
 public class Map extends Item implements Interactable, Movable {
 	Image mapIMG;
 
