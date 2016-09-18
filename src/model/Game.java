@@ -196,7 +196,7 @@ public class Game {
 	 *            is item we need to check if can be interacted with
 	 * @return true/false
 	 */
-	public boolean isInteractableItem(Item item) {
+	public boolean isInteractableItem(GameObject item) {
 
 		return item instanceof Interactable;
 	}
@@ -208,7 +208,7 @@ public class Game {
 	 *            is item we need to check if can be moved
 	 * @return true/false
 	 */
-	public boolean isMovableItem(Item item) {
+	public boolean isMovableItem(GameObject item) {
 
 		return item instanceof Movable;
 	}
@@ -219,7 +219,7 @@ public class Game {
 	 *            is item we need to check if can be moved
 	 * @return true/false
 	 */
-	public boolean isContainerItem(Item item) {
+	public boolean isContainerItem(GameObject item) {
 
 		return item instanceof Container;
 	}
@@ -264,7 +264,7 @@ public class Game {
 	 * @the method returns a string that contains information about the item. e.g. if item is container,
 	 * it will return a string containing description of container and of items it has inside
 	 */
-	public String inspectItem(Item item) {
+	public String inspectItem(GameObject item) {
         if (this.isContainerItem(item)) {
         	// item is container so we list through all items within it
         	if (((Container)item).getItems().isEmpty()) {
@@ -275,6 +275,9 @@ public class Game {
         		String output;
         		output = "This is a " + item.itemType() + ", it has the following" + ((Container)item).getItems().size() + "inside it:\n";
         		for (int i = 0; i < ((Container)item).getItems().size(); i++ ) {
+        			if (((Container)item).getItems().get(i) instanceof Container) {
+        				this.inspectItem(((Container) item).getItems().get(i));
+        			}
         			 output += "Item 1: " + ((Container)item).getItems().get(i).itemType + "\n";
 
         		}
@@ -282,6 +285,32 @@ public class Game {
         	}
         }
 	 return "This is a " + item.itemType();
+	}
+	/**
+	 * method that drops an item from user's inventory into an emptyTile
+	 * @param player that will drop the item
+	 * @param the item to be dropped
+	 * @return
+	 */
+	public boolean dropItem(Player player, Item item) {
+		// first check if player is on an empty tile
+		if (this.getGameMap().getTileMap()[player.getCharacterLocation().row()][player.getCharacterLocation().column()]
+				instanceof EmptyTile) {
+			// next check it tile does not already include an item
+			if (((EmptyTile)this.getGameMap().getTileMap()[player.getCharacterLocation().row()]
+					[player.getCharacterLocation().column()]).getObjectonTile() == null) {
+				// next we add the item to the tile
+				((EmptyTile)this.getGameMap().getTileMap()[player.getCharacterLocation().row()]
+						[player.getCharacterLocation().column()]).addObjecttoTile(item);
+				// next we remove item from player inventory
+				player.getInventory().remove(item);
+
+			}
+
+
+		}
+
+		return false;
 	}
 
 }

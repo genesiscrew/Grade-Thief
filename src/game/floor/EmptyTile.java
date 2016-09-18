@@ -8,7 +8,7 @@ import model.Character;
 public class EmptyTile implements Tile {
 
 	Location location;
-	boolean occupied = false;
+	boolean isOccupied = false;
 	Object o;
 	private String name = "-";
 
@@ -20,7 +20,7 @@ public class EmptyTile implements Tile {
 
 	@Override
 	public boolean occupied() {
-		return occupied;
+		return isOccupied;
 	}
 
 
@@ -39,11 +39,11 @@ public class EmptyTile implements Tile {
 
 		if (o instanceof Guard) {
 			this.name = "G";
-			occupied = true;
+			isOccupied = true;
 		}
 		else if (o instanceof Player) {
 			this.name = ((Player) o).getName();
-			occupied = true;
+			isOccupied = true;
 		}
 		else if (o instanceof Keys) {
 			this.name = ((Keys) o).itemType();
@@ -73,8 +73,22 @@ public class EmptyTile implements Tile {
 	public void resetEmptyTile() {
 		this.o = null;
 		this.name = "-";
-		occupied = false;
+		isOccupied = false;
 
+	}
+
+	public void setOccupied() {
+		this.isOccupied = true;
+	}
+
+	public void setUnoccupied() {
+		this.isOccupied = false;
+	}
+
+	@Override
+	public String name() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

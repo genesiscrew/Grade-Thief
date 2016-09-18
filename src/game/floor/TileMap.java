@@ -12,15 +12,15 @@ import java.util.Scanner;
 import items.Door;
 
 public class TileMap {
-	Tile[][] TileMapper;
+	Tile[][] TileMap;
 
 	public TileMap(Tile[][] TileMap) {
-		this.TileMapper = TileMap;
+		this.TileMap = TileMap;
 	}
 
 	public Tile[][]  getTileMap() {
 
-		return this.TileMapper;
+		return this.TileMap;
 	}
 /*
 	public Tile[][] createTileMap(String f) {
@@ -135,7 +135,7 @@ public class TileMap {
 		}
 
 
-		TileMapper = new Tile[width][lines.size()];
+		TileMap = new Tile[width][lines.size()];
 		
 		for(int y=0;y!=lines.size();++y) {
 			line = lines.get(y);
@@ -147,18 +147,18 @@ public class TileMap {
 					case '-' :
 						EmptyTile e = new EmptyTile();
 						e.setLocation(loc);
-						TileMapper[x][y] = e;
+						TileMap[x][y] = e;
 						break;			
 					case '*' :
 						WallTile w = new WallTile();
 						w.setLocation(loc);
-						TileMapper[x][y] = w;
+						TileMap[x][y] = w;
 						break;
 					case 'D' :
 						DoorTile d = new DoorTile();
 						d.setLocation(loc);
 						d.setDoor(Door.getDoor(001)); // gets the door with the given code
-						TileMapper[x][y] = d;
+						TileMap[x][y] = d;
 						break;
 				
 
@@ -173,7 +173,7 @@ public class TileMap {
 
 
         
-		return TileMapper;
+		return TileMap;
 	}
 
 
