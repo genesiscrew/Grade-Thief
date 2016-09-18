@@ -2,11 +2,8 @@ package game.floor;
 
 import java.io.File;
 import java.io.IOException;
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
-=======
->>>>>>> a8479ef76079bb7f9e80247a458a8e4d26589012
 
 import items.Door;
 
@@ -28,12 +25,7 @@ public class Room {
 
 	public void setTileMap(String f)  throws IOException {
 			TileMap t = new TileMap(null);
-			try {
 				this.roomTileMap = t.createTileMap(f);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 	}
 	/**
 	 * this sets the dimensions of the room RELATIVE to the floor
