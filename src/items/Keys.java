@@ -38,6 +38,16 @@ public class Keys extends Item implements Interactable, Movable {
 						System.out.println("Door still locked");
 
 		}
+		else if (j instanceof Container) {
+			Container e = (Container) j;
+			if (keyID == e.itemID)
+				System.out.println("unlocked the container");
+		else
+				System.out.println("container still locked");
+
+}
+
+		}
 		// TODO Auto-generated method stub
 
 		// check to see if charger is being usedON a wall socket

@@ -6,8 +6,8 @@ public class Door extends GameObject {
 	public String itemType = "Door";
 	public int itemID = 1111;
 
-	public Door(int itemID, int keyID) { //, int code, int keyID) {
-		super(itemID);
+	public Door(int itemID, String itemType) { //, int code, int keyID) {
+		super(itemID, itemType);
 		this.itemType = itemType;
 		this.itemID = itemID;
 		this.code = code;
