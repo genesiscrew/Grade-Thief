@@ -11,6 +11,7 @@ public  class Item extends GameObject {
 	public Item( int itemID, String itemType ) {
 		super(itemID, itemType);
 
+
 	}
 
 
