@@ -1,25 +1,12 @@
 package game.floor;
 
-import items.Door;
-/**
-*
-* Author: Stefan
-*
-*/
-public class DoorTile implements Tile  {
+public class RoomTile implements Tile {
 
-	Door door;
 	Location location;
 	private boolean isOccupied = false;
 
-
-	public void setDoor(Door door) {
-		this.door = door;
-	}
-
 	@Override
 	public Location tileLocation() {
-
 		return location;
 	}
 
@@ -33,36 +20,30 @@ public class DoorTile implements Tile  {
 		this.location = l;
 
 	}
-
 	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return "D";
+	public String name() {
+		if (occupied())
+			return "a";
+		return "R";
 	}
-
 
 	public String toString() {
 		return this.getClass().getSimpleName() + " " + location.toString();
 	}
 
-
-	@Override
-	public String name() {
-		if (occupied())
-			return "P";
-		return "D";
-	}
-
 	@Override
 	public void setOccupied() {
 		isOccupied = true;
-
 	}
 
 	@Override
 	public void setUnoccupied() {
-		isOccupied = false;
 
 	}
 
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

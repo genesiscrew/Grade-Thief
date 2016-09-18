@@ -1,42 +1,49 @@
 package game.floor;
 
 public class Location {
-	private int x; // must be between 0 and 25
-	private int y; // must be between 0 and 26
 
-	public Location( int x, int y) {
+	private int x;
+	private int y;
+
+	public Location(int x, int y) {
 		this.x = x;
-		this.y =y;
+		this.y = y;
+	}
 
+	public String toString() {
+		return x + " " + y;
 	}
 
 	public int row() {
 		return x;
 	}
-
 	public int column() {
 		return y;
 	}
-
-	public boolean isValid() {
-		//return y >= 0 && y <= 26 && x >= 0 && x <= 25;
-		return false;
-	}
-
-	public boolean equals(Object o) {
-		if(o instanceof Location) {
-			Location p = (Location) o;
-			return x == p.row() && y == p.column();
-		}
-		return false;
-	}
-
+	@Override
 	public int hashCode() {
-		return x ^ y;
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + x;
+		result = prime * result + y;
+		return result;
 	}
 
-	public String toString() {
-		return ((char)('a'+(y-1))) + Integer.toString(x);
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Location other = (Location) obj;
+		if (x != other.x)
+			return false;
+		if (y != other.y)
+			return false;
+		return true;
 	}
+
 
 }
