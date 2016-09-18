@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import characters.Player;
 import items.Door;
 
 
@@ -33,9 +34,13 @@ public class makeFloorTest {
 		String co238 = System.getProperty("user.dir") + "/src/game/floor/co238";
 		String co243 = System.getProperty("user.dir") + "/src/game/floor/co243";
 
-		Room room_co237 = new Room(null, null);
-		Room room_co238 = new Room(null, null);
-		Room room_co243 = new Room(null, null);
+		Door door_co237 = new Door(0000, 237);
+		Door door_co238 = new Door(0000, 238);
+		Door door_co243 = new Door(0000, 243);
+
+		Room room_co237 = new Room(null, door_co237);
+		Room room_co238 = new Room(null, door_co238);
+		Room room_co243 = new Room(null, door_co243);
 
 		room_co237.setTileMap(co237);
 		room_co238.setTileMap(co238);
@@ -52,18 +57,20 @@ public class makeFloorTest {
 
 		System.out.println("bounding co238 " + room_co238.roomTileMap.getMapWidth() + " ht " + room_co238.roomTileMap.getMapHeight());
 		room_co238.setBoundingBox(nextX, nextY, room_co238.roomTileMap.getMapWidth(), room_co238.roomTileMap.getMapHeight());
-		nextX += room_co238.roomTileMap.getMapWidth() + ADJACENT;
+
+		nextX += room_co238.roomTileMap.getMapWidth(); // + ADJACENT;
+		System.out.println("nextX " + nextX + " width" + room_co237.roomTileMap.getMapWidth());
 		nextY += 11;
 
 		room_co237.setBoundingBox(nextX, nextY, room_co237.roomTileMap.getMapWidth(), room_co237.roomTileMap.getMapHeight());
 
-		nextY += room_co237.roomTileMap.getMapHeight() + 7; // corridor 5 tiles, + 2 walls
+		nextY += room_co237.roomTileMap.getMapHeight() + 5; // corridor 5 tiles
 		room_co243.setBoundingBox(0, nextY, room_co243.roomTileMap.getMapWidth(), room_co243.roomTileMap.getMapHeight());
 
 		for (Room room : floorRooms) {
 
 			int[] bounds = room.getBoundingBox();
-			floor.addRoom(room, bounds[0], bounds[1], bounds[2], bounds[3]);
+			floor.addRoom(room, bounds[0], bounds[1], bounds[2], bounds[3], room.roomTileMap.getDoors());
 
 			//			for (int sy = room.sy; sy <= sy+room.h; sy++) {
 			//			for (int sx = room.sx; sx <= sx+room.w; sx++) {
@@ -72,17 +79,22 @@ public class makeFloorTest {
 			//		}
 		}
 
+		Player p = new Player(0000, "Stefan");
+		p.setCharacterLocation(19,27);
+		Location pL = p.getCharacterLocation();
+		floor.floorMap.floorTiles[pL.x][pL.y].setOccupied();
+
 		String s = "";
 		for (int h = 0; h<floor.floorMap.FLOOR_HEIGHT; h++) {
 			for (int w = 0; w<floor.floorMap.FLOOR_WIDTH; w++) {
-				//if (!(floor.floorMap.FloorMap[w][h] instanceof EmptyTile))
 					s = s + (floor.floorMap.floorTiles[w][h].name());
-				//System.out.println(floor.floorMap.FloorMap[w][h]);
 			}
 			s = s + "\n";
 		}
 
 		System.out.println(s);
+
+
 
 
 	}

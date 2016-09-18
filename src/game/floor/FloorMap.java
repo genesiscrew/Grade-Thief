@@ -3,8 +3,8 @@ package game.floor;
 public class FloorMap {
 
 	Tile[][] floorTiles;
-	final int FLOOR_WIDTH = 100;
-	final int FLOOR_HEIGHT = 100;
+	final int FLOOR_WIDTH = 50;
+	final int FLOOR_HEIGHT = 50;
 
 	public FloorMap(Tile[][] floorTiles) {
 		this.floorTiles = floorTiles;

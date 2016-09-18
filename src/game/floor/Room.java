@@ -1,6 +1,8 @@
 package game.floor;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import items.Door;
 
@@ -13,6 +15,7 @@ public class Room {
 	int sy = -1;
 	int w = -1;
 	int h = -1;
+	List<Location> doorLocations = new ArrayList<Location>();
 
 	public Room(TileMap roomTileMap, Door door) {
 		this.roomTileMap = roomTileMap;
@@ -37,6 +40,15 @@ public class Room {
 		this.sy = sy;
 		this.w = w;
 		this.h = h;
+	}
+
+
+	public List<Location> getDoorLocations() {
+		return this.doorLocations;
+	}
+
+	public void addDoorLocation(Location loc) {
+		this.doorLocations.add(loc);
 	}
 
 	public int[] getBoundingBox() {

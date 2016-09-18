@@ -45,4 +45,12 @@ public class WallTile implements Tile  {
 		return "W";
 	}
 
+	@Override
+	public void setOccupied() {
+	}
+
+	@Override
+	public void setUnoccupied() {
+	}
+
 }

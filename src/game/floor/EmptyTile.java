@@ -3,6 +3,7 @@ package game.floor;
 public class EmptyTile implements Tile {
 
 	Location location;
+	boolean isOccupied = false;
 
 	@Override
 	public Location tileLocation() {
@@ -11,7 +12,15 @@ public class EmptyTile implements Tile {
 
 	@Override
 	public boolean occupied() {
-		return false;
+		return isOccupied;
+	}
+
+	public void setOccupied() {
+		this.isOccupied = true;
+	}
+
+	public void setUnoccupied() {
+		this.isOccupied = false;
 	}
 
 	@Override
@@ -22,12 +31,14 @@ public class EmptyTile implements Tile {
 
 
 	public String toString() {
+
 		return this.getClass().getSimpleName() + " " + location.toString();
 	}
 
 	@Override
 	public String name() {
-		// TODO Auto-generated method stub
+		if (occupied())
+			return "a";
 		return "E";
 	}
 }

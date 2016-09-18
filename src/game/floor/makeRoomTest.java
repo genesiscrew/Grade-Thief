@@ -28,14 +28,14 @@ public class makeRoomTest {
 		Door d = new Door(0000, 0001);
 		Room r = new Room(null, d);
 
-		String co238 = System.getProperty("user.dir") + "/src/game/floor/co238";
+		String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
 
-		Room room_co238 = new Room(null, null);
+		Room room_co237 = new Room(null, null);
 
-		room_co238.setTileMap(co238);
+		room_co237.setTileMap(co237);
 
 
-	 r.setTileMap(co238);
+	 r.setTileMap(co237);
 
 		//		System.out.println("optional code " + r.roomTileMap.getOptionalCode());
 		//		System.out.println("height " + r.roomTileMap.getMapHeight());

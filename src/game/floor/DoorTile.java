@@ -40,7 +40,20 @@ public class DoorTile implements Tile  {
 
 	@Override
 	public String name() {
-		// TODO Auto-generated method stub
+		if (occupied())
+			return "P";
 		return "D";
+	}
+
+	@Override
+	public void setOccupied() {
+		isOccupied = true;
+
+	}
+
+	@Override
+	public void setUnoccupied() {
+		isOccupied = false;
+
 	}
 }
