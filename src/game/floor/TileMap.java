@@ -6,27 +6,48 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 
 import items.Door;
 
 public class TileMap {
+
 	Tile[][] TileMap;
+	int TileMapWidth = 0;
+	int TileMapHeight = 0;
+	int optionalCode = -1; // default value of map does not contain a door
+	private List<Location> doorLocations = new ArrayList<Location>();
+
+	public int getMapWidth() { return TileMapWidth; }
+	public int getMapHeight() { return TileMapHeight; }
+	public int getOptionalCode() { return optionalCode; }
+
 
 	public TileMap(Tile[][] TileMap) {
 		this.TileMap = TileMap;
 	}
 
-	public Tile[][]  getTileMap() {
 
+	public Tile[][]  getTileMap() {
 		return this.TileMap;
 	}
-/*
-	public Tile[][] createTileMap(String f) {
+
+
+
+	public TileMap createTileMap(String f) {
 		String map = convertFileToTileString(f);
 		return convertStringToTileMap(map);
 
+	}
+
+	public void addDoors(Location doorLocation) {
+		this.doorLocations.add(doorLocation);
+	}
+
+	public List<Location> getDoors() {
+		return this.doorLocations;
 	}
 	public String convertFileToTileString(String fileName) {
 
@@ -50,7 +71,7 @@ public class TileMap {
 		return fileString;
 	}
 
-	public Tile[][] convertStringToTileMap(String Tiles) {
+	public TileMap convertStringToTileMap(String Tiles) {
 
 		Scanner s = new Scanner(Tiles);
 
@@ -62,118 +83,61 @@ public class TileMap {
 		int width = Integer.parseInt(s.nextLine());
 		int height = Integer.parseInt(s.nextLine());
 
-		System.out.println(code + " " + width + " " + height);
+		 List<Location> doorLocs = new ArrayList<Location>();
+
+
+		TileMap TileMapper = new TileMap(new Tile[width][height]);
+
+		 TileMapper.optionalCode = code;
+		TileMapper.TileMapWidth = width;
+		TileMapper.TileMapHeight = height;
+
+//		System.out.println(code + " " + width + " " + height);
 
 		//int width = s.nextInt();
 		//int height = s.nextInt();
 		s.close();
 
-		TileMapper = new Tile[width][height];
-		Tiles = Tiles.substring(Tiles.indexOf('.') + 1); // concatenate dimensions now that is is loaded
+
+		Tiles = Tiles.substring(Tiles.indexOf('.') + 2); // concatenate dimensions now that is is loaded
+
 
 		int count = 0;
 
 				for (int y = 0; y < height; y++) {
-						for (int x = 0; x < width; x++){
-
+						for (int x = 0; x < width+1; x++){
 
 							char c = Tiles.charAt(count);
 
 							Location loc = new Location(x,y);
+						//	System.out.println(loc);
 
-						if (c == '*') {
-							WallTile w = new WallTile();
-							w.setLocation(loc);
-							TileMapper[x][y] = w;
-							System.out.println(w.getName());
-						} else if ( c == '-') {
+						  if ( c == 'x') {
 							EmptyTile e = new EmptyTile();
 							e.setLocation(loc);
-							TileMapper[x][y] = e;
-							System.out.println(e.getName());
-						} else if ( c == 'D') {
+							TileMapper.TileMap[x][y] = e;
+						} else if ( c == 'd') {
+
+							System.out.println("adding door at " + loc.toString() );
 							DoorTile d = new DoorTile();
 							d.setLocation(loc);
 							d.setDoor(Door.getDoor(code)); // gets the door with the given code
-							TileMapper[x][y] = d;
-							System.out.println(d.getName());
+							TileMapper.TileMap[x][y] = d;
+							doorLocs.add(loc); // adds the door to list of door locations
+
+
 						}
 
-					
+
 
 						count++;
 				}
 	}
-
+				System.out.println("=============================");
+				System.out.println("before returning tile mapper we hav edoors " + doorLocs.size());
+				TileMapper.doorLocations = doorLocs;
 					return TileMapper;
 
-	}
-	*/
-	public  Tile[][] createTileMap(String filename) throws IOException {
-		//read the door location data
-	
-
-
-		FileReader fr = new FileReader(filename);
-		BufferedReader br = new BufferedReader(fr);
-		ArrayList<String> lines = new ArrayList<String>();
-		int width = -1;
-		String line;
-		int counter = 0;
-		while((!(line = br.readLine()).isEmpty())) {
-			counter++;
-			System.out.println(line);
-			lines.add(line);
-
-			// now sanity check
-
-			if(width == -1) {
-				width = line.length();
-			} else if(width != line.length()) {
-				throw new IllegalArgumentException("Input file \"" + filename + "\" is malformed; line " + lines.size() + " incorrect width.");
-			}
-		}
-
-
-		TileMap = new Tile[width][lines.size()];
-		
-		for(int y=0;y!=lines.size();++y) {
-			line = lines.get(y);
-
-			for(int x=0;x!=width;++x) {
-				Location loc = new Location(x,y);
-				char c = line.charAt(x);
-				switch (c) {
-					case '-' :
-						EmptyTile e = new EmptyTile();
-						e.setLocation(loc);
-						TileMap[x][y] = e;
-						break;			
-					case '*' :
-						WallTile w = new WallTile();
-						w.setLocation(loc);
-						TileMap[x][y] = w;
-						break;
-					case 'D' :
-						DoorTile d = new DoorTile();
-						d.setLocation(loc);
-						d.setDoor(Door.getDoor(001)); // gets the door with the given code
-						TileMap[x][y] = d;
-						break;
-				
-
-
-				}
-
-
-			}
-
-
-		}
-
-
-        
-		return TileMap;
 	}
 
 

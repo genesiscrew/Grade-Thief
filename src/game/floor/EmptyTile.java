@@ -85,10 +85,16 @@ public class EmptyTile implements Tile {
 		this.isOccupied = false;
 	}
 
+	public String toString() {
+
+		return this.getClass().getSimpleName() + " " + location.toString();
+	}
+
 	@Override
 	public String name() {
-		// TODO Auto-generated method stub
-		return null;
+		if (occupied())
+			return "a";
+		return "E";
 	}
 
 }
