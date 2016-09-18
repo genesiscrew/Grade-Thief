@@ -10,8 +10,8 @@ public class Keys extends Item implements Interactable, Movable {
 		return itemType;
 	}
 
-	public Keys( int itemID, int keyID) {
-		super( itemID);
+	public Keys( int itemID, String itemType) {
+		super( itemID, itemType);
 		this.keyID = keyID;
 	}
 
@@ -52,7 +52,7 @@ public class Keys extends Item implements Interactable, Movable {
 
 		// check to see if charger is being usedON a wall socket
 
-	}
+
 
 	@Override
 	public void useItem() {	}

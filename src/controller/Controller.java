@@ -130,7 +130,7 @@ public class Controller {
 		// setup guard for floor 1
 		game.setupGuards(1);
 		//set up player on map
-		game.setupPlayers();
+		//game.setupPlayers();
 
 
 

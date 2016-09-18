@@ -1,6 +1,7 @@
 package game.floor;
 
 import java.io.File;
+import java.io.IOException;
 
 import items.Door;
 
@@ -14,7 +15,7 @@ public class Room {
 		this.door = door;
 	}
 
-	public void setTileMap(String f) {
+	public void setTileMap(String f) throws IOException {
 			TileMap t = new TileMap(null);
 			this.roomTileMap = t.createTileMap(f);
 	}
