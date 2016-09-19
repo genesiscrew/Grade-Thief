@@ -9,8 +9,8 @@ import java.awt.Image;
 public class Map extends Item implements Interactable, Movable {
 	Image mapIMG;
 
-	public Map(int itemID, Image mapIMG) {
-		super(itemID);
+	public Map(int itemID, Image mapIMG, String itemType) {
+		super(itemID, itemType);
 		this.mapIMG = mapIMG;
 	}
 
