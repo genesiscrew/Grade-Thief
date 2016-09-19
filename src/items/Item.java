@@ -9,7 +9,7 @@ public  class Item extends GameObject {
 	public int itemID;
 
 	public Item( int itemID) {
-		super(itemID);
+		super(itemID, null);
 		this.itemID = itemID;
 	}
 
