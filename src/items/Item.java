@@ -14,11 +14,6 @@ public  class Item extends GameObject {
 	}
 
 
-	// Location location;
-
-
-
-	// Model file ?
 
 
 
