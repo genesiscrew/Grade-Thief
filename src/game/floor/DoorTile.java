@@ -2,10 +2,12 @@ package game.floor;
 
 import items.Door;
 /**
-*
-* Author: Stefan
-*
-*/
+ *
+ * @author Stefan Vrecic
+ * DoorTile.java instance of Tile which represents a space occupied by a door. Useful for the floor map.
+ *
+ */
+
 public class DoorTile implements Tile  {
 
 	Door door;

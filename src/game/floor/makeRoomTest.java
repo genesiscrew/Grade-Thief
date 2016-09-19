@@ -6,7 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import items.Door;
-
+/**
+*
+* @author Stefan Vrecic
+*
+*/
 public class makeRoomTest {
 
 	public static void main(String[] args) throws IOException {

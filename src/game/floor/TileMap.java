@@ -11,7 +11,11 @@ import java.util.Scanner;
 
 
 import items.Door;
-
+/**
+ * @author Stefan Vrecic
+ * Class keeps track of a room, including its height, width and the details of the room
+ *
+ */
 public class TileMap {
 
 	Tile[][] TileMap;
@@ -24,22 +28,17 @@ public class TileMap {
 	public int getMapHeight() { return TileMapHeight; }
 	public int getOptionalCode() { return optionalCode; }
 
-
 	public TileMap(Tile[][] TileMap) {
 		this.TileMap = TileMap;
 	}
-
 
 	public Tile[][]  getTileMap() {
 		return this.TileMap;
 	}
 
-
-
 	public TileMap createTileMap(String f) {
 		String map = convertFileToTileString(f);
 		return convertStringToTileMap(map);
-
 	}
 
 	public void addDoors(Location doorLocation) {
@@ -49,6 +48,11 @@ public class TileMap {
 	public List<Location> getDoors() {
 		return this.doorLocations;
 	}
+
+	/**
+	 * @param fileName
+	 * @return -- converts file into string; used to load rooms
+	 */
 	public String convertFileToTileString(String fileName) {
 
 		String fileString = null;
@@ -71,74 +75,63 @@ public class TileMap {
 		return fileString;
 	}
 
+	/**
+	 * @param Tiles -- the file as a string
+	 * @return -- a map of tiles, including door locations etc
+	 *
+	 * Method used to load a file into a room
+	 */
 	public TileMap convertStringToTileMap(String Tiles) {
 
 		Scanner s = new Scanner(Tiles);
 
-		String scode = null, swidth = null, sheight = null;
-
-
+		//	String scode = null, swidth = null, sheight = null;
 
 		int code = Integer.parseInt(s.nextLine());
 		int width = Integer.parseInt(s.nextLine());
 		int height = Integer.parseInt(s.nextLine());
 
-		 List<Location> doorLocs = new ArrayList<Location>();
-
+		List<Location> doorLocs = new ArrayList<Location>();
 
 		TileMap TileMapper = new TileMap(new Tile[width][height]);
 
-		 TileMapper.optionalCode = code;
+		TileMapper.optionalCode = code;
 		TileMapper.TileMapWidth = width;
 		TileMapper.TileMapHeight = height;
 
-//		System.out.println(code + " " + width + " " + height);
-
-		//int width = s.nextInt();
-		//int height = s.nextInt();
 		s.close();
 
-
-		Tiles = Tiles.substring(Tiles.indexOf('.') + 2); // concatenate dimensions now that is is loaded
-
+		Tiles = Tiles.substring(Tiles.indexOf('.') + 2); // concatenate dimensions now that they are loaded
 
 		int count = 0;
 
-				for (int y = 0; y < height; y++) {
-						for (int x = 0; x < width+1; x++){
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width+1; x++){
 
-							char c = Tiles.charAt(count);
+				char c = Tiles.charAt(count);
 
-							Location loc = new Location(x,y);
-						//	System.out.println(loc);
+				Location loc = new Location(x,y);
 
-						  if ( c == 'x') {
-							EmptyTile e = new EmptyTile();
-							e.setLocation(loc);
-							TileMapper.TileMap[x][y] = e;
-						} else if ( c == 'd') {
+				if ( c == 'x') {
+					EmptyTile e = new EmptyTile();
+					e.setLocation(loc);
+					TileMapper.TileMap[x][y] = e;
 
-							System.out.println("adding door at " + loc.toString() );
-							DoorTile d = new DoorTile();
-							d.setLocation(loc);
-							d.setDoor(Door.getDoor(code)); // gets the door with the given code
-							TileMapper.TileMap[x][y] = d;
-							doorLocs.add(loc); // adds the door to list of door locations
-
-
-						}
-
-
-
-						count++;
+				} else if ( c == 'd') {
+					System.out.println("adding door at " + loc.toString() );
+					DoorTile d = new DoorTile();
+					d.setLocation(loc);
+					d.setDoor(Door.getDoor(code)); // gets the door with the given code
+					TileMapper.TileMap[x][y] = d;
+					doorLocs.add(loc); // adds the door to list of door locations
 				}
-	}
-				System.out.println("=============================");
-				System.out.println("before returning tile mapper we hav edoors " + doorLocs.size());
-				TileMapper.doorLocations = doorLocs;
-					return TileMapper;
+
+				count++;
+			}
+		}
+		TileMapper.doorLocations = doorLocs;
+		return TileMapper;
 
 	}
-
 
 }

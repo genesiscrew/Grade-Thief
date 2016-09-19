@@ -5,16 +5,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.plaf.SliderUI;
+
 import characters.Player;
 import items.Door;
 
-
+/**
+*
+* @author Stefan Vrecic
+*
+*/
 public class makeFloorTest {
 
 	public static void main(String[] args) throws IOException {
 
 		// make a floor
-
 		/// load the rooms and add it.
 		// get file path
 		// make a new room
@@ -85,6 +90,9 @@ public class makeFloorTest {
 		Location pL = p.getCharacterLocation();
 		floor.floorMap.floorTiles[pL.row()][pL.column()].setOccupied();
 
+		int playerLoop = 0;
+
+		while (playerLoop < 100) {
 		String s = "";
 		for (int h = 0; h<floor.floorMap.FLOOR_HEIGHT; h++) {
 			for (int w = 0; w<floor.floorMap.FLOOR_WIDTH; w++) {
@@ -94,6 +102,16 @@ public class makeFloorTest {
 		}
 
 		System.out.println(s);
+		playerLoop++;
+
+		try {Thread.sleep(700);	}
+		catch (InterruptedException e) {e.printStackTrace();}
+
+		floor.floorMap.floorTiles[pL.row()][pL.column()].setUnoccupied();
+		pL.modX(-1);
+		floor.floorMap.floorTiles[pL.row()][pL.column()].setOccupied();
+
+		}
 
 
 
