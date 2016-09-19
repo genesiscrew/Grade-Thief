@@ -10,6 +10,12 @@ public class Main {
     static JTextField TF;
 
     public static void main(String[] args) {
+        Main main = new Main();
+        main.createNewGame();
+    }
+
+
+    public void createNewGame(){
         JFrame F = new JFrame();
         Screen ScreenObject = new Screen();
         F.add(ScreenObject);

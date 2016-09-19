@@ -7,7 +7,7 @@ public class GenerateTerrain {
 
     Random r;
     static double roughness = 0;
-    static int mapSize = 100;
+    static int mapSize = 50;
     static double Size = 10;
     //	static Color G = new Color(155, 155, 155);
     static Color G = new Color(120, 100, 80);

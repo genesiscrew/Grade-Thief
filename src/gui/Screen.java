@@ -41,7 +41,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
 
     //The smaller the zoom the more zoomed out you are and visa versa, although altering too far from 1000 will make it look pretty weird
-    static double zoom = 1000, MinZoom = 500, MaxZoom = 2500, MouseX = 0, MouseY = 0, MovementSpeed = 0.5;
+    static double zoom = 1000, MinZoom = 500, MaxZoom = 2500, MouseX = 0, MouseY = 0, MovementSpeed = 2;
 
     //FPS is a bit primitive, you can set the MaxFPS as high as u want
     double drawFPS = 0, MaxFPS = 1000, SleepTime = 1000.0 / MaxFPS, LastRefresh = 0, StartTime = System.currentTimeMillis(), LastFPSCheck = 0, Checks = 0;
@@ -66,9 +66,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         invisibleMouse();
         new GenerateTerrain();
         Cubes.add(new Cube(0, -5, 0, 2, 2, 2, Color.red));
-        Cubes.add(new Cube(0, 20, 0, 10, 500, 100, Color.black));
-        Cubes.add(new Cube(500, 20, 0, 10, 500, 100, Color.black));
-        Cubes.add(new Cube(0, 20, 0, 500, 500, 100, Color.black));
+        Cubes.add(new Cube(0, 20, 0, 5, 250, 100, Color.blue));
+        Cubes.add(new Cube(250, 20, 0, 5, 250, 100, Color.green));
+        Cubes.add(new Cube(0, 20, 0, 250, 250, 100, Color.orange));
 
 
         Prisms.add(new Prism(6, -5, 0, 2, 2, 2, Color.green));
@@ -77,8 +77,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         Cubes.add(new Cube(20, -5, 0, 2, 2, 2, Color.red));
         Cubes.add(new Cube(22, -5, 0, 2, 2, 2, Color.red));
         Cubes.add(new Cube(20, -5, 2, 2, 2, 2, Color.red));
-        Prisms.add(new Prism(18, -5, 2, 2, 2, 2, Color.green));
-        Prisms.add(new Prism(22, -5, 2, 2, 2, 2, Color.green));
+//        Prisms.add(new Prism(18, -5, 2, 2, 2, 2, Color.green));
+//        Prisms.add(new Prism(22, -5, 2, 2, 2, 2, Color.green));
         Pyramids.add(new Pyramid(20, -5, 4, 2, 2, 2, Color.blue));
     }
 
@@ -204,25 +204,21 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         if (Keys[0]) {
             xMove += ViewVector.x;
             yMove += ViewVector.y;
-            zMove += ViewVector.z;
         }
 
         if (Keys[2]) {
             xMove -= ViewVector.x;
             yMove -= ViewVector.y;
-            zMove -= ViewVector.z;
         }
 
         if (Keys[1]) {
             xMove += SideViewVector.x;
             yMove += SideViewVector.y;
-            zMove += SideViewVector.z;
         }
 
         if (Keys[3]) {
             xMove -= SideViewVector.x;
             yMove -= SideViewVector.y;
-            zMove -= SideViewVector.z;
         }
 
         Vector MoveVector = new Vector(xMove, yMove, zMove);

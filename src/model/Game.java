@@ -27,6 +27,8 @@ import items.Direction.Dir;
 public class Game {
 	// the tile map
 	public TileMap board;
+
+
 	public Tile[][] TileMap;
 	public
 	// list of all game objects
@@ -283,5 +285,10 @@ public class Game {
         }
 	 return "This is a " + item.itemType();
 	}
+
+	public Tile[][] getTileMap() {
+		return TileMap;
+	}
+
 
 }
