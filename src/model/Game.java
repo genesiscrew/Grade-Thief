@@ -27,6 +27,8 @@ import items.Direction.Dir;
 public class Game {
 	// the tile map
 	public TileMap board;
+
+
 	public Tile[][] TileMap;
 	public
 	// list of all game objects
@@ -36,13 +38,8 @@ public class Game {
 	public Game() {
 		TileMap = new Tile[25][7];
 		board = new TileMap(TileMap);
+		board.createTileMap(System.getProperty("user.dir") + "/src/map");
 
-		try {
-			board.createTileMap(System.getProperty("user.dir") + "/src/map");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public TileMap getGameMap() {
@@ -283,5 +280,10 @@ public class Game {
         }
 	 return "This is a " + item.itemType();
 	}
+
+	public Tile[][] getTileMap() {
+		return TileMap;
+	}
+
 
 }

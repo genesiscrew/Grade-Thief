@@ -120,21 +120,17 @@ public class Controller {
 	}
 
 	public static void main(String[] args) {
+		Controller c = new Controller();
+		c.generateNewGameObject();
+	}
+
+	public Game generateNewGameObject(){
 		// create new game object
 		Game game = new Game();
-
-		// load game map from text file
-
-		// create new gaurd object
-
 		// setup guard for floor 1
 		game.setupGuards(1);
 		//set up player on map
-		//game.setupPlayers();
-
-
-
-
+		game.setupPlayers();
+		return game;
 	}
-
 }
