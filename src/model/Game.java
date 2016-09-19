@@ -33,7 +33,7 @@ public class Game {
 	static List<GameObject> containedItems = new ArrayList<GameObject>();
 	private ArrayList<Character> players = new ArrayList<Character>();
 
-	public Game() {
+	public Game() throws IOException {
 		TileMap = new Tile[25][7];
 		board = new TileMap(TileMap);
 
