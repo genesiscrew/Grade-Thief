@@ -2,7 +2,7 @@ package items;
 
 public class Keys extends Item implements Interactable, Movable {
 
-	String description = " a key";
+	String description = "a key";
 	public int keyID;
 	public String itemType = "K";
 
@@ -10,8 +10,8 @@ public class Keys extends Item implements Interactable, Movable {
 		return itemType;
 	}
 
-	public Keys( int itemID, String itemType) {
-		super( itemID, itemType);
+	public Keys(int itemID, String itemType, int keyID) {
+		super(itemID, itemType);
 		this.keyID = keyID;
 	}
 
@@ -32,7 +32,7 @@ public class Keys extends Item implements Interactable, Movable {
 		if (j.itemType().equals("Door")) {
 				j = (Door) j;
 				Door jDoor = (Door) j;
-				if (keyID == jDoor.itemID)
+				if (keyID == jDoor.keyID)
 						System.out.println("unlocked the door");
 				else
 						System.out.println("Door still locked");
@@ -40,7 +40,7 @@ public class Keys extends Item implements Interactable, Movable {
 		}
 		else if (j instanceof Container) {
 			Container e = (Container) j;
-			if (keyID == e.itemID)
+			if (keyID == e.keyID)
 				System.out.println("unlocked the container");
 		else
 				System.out.println("container still locked");

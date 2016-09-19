@@ -26,16 +26,16 @@ public class makeFloorTest {
 		int nextY = 0;
 		final int ADJACENT = 1; // adjacent rooms, add extra wall
 
-		Door d = new Door(0000, "0001");
+		Door d = new Door(0000, "0001", 0);
 		Room r = new Room(null, d);
 
 		String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
 		String co238 = System.getProperty("user.dir") + "/src/game/floor/co238";
 		String co243 = System.getProperty("user.dir") + "/src/game/floor/co243";
 
-		Door door_co237 = new Door(0000, "237");
-		Door door_co238 = new Door(0000, "238");
-		Door door_co243 = new Door(0000, "243");
+		Door door_co237 = new Door(0000, "237", 0);
+		Door door_co238 = new Door(0000, "238", 0);
+		Door door_co243 = new Door(0000, "243", 0);
 
 		Room room_co237 = new Room(null, door_co237);
 		Room room_co238 = new Room(null, door_co238);

@@ -5,10 +5,11 @@ import java.util.List;
 public class Container extends Item implements Interactable, Movable{
 
 	List<GameObject> containedItems;
-	public Container(int itemID, List<GameObject> containedItems, String itemType) {
+	int keyID;
+	public Container(int itemID, List<GameObject> containedItems, String itemType, int keyID) {
 		super(itemID, itemType);
 		this.containedItems = containedItems;
-
+        this.keyID = keyID;
 	}
 
 	public void setItems(List<GameObject> containedItems) {

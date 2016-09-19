@@ -26,7 +26,7 @@ public class makeRoomTest {
 		int nextY = 0;
 		final int ADJACENT = 1; // adjacent rooms, add extra wall
 
-		Door d = new Door(0000, "0001");
+		Door d = new Door(0000, "0001", 0);
 		Room r = new Room(null, d);
 
 		String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
