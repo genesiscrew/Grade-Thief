@@ -39,8 +39,7 @@ public class makeRoomTest {
 
 		room_co237.setTileMap(co237);
 
-
-	 r.setTileMap(co237);
+		r.setTileMap(co237);
 
 		//		System.out.println("optional code " + r.roomTileMap.getOptionalCode());
 		//		System.out.println("height " + r.roomTileMap.getMapHeight());
@@ -53,10 +52,6 @@ public class makeRoomTest {
 					System.out.println(r.roomTileMap.TileMap[x][y]);
 			}
 		}
-
-
-
-
 
 	}
 

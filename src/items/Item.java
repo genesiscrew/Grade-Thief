@@ -8,8 +8,10 @@ public  class Item extends GameObject {
 	// items should also have a GameWorld Position
 	public int itemID;
 
+
 	public Item( int itemID, String itemType ) {
 		super(itemID, itemType);
+
 
 
 	}
@@ -19,11 +21,6 @@ public  class Item extends GameObject {
 
 
 
-	// Model file ?
-
-
-
-
-
+	// Model file
 
 }
