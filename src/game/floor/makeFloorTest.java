@@ -60,23 +60,27 @@ public class makeFloorTest {
 		floorMap.setFloorMap(floorMap.createFloorMap()); // creates a 2d array or tiles and adds it to FloorMap
 
 		Floor floor = new Floor(floorRooms, null, floorMap);
+		TileMap tileMap = r.getRoomTileMap();
+		int mapWidth = tileMap.getMapWidth();
+		int mapHeight = tileMap.getMapHeight();
 
-		System.out.println("bounding co238 " + room_co238.roomTileMap.getMapWidth() + " ht " + room_co238.roomTileMap.getMapHeight());
-		room_co238.setBoundingBox(nextX, nextY, room_co238.roomTileMap.getMapWidth(), room_co238.roomTileMap.getMapHeight());
 
-		nextX += room_co238.roomTileMap.getMapWidth(); // + ADJACENT;
-		System.out.println("nextX " + nextX + " width" + room_co237.roomTileMap.getMapWidth());
+		System.out.println("bounding co238 " + mapWidth + " ht " + mapHeight);
+		room_co238.setBoundingBox(nextX, nextY, mapWidth, mapHeight);
+
+		nextX += mapWidth; // + ADJACENT;
+		System.out.println("nextX " + nextX + " width" + mapWidth);
 		nextY += 11;
 
-		room_co237.setBoundingBox(nextX, nextY, room_co237.roomTileMap.getMapWidth(), room_co237.roomTileMap.getMapHeight());
+		room_co237.setBoundingBox(nextX, nextY, mapWidth, mapHeight);
 
-		nextY += room_co237.roomTileMap.getMapHeight() + 5; // corridor 5 tiles
-		room_co243.setBoundingBox(0, nextY, room_co243.roomTileMap.getMapWidth(), room_co243.roomTileMap.getMapHeight());
+		nextY += mapHeight + 5; // corridor 5 tiles
+		room_co243.setBoundingBox(0, nextY,mapWidth, mapHeight);
 
 		for (Room room : floorRooms) {
 
 			int[] bounds = room.getBoundingBox();
-			floor.addRoom(room, bounds[0], bounds[1], bounds[2], bounds[3], room.roomTileMap.getDoors());
+			floor.addRoom(room, bounds[0], bounds[1], bounds[2], bounds[3], tileMap.getDoors());
 
 			//			for (int sy = room.sy; sy <= sy+room.h; sy++) {
 			//			for (int sx = room.sx; sx <= sx+room.w; sx++) {

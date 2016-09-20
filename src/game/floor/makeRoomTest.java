@@ -45,11 +45,12 @@ public class makeRoomTest {
 		//		System.out.println("height " + r.roomTileMap.getMapHeight());
 		//		System.out.println("width " + r.roomTileMap.getMapWidth());
 
-		for (int y = 0 ; y < r.roomTileMap.getMapHeight(); y++ ) {
-			for (int x = 0 ; x < r.roomTileMap.getMapWidth() ; x++) {
-				Tile t = r.roomTileMap.TileMap[x][y];
+		TileMap tileMap = r.getRoomTileMap();
+		for (int y = 0 ; y < tileMap.getMapHeight(); y++ ) {
+			for (int x = 0 ; x < tileMap.getMapWidth() ; x++) {
+				Tile t = tileMap.TileMap[x][y];
 				if (t != null)
-					System.out.println(r.roomTileMap.TileMap[x][y]);
+					System.out.println(tileMap.TileMap[x][y]);
 			}
 		}
 

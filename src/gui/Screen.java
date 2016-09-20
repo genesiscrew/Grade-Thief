@@ -17,24 +17,35 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
 public class Screen extends JPanel implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 
     //ArrayList of all the 3D polygons - each 3D polygon has a 2D 'PolygonObject' inside called 'DrawablePolygon'
-    static ArrayList<ThreeDPolygon> DPolygons = new ArrayList<ThreeDPolygon>();
+    static List<ThreeDPolygon> polygonFloor = new ArrayList<>();
 
-    static ArrayList<Cube> Cubes = new ArrayList<Cube>();
-    static ArrayList<Prism> Prisms = new ArrayList<Prism>();
-    static ArrayList<Pyramid> Pyramids = new ArrayList<Pyramid>();
+    static ArrayList<Cube> cubes = new ArrayList<Cube>();
+    static ArrayList<Prism> prisms = new ArrayList<Prism>();
+    static ArrayList<Pyramid> pyramids = new ArrayList<Pyramid>();
 
     //The polygon that the mouse is currently over
-    static PolygonObject PolygonOver = null;
+    static PolygonObject polygonOver = null;
+
+    final int startX = 15;
+    final int startY = 5;
+    final int startZ = 10;
+
 
     //Used for keeping mouse in center
     Robot r;
 
+    Terrain terrain;
+
+    /**
+     * This is the co-ordinates of where the player is  (x, y, z)
+     */
     static double[] ViewFrom = new double[]{15, 5, 10},
             ViewTo = new double[]{0, 0, 0},
             LightDir = new double[]{1, 1, 1};
@@ -62,24 +73,31 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
-
         invisibleMouse();
-        new GenerateTerrain();
-        Cubes.add(new Cube(0, -5, 0, 2, 2, 2, Color.red));
-        Cubes.add(new Cube(0, 20, 0, 5, 250, 100, Color.blue));
-        Cubes.add(new Cube(250, 20, 0, 5, 250, 100, Color.green));
-        Cubes.add(new Cube(0, 20, 0, 250, 250, 100, Color.orange));
+
+        // Load the terrian
+        terrain = new Terrain();
+        polygonFloor = terrain.generateMap();
 
 
-        Prisms.add(new Prism(6, -5, 0, 2, 2, 2, Color.green));
-        Pyramids.add(new Pyramid(12, -5, 0, 2, 2, 2, Color.blue));
-        Cubes.add(new Cube(18, -5, 0, 2, 2, 2, Color.red));
-        Cubes.add(new Cube(20, -5, 0, 2, 2, 2, Color.red));
-        Cubes.add(new Cube(22, -5, 0, 2, 2, 2, Color.red));
-        Cubes.add(new Cube(20, -5, 2, 2, 2, 2, Color.red));
-//        Prisms.add(new Prism(18, -5, 2, 2, 2, 2, Color.green));
-//        Prisms.add(new Prism(22, -5, 2, 2, 2, 2, Color.green));
-        Pyramids.add(new Pyramid(20, -5, 4, 2, 2, 2, Color.blue));
+        cubes.add(new Cube(0, -5, 0, 2, 2, 2, Color.red));
+        cubes.add(new Cube(0, 20, 0, 5, 250, 100, Color.blue));
+        cubes.add(new Cube(250, 20, 0, 5, 250, 100, Color.green));
+        cubes.add(new Cube(0, 20, 0, 250, 250, 100, Color.orange));
+
+        cubes.add(new Cube(18, -5, 0, 2, 2, 2, Color.red));
+        cubes.add(new Cube(20, -5, 0, 2, 2, 2, Color.red));
+        cubes.add(new Cube(22, -5, 0, 2, 2, 2, Color.red));
+        cubes.add(new Cube(20, -5, 2, 2, 2, 2, Color.red));
+
+
+        prisms.add(new Prism(6, -5, 0, 2, 2, 2, Color.green));
+        pyramids.add(new Pyramid(12, -5, 0, 2, 2, 2, Color.blue));
+        pyramids.add(new Pyramid(20, -5, 4, 2, 2, 2, Color.blue));
+
+        ViewFrom[0] = startX;
+        ViewFrom[1] = startY;
+        ViewFrom[2] = startZ;
     }
 
     public void paintComponent(Graphics g) {
@@ -92,31 +110,31 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         //Calculated all that is general for this camera position
         Calculator.SetPrederterminedInfo();
 
-        ControlSunAndLight();
+        controlSunAndLight();
 
         //Updates each polygon for this camera position
-        for (int i = 0; i < DPolygons.size(); i++)
-            DPolygons.get(i).updatePolygon();
+        for (int i = 0; i < polygonFloor.size(); i++)
+            polygonFloor.get(i).updatePolygon();
 
         //rotate and update shape examples
-        Cubes.get(0).rotation += .01;
-        Cubes.get(0).updatePoly();
+        cubes.get(0).rotation += .01;
+        cubes.get(0).updatePoly();
 
-        Prisms.get(0).rotation += .01;
-        Prisms.get(0).updatePoly();
+        prisms.get(0).rotation += .01;
+        prisms.get(0).updatePoly();
 
-        Pyramids.get(0).rotation += .01;
-        Pyramids.get(0).updatePoly();
+        pyramids.get(0).rotation += .01;
+        pyramids.get(0).updatePoly();
 
         //Set drawing order so closest polygons gets drawn last
         setOrder();
 
         //Set the polygon that the mouse is currently over
-        setPolygonOver();
+       // setPolygonOver();
 
         //draw polygons in the Order that is set by the 'setOrder' function
         for (int i = 0; i < NewOrder.length; i++)
-            DPolygons.get(NewOrder[i]).DrawablePolygon.drawPolygon(g);
+            polygonFloor.get(NewOrder[i]).DrawablePolygon.drawPolygon(g);
 
         //draw the cross in the center of the screen
         drawMouseAim(g);
@@ -124,15 +142,18 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         //FPS display
         g.drawString("FPS: " + (int) drawFPS + " (Benchmark)", 40, 40);
 
-        SleepAndRefresh();
+        sleepAndRefresh();
     }
 
-    void setOrder() {
-        double[] k = new double[DPolygons.size()];
-        NewOrder = new int[DPolygons.size()];
+    /**
+     * This sets the order that the polygons are drawn in
+     */
+    private void setOrder() {
+        double[] k = new double[polygonFloor.size()];
+        NewOrder = new int[polygonFloor.size()];
 
-        for (int i = 0; i < DPolygons.size(); i++) {
-            k[i] = DPolygons.get(i).AvgDist;
+        for (int i = 0; i < polygonFloor.size(); i++) {
+            k[i] = polygonFloor.get(i).AvgDist;
             NewOrder[i] = i;
         }
 
@@ -151,20 +172,30 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
                 }
     }
 
-    void invisibleMouse() {
+    /**
+     * This hides the mouse cursor so we can use the cross hairs instead
+     */
+    private void invisibleMouse() {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         BufferedImage cursorImage = new BufferedImage(1, 1, BufferedImage.TRANSLUCENT);
         Cursor invisibleCursor = toolkit.createCustomCursor(cursorImage, new Point(0, 0), "InvisibleCursor");
         setCursor(invisibleCursor);
     }
 
-    void drawMouseAim(Graphics g) {
+    /**
+     * This aims the mouse on the graphics
+     * @param g
+     */
+    private void drawMouseAim(Graphics g) {
         g.setColor(Color.black);
         g.drawLine((int) (Main.ScreenSize.getWidth() / 2 - aimSight), (int) (Main.ScreenSize.getHeight() / 2), (int) (Main.ScreenSize.getWidth() / 2 + aimSight), (int) (Main.ScreenSize.getHeight() / 2));
         g.drawLine((int) (Main.ScreenSize.getWidth() / 2), (int) (Main.ScreenSize.getHeight() / 2 - aimSight), (int) (Main.ScreenSize.getWidth() / 2), (int) (Main.ScreenSize.getHeight() / 2 + aimSight));
     }
 
-    void SleepAndRefresh() {
+    /**
+     * This calculates the frame rate
+     */
+    private void sleepAndRefresh() {
         long timeSLU = (long) (System.currentTimeMillis() - LastRefresh);
 
         Checks++;
@@ -187,14 +218,20 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         repaint();
     }
 
-    void ControlSunAndLight() {
+    /**
+     * Sets the the values for the light direction
+     */
+    void controlSunAndLight() {
         SunPos += 0.005;
-        double mapSize = GenerateTerrain.mapSize * GenerateTerrain.Size;
+        double mapSize = terrain.getMapWidth() * terrain.getMapWidth();
         LightDir[0] = mapSize / 2 - (mapSize / 2 + Math.cos(SunPos) * mapSize * 10);
         LightDir[1] = mapSize / 2 - (mapSize / 2 + Math.sin(SunPos) * mapSize * 10);
         LightDir[2] = -200;
     }
 
+    /**
+     *
+     */
     void cameraMovement() {
         Vector ViewVector = new Vector(ViewTo[0] - ViewFrom[0], ViewTo[1] - ViewFrom[1], ViewTo[2] - ViewFrom[2]);
         double xMove = 0, yMove = 0, zMove = 0;
@@ -222,26 +259,49 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         }
 
         Vector MoveVector = new Vector(xMove, yMove, zMove);
-        MoveTo(ViewFrom[0] + MoveVector.x * MovementSpeed, ViewFrom[1] + MoveVector.y * MovementSpeed, ViewFrom[2] + MoveVector.z * MovementSpeed);
+        moveTo(ViewFrom[0] + MoveVector.x * MovementSpeed, ViewFrom[1] + MoveVector.y * MovementSpeed, ViewFrom[2] + MoveVector.z * MovementSpeed);
     }
 
-    void MoveTo(double x, double y, double z) {
-        ViewFrom[0] = x;
-        ViewFrom[1] = y;
-        ViewFrom[2] = z;
-        updateView();
+    void moveTo(double x, double y, double z) {
+        System.out.println(x + " " + y + " " + z);
+
+        if(!positionOutOfBounds(x, y, z)) {
+           ViewFrom[0] = x;
+           ViewFrom[1] = y;
+           ViewFrom[2] = z;
+           updateView();
+       }
     }
 
+    private boolean positionOutOfBounds(double x, double y, double z){
+        double mapSize = terrain.getMapWidth() * terrain.getTileSize();
+        if(x < 0 || y < 0 || z < 0)
+            return true;
+        if(x > startX + mapSize || y > startY + mapSize || z > startZ + mapSize)
+            return true;
+        return false;
+    }
+
+    /**
+     * Highlights the polygon that the cursor is on
+     */
     void setPolygonOver() {
-        PolygonOver = null;
+        polygonOver = null;
         for (int i = NewOrder.length - 1; i >= 0; i--)
-            if (DPolygons.get(NewOrder[i]).DrawablePolygon.MouseOver() && DPolygons.get(NewOrder[i]).draw
-                    && DPolygons.get(NewOrder[i]).DrawablePolygon.visible) {
-                PolygonOver = DPolygons.get(NewOrder[i]).DrawablePolygon;
+            if (polygonFloor.get(NewOrder[i]).DrawablePolygon.MouseOver() && polygonFloor.get(NewOrder[i]).draw
+                    && polygonFloor.get(NewOrder[i]).DrawablePolygon.visible) {
+                polygonOver = polygonFloor.get(NewOrder[i]).DrawablePolygon;
                 break;
             }
     }
 
+    /**
+     * Called when the mouse is moved, calculates the amount it was moved and sets the vert and horizontal looking angles
+     * It also updates the view
+     *
+     * @param NewMouseX
+     * @param NewMouseY
+     */
     void mouseMovement(double NewMouseX, double NewMouseY) {
         double difX = (NewMouseX - Main.ScreenSize.getWidth() / 2);
         double difY = (NewMouseY - Main.ScreenSize.getHeight() / 2);
@@ -265,6 +325,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         ViewTo[2] = ViewFrom[2] + VertLook;
     }
 
+    /**
+     * Centre the mouse in the centre of the screen
+     */
     void centerMouse() {
         try {
             r = new Robot();
@@ -330,12 +393,12 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     public void mousePressed(MouseEvent arg0) {
         if (arg0.getButton() == MouseEvent.BUTTON1)
-            if (PolygonOver != null)
-                PolygonOver.seeThrough = false;
+            if (polygonOver != null)
+                polygonOver.seeThrough = false;
 
         if (arg0.getButton() == MouseEvent.BUTTON3)
-            if (PolygonOver != null)
-                PolygonOver.seeThrough = false;
+            if (polygonOver != null)
+                polygonOver.seeThrough = false;
     }
 
     public void mouseReleased(MouseEvent arg0) {

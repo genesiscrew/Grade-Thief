@@ -20,7 +20,7 @@ public class ThreeDPolygon {
     }
 
     void createPolygon() {
-        DrawablePolygon = new PolygonObject(new double[x.length], new double[x.length], c, Screen.DPolygons.size(), seeThrough);
+        DrawablePolygon = new PolygonObject(new double[x.length], new double[x.length], c, Screen.polygonFloor.size(), seeThrough);
     }
 
     void updatePolygon() {
