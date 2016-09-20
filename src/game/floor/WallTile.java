@@ -1,5 +1,9 @@
 package game.floor;
-
+/**
+*
+* @author Stefan Vrecic
+*
+*/
 public class WallTile implements Tile  {
 
 	Location location;
