@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import game.floor.Room;
+import game.floor.TileMap;
 
 public class GenerateTerrain {
 
@@ -17,17 +18,18 @@ public class GenerateTerrain {
 
     public GenerateTerrain() throws IOException {
 
-//    	String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
-//		Room room_co237 = new Room(null, null);
-//		room_co237.setTileMap(co237);
-//
-//		GenerateTerrain.mapSize = 1 + 2 * Math.max(room_co237.roomTileMap.getMapHeight(), room_co237.roomTileMap.getMapWidth());
-//
-//		System.out.println("mapSize " + mapSize);
-//
-//		try {
-//			Thread.sleep(2000);
-//		} catch (InterruptedException e) {	e.printStackTrace();	}
+    	String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
+		Room room_co237 = new Room(null, null);
+		room_co237.setTileMap(co237);
+
+        TileMap tileMap = room_co237.getRoomTileMap();
+        GenerateTerrain.mapSize = 1 + 2 * Math.max(tileMap.getMapHeight(),tileMap.getMapWidth());
+
+		System.out.println("mapSize " + mapSize);
+
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {	e.printStackTrace();	}
 
 
         r = new Random();
@@ -36,6 +38,7 @@ public class GenerateTerrain {
 
         for (int y = 0; y < values1.length / 2; y += 2) {
             for (int i = 0; i < values1.length; i++) {
+                values2[i] = r.nextDouble() * roughness;
                 values2[i] = r.nextDouble() * roughness;
             }
 
@@ -48,9 +51,7 @@ public class GenerateTerrain {
                 }
             }
 
-            for (int i = 0; i < values1.length; i++) {
-                values2[i] = r.nextDouble() * roughness;
-            }
+
 
             if (y != 0) {
                 for (int x = 0; x < values1.length / 2; x++) {

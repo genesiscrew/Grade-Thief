@@ -8,14 +8,15 @@ import java.util.List;
 import items.Door;
 
 public class Room {
+
 	// a room should be laid out in a grid
 	//Tile[][] roomTileMap; // this contains the arrangement of the room
-	TileMap roomTileMap;
-	Door door;
-	int sx = -1;
-	int sy = -1;
-	int w = -1;
-	int h = -1;
+	private TileMap roomTileMap;
+	private Door door;
+	private int sx = -1;
+	private int sy = -1;
+	private int w = -1;
+	private int h = -1;
 	List<Location> doorLocations = new ArrayList<Location>();
 
 	public Room(TileMap roomTileMap, Door door) {
@@ -58,5 +59,30 @@ public class Room {
 	public int roomGetCode() {
 		return this.door.code;
 	}
+
+	public TileMap getRoomTileMap() {
+		return roomTileMap;
+	}
+
+	public Door getDoor() {
+		return door;
+	}
+
+	public int getSx() {
+		return sx;
+	}
+
+	public int getSy() {
+		return sy;
+	}
+
+	public int getW() {
+		return w;
+	}
+
+	public int getH() {
+		return h;
+	}
+
 
 }

@@ -16,6 +16,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -64,7 +65,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         this.addMouseWheelListener(this);
 
         invisibleMouse();
-        new GenerateTerrain();
+        try {
+            new GenerateTerrain();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Cubes.add(new Cube(0, -5, 0, 2, 2, 2, Color.red));
         Cubes.add(new Cube(0, 20, 0, 5, 250, 100, Color.blue));
         Cubes.add(new Cube(250, 20, 0, 5, 250, 100, Color.green));
