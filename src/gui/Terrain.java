@@ -7,30 +7,29 @@ import java.util.Random;
 import game.floor.Room;
 import game.floor.TileMap;
 
-public class GenerateTerrain {
+public class Terrain {
 
-    Random r;
-    static double roughness = 0;
-    static int mapSize = 33;
+    private Random r;
+    private double roughness = 0;
 
-    static double Size = 10;
-    static Color G = new Color(120, 100, 80);
 
-    public GenerateTerrain() throws IOException {
+    private int mapSize = 33;
+
+    private double size = 10;
+    private Color G = new Color(120, 100, 80);
+
+
+
+    public Terrain() throws IOException {
 
     	String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
 		Room room_co237 = new Room(null, null);
 		room_co237.setTileMap(co237);
 
         TileMap tileMap = room_co237.getRoomTileMap();
-        GenerateTerrain.mapSize = 1 + 2 * Math.max(tileMap.getMapHeight(),tileMap.getMapWidth());
+        // mapSize = 1 + 2 * Math.max(tileMap.getMapHeight(),tileMap.getMapWidth());
 
 		System.out.println("mapSize " + mapSize);
-
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {	e.printStackTrace();	}
-
 
         r = new Random();
         double[] values1 = new double[mapSize];
@@ -45,22 +44,29 @@ public class GenerateTerrain {
             if (y != 0) {
                 for (int x = 0; x < values1.length / 2; x++) {
                     Screen.DPolygons.add(new ThreeDPolygon(
-                            new double[]{(Size * x),  (Size * x),  Size + (Size * x), Size + (Size * x)},
-                            new double[]{(Size * y),  Size + (Size * y), Size + (Size * y),  (Size * y)},
+                            new double[]{(size * x),  (size * x),  size + (size * x), size + (size * x)},
+                            new double[]{(size * y),  size + (size * y), size + (size * y),  (size * y)},
                             new double[]{values1[x], values2[x], values2[x + 1],  values1[x + 1]}, G, false));
                 }
             }
 
-
-
             if (y != 0) {
                 for (int x = 0; x < values1.length / 2; x++) {
                     Screen.DPolygons.add(new ThreeDPolygon(
-                            new double[]{(Size * x), (Size * x), Size + (Size * x), Size + (Size * x)},
-                            new double[]{(Size * (y + 1)), Size + (Size * (y + 1)), Size + (Size * (y + 1)), (Size * (y + 1))},
+                            new double[]{(size * x), (size * x), size + (size * x), size + (size * x)},
+                            new double[]{(size * (y + 1)), size + (size * (y + 1)), size + (size * (y + 1)), (size * (y + 1))},
                             new double[]{values1[x], values2[x], values2[x + 1], values1[x + 1]}, G, false));
                 }
             }
         }
+    }
+
+
+    public int getMapSize() {
+        return mapSize;
+    }
+
+    public double getTileSize() {
+        return size;
     }
 }

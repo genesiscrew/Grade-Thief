@@ -33,9 +33,19 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     //The polygon that the mouse is currently over
     static PolygonObject PolygonOver = null;
 
+    final int startX = 15;
+    final int startY = 5;
+    final int startZ = 10;
+
+
     //Used for keeping mouse in center
     Robot r;
 
+    Terrain terrain;
+
+    /**
+     * This is the co-ordinates of where the player is  (x, y, z)
+     */
     static double[] ViewFrom = new double[]{15, 5, 10},
             ViewTo = new double[]{0, 0, 0},
             LightDir = new double[]{1, 1, 1};
@@ -64,9 +74,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
 
+
+
         invisibleMouse();
         try {
-            new GenerateTerrain();
+           terrain = new Terrain();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -83,10 +95,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
         Prisms.add(new Prism(6, -5, 0, 2, 2, 2, Color.green));
         Pyramids.add(new Pyramid(12, -5, 0, 2, 2, 2, Color.blue));
-
-//        Prisms.add(new Prism(18, -5, 2, 2, 2, 2, Color.green));
-//        Prisms.add(new Prism(22, -5, 2, 2, 2, 2, Color.green));
         Pyramids.add(new Pyramid(20, -5, 4, 2, 2, 2, Color.blue));
+
+        ViewFrom[0] = startX;
+        ViewFrom[1] = startY;
+        ViewFrom[2] = startZ;
     }
 
     public void paintComponent(Graphics g) {
@@ -212,7 +225,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      */
     void controlSunAndLight() {
         SunPos += 0.005;
-        double mapSize = GenerateTerrain.mapSize * GenerateTerrain.Size;
+        double mapSize = terrain.getMapSize() * terrain.getMapSize();
         LightDir[0] = mapSize / 2 - (mapSize / 2 + Math.cos(SunPos) * mapSize * 10);
         LightDir[1] = mapSize / 2 - (mapSize / 2 + Math.sin(SunPos) * mapSize * 10);
         LightDir[2] = -200;
@@ -252,10 +265,23 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
     void moveTo(double x, double y, double z) {
-        ViewFrom[0] = x;
-        ViewFrom[1] = y;
-        ViewFrom[2] = z;
-        updateView();
+        System.out.println(x + " " + y + " " + z);
+
+        if(!positionOutOfBounds(x, y, z)) {
+           ViewFrom[0] = x;
+           ViewFrom[1] = y;
+           ViewFrom[2] = z;
+           updateView();
+       }
+    }
+
+    private boolean positionOutOfBounds(double x, double y, double z){
+        double mapSize = terrain.getMapSize() * terrain.getTileSize();
+        if(x < 0 || y < 0 || z < 0)
+            return true;
+        if(x > startX + mapSize || y > startY + mapSize || z > startZ + mapSize)
+            return true;
+        return false;
     }
 
     /**
