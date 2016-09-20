@@ -39,7 +39,7 @@ public class PolygonObject {
                 g.drawPolygon(P);
             }
 
-            if (Screen.PolygonOver == this) {
+            if (Screen.polygonOver == this) {
                 g.setColor(new Color(255, 255, 255, 100));
                 g.fillPolygon(P);
             }

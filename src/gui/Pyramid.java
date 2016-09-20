@@ -13,15 +13,15 @@ public class Pyramid {
 
     public Pyramid(double x, double y, double z, double width, double length, double height, Color c) {
         Polys[0] = new ThreeDPolygon(new double[]{x, x + width, x + width, x}, new double[]{y, y, y + length, y + length}, new double[]{z, z, z, z}, c, false);
-        Screen.DPolygons.add(Polys[0]);
+        Screen.polygonFloor.add(Polys[0]);
         Polys[1] = new ThreeDPolygon(new double[]{x, x, x + width}, new double[]{y, y, y, y}, new double[]{z, z + height, z + height}, c, false);
-        Screen.DPolygons.add(Polys[1]);
+        Screen.polygonFloor.add(Polys[1]);
         Polys[2] = new ThreeDPolygon(new double[]{x + width, x + width, x + width}, new double[]{y, y, y + length}, new double[]{z, z + height, z + height}, c, false);
-        Screen.DPolygons.add(Polys[2]);
+        Screen.polygonFloor.add(Polys[2]);
         Polys[3] = new ThreeDPolygon(new double[]{x, x, x + width}, new double[]{y + length, y + length, y + length}, new double[]{z, z + height, z + height}, c, false);
-        Screen.DPolygons.add(Polys[3]);
+        Screen.polygonFloor.add(Polys[3]);
         Polys[4] = new ThreeDPolygon(new double[]{x, x, x}, new double[]{y, y, y + length}, new double[]{z, z + height, z + height}, c, false);
-        Screen.DPolygons.add(Polys[4]);
+        Screen.polygonFloor.add(Polys[4]);
 
         this.c = c;
         this.x = x;
@@ -93,8 +93,8 @@ public class Pyramid {
 
     void updatePoly() {
         for (int i = 0; i < 5; i++) {
-            Screen.DPolygons.add(Polys[i]);
-            Screen.DPolygons.remove(Polys[i]);
+            Screen.polygonFloor.add(Polys[i]);
+            Screen.polygonFloor.remove(Polys[i]);
         }
 
         double radius = Math.sqrt(width * width + length * length);
@@ -135,7 +135,7 @@ public class Pyramid {
 
     void removePyramid() {
         for (int i = 0; i < 5; i++)
-            Screen.DPolygons.remove(Polys[i]);
-        Screen.Pyramids.remove(this);
+            Screen.polygonFloor.remove(Polys[i]);
+        Screen.pyramids.remove(this);
     }
 }

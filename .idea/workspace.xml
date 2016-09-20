@@ -2,11 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bb1d81ad-2684-41c8-a912-b40cd6e3a962" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/gui/GenerateTerrain.java" afterPath="$PROJECT_DIR$/src/gui/Terrain.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/game/floor/Room.java" afterPath="$PROJECT_DIR$/src/game/floor/Room.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/game/floor/makeFloorTest.java" afterPath="$PROJECT_DIR$/src/game/floor/makeFloorTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/game/floor/makeRoomTest.java" afterPath="$PROJECT_DIR$/src/game/floor/makeRoomTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/gui/Cube.java" afterPath="$PROJECT_DIR$/src/gui/Cube.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/gui/PolygonObject.java" afterPath="$PROJECT_DIR$/src/gui/PolygonObject.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/gui/Prism.java" afterPath="$PROJECT_DIR$/src/gui/Prism.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/gui/Pyramid.java" afterPath="$PROJECT_DIR$/src/gui/Pyramid.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/gui/Screen.java" afterPath="$PROJECT_DIR$/src/gui/Screen.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/gui/Terrain.java" afterPath="$PROJECT_DIR$/src/gui/Terrain.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/gui/ThreeDPolygon.java" afterPath="$PROJECT_DIR$/src/gui/ThreeDPolygon.java" />
     </list>
     <ignored path="grade-thief.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,27 +33,32 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Screen.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Screen.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/gui/Screen.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="286" column="7" selection-start-line="286" selection-start-column="7" selection-end-line="286" selection-end-column="7" />
+            <state relative-caret-position="150">
+              <caret line="28" column="57" selection-start-line="28" selection-start-column="57" selection-end-line="28" selection-end-column="57" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Terrain.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ThreeDPolygon.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/gui/ThreeDPolygon.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="197">
+              <caret line="22" column="107" selection-start-line="22" selection-start-column="107" selection-end-line="22" selection-end-column="107" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Terrain.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/gui/Terrain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="443">
-              <caret line="67" column="0" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
-              <folding>
-                <element signature="e#2164#2165#0" expanded="true" />
-                <element signature="e#2194#2195#0" expanded="true" />
-                <element signature="e#2229#2230#0" expanded="true" />
-                <element signature="e#2256#2257#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="173">
+              <caret line="40" column="49" selection-start-line="40" selection-start-column="49" selection-end-line="40" selection-end-column="49" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -75,8 +85,8 @@
         <option value="$PROJECT_DIR$/src/game/floor/makeRoomTest.java" />
         <option value="$PROJECT_DIR$/src/game/floor/makeFloorTest.java" />
         <option value="$PROJECT_DIR$/src/gui/GenerateTerrain.java" />
-        <option value="$PROJECT_DIR$/src/gui/Terrain.java" />
         <option value="$PROJECT_DIR$/src/gui/Screen.java" />
+        <option value="$PROJECT_DIR$/src/gui/Terrain.java" />
       </list>
     </option>
   </component>
@@ -554,7 +564,15 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/gui/Terrain.java</url>
+          <line>21</line>
+          <properties />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="2" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -653,14 +671,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/game/floor/Room.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="15" column="24" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/game/floor/makeFloorTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="900">
@@ -701,31 +711,42 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/game/floor/Room.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="27" column="36" selection-start-line="27" selection-start-column="32" selection-end-line="27" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/gui/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
-          <caret line="19" column="37" selection-start-line="19" selection-start-column="37" selection-end-line="19" selection-end-column="37" />
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/gui/ThreeDPolygon.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="22" column="107" selection-start-line="22" selection-start-column="107" selection-end-line="22" selection-end-column="107" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/gui/Screen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="28" column="57" selection-start-line="28" selection-start-column="57" selection-end-line="28" selection-end-column="57" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/gui/Terrain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="443">
-          <caret line="67" column="0" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
-          <folding>
-            <element signature="e#2164#2165#0" expanded="true" />
-            <element signature="e#2194#2195#0" expanded="true" />
-            <element signature="e#2229#2230#0" expanded="true" />
-            <element signature="e#2256#2257#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/gui/Screen.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="286" column="7" selection-start-line="286" selection-start-column="7" selection-end-line="286" selection-end-column="7" />
+        <state relative-caret-position="173">
+          <caret line="40" column="49" selection-start-line="40" selection-start-column="49" selection-end-line="40" selection-end-column="49" />
           <folding />
         </state>
       </provider>

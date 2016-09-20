@@ -16,22 +16,22 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
 public class Screen extends JPanel implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 
     //ArrayList of all the 3D polygons - each 3D polygon has a 2D 'PolygonObject' inside called 'DrawablePolygon'
-    static ArrayList<ThreeDPolygon> DPolygons = new ArrayList<ThreeDPolygon>();
+    static List<ThreeDPolygon> polygonFloor = new ArrayList<>();
 
-    static ArrayList<Cube> Cubes = new ArrayList<Cube>();
-    static ArrayList<Prism> Prisms = new ArrayList<Prism>();
-    static ArrayList<Pyramid> Pyramids = new ArrayList<Pyramid>();
+    static ArrayList<Cube> cubes = new ArrayList<Cube>();
+    static ArrayList<Prism> prisms = new ArrayList<Prism>();
+    static ArrayList<Pyramid> pyramids = new ArrayList<Pyramid>();
 
     //The polygon that the mouse is currently over
-    static PolygonObject PolygonOver = null;
+    static PolygonObject polygonOver = null;
 
     final int startX = 15;
     final int startY = 5;
@@ -73,29 +73,27 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
-
-
-
         invisibleMouse();
-        try {
-           terrain = new Terrain();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Cubes.add(new Cube(0, -5, 0, 2, 2, 2, Color.red));
-        Cubes.add(new Cube(0, 20, 0, 5, 250, 100, Color.blue));
-        Cubes.add(new Cube(250, 20, 0, 5, 250, 100, Color.green));
-        Cubes.add(new Cube(0, 20, 0, 250, 250, 100, Color.orange));
 
-        Cubes.add(new Cube(18, -5, 0, 2, 2, 2, Color.red));
-        Cubes.add(new Cube(20, -5, 0, 2, 2, 2, Color.red));
-        Cubes.add(new Cube(22, -5, 0, 2, 2, 2, Color.red));
-        Cubes.add(new Cube(20, -5, 2, 2, 2, 2, Color.red));
+        // Load the terrian
+        terrain = new Terrain();
+        polygonFloor = terrain.generateMap();
 
 
-        Prisms.add(new Prism(6, -5, 0, 2, 2, 2, Color.green));
-        Pyramids.add(new Pyramid(12, -5, 0, 2, 2, 2, Color.blue));
-        Pyramids.add(new Pyramid(20, -5, 4, 2, 2, 2, Color.blue));
+        cubes.add(new Cube(0, -5, 0, 2, 2, 2, Color.red));
+        cubes.add(new Cube(0, 20, 0, 5, 250, 100, Color.blue));
+        cubes.add(new Cube(250, 20, 0, 5, 250, 100, Color.green));
+        cubes.add(new Cube(0, 20, 0, 250, 250, 100, Color.orange));
+
+        cubes.add(new Cube(18, -5, 0, 2, 2, 2, Color.red));
+        cubes.add(new Cube(20, -5, 0, 2, 2, 2, Color.red));
+        cubes.add(new Cube(22, -5, 0, 2, 2, 2, Color.red));
+        cubes.add(new Cube(20, -5, 2, 2, 2, 2, Color.red));
+
+
+        prisms.add(new Prism(6, -5, 0, 2, 2, 2, Color.green));
+        pyramids.add(new Pyramid(12, -5, 0, 2, 2, 2, Color.blue));
+        pyramids.add(new Pyramid(20, -5, 4, 2, 2, 2, Color.blue));
 
         ViewFrom[0] = startX;
         ViewFrom[1] = startY;
@@ -115,18 +113,18 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         controlSunAndLight();
 
         //Updates each polygon for this camera position
-        for (int i = 0; i < DPolygons.size(); i++)
-            DPolygons.get(i).updatePolygon();
+        for (int i = 0; i < polygonFloor.size(); i++)
+            polygonFloor.get(i).updatePolygon();
 
         //rotate and update shape examples
-        Cubes.get(0).rotation += .01;
-        Cubes.get(0).updatePoly();
+        cubes.get(0).rotation += .01;
+        cubes.get(0).updatePoly();
 
-        Prisms.get(0).rotation += .01;
-        Prisms.get(0).updatePoly();
+        prisms.get(0).rotation += .01;
+        prisms.get(0).updatePoly();
 
-        Pyramids.get(0).rotation += .01;
-        Pyramids.get(0).updatePoly();
+        pyramids.get(0).rotation += .01;
+        pyramids.get(0).updatePoly();
 
         //Set drawing order so closest polygons gets drawn last
         setOrder();
@@ -136,7 +134,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
         //draw polygons in the Order that is set by the 'setOrder' function
         for (int i = 0; i < NewOrder.length; i++)
-            DPolygons.get(NewOrder[i]).DrawablePolygon.drawPolygon(g);
+            polygonFloor.get(NewOrder[i]).DrawablePolygon.drawPolygon(g);
 
         //draw the cross in the center of the screen
         drawMouseAim(g);
@@ -151,11 +149,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * This sets the order that the polygons are drawn in
      */
     private void setOrder() {
-        double[] k = new double[DPolygons.size()];
-        NewOrder = new int[DPolygons.size()];
+        double[] k = new double[polygonFloor.size()];
+        NewOrder = new int[polygonFloor.size()];
 
-        for (int i = 0; i < DPolygons.size(); i++) {
-            k[i] = DPolygons.get(i).AvgDist;
+        for (int i = 0; i < polygonFloor.size(); i++) {
+            k[i] = polygonFloor.get(i).AvgDist;
             NewOrder[i] = i;
         }
 
@@ -225,7 +223,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      */
     void controlSunAndLight() {
         SunPos += 0.005;
-        double mapSize = terrain.getMapSize() * terrain.getMapSize();
+        double mapSize = terrain.getMapWidth() * terrain.getMapWidth();
         LightDir[0] = mapSize / 2 - (mapSize / 2 + Math.cos(SunPos) * mapSize * 10);
         LightDir[1] = mapSize / 2 - (mapSize / 2 + Math.sin(SunPos) * mapSize * 10);
         LightDir[2] = -200;
@@ -276,7 +274,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
     private boolean positionOutOfBounds(double x, double y, double z){
-        double mapSize = terrain.getMapSize() * terrain.getTileSize();
+        double mapSize = terrain.getMapWidth() * terrain.getTileSize();
         if(x < 0 || y < 0 || z < 0)
             return true;
         if(x > startX + mapSize || y > startY + mapSize || z > startZ + mapSize)
@@ -288,11 +286,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * Highlights the polygon that the cursor is on
      */
     void setPolygonOver() {
-        PolygonOver = null;
+        polygonOver = null;
         for (int i = NewOrder.length - 1; i >= 0; i--)
-            if (DPolygons.get(NewOrder[i]).DrawablePolygon.MouseOver() && DPolygons.get(NewOrder[i]).draw
-                    && DPolygons.get(NewOrder[i]).DrawablePolygon.visible) {
-                PolygonOver = DPolygons.get(NewOrder[i]).DrawablePolygon;
+            if (polygonFloor.get(NewOrder[i]).DrawablePolygon.MouseOver() && polygonFloor.get(NewOrder[i]).draw
+                    && polygonFloor.get(NewOrder[i]).DrawablePolygon.visible) {
+                polygonOver = polygonFloor.get(NewOrder[i]).DrawablePolygon;
                 break;
             }
     }
@@ -395,12 +393,12 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     public void mousePressed(MouseEvent arg0) {
         if (arg0.getButton() == MouseEvent.BUTTON1)
-            if (PolygonOver != null)
-                PolygonOver.seeThrough = false;
+            if (polygonOver != null)
+                polygonOver.seeThrough = false;
 
         if (arg0.getButton() == MouseEvent.BUTTON3)
-            if (PolygonOver != null)
-                PolygonOver.seeThrough = false;
+            if (polygonOver != null)
+                polygonOver.seeThrough = false;
     }
 
     public void mouseReleased(MouseEvent arg0) {
