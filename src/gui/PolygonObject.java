@@ -4,49 +4,73 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
 
+/**
+ * This stores a polygon, its colour, the lighting and whether is should be drawn, its transparency and if its visible
+ */
 public class PolygonObject {
-    Polygon P;
-    Color c;
+    Polygon polygon;
+    Color color;
     boolean draw = true, visible = true, seeThrough;
     double lighting = 1;
 
+    /**
+     * Create a new polygon
+     * @param x
+     * @param y
+     * @param c
+     * @param n
+     * @param seeThrough
+     */
     public PolygonObject(double[] x, double[] y, Color c, int n, boolean seeThrough) {
-        P = new Polygon();
+        polygon = new Polygon();
         for (int i = 0; i < x.length; i++)
-            P.addPoint((int) x[i], (int) y[i]);
-        this.c = c;
+            polygon.addPoint((int) x[i], (int) y[i]);
+        this.color = c;
         this.seeThrough = seeThrough;
     }
 
+    /**
+     * Update its points
+     * @param x
+     * @param y
+     */
     void updatePolygon(double[] x, double[] y) {
-        P.reset();
+        polygon.reset();
         for (int i = 0; i < x.length; i++) {
-            P.xpoints[i] = (int) x[i];
-            P.ypoints[i] = (int) y[i];
-            P.npoints = x.length;
+            polygon.xpoints[i] = (int) x[i];
+            polygon.ypoints[i] = (int) y[i];
+            polygon.npoints = x.length;
         }
     }
 
+    /**
+     * Draw the polygon
+     * @param g
+     */
     void drawPolygon(Graphics g) {
         if (draw && visible) {
-            g.setColor(new Color((int) (c.getRed() * lighting), (int) (c.getGreen() * lighting), (int) (c.getBlue() * lighting)));
+            g.setColor(new Color((int) (color.getRed() * lighting), (int) (color.getGreen() * lighting), (int) (color.getBlue() * lighting)));
             if (seeThrough)
-                g.drawPolygon(P);
+                g.drawPolygon(polygon);
             else
-                g.fillPolygon(P);
-            if (Screen.OutLines) {
+                g.fillPolygon(polygon);
+            if (Screen.drawOutlines) {
                 g.setColor(new Color(0, 0, 0));
-                g.drawPolygon(P);
+                g.drawPolygon(polygon);
             }
 
             if (Screen.polygonOver == this) {
                 g.setColor(new Color(255, 255, 255, 100));
-                g.fillPolygon(P);
+                g.fillPolygon(polygon);
             }
         }
     }
 
-    boolean MouseOver() {
-        return P.contains(Main.ScreenSize.getWidth() / 2, Main.ScreenSize.getHeight() / 2);
+    /**
+     *
+     * @return
+     */
+    public boolean mouseOver() {
+        return polygon.contains(Main.ScreenSize.getWidth() / 2, Main.ScreenSize.getHeight() / 2);
     }
 }

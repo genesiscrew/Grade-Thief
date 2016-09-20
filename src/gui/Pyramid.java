@@ -3,14 +3,34 @@ package gui;
 
 import java.awt.Color;
 
+/**
+ *
+ */
 public class Pyramid {
-    double x, y, z, width, length, height, rotation = Math.PI * 0.75;
+
+    double x;
+    double y;
+    double z;
+    double width;
+    double length;
+    double height;
+    double rotation = Math.PI * 0.75;
     double[] RotAdd = new double[4];
     Color c;
     double x1, x2, x3, x4, x5, y1, y2, y3, y4, y5;
     ThreeDPolygon[] Polys = new ThreeDPolygon[5];
     double[] angle;
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @param width
+     * @param length
+     * @param height
+     * @param c
+     */
     public Pyramid(double x, double y, double z, double width, double length, double height, Color c) {
         Polys[0] = new ThreeDPolygon(new double[]{x, x + width, x + width, x}, new double[]{y, y, y + length, y + length}, new double[]{z, z, z, z}, c, false);
         Screen.polygonFloor.add(Polys[0]);
@@ -35,6 +55,9 @@ public class Pyramid {
         updatePoly();
     }
 
+    /**
+     *
+     */
     void setRotAdd() {
         angle = new double[6];
 
@@ -46,7 +69,7 @@ public class Pyramid {
         if (xdif < 0)
             angle[0] += Math.PI;
 
-/////////
+        /////////
         xdif = width + 0.00001;
         ydif = -length + 0.00001;
 
@@ -54,7 +77,7 @@ public class Pyramid {
 
         if (xdif < 0)
             angle[1] += Math.PI;
-/////////
+        /////////
         xdif = width + 0.00001;
         ydif = length + 0.00001;
 
@@ -63,7 +86,7 @@ public class Pyramid {
         if (xdif < 0)
             angle[2] += Math.PI;
 
-/////////
+        /////////
         xdif = -width + 0.00001;
         ydif = length + 0.00001;
 
@@ -78,7 +101,12 @@ public class Pyramid {
         RotAdd[3] = angle[3] + 0.25 * Math.PI;
     }
 
-    void UpdateDirection(double toX, double toY) {
+    /**
+     * Update the direction
+     * @param toX
+     * @param toY
+     */
+    void updateDirection(double toX, double toY) {
         double xdif = toX - (x + width / 2) + 0.00001;
         double ydif = toY - (y + length / 2) + 0.00001;
 
@@ -91,6 +119,9 @@ public class Pyramid {
         updatePoly();
     }
 
+    /**
+     * Update the polygon
+     */
     void updatePoly() {
         for (int i = 0; i < 5; i++) {
             Screen.polygonFloor.add(Polys[i]);
@@ -133,6 +164,9 @@ public class Pyramid {
 
     }
 
+    /**
+     *
+     */
     void removePyramid() {
         for (int i = 0; i < 5; i++)
             Screen.polygonFloor.remove(Polys[i]);

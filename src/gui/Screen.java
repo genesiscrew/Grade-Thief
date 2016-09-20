@@ -23,14 +23,14 @@ import javax.swing.JPanel;
 
 public class Screen extends JPanel implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 
-    //ArrayList of all the 3D polygons - each 3D polygon has a 2D 'PolygonObject' inside called 'DrawablePolygon'
+    // List of all the 3D polygons - each 3D polygon has a 2D 'PolygonObject' inside called 'DrawablePolygon'
     static List<ThreeDPolygon> polygonFloor = new ArrayList<>();
 
     static ArrayList<Cube> cubes = new ArrayList<Cube>();
     static ArrayList<Prism> prisms = new ArrayList<Prism>();
     static ArrayList<Pyramid> pyramids = new ArrayList<Pyramid>();
 
-    //The polygon that the mouse is currently over
+    // The polygon that the mouse is currently over
     static PolygonObject polygonOver = null;
 
     final int startX = 15;
@@ -38,9 +38,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     final int startZ = 10;
 
 
-    //Used for keeping mouse in center
+    // Used for keeping mouse in center
     Robot r;
 
+    // The floors map
     Terrain terrain;
 
     /**
@@ -51,21 +52,39 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             LightDir = new double[]{1, 1, 1};
 
 
-    //The smaller the zoom the more zoomed out you are and visa versa, although altering too far from 1000 will make it look pretty weird
-    static double zoom = 1000, MinZoom = 500, MaxZoom = 2500, MouseX = 0, MouseY = 0, MovementSpeed = 2;
+    // The smaller the zoom the more zoomed out you are and visa versa, although altering too far from 1000 will make it look pretty weird
+    static double zoom = 1000;
+    static double minZoom = 500;
+    static double maxZoom = 2500;
+    static double mouseX = 0;
+    static double mouseY = 0;
+    static double movementSpeed = 2;
 
     //FPS is a bit primitive, you can set the MaxFPS as high as u want
     double drawFPS = 0, MaxFPS = 1000, SleepTime = 1000.0 / MaxFPS, LastRefresh = 0, StartTime = System.currentTimeMillis(), LastFPSCheck = 0, Checks = 0;
-    //VertLook goes from 0.999 to -0.999, minus being looking down and + looking up, HorLook takes any number and goes round in radians
-    //aimSight changes the size of the center-cross. The lower HorRotSpeed or VertRotSpeed, the faster the camera will rotate in those directions
-    double VertLook = -0.9, HorLook = 0, aimSight = 4, HorRotSpeed = 900, VertRotSpeed = 2200, SunPos = 0;
 
-    //will hold the order that the polygons in the ArrayList DPolygon should be drawn meaning DPolygon.get(NewOrder[0]) gets drawn first
+
+    double VertLook = -0.9;  // Goes from 0.999 to -0.999, minus being looking down and + looking up
+    double HorLook = 0;     // takes any number and goes round in radians
+    double aimSight = 4; // Changes the size of the center-cross.
+
+    // The lower HorRotSpeed or VertRotSpeed, the faster the camera will rotate in those directions
+    double HorRotSpeed = 900;
+    double VertRotSpeed = 2200;
+    double SunPos = 0;
+
+    /**
+     * Will hold the order that the polygons in the ArrayList DPolygon should be drawn meaning
+     * DPolygon.get(NewOrder[0]) gets drawn first
+     */
     int[] NewOrder;
 
-    static boolean OutLines = true;
+    static boolean drawOutlines = false;
     boolean[] Keys = new boolean[4];
 
+    /**
+     * Create a new screen
+     */
     public Screen() {
         this.addKeyListener(this);
         setFocusable(true);
@@ -75,16 +94,16 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         this.addMouseWheelListener(this);
         invisibleMouse();
 
-        // Load the terrian
+        // Load the terrain
         terrain = new Terrain();
         polygonFloor = terrain.generateMap();
 
-        int wallLength = (int)(terrain.getMapHeight() * terrain.getTileSize()) - 5;
+        int wallLength = (int) (terrain.getMapHeight() * terrain.getTileSize()) - 5;
         int wallHeight = 50;
 
         cubes.add(new Cube(0, 0, 0, 5, wallLength, wallHeight, Color.blue));
         cubes.add(new Cube(5, 0, 0, wallLength - 10, 5, wallHeight, Color.blue));
-        cubes.add(new Cube(wallLength-5, 0, 0, 5, wallLength, wallHeight, Color.green));
+        cubes.add(new Cube(wallLength - 5, 0, 0, 5, wallLength, wallHeight, Color.green));
         cubes.add(new Cube(0, wallLength, 0, wallLength - 5, 5, wallHeight, Color.blue));
 
         ViewFrom[0] = startX;
@@ -100,7 +119,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         cameraMovement();
 
         //Calculated all that is general for this camera position
-        Calculator.SetPrederterminedInfo();
+        Calculator.setPredeterminedInfo();
 
         controlSunAndLight();
 
@@ -113,7 +132,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         setOrder();
 
         //Set the polygon that the mouse is currently over
-       // setPolygonOver();
+        // setPolygonOver();
 
         //draw polygons in the Order that is set by the 'setOrder' function
         for (int i = 0; i < NewOrder.length; i++)
@@ -167,6 +186,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     /**
      * This aims the mouse on the graphics
+     *
      * @param g
      */
     private void drawMouseAim(Graphics g) {
@@ -213,7 +233,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
     /**
-     *
+     * Called when the camera is moved
      */
     void cameraMovement() {
         Vector ViewVector = new Vector(ViewTo[0] - ViewFrom[0], ViewTo[1] - ViewFrom[1], ViewTo[2] - ViewFrom[2]);
@@ -242,25 +262,38 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         }
 
         Vector MoveVector = new Vector(xMove, yMove, zMove);
-        moveTo(ViewFrom[0] + MoveVector.x * MovementSpeed, ViewFrom[1] + MoveVector.y * MovementSpeed, ViewFrom[2] + MoveVector.z * MovementSpeed);
+        moveTo(ViewFrom[0] + MoveVector.x * movementSpeed, ViewFrom[1] + MoveVector.y * movementSpeed, ViewFrom[2] + MoveVector.z * movementSpeed);
     }
 
+    /**
+     * Move the player to x, y, z
+     * @param x
+     * @param y
+     * @param z
+     */
     void moveTo(double x, double y, double z) {
         System.out.println(x + " " + y + " " + z);
 
-        if(!positionOutOfBounds(x, y, z)) {
-           ViewFrom[0] = x;
-           ViewFrom[1] = y;
-           ViewFrom[2] = z;
-           updateView();
-       }
+        if (!positionOutOfBounds(x, y, z)) {
+            ViewFrom[0] = x;
+            ViewFrom[1] = y;
+            ViewFrom[2] = z;
+            updateView();
+        }
     }
 
-    private boolean positionOutOfBounds(double x, double y, double z){
+    /**
+     * Is position x, y, z outside of the floor?
+     * @param x
+     * @param y
+     * @param z
+     * @return
+     */
+    private boolean positionOutOfBounds(double x, double y, double z) {
         double mapSize = terrain.getMapWidth() * terrain.getTileSize();
-        if(x < 0 || y < 0 || z < 0)
+        if (x < 0 || y < 0 || z < 0)
             return true;
-        if(x > startX + mapSize || y > startY + mapSize || z > startZ + mapSize)
+        if (x > startX + mapSize || y > startY + mapSize || z > startZ + mapSize)
             return true;
         return false;
     }
@@ -271,7 +304,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     void setPolygonOver() {
         polygonOver = null;
         for (int i = NewOrder.length - 1; i >= 0; i--)
-            if (polygonFloor.get(NewOrder[i]).DrawablePolygon.MouseOver() && polygonFloor.get(NewOrder[i]).draw
+            if (polygonFloor.get(NewOrder[i]).DrawablePolygon.mouseOver() && polygonFloor.get(NewOrder[i]).draw
                     && polygonFloor.get(NewOrder[i]).DrawablePolygon.visible) {
                 polygonOver = polygonFloor.get(NewOrder[i]).DrawablePolygon;
                 break;
@@ -301,6 +334,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         updateView();
     }
 
+    /**
+     * Sets the x, y, z that the player is looking at
+     */
     void updateView() {
         double r = Math.sqrt(1 - (VertLook * VertLook));
         ViewTo[0] = ViewFrom[0] + r * Math.cos(HorLook);
@@ -320,6 +356,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         }
     }
 
+    @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_W)
             Keys[0] = true;
@@ -330,11 +367,12 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         if (e.getKeyCode() == KeyEvent.VK_D)
             Keys[3] = true;
         if (e.getKeyCode() == KeyEvent.VK_O)
-            OutLines = !OutLines;
+            drawOutlines = !drawOutlines;
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
             System.exit(0);
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_W)
             Keys[0] = false;
@@ -346,34 +384,40 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             Keys[3] = false;
     }
 
+    @Override
     public void keyTyped(KeyEvent e) {
+
     }
 
     @Override
     public void mouseDragged(MouseEvent arg0) {
         mouseMovement(arg0.getX(), arg0.getY());
-        MouseX = arg0.getX();
-        MouseY = arg0.getY();
+        mouseX = arg0.getX();
+        mouseY = arg0.getY();
         centerMouse();
     }
 
     @Override
     public void mouseMoved(MouseEvent arg0) {
         mouseMovement(arg0.getX(), arg0.getY());
-        MouseX = arg0.getX();
-        MouseY = arg0.getY();
+        mouseX = arg0.getX();
+        mouseY = arg0.getY();
         centerMouse();
     }
 
+    @Override
     public void mouseClicked(MouseEvent arg0) {
     }
 
+    @Override
     public void mouseEntered(MouseEvent arg0) {
     }
 
+    @Override
     public void mouseExited(MouseEvent arg0) {
     }
 
+    @Override
     public void mousePressed(MouseEvent arg0) {
         if (arg0.getButton() == MouseEvent.BUTTON1)
             if (polygonOver != null)
@@ -384,15 +428,17 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
                 polygonOver.seeThrough = false;
     }
 
+    @Override
     public void mouseReleased(MouseEvent arg0) {
     }
 
+    @Override
     public void mouseWheelMoved(MouseWheelEvent arg0) {
         if (arg0.getUnitsToScroll() > 0) {
-            if (zoom > MinZoom)
+            if (zoom > minZoom)
                 zoom -= 25 * arg0.getUnitsToScroll();
         } else {
-            if (zoom < MaxZoom)
+            if (zoom < maxZoom)
                 zoom -= 25 * arg0.getUnitsToScroll();
         }
     }

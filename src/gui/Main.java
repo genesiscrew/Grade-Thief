@@ -5,6 +5,9 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
+/**
+ * This is the main class that runs the game
+ */
 public class Main {
     static Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
     static JTextField TF;
@@ -14,8 +17,10 @@ public class Main {
         main.createNewGame();
     }
 
-
-    public void createNewGame(){
+    /**
+     * Create a new game and launch in full screen
+     */
+    public void createNewGame() {
         JFrame F = new JFrame();
         Screen ScreenObject = new Screen();
         F.add(ScreenObject);

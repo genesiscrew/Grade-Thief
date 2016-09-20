@@ -9,6 +9,9 @@ import java.util.Random;
 import game.floor.Room;
 import game.floor.TileMap;
 
+/**
+ * This is the floor of the map
+ */
 public class Terrain {
 
     private final int mapWidth = 30;
@@ -32,7 +35,10 @@ public class Terrain {
 		System.out.printf("Width: %d, Height: %d \n" , mapWidth, mapHeight);
     }
 
-
+    /**
+     * Return a new map being the size of the width and height set in the fields
+     * @return
+     */
     public List<ThreeDPolygon> generateMap(){
         Random r = new Random();
         double[] values1 = new double[mapWidth];
@@ -48,10 +54,8 @@ public class Terrain {
                         new double[]{values1[x], values2[x], values2[x + 1],  values1[x + 1]}, G, false));
             }
         }
-
         return polygonFloor;
     }
-
 
 
     public double getTileSize() {
