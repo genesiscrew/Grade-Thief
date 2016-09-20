@@ -29,21 +29,19 @@ public class Terrain {
 
         TileMap tileMap = room_co237.getRoomTileMap();
         // mapSize = 1 + 2 * Math.max(tileMap.getMapHeight(),tileMap.getMapWidth());
-
 		System.out.printf("Width: %d, Height: %d \n" , mapWidth, mapHeight);
     }
 
 
-
     public List<ThreeDPolygon> generateMap(){
         Random r = new Random();
-        double[] values1 = new double[mapWidth+1];
-        double[] values2 = new double[mapHeight+1];
+        double[] values1 = new double[mapWidth];
+        double[] values2 = new double[mapHeight];
 
         List<ThreeDPolygon> polygonFloor = new ArrayList<>();
 
         for (int y = 0; y < mapWidth; y++) {
-            for (int x = 0; x < mapHeight; x++) {
+            for (int x = 0; x < mapHeight - 1; x++) {
                polygonFloor.add(new ThreeDPolygon(
                         new double[]{(tileSize * x),  (tileSize * x),  tileSize + (tileSize * x), tileSize + (tileSize * x)},
                         new double[]{(tileSize * y),  tileSize + (tileSize * y), tileSize + (tileSize * y),  (tileSize * y)},
@@ -53,6 +51,7 @@ public class Terrain {
 
         return polygonFloor;
     }
+
 
 
     public double getTileSize() {

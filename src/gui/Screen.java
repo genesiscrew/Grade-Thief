@@ -79,21 +79,13 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         terrain = new Terrain();
         polygonFloor = terrain.generateMap();
 
+        int wallLength = (int)(terrain.getMapHeight() * terrain.getTileSize()) - 5;
+        int wallHeight = 50;
 
-        cubes.add(new Cube(0, -5, 0, 2, 2, 2, Color.red));
-        cubes.add(new Cube(0, 20, 0, 5, 250, 100, Color.blue));
-        cubes.add(new Cube(250, 20, 0, 5, 250, 100, Color.green));
-        cubes.add(new Cube(0, 20, 0, 250, 250, 100, Color.orange));
-
-        cubes.add(new Cube(18, -5, 0, 2, 2, 2, Color.red));
-        cubes.add(new Cube(20, -5, 0, 2, 2, 2, Color.red));
-        cubes.add(new Cube(22, -5, 0, 2, 2, 2, Color.red));
-        cubes.add(new Cube(20, -5, 2, 2, 2, 2, Color.red));
-
-
-        prisms.add(new Prism(6, -5, 0, 2, 2, 2, Color.green));
-        pyramids.add(new Pyramid(12, -5, 0, 2, 2, 2, Color.blue));
-        pyramids.add(new Pyramid(20, -5, 4, 2, 2, 2, Color.blue));
+        cubes.add(new Cube(0, 0, 0, 5, wallLength, wallHeight, Color.blue));
+        cubes.add(new Cube(5, 0, 0, wallLength - 10, 5, wallHeight, Color.blue));
+        cubes.add(new Cube(wallLength-5, 0, 0, 5, wallLength, wallHeight, Color.green));
+        cubes.add(new Cube(0, wallLength, 0, wallLength - 5, 5, wallHeight, Color.blue));
 
         ViewFrom[0] = startX;
         ViewFrom[1] = startY;
@@ -116,15 +108,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         for (int i = 0; i < polygonFloor.size(); i++)
             polygonFloor.get(i).updatePolygon();
 
-        //rotate and update shape examples
-        cubes.get(0).rotation += .01;
-        cubes.get(0).updatePoly();
-
-        prisms.get(0).rotation += .01;
-        prisms.get(0).updatePoly();
-
-        pyramids.get(0).rotation += .01;
-        pyramids.get(0).updatePoly();
 
         //Set drawing order so closest polygons gets drawn last
         setOrder();
