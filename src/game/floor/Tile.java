@@ -1,5 +1,9 @@
 package game.floor;
-
+/**
+*
+* @author Stefan Vrecic
+*
+*/
 public interface Tile {
 	//public Tile() { // constructor could include player, object, it contains?
 

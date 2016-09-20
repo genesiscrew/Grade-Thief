@@ -1,5 +1,10 @@
 package game.floor;
-
+/**
+*
+* @author Stefan Vrecic
+* Location.java specifies an x-y coordinates system in the game.
+* Used to keep track of ites, players, rooms etc.
+*/
 public class Location {
 
 	private int x;
@@ -12,6 +17,13 @@ public class Location {
 
 	public String toString() {
 		return x + " " + y;
+	}
+
+	public void modX(int i) {
+		this.x += i;
+	}
+	public void modY(int i) {
+		this.y += i;
 	}
 
 	public int row() {

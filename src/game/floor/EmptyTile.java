@@ -4,7 +4,12 @@ import characters.Guard;
 import characters.Player;
 import items.Keys;
 import model.Character;
-
+/**
+*
+* @author Stefan Vrecic
+* EmptyTile.java instance of Tile which represents a blank tile in the game. Can be occupied by a player or an object
+*
+*/
 public class EmptyTile implements Tile {
 
 	Location location;
