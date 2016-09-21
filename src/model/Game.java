@@ -1,12 +1,16 @@
 package model;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import characters.Guard;
 import characters.Player;
 import game.floor.EmptyTile;
+import game.floor.Floor;
 import game.floor.Location;
 import game.floor.Tile;
 import game.floor.TileMap;
@@ -28,16 +32,14 @@ public class Game {
 	// the tile map
 	public TileMap board;
 	public Tile[][] TileMap;
+	public Floor[] floors;
 	public
 	// list of all game objects
 	static List<GameObject> containedItems = new ArrayList<GameObject>();
 	private ArrayList<Character> players = new ArrayList<Character>();
 
 	public Game() throws IOException {
-		TileMap = new Tile[25][7];
-		board = new TileMap(TileMap);
-
-		board.createTileMap(System.getProperty("user.dir") + "/src/map");
+		floors = new Floor[1];
 	}
 
 	public TileMap getGameMap() {
@@ -64,6 +66,7 @@ public class Game {
 
 	/**
 	 * this method sets up guards within the map
+	 *
 	 * @param integer
 	 *            parameter specifying floorNumber where guards will be
 	 *            activated
@@ -218,12 +221,15 @@ public class Game {
 
 		return item instanceof Container;
 	}
-/**
- *
- * @param the player who wants to pick up an item
- * @param the item the user wants to pick up
- * @return
- */
+
+	/**
+	 *
+	 * @param the
+	 *            player who wants to pick up an item
+	 * @param the
+	 *            item the user wants to pick up
+	 * @return
+	 */
 	public boolean pickupItem(Player player, Item item) {
 
 		if (this.isInteractableItem(item)) {
@@ -232,7 +238,8 @@ public class Game {
 				// anything thing(if any) it contains and leave container
 				// in the game world
 				for (GameObject e : ((Container) item).getItems()) {
-					// only adds an item to user's inventory if the inventory is not full ie filled with less than 10 items
+					// only adds an item to user's inventory if the inventory is
+					// not full ie filled with less than 10 items
 					if (player.getInventory().size() < 11) {
 						player.addToInventory(item);
 						((Container) item).getItems().remove(item);
@@ -244,9 +251,10 @@ public class Game {
 				// tile in game world
 				((EmptyTile) this.getGameMap().getTileMap()[item.getGameObjectLocation().row()][item
 						.getGameObjectLocation().column()]).resetEmptyTile();
-				// only adds an item to user's inventory if the inventory is not full ie filled with less than 10 items
+				// only adds an item to user's inventory if the inventory is not
+				// full ie filled with less than 10 items
 				if (player.getInventory().size() < 11) {
-				player.addToInventory(item);
+					player.addToInventory(item);
 				}
 
 			}
@@ -254,58 +262,133 @@ public class Game {
 
 		return false;
 	}
+
 	/**
 	 *
-	 * @the method returns a string that contains information about the item. e.g. if item is container,
-	 * it will return a string containing description of container and of items it has inside
+	 * @the method returns a string that contains information about the item.
+	 *      e.g. if item is container, it will return a string containing
+	 *      description of container and of items it has inside
 	 */
 	public String inspectItem(GameObject item) {
-        if (this.isContainerItem(item)) {
-        	// item is container so we list through all items within it
-        	if (((Container)item).getItems().isEmpty()) {
-        		return "This is a " + item.itemType() + ", it has no items inside it";
+		if (this.isContainerItem(item)) {
+			// item is container so we list through all items within it
+			if (((Container) item).getItems().isEmpty()) {
+				return "This is a " + item.itemType() + ", it has no items inside it";
 
-        	}
-        	else {
-        		String output;
-        		output = "This is a " + item.itemType() + ", it has the following" + ((Container)item).getItems().size() + "inside it:\n";
-        		for (int i = 0; i < ((Container)item).getItems().size(); i++ ) {
-        			if (((Container)item).getItems().get(i) instanceof Container) {
-        				this.inspectItem(((Container) item).getItems().get(i));
-        			}
-        			 output += "Item 1: " + ((Container)item).getItems().get(i).itemType + "\n";
+			} else {
+				String output;
+				output = "This is a " + item.itemType() + ", it has the following"
+						+ ((Container) item).getItems().size() + "inside it:\n";
+				for (int i = 0; i < ((Container) item).getItems().size(); i++) {
+					if (((Container) item).getItems().get(i) instanceof Container) {
+						this.inspectItem(((Container) item).getItems().get(i));
+					}
+					output += "Item 1: " + ((Container) item).getItems().get(i).itemType + "\n";
 
-        		}
-             return output;
-        	}
-        }
-	 return "This is a " + item.itemType();
+				}
+				return output;
+			}
+		}
+		return "This is a " + item.itemType();
 	}
+
 	/**
 	 * method that drops an item from user's inventory into an emptyTile
-	 * @param player that will drop the item
-	 * @param the item to be dropped
+	 *
+	 * @param player
+	 *            that will drop the item
+	 * @param the
+	 *            item to be dropped
 	 * @return
 	 */
 	public boolean dropItem(Player player, Item item) {
 		// first check if player is on an empty tile
-		if (this.getGameMap().getTileMap()[player.getCharacterLocation().row()][player.getCharacterLocation().column()]
-				instanceof EmptyTile) {
+		if (this.getGameMap().getTileMap()[player.getCharacterLocation().row()][player.getCharacterLocation()
+				.column()] instanceof EmptyTile) {
 			// next check it tile does not already include an item
-			if (((EmptyTile)this.getGameMap().getTileMap()[player.getCharacterLocation().row()]
-					[player.getCharacterLocation().column()]).getObjectonTile() == null) {
+			if (((EmptyTile) this.getGameMap().getTileMap()[player.getCharacterLocation().row()][player
+					.getCharacterLocation().column()]).getObjectonTile() == null) {
 				// next we add the item to the tile
-				((EmptyTile)this.getGameMap().getTileMap()[player.getCharacterLocation().row()]
-						[player.getCharacterLocation().column()]).addObjecttoTile(item);
+				((EmptyTile) this.getGameMap().getTileMap()[player.getCharacterLocation().row()][player
+						.getCharacterLocation().column()]).addObjecttoTile(item);
 				// next we remove item from player inventory
 				player.getInventory().remove(item);
 
 			}
 
-
 		}
 
 		return false;
+	}
+
+	public void populateGameWorld(String file) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void addFloor(Floor floor) {
+		floors[0] = floor;
+		populateFloor(floor, System.getProperty("user.dir") + "/src/map");
+	}
+
+	public void populateFloor(Floor floor, String string) {
+		/*
+		 * x y id nameOfItem typeOfItem
+		 *
+		 * scanner ... if (line.contains ("CONT) ) { Container c = nameOfItem;
+		 * c.keyID = sc.nextInt(); while (sc.nextLine() != ".") {
+		 * c.add(nameOfItem) } }
+		 */
+		File file = new File(string);
+		Scanner sc = null;
+		try {
+			sc = new Scanner(file);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		while (sc.hasNextLine()) {
+			int x = sc.nextInt();
+			System.out.println(x);
+			int y = sc.nextInt();
+			System.out.println(y);
+			int id = sc.nextInt();
+			System.out.println(id);
+			String name = sc.next();
+			System.out.println(name);
+			String type = sc.next();
+			if (type.equals("C")) {
+				// container found
+				int keyID = sc.nextInt();
+				System.out.println(keyID);
+				int itemCount = sc.nextInt();
+				System.out.println(itemCount);
+				while (itemCount > 0) {
+					// loop from each item line
+					String line = sc.nextLine();
+					StringBuilder sb = new StringBuilder();
+					while (line != "") {
+						sb.append(line);
+						sb.append(System.lineSeparator());
+						line = sc.nextLine();
+					}
+					String fileString = sb.toString();
+					System.out.println(fileString);
+                    itemCount--;
+				}
+
+			} else if (type.equals("K")) {
+				// Key found
+				int keyID = sc.nextInt();
+				System.out.println(keyID);
+
+			} else {
+				// normal item found
+			}
+
+		}
+		sc.close();
 	}
 
 }

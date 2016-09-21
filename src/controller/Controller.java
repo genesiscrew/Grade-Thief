@@ -121,7 +121,13 @@ public class Controller {
 
 	public static void main(String[] args) {
 		// create new game object
-		Game game = new Game();
+		Game game;
+		try {
+			game = new Game();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// load game map from text file
 
@@ -131,6 +137,7 @@ public class Controller {
 		game.setupGuards(1);
 		//set up player on map
 		//game.setupPlayers();
+		game.populateGameWorld(System.getProperty("user.dir") + "/src/map");
 
 
 
