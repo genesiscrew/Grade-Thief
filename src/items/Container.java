@@ -46,6 +46,13 @@ public class Container extends Item implements Interactable, Movable{
 		// TODO Auto-generated method stub
 
 	}
+	/**
+	 * add item into container
+	 */
+	public void addItem(Item item) {
+		this.containedItems.add(item);
+		
+	}
 
 
 }

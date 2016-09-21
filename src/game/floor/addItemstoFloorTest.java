@@ -54,7 +54,7 @@ public class addItemstoFloorTest {
 		Game game = new Game();
 
 		Floor floor = new Floor(floorRooms, null, floorMap);
-		game.addFloor(floor);
+		
 
 		System.out.println("bounding co238 " + room_co238.roomTileMap.getMapWidth() + " ht " + room_co238.roomTileMap.getMapHeight());
 		room_co238.setBoundingBox(nextX, nextY, room_co238.roomTileMap.getMapWidth(), room_co238.roomTileMap.getMapHeight());
@@ -86,7 +86,8 @@ public class addItemstoFloorTest {
 		floor.floorMap.floorTiles[pL.row()][pL.column()].setOccupied();
 		
 		
-
+		game.addFloor(floor);
+		
 		String s = "";
 		for (int h = 0; h<floor.floorMap.FLOOR_HEIGHT; h++) {
 			for (int w = 0; w<floor.floorMap.FLOOR_WIDTH; w++) {

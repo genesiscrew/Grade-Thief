@@ -23,6 +23,7 @@ import items.Distance;
 import items.GameObject;
 import items.Interactable;
 import items.Item;
+import items.Keys;
 import items.Movable;
 import items.Direction.Dir;
 
@@ -350,13 +351,14 @@ public class Game {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+        String s = null;
 		while (sc.hasNextLine()) {
 			if (!sc.equals("")) {
 				int x = sc.nextInt();
 				System.out.println(x);
 				int y = sc.nextInt();
 				System.out.println(y);
+				Tile tile = floor.getFloorMap().getFloorTileMap()[x][y];
 				int id = sc.nextInt();
 				System.out.println(id);
 				String name = sc.next();
@@ -414,12 +416,30 @@ public class Game {
 					if (container != null) {
 						// TODO: if method called by container item, then add item into container list
 					}
+					else {
+						EmptyTile E = (EmptyTile) tile;
+						Keys i = new Keys(id, type, keyID);
+						E.addObjecttoTile(i);
+						E.setOccupied();
+						System.out.println("e occupied" + E.isOccupied);
+						floor.getFloorMap().getFloorTileMap()[x][y] = E;
+						
+					}
 
 				} else {
 					// normal item found
 					// TODO: create normal item and add it to floor tile map
 					if (container != null) {
 						// TODO: if method called by container item, then add item into container list
+					} else{
+					//if method is not called by container item, then add the container into the tile map
+					System.out.println("adding item??");
+					EmptyTile E = (EmptyTile) tile;
+					Item i = new Item(id, type);
+					E.addObjecttoTile(i);
+					E.setOccupied();
+					System.out.println("e occupied" + E.isOccupied);
+					floor.getFloorMap().getFloorTileMap()[x][y] = E;
 					}
 
 				}
