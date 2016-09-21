@@ -1,6 +1,8 @@
 package gui;
 
-
+/**
+ * This is a single vector used to assist rendering, its made up of three values being x,y and z
+ */
 public class Vector {
     double x, y, z;
 
@@ -12,10 +14,14 @@ public class Vector {
             this.y = y / Length;
             this.z = z / Length;
         }
-
     }
 
-    Vector CrossProduct(Vector V) {
+    /**
+     * Return the cross product of this vector and vector v
+     * @param V
+     * @return
+     */
+    public Vector CrossProduct(Vector V) {
         Vector CrossVector = new Vector(
                 y * V.z - z * V.y,
                 z * V.x - x * V.z,

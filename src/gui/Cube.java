@@ -2,7 +2,11 @@ package gui;
 
 import java.awt.Color;
 
+/**
+ * This represents a 3D cube that is rendered onto the GUI
+ */
 public class Cube {
+
     double x, y, z, width, length, height, rotation = Math.PI * 0.75;
     double[] RotAdd = new double[4];
     Color c;
@@ -10,6 +14,16 @@ public class Cube {
     ThreeDPolygon[] Polys = new ThreeDPolygon[6];
     double[] angle;
 
+    /**
+     * Create a new cube
+     * @param x
+     * @param y
+     * @param z
+     * @param width
+     * @param length
+     * @param height
+     * @param c
+     */
     public Cube(double x, double y, double z, double width, double length, double height, Color c) {
         Polys[0] = new ThreeDPolygon(new double[]{x, x + width, x + width, x}, new double[]{y, y, y + length, y + length}, new double[]{z, z, z, z}, c, false);
         Screen.polygonFloor.add(Polys[0]);
@@ -47,7 +61,7 @@ public class Cube {
         if (xdif < 0)
             angle[0] += Math.PI;
 
-/////////
+        /////////
         xdif = width / 2 + 0.00001;
         ydif = -length / 2 + 0.00001;
 
@@ -55,7 +69,7 @@ public class Cube {
 
         if (xdif < 0)
             angle[1] += Math.PI;
-/////////
+        /////////
         xdif = width / 2 + 0.00001;
         ydif = length / 2 + 0.00001;
 
@@ -64,7 +78,7 @@ public class Cube {
         if (xdif < 0)
             angle[2] += Math.PI;
 
-/////////
+        /////////
         xdif = -width / 2 + 0.00001;
         ydif = length / 2 + 0.00001;
 
@@ -80,7 +94,12 @@ public class Cube {
 
     }
 
-    void UpdateDirection(double toX, double toY) {
+    /**
+     * Update the direction the polygon is facing
+     * @param toX
+     * @param toY
+     */
+    void updateDirection(double toX, double toY) {
         double xdif = toX - (x + width / 2) + 0.00001;
         double ydif = toY - (y + length / 2) + 0.00001;
 
@@ -93,6 +112,9 @@ public class Cube {
         updatePoly();
     }
 
+    /**
+     *
+     */
     void updatePoly() {
         for (int i = 0; i < 6; i++) {
             Screen.polygonFloor.add(Polys[i]);
@@ -134,9 +156,11 @@ public class Cube {
         Polys[5].x = new double[]{x4, x4, x1, x1};
         Polys[5].y = new double[]{y4, y4, y1, y1};
         Polys[5].z = new double[]{z, z + height, z + height, z};
-
     }
 
+    /**
+     * Remove the cube
+     */
     void removeCube() {
         for (int i = 0; i < 6; i++)
             Screen.polygonFloor.remove(Polys[i]);
