@@ -3,6 +3,9 @@ package model;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -328,10 +331,10 @@ public class Game {
 
 	public void addFloor(Floor floor) {
 		floors[0] = floor;
-		populateFloor(floor, System.getProperty("user.dir") + "/src/map");
+		populateFloor(floor, System.getProperty("user.dir") + "/src/map", null);
 	}
 
-	public void populateFloor(Floor floor, String string) {
+	public void populateFloor(Floor floor, String string, Container container) {
 		/*
 		 * x y id nameOfItem typeOfItem
 		 *
@@ -349,46 +352,81 @@ public class Game {
 		}
 
 		while (sc.hasNextLine()) {
-			int x = sc.nextInt();
-			System.out.println(x);
-			int y = sc.nextInt();
-			System.out.println(y);
-			int id = sc.nextInt();
-			System.out.println(id);
-			String name = sc.next();
-			System.out.println(name);
-			String type = sc.next();
-			if (type.equals("C")) {
-				// container found
-				int keyID = sc.nextInt();
-				System.out.println(keyID);
-				int itemCount = sc.nextInt();
-				System.out.println(itemCount);
-				while (itemCount > 0) {
+			if (!sc.equals("")) {
+				int x = sc.nextInt();
+				System.out.println(x);
+				int y = sc.nextInt();
+				System.out.println(y);
+				int id = sc.nextInt();
+				System.out.println(id);
+				String name = sc.next();
+				System.out.println(name);
+				String type = sc.next();
+				if (type.equals("C")) {
+					// container found
+					int keyID = sc.nextInt();
+					System.out.println(keyID);
+					int itemCount = sc.nextInt();
+					System.out.println(itemCount);
+					// while (itemCount > 0) {
 					// loop from each item line
 					String line = sc.nextLine();
 					StringBuilder sb = new StringBuilder();
-					while (line != "") {
+					while (!line.equals(".")) {
 						sb.append(line);
 						sb.append(System.lineSeparator());
 						line = sc.nextLine();
 					}
 					String fileString = sb.toString();
 					System.out.println(fileString);
-                    itemCount--;
+					// Create temp file.
+					File temp = null;
+
+					try {
+						temp = File.createTempFile("temp", ".txt");
+						System.out.println("Temp file : " + temp.getAbsolutePath());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					try {
+						fileString = fileString.substring(1, fileString.length()-1); //trim the first blank space
+						Files.write(Paths.get(temp.getAbsolutePath()), fileString.getBytes(),
+								StandardOpenOption.APPEND);
+					} catch (IOException e) {
+						// exception handling left as an exercise for the reader
+					}
+                    Container con = new Container(id, null, "box", keyID);
+                    if (container != null) {
+						// TODO: if method called by container item, then add item into container list
+					}
+					this.populateFloor(floor, temp.getAbsolutePath(), con);
+					temp.deleteOnExit();
+					// itemCount--;
+					// }
+
+				} else if (type.equals("K")) {
+					// Key found
+					int keyID = sc.nextInt();
+					System.out.println(keyID);
+					// TODO: create key item and add it to floor tile map
+					if (container != null) {
+						// TODO: if method called by container item, then add item into container list
+					}
+
+				} else {
+					// normal item found
+					// TODO: create normal item and add it to floor tile map
+					if (container != null) {
+						// TODO: if method called by container item, then add item into container list
+					}
+
 				}
-
-			} else if (type.equals("K")) {
-				// Key found
-				int keyID = sc.nextInt();
-				System.out.println(keyID);
-
-			} else {
-				// normal item found
 			}
-
 		}
 		sc.close();
+
 	}
 
 }
