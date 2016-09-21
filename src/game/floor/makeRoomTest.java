@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import items.Container;
 import items.Door;
+import model.Game;
 /**
-*
-* @author Stefan Vrecic
-*
-*/
+ *
+ * @author Stefan Vrecic
+ *
+ */
 public class makeRoomTest {
 
 	public static void main(String[] args) throws IOException {
@@ -22,6 +24,7 @@ public class makeRoomTest {
 		// make a new room
 		// put the file path into room.setTileMap(filePath)
 		// this will delegate the work to TileMap.java
+		Game game = new Game();
 
 		Floor floor;
 		List<Room> floorRooms = new ArrayList<Room>();
@@ -46,13 +49,40 @@ public class makeRoomTest {
 		//		System.out.println("width " + r.roomTileMap.getMapWidth());
 
 		TileMap tileMap = r.getRoomTileMap();
+		String s = "";
 		for (int y = 0 ; y < tileMap.getMapHeight(); y++ ) {
 			for (int x = 0 ; x < tileMap.getMapWidth() ; x++) {
-				Tile t = tileMap.TileMap[x][y];
+				Tile t = tileMap.getTileMap()[x][y];
 				if (t != null)
-					System.out.println(tileMap.TileMap[x][y]);
+					s = s + (tileMap.getTileMap()[x][y].getName());
 			}
+			s = s + "\n";
 		}
+
+		System.out.println(s);
+		System.out.println(r.getRoomTileMap().getItems());
+
+		tileMap.populateRoom(r, tileMap.getItems(), null);
+
+		System.out.println("got her hoooooooooooooooooooooooooooooooooooooooooorrrrrrrrrrrrray");
+		s = "";
+		for (int y = 0 ; y < tileMap.getMapHeight(); y++ ) {
+			for (int x = 0 ; x < tileMap.getMapWidth() ; x++) {
+				Tile t = tileMap.getTileMap()[x][y];
+				if (t != null) {
+					if (tileMap.getTileMap()[x][y].occupied())
+						s = s  + (tileMap.getTileMap()[x][y].getObjectonTile().toString());
+					else
+						s = s + (tileMap.getTileMap()[x][y].getName());
+
+				}
+
+			}
+			s = s + "\n";
+		}
+		System.out.println(s);
+
+
 
 	}
 

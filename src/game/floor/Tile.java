@@ -15,6 +15,7 @@ public interface Tile {
 	public void setLocation(Location l);
 	public String getName();
 	public String name(); // testing purposes
+	public Object getObjectonTile();
 
 
 

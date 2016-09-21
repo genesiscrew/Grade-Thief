@@ -30,7 +30,7 @@ public class WallTile implements Tile  {
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return "*";
+		return "W";
 	}
 
 	public String toString() {
@@ -42,6 +42,9 @@ public class WallTile implements Tile  {
 		this.containsCamera = true;
 	}
 
+	public Object getObjectonTile(){
+		return null;
+	}
 	public boolean cameraIsActivated() {
 		return this.cameraActivated;
 	}

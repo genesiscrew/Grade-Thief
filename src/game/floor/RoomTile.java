@@ -13,7 +13,9 @@ public class RoomTile implements Tile {
 	public Location tileLocation() {
 		return location;
 	}
-
+	public Object getObjectonTile(){
+		return null;
+	}
 	@Override
 	public boolean occupied() {
 		return isOccupied;

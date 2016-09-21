@@ -24,7 +24,9 @@ public class DoorTile implements Tile  {
 
 		return location;
 	}
-
+	public Object getObjectonTile(){
+		return null;
+	}
 	@Override
 	public boolean occupied() {
 		return isOccupied;

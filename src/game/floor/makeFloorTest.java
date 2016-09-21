@@ -92,15 +92,15 @@ public class makeFloorTest {
 		Player p = new Player(0000, "Stefan");
 		p.setCharacterLocation(19,27);
 		Location pL = p.getCharacterLocation();
-		floor.floorMap.floorTiles[pL.row()][pL.column()].setOccupied();
+		floor.getFloorMap().getFloorTiles()[pL.row()][pL.column()].setOccupied();
 
 		int playerLoop = 0;
 
 		while (playerLoop < 100) {
 		String s = "";
-		for (int h = 0; h<floor.floorMap.FLOOR_HEIGHT; h++) {
-			for (int w = 0; w<floor.floorMap.FLOOR_WIDTH; w++) {
-					s = s + (floor.floorMap.floorTiles[w][h].name());
+		for (int h = 0; h<floor.getFloorMap().FLOOR_HEIGHT; h++) {
+			for (int w = 0; w<floor.getFloorMap().FLOOR_WIDTH; w++) {
+					s = s + (floor.getFloorMap().getFloorTiles()[w][h].name());
 			}
 			s = s + "\n";
 		}
@@ -111,9 +111,9 @@ public class makeFloorTest {
 		try {Thread.sleep(700);	}
 		catch (InterruptedException e) {e.printStackTrace();}
 
-		floor.floorMap.floorTiles[pL.row()][pL.column()].setUnoccupied();
+		floor.getFloorMap().getFloorTiles()[pL.row()][pL.column()].setUnoccupied();
 		pL.modX(-1);
-		floor.floorMap.floorTiles[pL.row()][pL.column()].setOccupied();
+		floor.getFloorMap().getFloorTiles()[pL.row()][pL.column()].setOccupied();
 
 		}
 
