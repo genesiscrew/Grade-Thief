@@ -4,23 +4,37 @@ import characters.Guard;
 import characters.Player;
 import items.Keys;
 import model.Character;
-
+/**
+*
+* @author Stefan Vrecic
+* EmptyTile.java instance of Tile which represents a blank tile in the game. Can be occupied by a player or an object
+*
+*/
 public class EmptyTile implements Tile {
 
 	Location location;
-	boolean isOccupied = false;
 	Object o;
-	private String name = "-";
+	private String name = "E";
+
+
+	boolean isOccupied = false;
 
 	@Override
 	public Location tileLocation() {
-		// TODO Auto-generated method stub
 		return location;
 	}
 
 	@Override
 	public boolean occupied() {
 		return isOccupied;
+	}
+
+	public void setOccupied() {
+		this.isOccupied = true;
+	}
+
+	public void setUnoccupied() {
+		this.isOccupied = false;
 	}
 
 
@@ -47,6 +61,7 @@ public class EmptyTile implements Tile {
 		}
 		else if (o instanceof Keys) {
 			this.name = ((Keys) o).itemType();
+			isOccupied = true;
 		}
 
 
@@ -77,13 +92,6 @@ public class EmptyTile implements Tile {
 
 	}
 
-	public void setOccupied() {
-		this.isOccupied = true;
-	}
-
-	public void setUnoccupied() {
-		this.isOccupied = false;
-	}
 
 	public String toString() {
 
@@ -96,5 +104,4 @@ public class EmptyTile implements Tile {
 			return "a";
 		return "E";
 	}
-
 }

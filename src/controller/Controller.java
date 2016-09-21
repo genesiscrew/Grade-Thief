@@ -1,4 +1,4 @@
-package controller;
+ackage controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -120,7 +120,13 @@ public class Controller {
 	}
 
 	public static void main(String[] args) {
+		Controller c = new Controller();
+		c.generateNewGameObject();
+	}
+
+	public Game generateNewGameObject(){
 		// create new game object
+<<<<<<< HEAD
 		Game game;
 		try {
 			game = new Game();
@@ -142,6 +148,13 @@ public class Controller {
 
 
 
+=======
+		Game game = new Game();
+		// setup guard for floor 1
+		game.setupGuards(1);
+		//set up player on map
+		game.setupPlayers();
+		return game;
+>>>>>>> c205558933e0cfa0a631cbd8a4d66be5234bba3d
 	}
-
 }

@@ -1,5 +1,9 @@
 package game.floor;
-
+/**
+*
+* @author Stefan Vrecic
+*
+*/
 public interface Tile {
 	//public Tile() { // constructor could include player, object, it contains?
 
@@ -11,6 +15,7 @@ public interface Tile {
 	public void setLocation(Location l);
 	public String getName();
 	public String name(); // testing purposes
+	public Object getObjectonTile();
 
 
 

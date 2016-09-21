@@ -2,15 +2,18 @@ package game.floor;
 
 import items.Door;
 /**
-*
-* Author: Stefan
-*
-*/
+ *
+ * @author Stefan Vrecic
+ * DoorTile.java instance of Tile which represents a space occupied by a door. Useful for the floor map.
+ *
+ */
+
 public class DoorTile implements Tile  {
 
 	Door door;
 	Location location;
 	private boolean isOccupied = false;
+
 
 	public void setDoor(Door door) {
 		this.door = door;
@@ -21,7 +24,9 @@ public class DoorTile implements Tile  {
 
 		return location;
 	}
-
+	public Object getObjectonTile(){
+		return null;
+	}
 	@Override
 	public boolean occupied() {
 		return isOccupied;
@@ -39,9 +44,11 @@ public class DoorTile implements Tile  {
 		return "D";
 	}
 
+
 	public String toString() {
 		return this.getClass().getSimpleName() + " " + location.toString();
 	}
+
 
 	@Override
 	public String name() {

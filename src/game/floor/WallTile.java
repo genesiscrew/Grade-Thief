@@ -1,5 +1,9 @@
 package game.floor;
-
+/**
+*
+* @author Stefan Vrecic
+*
+*/
 public class WallTile implements Tile  {
 
 	Location location;
@@ -26,18 +30,20 @@ public class WallTile implements Tile  {
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return "*";
+		return "W";
 	}
 
 	public String toString() {
 		return this.getClass().getSimpleName() + " " + location.toString();
 	}
 
-
 	public void setCamera() {
 		this.containsCamera = true;
 	}
 
+	public Object getObjectonTile(){
+		return null;
+	}
 	public boolean cameraIsActivated() {
 		return this.cameraActivated;
 	}

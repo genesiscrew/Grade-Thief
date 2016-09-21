@@ -358,7 +358,7 @@ public class Game {
 				System.out.println(x);
 				int y = sc.nextInt();
 				System.out.println(y);
-				Tile tile = floor.getFloorMap().getFloorTileMap()[x][y];
+				//Tile tile = floor.getFloorMap().getFloorTileMap()[x][y];
 				int id = sc.nextInt();
 				System.out.println(id);
 				String name = sc.next();
@@ -393,7 +393,7 @@ public class Game {
 					}
 
 					try {
-						fileString = fileString.substring(1, fileString.length()-1); //trim the first blank space
+						fileString = fileString.substring(1, fileString.indexOf('.')); //trim the first blank space
 						Files.write(Paths.get(temp.getAbsolutePath()), fileString.getBytes(),
 								StandardOpenOption.APPEND);
 					} catch (IOException e) {
@@ -417,13 +417,13 @@ public class Game {
 						// TODO: if method called by container item, then add item into container list
 					}
 					else {
-						EmptyTile E = (EmptyTile) tile;
+						//EmptyTile E = (EmptyTile) tile;
 						Keys i = new Keys(id, type, keyID);
-						E.addObjecttoTile(i);
-						E.setOccupied();
-						System.out.println("e occupied" + E.isOccupied);
-						floor.getFloorMap().getFloorTileMap()[x][y] = E;
-						
+						//E.addObjecttoTile(i);
+						//E.setOccupied();
+						//System.out.println("e occupied" + E.isOccupied);
+						//floor.getFloorMap().getFloorTileMap()[x][y] = E;
+
 					}
 
 				} else {
@@ -434,12 +434,12 @@ public class Game {
 					} else{
 					//if method is not called by container item, then add the container into the tile map
 					System.out.println("adding item??");
-					EmptyTile E = (EmptyTile) tile;
+					//EmptyTile E = (EmptyTile) tile;
 					Item i = new Item(id, type);
-					E.addObjecttoTile(i);
-					E.setOccupied();
-					System.out.println("e occupied" + E.isOccupied);
-					floor.getFloorMap().getFloorTileMap()[x][y] = E;
+					//E.addObjecttoTile(i);
+					//E.setOccupied();
+				//	System.out.println("e occupied" + E.isOccupied);
+				//	floor.getFloorMap().getFloorTileMap()[x][y] = E;
 					}
 
 				}
