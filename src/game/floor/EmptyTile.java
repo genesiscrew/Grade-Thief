@@ -14,7 +14,7 @@ public class EmptyTile implements Tile {
 
 	Location location;
 	Object o;
-	private String name = "-";
+	private String name = "E";
 
 
 	boolean isOccupied = false;
@@ -61,6 +61,7 @@ public class EmptyTile implements Tile {
 		}
 		else if (o instanceof Keys) {
 			this.name = ((Keys) o).itemType();
+			isOccupied = true;
 		}
 
 

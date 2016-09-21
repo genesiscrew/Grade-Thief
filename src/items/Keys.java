@@ -8,6 +8,9 @@ public class Keys extends Item implements Interactable, Movable {
 		super(itemID, itemType);
 	}
 
+	public String toString() {
+		return "K";
+	}
     public String itemType() {
         return itemType;
     }

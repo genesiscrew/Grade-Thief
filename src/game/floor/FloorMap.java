@@ -6,7 +6,7 @@ package game.floor;
 */
 public class FloorMap {
 
-	Tile[][] floorTiles;
+	private Tile[][] floorTiles;
 	// final int COTTON_FLOOR_WIDTH = 112; // DO NOT EDIT
 	// final int COTTON_FLOOR_HEIGHT = 67; // DO NOT EDIT
 	// grid size = 67 * 112 = 7504.
@@ -34,6 +34,10 @@ public class FloorMap {
 		}
 
 		return emptyMap;
+	}
+
+	public Tile[][] getFloorTiles() {
+		return this.floorTiles;
 	}
 
 	public void setFloorMap(Tile[][] FloorMap) {

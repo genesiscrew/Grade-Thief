@@ -16,7 +16,9 @@ public  class Item extends GameObject {
 
 	}
 
-
+	public String toString() {
+		return "I";
+	}
 	// Location location;
 
 
