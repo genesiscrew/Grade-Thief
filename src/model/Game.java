@@ -227,11 +227,9 @@ public class Game {
 	}
 
 	/**
-	 *
-	 * @param the
-	 *            player who wants to pick up an item
-	 * @param the
-	 *            item the user wants to pick up
+	 *this method allows player to pick up items from the game world
+	 * @param the player who wants to pick up an item
+	 * @param the item the user wants to pick up
 	 * @return
 	 */
 	public boolean pickupItem(Player player, Item item) {
@@ -335,14 +333,14 @@ public class Game {
 		populateFloor(floor, System.getProperty("user.dir") + "/src/map", null);
 	}
 
+	/**
+	 * this mthod is responible for populating the floor corridors, excluding the rooms
+	 * @param there floor where we will add the items
+	 * @param the location of the text file will be reading the item data from
+	 * @param the container object that has called this method (if any).
+	 */
 	public void populateFloor(Floor floor, String string, Container container) {
-		/*
-		 * x y id nameOfItem typeOfItem
-		 *
-		 * scanner ... if (line.contains ("CONT) ) { Container c = nameOfItem;
-		 * c.keyID = sc.nextInt(); while (sc.nextLine() != ".") {
-		 * c.add(nameOfItem) } }
-		 */
+
 		File file = new File(string);
 		Scanner sc = null;
 		try {

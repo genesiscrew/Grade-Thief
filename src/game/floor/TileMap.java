@@ -254,7 +254,7 @@ public class TileMap {
 					// TODO: create key item and add it to floor tile map
 
 					EmptyTile E = (EmptyTile) tile;
-					Keys K = new Keys(id, type);
+					Keys K = new Keys(id, type, keyID);
 					E.addObjecttoTile(K);
 					E.setOccupied(); System.out.println("e occupied" + E.isOccupied);
 					tileMap.setTile(x, y, E);
@@ -280,7 +280,7 @@ public class TileMap {
 					// normal item found
 					// TODO: create normal item and add it to floor tile map
 					System.out.println("w====================================================");
-				  System.out.println(container.toString());
+				  //System.out.println(container.toString());
 					System.out.println("=addddddddded itemmmmmmmmmmmmm check contianer");
 
 					if (container != null) {
