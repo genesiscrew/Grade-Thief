@@ -39,7 +39,7 @@ public class Guard extends Character {
 	}
 
 	/**
-	 * this method moves the guard along a path specified by the move strategy
+	 * this method moves the guard along a path specified by the move strategy, the method should keep running until an intruder is detected
 	 */
 	public void move() {
 
@@ -71,9 +71,10 @@ public class Guard extends Character {
 
 				}
 				// Guard has move n moves equal to distance specified in
-				// strategy, now we reverse the movement directions and run the
+				// strategy, now we reverse the movement directions (if required e.g. north south path does not require reversal
+				// but a north west path would need to go back to origin through east south) when the guard reaches last square in path  and run the
 				// move method again
-				if (x == (distance - 1)) {
+				if (x == (distance - 1) && i == (directionList.size()-1)) {
 
 					this.reverseStrategy();
 					this.move();
@@ -91,17 +92,50 @@ public class Guard extends Character {
 
 		if (this.moveStrategy == 5) {
 			// reverse movement
+			this.moveStrategy = 9;
 			strategy = new GuardStrategy(9);
 			directionList = strategy.getDirectionList();
 		}
 		if (this.moveStrategy == 6) {
 			// reverse movement
+			this.moveStrategy = 10;
 			strategy = new GuardStrategy(10);
 			directionList = strategy.getDirectionList();
 		}
 		if (this.moveStrategy == 7) {
-			// reverse movement
-			strategy = new GuardStrategy(10);
+			// reverse movement by updating the arraylist of directions based on new movement strategy
+			this.moveStrategy = 11;
+			strategy = new GuardStrategy(11);
+			directionList = strategy.getDirectionList();
+		}
+		if (this.moveStrategy == 8) {
+			// reverse movement by updating the arraylist of directions based on new movement strategy
+			this.moveStrategy = 12;
+			strategy = new GuardStrategy(12);
+			directionList = strategy.getDirectionList();
+		}
+		if (this.moveStrategy == 9) {
+			// reverse movement by updating the arraylist of directions based on new movement strategy
+			this.moveStrategy = 5;
+			strategy = new GuardStrategy(5);
+			directionList = strategy.getDirectionList();
+		}
+		if (this.moveStrategy == 10) {
+			// reverse movement by updating the arraylist of directions based on new movement strategy
+			this.moveStrategy = 6;
+			strategy = new GuardStrategy(6);
+			directionList = strategy.getDirectionList();
+		}
+		if (this.moveStrategy == 11) {
+			// reverse movement by updating the arraylist of directions based on new movement strategy
+			this.moveStrategy = 7;
+			strategy = new GuardStrategy(7);
+			directionList = strategy.getDirectionList();
+		}
+		if (this.moveStrategy == 12) {
+			// reverse movement by updating the arraylist of directions based on new movement strategy
+			this.moveStrategy = 8;
+			strategy = new GuardStrategy(8);
 			directionList = strategy.getDirectionList();
 		}
 
@@ -188,7 +222,11 @@ public class Guard extends Character {
 		// TODO Auto-generated method stub
 
 	}
-
+  /**
+   * this  inner class returns an arraylist of directions based on integer input
+   * @author abubakhami
+   *
+   */
 	private class GuardStrategy {
 		private int moveStratey;
 		private ArrayList<Direction.Dir> directionList;
@@ -238,6 +276,10 @@ public class Guard extends Character {
 			}
 			if (moveStrategy == 11) {
 				directionList.add(Dir.EAST);
+				directionList.add(Dir.SOUTH);
+			}
+			if (moveStrategy == 12) {
+				directionList.add(Dir.WEST);
 				directionList.add(Dir.SOUTH);
 			}
 		}
