@@ -15,7 +15,6 @@ import characters.Player;
 import game.floor.EmptyTile;
 import game.floor.Floor;
 import game.floor.Location;
-import game.floor.Room;
 import game.floor.Tile;
 import game.floor.TileMap;
 import items.Container;
@@ -28,7 +27,6 @@ import items.Keys;
 import items.Movable;
 import items.Direction.Dir;
 
-
 /**
  *
  * @author Hamid Abubakr this class contains the game logic ie multiplayer ,
@@ -39,6 +37,7 @@ public class Game {
 	public TileMap board;
 	public Tile[][] TileMap;
 	public Floor[] floors;
+
 	public
 	// list of all game objects
 	static List<GameObject> containedItems = new ArrayList<GameObject>();
@@ -229,11 +228,9 @@ public class Game {
 	}
 
 	/**
-	 *
-	 * @param the
-	 *            player who wants to pick up an item
-	 * @param the
-	 *            item the user wants to pick up
+	 *this method allows player to pick up items from the game world
+	 * @param the player who wants to pick up an item
+	 * @param the item the user wants to pick up
 	 * @return
 	 */
 	public boolean pickupItem(Player player, Item item) {
@@ -337,16 +334,14 @@ public class Game {
 		populateFloor(floor, System.getProperty("user.dir") + "/src/map", null);
 	}
 
-
-
+	/**
+	 * this mthod is responible for populating the floor corridors, excluding the rooms
+	 * @param there floor where we will add the items
+	 * @param the location of the text file will be reading the item data from
+	 * @param the container object that has called this method (if any).
+	 */
 	public void populateFloor(Floor floor, String string, Container container) {
-		/*
-		 * x y id nameOfItem typeOfItem
-		 *
-		 * scanner ... if (line.contains ("CONT) ) { Container c = nameOfItem;
-		 * c.keyID = sc.nextInt(); while (sc.nextLine() != ".") {
-		 * c.add(nameOfItem) } }
-		 */
+
 		File file = new File(string);
 		Scanner sc = null;
 		try {
@@ -355,13 +350,14 @@ public class Game {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+        String s = null;
 		while (sc.hasNextLine()) {
 			if (!sc.equals("")) {
 				int x = sc.nextInt();
 				System.out.println(x);
 				int y = sc.nextInt();
 				System.out.println(y);
+				//Tile tile = floor.getFloorMap().getFloorTileMap()[x][y];
 				int id = sc.nextInt();
 				System.out.println(id);
 				String name = sc.next();
@@ -396,7 +392,7 @@ public class Game {
 					}
 
 					try {
-						fileString = fileString.substring(1, fileString.length()-1); //trim the first blank space
+						fileString = fileString.substring(1, fileString.indexOf('.')); //trim the first blank space
 						Files.write(Paths.get(temp.getAbsolutePath()), fileString.getBytes(),
 								StandardOpenOption.APPEND);
 					} catch (IOException e) {
@@ -419,12 +415,30 @@ public class Game {
 					if (container != null) {
 						// TODO: if method called by container item, then add item into container list
 					}
+					else {
+						//EmptyTile E = (EmptyTile) tile;
+						Keys i = new Keys(id, type, keyID);
+						//E.addObjecttoTile(i);
+						//E.setOccupied();
+						//System.out.println("e occupied" + E.isOccupied);
+						//floor.getFloorMap().getFloorTileMap()[x][y] = E;
+
+					}
 
 				} else {
 					// normal item found
 					// TODO: create normal item and add it to floor tile map
 					if (container != null) {
 						// TODO: if method called by container item, then add item into container list
+					} else{
+					//if method is not called by container item, then add the container into the tile map
+					System.out.println("adding item??");
+					//EmptyTile E = (EmptyTile) tile;
+					Item i = new Item(id, type);
+					//E.addObjecttoTile(i);
+					//E.setOccupied();
+				//	System.out.println("e occupied" + E.isOccupied);
+				//	floor.getFloorMap().getFloorTileMap()[x][y] = E;
 					}
 
 				}

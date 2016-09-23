@@ -21,7 +21,7 @@ public class Player extends Character {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
+
 	public void move(Direction dir, Distance d) {
 		// altars details in tile in world
 		// altars playerLocation

@@ -111,12 +111,10 @@ public class TileMap {
 		TileMapper.TileMapWidth = width;
 		TileMapper.TileMapHeight = height;
 
-
 		String items = Tiles.substring(Tiles.lastIndexOf("*") + 2);
 		TileMapper.setItems(items);
 		//  System.out.println(items);
 		s.close();
-
 
 		Tiles = Tiles.substring(Tiles.indexOf('.') + 2); // concatenate dimensions now that they are loaded
 
@@ -150,10 +148,6 @@ public class TileMap {
 				count++;
 			}
 		}
-
-
-
-
 
 		TileMapper.doorLocations = doorLocs;
 		return TileMapper;
@@ -195,8 +189,6 @@ public class TileMap {
 				String type = sc.next();
 		//		System.out.println("type " + type);
 
-
-
 				if (type.equals("C")) {
 					// container found
 					int keyID = sc.nextInt();
@@ -215,17 +207,12 @@ public class TileMap {
 					String fileString = sb.toString();
 					System.out.println(fileString);
 
-
-
-
 						System.out.println("ccccccccccccccccccccccccccccccccccccccccc");
 						System.out.println("+" + fileString + "fileStringgggggggggggggggggg");
 
 						fileString = fileString.substring(1, fileString.length()); //trim the first blank space
 //						fileString = fileString.substring(0, fileString.indexOf("."));
 						System.out.println(fileString + "fileString");
-
-
 
                     Container con = new Container(id, null, "box", keyID);
                     // if container called mathod then we add this container into the calling container
@@ -234,7 +221,6 @@ public class TileMap {
                     System.out.println("con");
                     populateRoom(room, fileString, con);
 					//populateRoom(room, temp.getAbsolutePath(), con);
-
 
                     if (container != null) {
 
@@ -268,7 +254,7 @@ public class TileMap {
 					// TODO: create key item and add it to floor tile map
 
 					EmptyTile E = (EmptyTile) tile;
-					Keys K = new Keys(id, type);
+					Keys K = new Keys(id, type, keyID);
 					E.addObjecttoTile(K);
 					E.setOccupied(); System.out.println("e occupied" + E.isOccupied);
 					tileMap.setTile(x, y, E);
@@ -291,13 +277,11 @@ public class TileMap {
 					System.out.println("e occupied" + E.isOccupied);
 					tileMap.setTile(x, y, E);
 
-
 					// normal item found
 					// TODO: create normal item and add it to floor tile map
 					System.out.println("w====================================================");
-				  System.out.println(container.toString());
+				  //System.out.println(container.toString());
 					System.out.println("=addddddddded itemmmmmmmmmmmmm check contianer");
-
 
 					if (container != null) {
 						System.out.println("=====================================");

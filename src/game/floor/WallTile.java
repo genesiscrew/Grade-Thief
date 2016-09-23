@@ -37,7 +37,6 @@ public class WallTile implements Tile  {
 		return this.getClass().getSimpleName() + " " + location.toString();
 	}
 
-
 	public void setCamera() {
 		this.containsCamera = true;
 	}
