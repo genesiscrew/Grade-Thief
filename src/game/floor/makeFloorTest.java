@@ -60,7 +60,8 @@ public class makeFloorTest {
 		floorMap.setFloorMap(floorMap.createFloorMap()); // creates a 2d array or tiles and adds it to FloorMap
 
 		Floor floor = new Floor(floorRooms, null, floorMap);
-		TileMap tileMap = r.getRoomTileMap();
+
+		TileMap tileMap = room_co238.getRoomTileMap();
 		int mapWidth = tileMap.getMapWidth();
 		int mapHeight = tileMap.getMapHeight();
 
@@ -72,14 +73,23 @@ public class makeFloorTest {
 		System.out.println("nextX " + nextX + " width" + mapWidth);
 		nextY += 11;
 
+		tileMap = room_co237.getRoomTileMap();
+
+		mapWidth = tileMap.getMapWidth();
+		mapHeight = tileMap.getMapHeight();
 		room_co237.setBoundingBox(nextX, nextY, mapWidth, mapHeight);
 
 		nextY += mapHeight + 5; // corridor 5 tiles
-		room_co243.setBoundingBox(0, nextY,mapWidth, mapHeight);
+
+		mapWidth = room_co243.getRoomTileMap().getMapWidth();
+		mapHeight = room_co243.getRoomTileMap().getMapHeight();
+
+		room_co243.setBoundingBox(0, nextY, mapWidth, mapHeight);
 
 		for (Room room : floorRooms) {
 
 			int[] bounds = room.getBoundingBox();
+			//System.out.println(room.getBoundingBox().toString());
 			floor.addRoom(room, bounds[0], bounds[1], bounds[2], bounds[3], tileMap.getDoors());
 
 			//			for (int sy = room.sy; sy <= sy+room.h; sy++) {
@@ -96,8 +106,8 @@ public class makeFloorTest {
 
 		int playerLoop = 0;
 
-		while (playerLoop < 100) {
 		String s = "";
+		//while (playerLoop < 100) {
 		for (int h = 0; h<floor.getFloorMap().FLOOR_HEIGHT; h++) {
 			for (int w = 0; w<floor.getFloorMap().FLOOR_WIDTH; w++) {
 					s = s + (floor.getFloorMap().getFloorTiles()[w][h].name());
@@ -105,8 +115,10 @@ public class makeFloorTest {
 			s = s + "\n";
 		}
 
+		//playerLoop++;
+	//	}
+
 		System.out.println(s);
-		playerLoop++;
 
 		try {Thread.sleep(700);	}
 		catch (InterruptedException e) {e.printStackTrace();}
@@ -121,4 +133,4 @@ public class makeFloorTest {
 
 
 	}
-}
+
