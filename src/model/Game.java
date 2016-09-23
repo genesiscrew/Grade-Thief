@@ -37,6 +37,7 @@ public class Game {
 	public TileMap board;
 	public Tile[][] TileMap;
 	public Floor[] floors;
+
 	public
 	// list of all game objects
 	static List<GameObject> containedItems = new ArrayList<GameObject>();
