@@ -214,7 +214,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * Sets the the values for the light direction
      */
     void controlSunAndLight() {
-        SunPos += 0.005;
+        //SunPos += 0.005;
         double mapSize = room.getFloor().getMapWidth() * room.getFloor().getMapWidth();
         LightDir[0] = mapSize / 2 - (mapSize / 2 + Math.cos(SunPos) * mapSize * 10);
         LightDir[1] = mapSize / 2 - (mapSize / 2 + Math.sin(SunPos) * mapSize * 10);
@@ -395,15 +395,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
     public void jump() {
-        for (int i = 1; i < 10; i++) {
+        for (int i = 1; i < 5; i++) {
             ViewFrom[2] += 1;
             updateView();
         }
-
-//        for (int i = 1; i < 10; i++) {
-//            ViewFrom[2] -= 1;
-//            updateView();
-//        }
     }
 
     @Override

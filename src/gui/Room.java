@@ -2,6 +2,7 @@ package gui;
 
 import items.Chair;
 import items.Laptop;
+import items.Player;
 import items.Table;
 
 import java.awt.*;
@@ -28,21 +29,23 @@ public class Room {
      */
     ArrayList<Drawable> roomObjects = new ArrayList<Drawable>();
 
-    Floor floor;
+    Floor floor = new Floor(0,0,10,10);
 
     /**
      *
      */
     public Room(int type){
-        floor = new Floor();
-        this.floorPolygons = floor.generateMap();
         this.polygons = new ArrayList<>();
 
-        if(type == 1)
+        if(type == 1) {
             addObjectsToMap();
-        else
+            floor = new Floor(0, 0, 10, 10);
+            this.floorPolygons = floor.generateMap();
+        }else {
             addObjectsToMap2();
-
+            floor = new Floor(100,0,10,10);
+            this.floorPolygons = floor.generateMap();
+        }
     }
 
     private void addObjectsToMap() {
@@ -65,6 +68,9 @@ public class Room {
         roomObjects.add(new Chair(75, 60, 0, 5, 5, 5, Color.red));
         roomObjects.add(new Chair(75, 70, 0, 5, 5, 5, Color.red));
         roomObjects.add(new Chair(75, 80, 0, 5, 5, 5, Color.red));
+
+        roomObjects.add(new Player(20, 20, 0, 5, 3, 12, Color.green));
+
     }
 
     private void addObjectsToMap2() {
