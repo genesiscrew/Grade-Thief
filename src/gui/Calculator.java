@@ -76,18 +76,18 @@ public class Calculator {
 	/**
 	 *
 	 */
-	static void setPredeterminedInfo() {
-		ViewVector = new Vector(Screen.ViewTo[0] - Screen.ViewFrom[0], Screen.ViewTo[1] - Screen.ViewFrom[1], Screen.ViewTo[2] - Screen.ViewFrom[2]);
+	static void setPredeterminedInfo(Screen screen) {
+		ViewVector = new Vector(screen.ViewTo[0] - screen.ViewFrom[0], screen.ViewTo[1] - screen.ViewFrom[1], screen.ViewTo[2] - screen.ViewFrom[2]);
 		DirectionVector = new Vector(1, 1, 1);
 		PlaneVector1 = ViewVector.CrossProduct(DirectionVector);
 		PlaneVector2 = ViewVector.CrossProduct(PlaneVector1);
-		P = new Plane(PlaneVector1, PlaneVector2, Screen.ViewTo);
+		P = new Plane(PlaneVector1, PlaneVector2, screen.ViewTo);
 
-		RotationVector = Calculator.getRotationVector(Screen.ViewFrom, Screen.ViewTo);
+		RotationVector = Calculator.getRotationVector(screen.ViewFrom, screen.ViewTo);
 		W1 = ViewVector.CrossProduct(RotationVector);
 		W2 = ViewVector.CrossProduct(W1);
 
-		CalcFocusPos = Calculator.CalculatePositionP(Screen.ViewFrom, Screen.ViewTo, Screen.ViewTo[0], Screen.ViewTo[1], Screen.ViewTo[2]);
+		CalcFocusPos = Calculator.CalculatePositionP(screen.ViewFrom, screen.ViewTo, screen.ViewTo[0], screen.ViewTo[1], screen.ViewTo[2]);
 		CalcFocusPos[0] = Screen.zoom * CalcFocusPos[0];
 		CalcFocusPos[1] = Screen.zoom * CalcFocusPos[1];
 	}

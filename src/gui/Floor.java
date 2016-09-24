@@ -10,9 +10,9 @@ import game.floor.Room;
 import game.floor.TileMap;
 
 /**
- * This is the floor of the map
+ * This is the floorPolygons of the map
  */
-public class Terrain {
+public class Floor {
 
     private final int mapWidth = 30;
     private final int mapHeight = mapWidth;
@@ -20,7 +20,7 @@ public class Terrain {
     private double tileSize = 10;
     private Color G = new Color(120, 100, 80);
 
-    public Terrain() {
+    public Floor() {
 
     	String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
 		Room room_co237 = new Room(null, null);
