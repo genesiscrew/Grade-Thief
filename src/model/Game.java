@@ -26,6 +26,9 @@ import items.Item;
 import items.Keys;
 import items.Movable;
 import items.Direction.Dir;
+import pacman.game.Character;
+import pacman.game.Ghost;
+import pacman.game.Pacman;
 
 /**
  *
@@ -42,30 +45,37 @@ public class Game {
 	// list of all game objects
 	static List<GameObject> containedItems = new ArrayList<GameObject>();
 	private ArrayList<Character> players = new ArrayList<Character>();
+	private boolean tick;
 
 	public Game() throws IOException {
 		floors = new Floor[1];
 	}
 
-	public TileMap getGameMap() {
-		return board;
+	public Floor getFloor(int floorNo) {
+		return floors[floorNo];
 
+	}
+	
+	public synchronized void clockTick() {
+	
 	}
 
 	/**
 	 * for debugging purposes, draws map into console
 	 */
-	public void drawBoard() {
+	public void drawBoard(int floorNo) {
 
-		int count = 0;
-		for (int y = 0; y != this.board.getTileMap()[y].length; y++) {
-			for (int x = 0; x != this.board.getTileMap().length; x++) {
-
-				System.out.printf(this.board.getTileMap()[x][y].getName());
+	
+		String s = "";
+		for (int h = 0; h<this.getFloor(floorNo).getFloorMap().FLOOR_HEIGHT; h++) {
+			for (int w = 0; w<this.getFloor(floorNo).getFloorMap().FLOOR_WIDTH; w++) {
+					s = s + (this.getFloor(floorNo).getFloorMap().getFloorTiles()[w][h].name());
 			}
-			System.out.println();
-
+			s = s + "\n";
 		}
+
+	
+		System.out.println(s);
 
 	}
 
@@ -77,23 +87,23 @@ public class Game {
 	 *            activated
 	 */
 	public void setupGuards(int floorNumber) {
-		Guard gaurd1 = new Guard(0, "guard1");
-		Guard guard2 = new Guard(1, "guard2");
+		Guard gaurd1 = new Guard(0, "guard1", 1, 6);
+		Guard guard2 = new Guard(1, "guard2",6,6);
 		Player player = new Player(0, "H");
 		Distance dist = new Distance(1);
 		// set character location
 		gaurd1.setCharacterLocation(7, 7);
 		// add player object to map
-		((EmptyTile) Game.this.getGameMap().getTileMap()[7][7]).addObjecttoTile(player);
+		((EmptyTile) Game.this.getFloorMap().getTileMap()[7][7]).addObjecttoTile(player);
 		Game.this.drawBoard();
 
 		// set gaurd's location
 		gaurd1.setCharacterLocation(0, 7);
 		guard2.setCharacterLocation(24, 7);
 		// add guard object to tile on map
-		((EmptyTile) Game.this.getGameMap().getTileMap()[0][7]).addObjecttoTile(gaurd1);
+		((EmptyTile) Game.this.getFloorMap().getTileMap()[0][7]).addObjecttoTile(gaurd1);
 		drawBoard();
-		((EmptyTile) Game.this.getGameMap().getTileMap()[24][7]).addObjecttoTile(guard2);
+		((EmptyTile) Game.this.getFloorMap().getTileMap()[24][7]).addObjecttoTile(guard2);
 		drawBoard();
 
 		// create a thread for the guard, so that he can move within map
@@ -105,16 +115,16 @@ public class Game {
 				// coordinate on the Map, change destination
 				// if () {}
 				// gaurd will keep moving
-				Direction dir = new Direction(Dir.EAST);
-				while (!gaurd1.checkforIntruder(Game.this, dir)) {
+
+				while (!gaurd1.checkforIntruder(Game.this)) {
 					// update direction of guard based on hardcoded route
 					// through Tilemap
 
 					// move the guard to new location
 					// remove gaurd as object from previous empty tile
-					((EmptyTile) Game.this.getGameMap().getTileMap()[gaurd1.getCharacterLocation().row()][gaurd1
+					((EmptyTile) Game.this.getFloorMap(1)[gaurd1.getCharacterLocation().row()][gaurd1
 							.getCharacterLocation().column()]).resetEmptyTile();
-					gaurd1.move(dir, dist);
+					gaurd1.move();
 					try {
 						sleep(1000);
 					} catch (InterruptedException e) {
@@ -122,7 +132,7 @@ public class Game {
 						e.printStackTrace();
 					}
 					// add the gaurd as object to the new empty tile
-					((EmptyTile) Game.this.getGameMap().getTileMap()[gaurd1.getCharacterLocation().row()][gaurd1
+					((EmptyTile) Game.this.getFloorMap(1)[gaurd1.getCharacterLocation().row()][gaurd1
 							.getCharacterLocation().column()]).addObjecttoTile(gaurd1);
 
 					// draw board intp console for debugging purposes
@@ -140,16 +150,16 @@ public class Game {
 				// if () {}
 				// gaurd will keep moving
 
-				Direction dir = new Direction(Dir.WEST);
-				while (!guard2.checkforIntruder(Game.this, dir)) {
+
+				while (!guard2.checkforIntruder(Game.this)) {
 					// update direction of guard based on hardcoded route
 					// through Tilemap
 
 					// move the guard to new location
 					// remove gaurd as object from previous empty tile
-					((EmptyTile) Game.this.getGameMap().getTileMap()[guard2.getCharacterLocation().row()][guard2
+					((EmptyTile) Game.this.getFloorMap(1)[guard2.getCharacterLocation().row()][guard2
 							.getCharacterLocation().column()]).resetEmptyTile();
-					guard2.move(dir, dist);
+					guard2.move();
 					try {
 						sleep(1000);
 					} catch (InterruptedException e) {
@@ -157,7 +167,7 @@ public class Game {
 						e.printStackTrace();
 					}
 					// add the gaurd as object to the new empty tile
-					((EmptyTile) Game.this.getGameMap().getTileMap()[guard2.getCharacterLocation().row()][guard2
+					((EmptyTile) Game.this.getFloorMap(1)[guard2.getCharacterLocation().row()][guard2
 							.getCharacterLocation().column()]).addObjecttoTile(guard2);
 
 					// draw board intp console for debugging purposes
@@ -187,8 +197,8 @@ public class Game {
 	 */
 	public boolean isValidMove(Location targetLocation) {
 
-		return !this.getGameMap().getTileMap()[targetLocation.row()][targetLocation.column()].occupied()
-				&& this.getGameMap().getTileMap()[targetLocation.row()][targetLocation.column()] instanceof EmptyTile;
+		return !this.getFloorMap().getTileMap()[targetLocation.row()][targetLocation.column()].occupied()
+				&& this.getFloorMap().getTileMap()[targetLocation.row()][targetLocation.column()] instanceof EmptyTile;
 
 	}
 
@@ -252,7 +262,7 @@ public class Game {
 			} else {
 				// item is not a container so we pick it up and remove it from
 				// tile in game world
-				((EmptyTile) this.getGameMap().getTileMap()[item.getGameObjectLocation().row()][item
+				((EmptyTile) this.getFloorMap().getTileMap()[item.getGameObjectLocation().row()][item
 						.getGameObjectLocation().column()]).resetEmptyTile();
 				// only adds an item to user's inventory if the inventory is not
 				// full ie filled with less than 10 items
@@ -306,13 +316,13 @@ public class Game {
 	 */
 	public boolean dropItem(Player player, Item item) {
 		// first check if player is on an empty tile
-		if (this.getGameMap().getTileMap()[player.getCharacterLocation().row()][player.getCharacterLocation()
+		if (this.getFloorMap().getTileMap()[player.getCharacterLocation().row()][player.getCharacterLocation()
 				.column()] instanceof EmptyTile) {
 			// next check it tile does not already include an item
-			if (((EmptyTile) this.getGameMap().getTileMap()[player.getCharacterLocation().row()][player
+			if (((EmptyTile) this.getFloorMap().getTileMap()[player.getCharacterLocation().row()][player
 					.getCharacterLocation().column()]).getObjectonTile() == null) {
 				// next we add the item to the tile
-				((EmptyTile) this.getGameMap().getTileMap()[player.getCharacterLocation().row()][player
+				((EmptyTile) this.getFloorMap().getTileMap()[player.getCharacterLocation().row()][player
 						.getCharacterLocation().column()]).addObjecttoTile(item);
 				// next we remove item from player inventory
 				player.getInventory().remove(item);
@@ -331,7 +341,7 @@ public class Game {
 
 	public void addFloor(Floor floor) {
 		floors[0] = floor;
-		populateFloor(floor, System.getProperty("user.dir") + "/src/map", null);
+		//populateFloor(floor, System.getProperty("user.dir") + "/src/map", null);
 	}
 
 	/**
@@ -446,6 +456,16 @@ public class Game {
 		}
 		sc.close();
 
+	}
+
+	public void tick(boolean b) {
+		this.tick = b;
+		
+	}
+
+	public boolean gettick() {
+		// TODO Auto-generated method stub
+		return this.tick;
 	}
 
 }

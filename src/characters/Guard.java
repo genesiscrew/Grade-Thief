@@ -3,6 +3,8 @@ package characters;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import javax.swing.plaf.SliderUI;
+
 import game.floor.EmptyTile;
 import game.floor.Location;
 import items.Direction;
@@ -20,14 +22,16 @@ public class Guard extends Character {
 
 	Location characterLocation;
 	private int distance;
+	private int floorNo;
 
-	public Guard(int characterID, String characterName, int moveStrategy, int distance) {
+	public Guard(int characterID, String characterName, int moveStrategy, int distance, int floorNo) {
 		super(characterID, characterName);
 		this.distance = distance;
 		this.moveStrategy = moveStrategy;
 		strategy = new GuardStrategy(moveStrategy);
 		directionList = strategy.getDirectionList();
-
+		this.dir = directionList.get(0);
+		this.floorNo = floorNo;
 	}
 
 	public Location getCharacterLocation() {
@@ -39,16 +43,23 @@ public class Guard extends Character {
 	}
 
 	/**
-	 * this method moves the guard along a path specified by the move strategy, the method should keep running until an intruder is detected
+	 * this method moves the guard along a path specified by the move strategy,
+	 * the method should keep running until an intruder is detected
 	 */
-	public void move() {
+	public void move(Game game) {
 
+		
+		while (!this.checkforIntruder(game)) {
 		for (int i = 0; i < directionList.size(); i++) {
 
 			// set Guard's direction
 			this.dir = directionList.get(i);
 			// now we move guard n steps
 			for (int x = 0; x < distance; x++) {
+				// move the guard to new location
+				// remove gaurd as object from previous empty tile
+				((EmptyTile) game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row()][this.getCharacterLocation()
+						.column()]).resetEmptyTile();
 				// move the guard one step based on direction
 				if (this.dir.equals(Dir.EAST)) {
 					this.setCharacterLocation(this.getCharacterLocation().row() + 1,
@@ -62,27 +73,44 @@ public class Guard extends Character {
 				} else if (this.dir.equals(Dir.NORTH)) {
 
 					this.setCharacterLocation(this.getCharacterLocation().row(),
-							this.getCharacterLocation().column() + 1);
+							this.getCharacterLocation().column() - 1);
 
 				} else if (this.dir.equals(Dir.SOUTH)) {
 
 					this.setCharacterLocation(this.getCharacterLocation().row(),
-							this.getCharacterLocation().column() - 1);
+							this.getCharacterLocation().column() + 1);
 
 				}
-				// Guard has move n moves equal to distance specified in
-				// strategy, now we reverse the movement directions (if required e.g. north south path does not require reversal
-				// but a north west path would need to go back to origin through east south) when the guard reaches last square in path  and run the
-				// move method again
-				if (x == (distance - 1) && i == (directionList.size()-1)) {
+			
+				// add the gaurd as object to the new empty tile
+				((EmptyTile) game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row()][this.getCharacterLocation()
+						.column()]).addObjecttoTile(this);
+				game.tick(true);
 
+				// draw board intp console for debugging purposes
+				//game.drawBoard(this.floorNo);
+				// Guard has move n moves equal to distance specified in
+				// strategy, now we reverse the movement directions (if required
+				// e.g. north south path does not require reversal
+				// but a north west path would need to go back to origin through
+				// east south) when the guard reaches last square in path and
+				// run the
+				// move method again
+				if (x == (distance - 1) && i == (directionList.size() - 1)) {
+              
 					this.reverseStrategy();
-					this.move();
+					//this.move(game);
 				}
 			}
+		}
 
 		}
 
+	}
+
+	public int getFloorNo() {
+
+		return this.floorNo;
 	}
 
 	/**
@@ -95,60 +123,74 @@ public class Guard extends Character {
 			this.moveStrategy = 9;
 			strategy = new GuardStrategy(9);
 			directionList = strategy.getDirectionList();
+			this.dir = directionList.get(0);
 		}
-		if (this.moveStrategy == 6) {
+		else if (this.moveStrategy == 6) {
 			// reverse movement
 			this.moveStrategy = 10;
 			strategy = new GuardStrategy(10);
 			directionList = strategy.getDirectionList();
+			this.dir = directionList.get(0);
 		}
-		if (this.moveStrategy == 7) {
-			// reverse movement by updating the arraylist of directions based on new movement strategy
+		else if (this.moveStrategy == 7) {
+			// reverse movement by updating the arraylist of directions based on
+			// new movement strategy
 			this.moveStrategy = 11;
 			strategy = new GuardStrategy(11);
 			directionList = strategy.getDirectionList();
+			this.dir = directionList.get(0);
 		}
-		if (this.moveStrategy == 8) {
-			// reverse movement by updating the arraylist of directions based on new movement strategy
+		else if (this.moveStrategy == 8) {
+			// reverse movement by updating the arraylist of directions based on
+			// new movement strategy
 			this.moveStrategy = 12;
 			strategy = new GuardStrategy(12);
 			directionList = strategy.getDirectionList();
+			this.dir = directionList.get(0);
 		}
-		if (this.moveStrategy == 9) {
-			// reverse movement by updating the arraylist of directions based on new movement strategy
+		else if (this.moveStrategy == 9) {
+			// reverse movement by updating the arraylist of directions based on
+			// new movement strategy
 			this.moveStrategy = 5;
 			strategy = new GuardStrategy(5);
 			directionList = strategy.getDirectionList();
+			this.dir = directionList.get(0);
 		}
-		if (this.moveStrategy == 10) {
-			// reverse movement by updating the arraylist of directions based on new movement strategy
+		else if (this.moveStrategy == 10) {
+			// reverse movement by updating the arraylist of directions based on
+			// new movement strategy
 			this.moveStrategy = 6;
 			strategy = new GuardStrategy(6);
 			directionList = strategy.getDirectionList();
+			this.dir = directionList.get(0);
 		}
-		if (this.moveStrategy == 11) {
-			// reverse movement by updating the arraylist of directions based on new movement strategy
+		else if (this.moveStrategy == 11) {
+			// reverse movement by updating the arraylist of directions based on
+			// new movement strategy
 			this.moveStrategy = 7;
 			strategy = new GuardStrategy(7);
 			directionList = strategy.getDirectionList();
+			this.dir = directionList.get(0);
 		}
-		if (this.moveStrategy == 12) {
-			// reverse movement by updating the arraylist of directions based on new movement strategy
+		else if (this.moveStrategy == 12) {
+			// reverse movement by updating the arraylist of directions based on
+			// new movement strategy
 			this.moveStrategy = 8;
 			strategy = new GuardStrategy(8);
 			directionList = strategy.getDirectionList();
+			this.dir = directionList.get(0);
 		}
 
 	}
 
-	public Boolean checkforIntruder(Game game, Direction dir) {
-		if (dir.getDirection().equals(Dir.EAST)) {
+	public Boolean checkforIntruder(Game game) {
+		if (dir.equals(Dir.EAST)) {
 			for (int i = 0; i < 6; i++) {
-				if (game.getGameMap().getTileMap()[this.getCharacterLocation().row() + i][this.getCharacterLocation()
+				if (game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row() + i][this.getCharacterLocation()
 						.column()] instanceof EmptyTile
-						&& game.getGameMap().getTileMap()[this.getCharacterLocation().row() + i][this
-								.getCharacterLocation().column()].occupied()
-						&& ((EmptyTile) game.getGameMap().getTileMap()[this.getCharacterLocation().row() + i][this
+						&& game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row() + i][this.getCharacterLocation()
+								.column()].occupied()
+						&& ((EmptyTile) game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row() + i][this
 								.getCharacterLocation().column()]).getObjectonTile() instanceof Player) {
 					System.out.println("we have found an intruder");
 					return true;
@@ -156,14 +198,14 @@ public class Guard extends Character {
 				}
 			}
 
-		} else if (dir.getDirection().equals(Dir.WEST)) {
+		} else if (dir.equals(Dir.WEST)) {
 			for (int i = 0; i < 6; i++) {
 
-				if (game.getGameMap().getTileMap()[this.getCharacterLocation().row() - i][this.getCharacterLocation()
+				if (game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row() - i][this.getCharacterLocation()
 						.column()] instanceof EmptyTile
-						&& game.getGameMap().getTileMap()[this.getCharacterLocation().row() - i][this
-								.getCharacterLocation().column()].occupied()
-						&& ((EmptyTile) game.getGameMap().getTileMap()[this.getCharacterLocation().row() - i][this
+						&& game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row() - i][this.getCharacterLocation()
+								.column()].occupied()
+						&& ((EmptyTile) game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row() - i][this
 								.getCharacterLocation().column()]).getObjectonTile() instanceof Player) {
 					System.out.println("we have found an intruder");
 					return true;
@@ -171,28 +213,28 @@ public class Guard extends Character {
 				}
 			}
 
-		} else if (dir.getDirection().equals(Dir.NORTH)) {
+		} else if (dir.equals(Dir.NORTH)) {
 			for (int i = 0; i < 6; i++) {
-				if (game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this.getCharacterLocation()
-						.column() + 1] instanceof EmptyTile
-						&& game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this.getCharacterLocation()
-								.column() + 1].occupied()
-						&& ((EmptyTile) game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this
-								.getCharacterLocation().column() + 1]).getObjectonTile() instanceof Player) {
-					System.out.println("we have found an intruder");
-					return true;
-
-				}
-			}
-
-		} else if (dir.getDirection().equals(Dir.SOUTH)) {
-			for (int i = 0; i < 6; i++) {
-				if (game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this.getCharacterLocation()
-						.column() - i] instanceof EmptyTile
-						&& game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this.getCharacterLocation()
+				if (game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row()][this.getCharacterLocation().column()
+						- 1] instanceof EmptyTile
+						&& game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row()][this.getCharacterLocation()
 								.column() - 1].occupied()
-						&& ((EmptyTile) game.getGameMap().getTileMap()[this.getCharacterLocation().row()][this
-								.getCharacterLocation().column() - i]).getObjectonTile() instanceof Player) {
+						&& ((EmptyTile) game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row()][this
+								.getCharacterLocation().column() - 1]).getObjectonTile() instanceof Player) {
+					System.out.println("we have found an intruder");
+					return true;
+
+				}
+			}
+
+		} else if (dir.equals(Dir.SOUTH)) {
+			for (int i = 0; i < 6; i++) {
+				if (game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row()][this.getCharacterLocation().column()
+						+ i] instanceof EmptyTile
+						&& game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row()][this.getCharacterLocation()
+								.column() + 1].occupied()
+						&& ((EmptyTile) game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row()][this
+								.getCharacterLocation().column() + i]).getObjectonTile() instanceof Player) {
 					System.out.println("we have found an intruder");
 					return true;
 
@@ -222,18 +264,21 @@ public class Guard extends Character {
 		// TODO Auto-generated method stub
 
 	}
-  /**
-   * this  inner class returns an arraylist of directions based on integer input
-   * @author abubakhami
-   *
-   */
+
+	/**
+	 * this inner class returns an arraylist of directions based on integer
+	 * input
+	 *
+	 * @author abubakhami
+	 *
+	 */
 	private class GuardStrategy {
 		private int moveStratey;
 		private ArrayList<Direction.Dir> directionList;
 
 		GuardStrategy(int moveStrategy) {
 			this.moveStratey = moveStrategy;
-			ArrayList<Direction.Dir> directionList = new ArrayList<Direction.Dir>();
+			directionList = new ArrayList<Direction.Dir>();
 			if (moveStrategy == 1) {
 				directionList.add(Dir.EAST);
 				directionList.add(Dir.WEST);
@@ -283,9 +328,10 @@ public class Guard extends Character {
 				directionList.add(Dir.SOUTH);
 			}
 		}
+
 		public ArrayList<Direction.Dir> getDirectionList() {
 
-			return this.directionList;
+			return directionList;
 		}
 
 	}

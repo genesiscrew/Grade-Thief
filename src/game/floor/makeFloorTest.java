@@ -115,9 +115,7 @@ public class makeFloorTest {
 			s = s + "\n";
 		}
 
-		//playerLoop++;
-	//	}
-
+	
 		System.out.println(s);
 
 		try {Thread.sleep(700);	}
