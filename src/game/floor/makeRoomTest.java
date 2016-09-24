@@ -1,12 +1,16 @@
 package game.floor;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import gui.Drawable;
 import items.Container;
 import items.Door;
+import items.Laptop;
+import items.Marker;
 import model.Game;
 /**
  *
@@ -16,23 +20,16 @@ import model.Game;
 public class makeRoomTest {
 
 	public static void main(String[] args) throws IOException {
+		makeRoomTest m = new makeRoomTest(null);
+		Room r = m.t();
+	}
 
-		// make a floor
+	public Room room;
 
-		/// load the rooms and add it.
-		// get file path
-		// make a new room
-		// put the file path into room.setTileMap(filePath)
-		// this will delegate the work to TileMap.java
-		Game game = new Game();
-
-		Floor floor;
-		List<Room> floorRooms = new ArrayList<Room>();
-
-		int nextX = 0;
-		int nextY = 0;
-		final int ADJACENT = 1; // adjacent rooms, add extra wall
-
+	public makeRoomTest(Room r) throws IOException {
+		this.room = t();
+	}
+			public Room t() throws IOException {
 		Door d = new Door(0000, "0001",0);
 		Room r = new Room(null, d);
 
@@ -41,12 +38,9 @@ public class makeRoomTest {
 		Room room_co237 = new Room(null, null);
 
 		room_co237.setTileMap(co237);
+		room_co237.getRoomTileMap().setRoom(room_co237);
 
 		r.setTileMap(co237);
-
-		//		System.out.println("optional code " + r.roomTileMap.getOptionalCode());
-		//		System.out.println("height " + r.roomTileMap.getMapHeight());
-		//		System.out.println("width " + r.roomTileMap.getMapWidth());
 
 		TileMap tileMap = r.getRoomTileMap();
 		String s = "";
@@ -74,16 +68,26 @@ public class makeRoomTest {
 						s = s  + (tileMap.getTileMap()[x][y].getObjectonTile().toString());
 					else
 						s = s + (tileMap.getTileMap()[x][y].getName());
-
 				}
-
 			}
 			s = s + "\n";
 		}
 		System.out.println(s);
 
+		System.out.println(tileMap.getTileMap()[6][4]);
+		Object o = tileMap.getTileMap()[6][4].getObjectonTile();
 
+		Container c = (Container) o;
+		System.out.println("bchecking inside tile 6,4 ");
+//		System.out.println(c);
+//		System.out.println(c.getItems());
+		System.out.println("finished checking");
+
+		for (Drawable lp : r.getDrawableItems()) {
+//			Marker laptop = (Marker) lp;
+//			System.out.println(laptop.toString());
+		}
+		return r;
 
 	}
-
-}
+	}

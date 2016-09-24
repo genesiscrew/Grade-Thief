@@ -1,11 +1,15 @@
 package items;
 
-public class Keys extends Item implements Interactable, Movable {
+import gui.Drawable;
+
+public class Keys extends Item implements Interactable, Movable, Drawable {
 
     String description = " a key";
+    int keyID;
 
-	public Keys(int itemID, String itemType) {
+	public Keys(int itemID, String itemType, int keyID) {
 		super(itemID, itemType);
+		this.keyID = keyID;
 	}
 
 	public String toString() {
@@ -30,21 +34,20 @@ public class Keys extends Item implements Interactable, Movable {
         if (j.itemType().equals("Door")) {
             j = (Door) j;
             Door jDoor = (Door) j;
-            if (itemID == jDoor.itemID)
+            if (keyID == jDoor.itemID)
                 System.out.println("unlocked the door");
             else
                 System.out.println("Door still locked");
 
         } else if (j instanceof Container) {
             Container e = (Container) j;
-            if (itemID == e.itemID)
+            if (keyID == e.itemID)
                 System.out.println("unlocked the container");
             else
                 System.out.println("container still locked");
         }
 
     }
-
 
     @Override
     public void useItem() {
