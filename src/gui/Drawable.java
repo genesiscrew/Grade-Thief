@@ -34,4 +34,18 @@ public interface Drawable {
      */
     void removeCube();
 
+    /**
+     * Is the player moving into an object?
+     * @param x
+     * @param y
+     * @param z
+     * @return
+     */
+    boolean containsPoint(int x, int y, int z);
+
+    /**
+     * Get all the polygons of the object
+     * @return
+     */
+    List<ThreeDPolygon> getPolygons();
 }

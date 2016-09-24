@@ -7,8 +7,8 @@ public class ThreeDPolygon {
     double[] x, y, z;
     boolean draw = true, seeThrough = false;
     double[] CalcPos, newX, newY;
-    PolygonObject DrawablePolygon;
-    double AvgDist;
+    PolygonObject drawablePolygon;
+    double averageDistance;
 
     public ThreeDPolygon(double[] x, double[] y, double[] z, Color c, boolean seeThrough) {
         this.x = x;
@@ -20,52 +20,56 @@ public class ThreeDPolygon {
     }
 
     void createPolygon() {
-        DrawablePolygon = new PolygonObject(new double[x.length], new double[x.length], c, Screen.polygonFloor.size(), seeThrough);
+        drawablePolygon = new PolygonObject(new double[x.length], new double[x.length], c, seeThrough);
     }
 
-    void updatePolygon() {
+    void updatePolygon(Screen screen) {
         newX = new double[x.length];
         newY = new double[x.length];
         draw = true;
         for (int i = 0; i < x.length; i++) {
-            CalcPos = Calculator.CalculatePositionP(Screen.ViewFrom, Screen.ViewTo, x[i], y[i], z[i]);
+            CalcPos = Calculator.CalculatePositionP(screen.ViewFrom, screen.ViewTo, x[i], y[i], z[i]);
             newX[i] = (Main.ScreenSize.getWidth() / 2 - Calculator.CalcFocusPos[0]) + CalcPos[0] * Screen.zoom;
             newY[i] = (Main.ScreenSize.getHeight() / 2 - Calculator.CalcFocusPos[1]) + CalcPos[1] * Screen.zoom;
             if (Calculator.t < 0)
                 draw = false;
         }
 
-        calcLighting();
+        calcLighting(screen);
 
-        DrawablePolygon.draw = draw;
-        DrawablePolygon.updatePolygon(newX, newY);
-        AvgDist = GetDist();
+        drawablePolygon.draw = draw;
+        drawablePolygon.updatePolygon(newX, newY);
+        averageDistance = GetDist(screen);
     }
 
-    void calcLighting() {
+    void calcLighting(Screen screen) {
         Plane lightingPlane = new Plane(this);
-        double angle = Math.acos(((lightingPlane.NV.x * Screen.LightDir[0]) +
-                (lightingPlane.NV.y * Screen.LightDir[1]) + (lightingPlane.NV.z * Screen.LightDir[2]))
-                / (Math.sqrt(Screen.LightDir[0] * Screen.LightDir[0] + Screen.LightDir[1] * Screen.LightDir[1] + Screen.LightDir[2] * Screen.LightDir[2])));
+        double angle = Math.acos(((lightingPlane.NV.x * screen.LightDir[0]) +
+                (lightingPlane.NV.y * screen.LightDir[1]) + (lightingPlane.NV.z * screen.LightDir[2]))
+                / (Math.sqrt(screen.LightDir[0] * screen.LightDir[0] + screen.LightDir[1] * screen.LightDir[1] + screen.LightDir[2] *screen.LightDir[2])));
 
-        DrawablePolygon.lighting = 0.2 + 1 - Math.sqrt(Math.toDegrees(angle) / 180);
+        drawablePolygon.lighting = 0.2 + 1 - Math.sqrt(Math.toDegrees(angle) / 180);
 
-        if (DrawablePolygon.lighting > 1)
-            DrawablePolygon.lighting = 1;
-        if (DrawablePolygon.lighting < 0)
-            DrawablePolygon.lighting = 0;
+        if (drawablePolygon.lighting > 1)
+            drawablePolygon.lighting = 1;
+        if (drawablePolygon.lighting < 0)
+            drawablePolygon.lighting = 0;
     }
 
-    double GetDist() {
+    /**
+     * Calculates the average distance to the viewer
+     * @return
+     */
+    double GetDist(Screen screen) {
         double total = 0;
         for (int i = 0; i < x.length; i++)
-            total += GetDistanceToP(i);
+            total += GetDistanceToP(i, screen);
         return total / x.length;
     }
 
-    double GetDistanceToP(int i) {
-        return Math.sqrt((Screen.ViewFrom[0] - x[i]) * (Screen.ViewFrom[0] - x[i]) +
-                (Screen.ViewFrom[1] - y[i]) * (Screen.ViewFrom[1] - y[i]) +
-                (Screen.ViewFrom[2] - z[i]) * (Screen.ViewFrom[2] - z[i]));
+    double GetDistanceToP(int i, Screen screen) {
+        return Math.sqrt((screen.ViewFrom[0] - x[i]) * (screen.ViewFrom[0] - x[i]) +
+                (screen.ViewFrom[1] - y[i]) * (screen.ViewFrom[1] - y[i]) +
+                (screen.ViewFrom[2] - z[i]) * (screen.ViewFrom[2] - z[i]));
     }
 }

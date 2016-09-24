@@ -23,12 +23,7 @@ import javax.swing.JPanel;
 
 public class Screen extends JPanel implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 
-    // List of all the 3D polygons - each 3D polygon has a 2D 'PolygonObject' inside called 'DrawablePolygon'
-    static List<ThreeDPolygon> polygonFloor = new ArrayList<>();
-
-    static ArrayList<Cube> cubes = new ArrayList<Cube>();
-    static ArrayList<Prism> prisms = new ArrayList<Prism>();
-    static ArrayList<Pyramid> pyramids = new ArrayList<Pyramid>();
+    private Room room;
 
     // The polygon that the mouse is currently over
     static PolygonObject polygonOver = null;
@@ -37,17 +32,13 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     final int startY = 5;
     final int startZ = 10;
 
-
     // Used for keeping mouse in center
     Robot r;
-
-    // The floors map
-    Terrain terrain;
 
     /**
      * This is the co-ordinates of where the player is  (x, y, z)
      */
-    static double[] ViewFrom = new double[]{15, 5, 10},
+    double[] ViewFrom = new double[]{15, 5, 10},
             ViewTo = new double[]{0, 0, 0},
             LightDir = new double[]{1, 1, 1};
 
@@ -58,7 +49,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     static double maxZoom = 2500;
     static double mouseX = 0;
     static double mouseY = 0;
-    static double movementSpeed = 2;
+    static double movementSpeed = 0.5;
 
     //FPS is a bit primitive, you can set the MaxFPS as high as u want
     double drawFPS = 0, MaxFPS = 1000, SleepTime = 1000.0 / MaxFPS, LastRefresh = 0, StartTime = System.currentTimeMillis(), LastFPSCheck = 0, Checks = 0;
@@ -75,11 +66,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     /**
      * Will hold the order that the polygons in the ArrayList DPolygon should be drawn meaning
-     * DPolygon.get(NewOrder[0]) gets drawn first
+     * DPolygon.get(polygonDrawOrder[0]) gets drawn first
      */
-    int[] NewOrder;
+    int[] polygonDrawOrder;
 
-    static boolean drawOutlines = false;
+    static boolean drawOutlines = true;
     boolean[] Keys = new boolean[4];
 
     /**
@@ -94,22 +85,14 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         this.addMouseWheelListener(this);
         invisibleMouse();
 
-        // Load the terrain
-        terrain = new Terrain();
-        polygonFloor = terrain.generateMap();
-
-        int wallLength = (int) (terrain.getMapHeight() * terrain.getTileSize()) - 5;
-        int wallHeight = 50;
-
-        cubes.add(new Cube(0, 0, 0, 5, wallLength, wallHeight, Color.blue));
-        cubes.add(new Cube(5, 0, 0, wallLength - 10, 5, wallHeight, Color.blue));
-        cubes.add(new Cube(wallLength - 5, 0, 0, 5, wallLength, wallHeight, Color.green));
-        cubes.add(new Cube(0, wallLength, 0, wallLength - 5, 5, wallHeight, Color.blue));
+        // Load the section of the map
+        room = new Room();
 
         ViewFrom[0] = startX;
         ViewFrom[1] = startY;
         ViewFrom[2] = startZ;
     }
+
 
     public void paintComponent(Graphics g) {
         //Clear screen and draw background color
@@ -119,44 +102,46 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         cameraMovement();
 
         //Calculated all that is general for this camera position
-        Calculator.setPredeterminedInfo();
-
+        Calculator.setPredeterminedInfo(this);
         controlSunAndLight();
 
-        //Updates each polygon for this camera position
-        for (int i = 0; i < polygonFloor.size(); i++)
-            polygonFloor.get(i).updatePolygon();
+        List<ThreeDPolygon> allPolygons = new ArrayList<>();
+        // Add all polygons
+        allPolygons.addAll(room.getFloorPolygons());
+        room.getRoomObjects().forEach(o -> allPolygons.addAll(o.getPolygons()));
 
+        //Updates each polygon for this camera position
+        for (int i = 0; i < allPolygons.size(); i++)
+            allPolygons.get(i).updatePolygon(this);
 
         //Set drawing order so closest polygons gets drawn last
-        setOrder();
+        setOrder(allPolygons);
 
         //Set the polygon that the mouse is currently over
         // setPolygonOver();
 
         //draw polygons in the Order that is set by the 'setOrder' function
-        for (int i = 0; i < NewOrder.length; i++)
-            polygonFloor.get(NewOrder[i]).DrawablePolygon.drawPolygon(g);
+        for (int i = 0; i < polygonDrawOrder.length; i++)
+            allPolygons.get(polygonDrawOrder[i]).drawablePolygon.drawPolygon(g);
 
         //draw the cross in the center of the screen
         drawMouseAim(g);
 
         //FPS display
         g.drawString("FPS: " + (int) drawFPS + " (Benchmark)", 40, 40);
-
         sleepAndRefresh();
     }
 
     /**
      * This sets the order that the polygons are drawn in
      */
-    private void setOrder() {
-        double[] k = new double[polygonFloor.size()];
-        NewOrder = new int[polygonFloor.size()];
+    private void setOrder(List<ThreeDPolygon> polys) {
+        double[] k = new double[polys.size()];
+        polygonDrawOrder = new int[polys.size()];
 
-        for (int i = 0; i < polygonFloor.size(); i++) {
-            k[i] = polygonFloor.get(i).AvgDist;
-            NewOrder[i] = i;
+        for (int i = 0; i < polys.size(); i++) {
+            k[i] = polys.get(i).averageDistance;
+            polygonDrawOrder[i] = i;
         }
 
         double temp;
@@ -165,11 +150,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             for (int b = 0; b < k.length - 1; b++)
                 if (k[b] < k[b + 1]) {
                     temp = k[b];
-                    tempr = NewOrder[b];
-                    NewOrder[b] = NewOrder[b + 1];
+                    tempr = polygonDrawOrder[b];
+                    polygonDrawOrder[b] = polygonDrawOrder[b + 1];
                     k[b] = k[b + 1];
 
-                    NewOrder[b + 1] = tempr;
+                    polygonDrawOrder[b + 1] = tempr;
                     k[b + 1] = temp;
                 }
     }
@@ -226,7 +211,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      */
     void controlSunAndLight() {
         SunPos += 0.005;
-        double mapSize = terrain.getMapWidth() * terrain.getMapWidth();
+        double mapSize = room.getFloor().getMapWidth() * room.getFloor().getMapWidth();
         LightDir[0] = mapSize / 2 - (mapSize / 2 + Math.cos(SunPos) * mapSize * 10);
         LightDir[1] = mapSize / 2 - (mapSize / 2 + Math.sin(SunPos) * mapSize * 10);
         LightDir[2] = -200;
@@ -267,6 +252,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     /**
      * Move the player to x, y, z
+     *
      * @param x
      * @param y
      * @param z
@@ -274,23 +260,30 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     void moveTo(double x, double y, double z) {
         System.out.println(x + " " + y + " " + z);
 
-        if (!positionOutOfBounds(x, y, z)) {
-            ViewFrom[0] = x;
-            ViewFrom[1] = y;
-            ViewFrom[2] = z;
-            updateView();
-        }
+        // Check that the player isn't out of the maps floorPolygons
+        if (positionOutOfBounds(x, y, z))
+            return;
+
+        // Check that the player isn't moving into any roomObjects
+        if (movingIntoAnObject(x, y, z))
+            return;
+
+        ViewFrom[0] = x;
+        ViewFrom[1] = y;
+        ViewFrom[2] = z;
+        updateView();
     }
 
     /**
-     * Is position x, y, z outside of the floor?
+     * Is position x, y, z outside of the floorPolygons?
+     *
      * @param x
      * @param y
      * @param z
      * @return
      */
     private boolean positionOutOfBounds(double x, double y, double z) {
-        double mapSize = terrain.getMapWidth() * terrain.getTileSize();
+        double mapSize = room.getFloor().getMapWidth() * room.getFloor().getTileSize();
         if (x < 0 || y < 0 || z < 0)
             return true;
         if (x > startX + mapSize || y > startY + mapSize || z > startZ + mapSize)
@@ -299,14 +292,28 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
     /**
+     * Checks to see if the
+     *
+     * @return
+     */
+    private boolean movingIntoAnObject(double x, double y, double z) {
+        for (Drawable o : room.getRoomObjects()) {
+            if (o.containsPoint((int) x, (int) y, (int) z)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Highlights the polygon that the cursor is on
      */
     void setPolygonOver() {
         polygonOver = null;
-        for (int i = NewOrder.length - 1; i >= 0; i--)
-            if (polygonFloor.get(NewOrder[i]).DrawablePolygon.mouseOver() && polygonFloor.get(NewOrder[i]).draw
-                    && polygonFloor.get(NewOrder[i]).DrawablePolygon.visible) {
-                polygonOver = polygonFloor.get(NewOrder[i]).DrawablePolygon;
+        for (int i = polygonDrawOrder.length - 1; i >= 0; i--)
+            if (room.getPolygons().get(polygonDrawOrder[i]).drawablePolygon.mouseOver() && room.getPolygons().get(polygonDrawOrder[i]).draw
+                    && room.getPolygons().get(polygonDrawOrder[i]).drawablePolygon.visible) {
+                polygonOver = room.getPolygons().get(polygonDrawOrder[i]).drawablePolygon;
                 break;
             }
     }
@@ -370,6 +377,21 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             drawOutlines = !drawOutlines;
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
             System.exit(0);
+        if (e.getKeyCode() == KeyEvent.VK_SPACE)
+            jump();
+
+    }
+
+    public void jump() {
+        for (int i = 1; i < 10; i++) {
+            ViewFrom[2] += 1;
+            updateView();
+        }
+
+//        for (int i = 1; i < 10; i++) {
+//            ViewFrom[2] -= 1;
+//            updateView();
+//        }
     }
 
     @Override
