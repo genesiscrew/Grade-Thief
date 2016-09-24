@@ -20,7 +20,6 @@ public class PolygonObject {
      * @param x
      * @param y
      * @param c
-     * @param n
      * @param seeThrough
      */
     public PolygonObject(double[] x, double[] y, Color c, boolean seeThrough) {
@@ -28,7 +27,7 @@ public class PolygonObject {
         for (int i = 0; i < x.length; i++)
             polygon.addPoint((int) x[i], (int) y[i]);
         this.color = c;
-        //this.seeThrough = seeThrough;
+        this.seeThrough = seeThrough;
     }
 
     /**
