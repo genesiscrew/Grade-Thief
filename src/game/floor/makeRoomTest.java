@@ -74,15 +74,21 @@ public class makeRoomTest {
 						s = s  + (tileMap.getTileMap()[x][y].getObjectonTile().toString());
 					else
 						s = s + (tileMap.getTileMap()[x][y].getName());
-
 				}
-
 			}
 			s = s + "\n";
 		}
 		System.out.println(s);
 
+		// System.out.println(tileMap.getTileMap()[6][1].getObjectonTile().toString());
+		System.out.println(tileMap.getTileMap()[6][4]);
+		Object o = tileMap.getTileMap()[6][4].getObjectonTile();
 
+		Container c = (Container) o;
+		System.out.println("bchecking inside tile 6,4 ");
+		System.out.println(c);
+		System.out.println(c.getItems());
+		System.out.println("finished checking");
 
 	}
 
