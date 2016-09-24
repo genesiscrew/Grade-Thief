@@ -33,16 +33,19 @@ public class Room {
     /**
      *
      */
-    public Room(){
+    public Room(int type){
         floor = new Floor();
         this.floorPolygons = floor.generateMap();
         this.polygons = new ArrayList<>();
-        addObjectsToMap();
+
+        if(type == 1)
+            addObjectsToMap();
+        else
+            addObjectsToMap2();
 
     }
 
     private void addObjectsToMap() {
-
         int wallLength = (int) (floor.getMapHeight() * floor.getTileSize()) - 5;
         int wallHeight = 50;
 
@@ -64,8 +67,18 @@ public class Room {
         roomObjects.add(new Chair(75, 80, 0, 5, 5, 5, Color.red));
     }
 
+    private void addObjectsToMap2() {
+        int wallLength = (int) (floor.getMapHeight() * floor.getTileSize()) - 5;
+        int wallHeight = 50;
 
+        roomObjects.add(new Cube(0, 0, 0, 5, wallLength, wallHeight, Color.blue));
+        roomObjects.add(new Cube(5, 0, 0, wallLength - 10, 5, wallHeight, Color.blue));
+        roomObjects.add(new Cube(wallLength - 5, 0, 0, 5, wallLength, wallHeight, Color.blue));
+        roomObjects.add(new Cube(0, wallLength, 0, wallLength - 5, 5, wallHeight, Color.blue));
 
+        roomObjects.add(new Table(50, 50, 0, 20, 50, 7, Color.red));
+        roomObjects.add(new Laptop(55, 50, 7, 5, 3, 4, Color.black));
+    }
 
     public ArrayList<Drawable> getRoomObjects() {
         return roomObjects;

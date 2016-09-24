@@ -18,7 +18,7 @@ public class Floor {
     private final int mapHeight = mapWidth;
 
     private double tileSize = 10;
-    private Color G = new Color(120, 100, 80);
+    private Color tileColor = new Color(255, 208, 193);
 
     public Floor() {
 
@@ -51,12 +51,11 @@ public class Floor {
                polygonFloor.add(new ThreeDPolygon(
                         new double[]{(tileSize * x),  (tileSize * x),  tileSize + (tileSize * x), tileSize + (tileSize * x)},
                         new double[]{(tileSize * y),  tileSize + (tileSize * y), tileSize + (tileSize * y),  (tileSize * y)},
-                        new double[]{values1[x], values2[x], values2[x + 1],  values1[x + 1]}, G, false));
+                        new double[]{values1[x], values2[x], values2[x + 1],  values1[x + 1]}, tileColor, false));
             }
         }
         return polygonFloor;
     }
-
 
     public double getTileSize() {
         return tileSize;

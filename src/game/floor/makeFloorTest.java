@@ -11,10 +11,10 @@ import characters.Player;
 import items.Door;
 
 /**
-*
-* @author Stefan Vrecic
-*
-*/
+ *
+ * @author Stefan Vrecic
+ *
+ */
 public class makeFloorTest {
 
 	public static void main(String[] args) throws IOException {
@@ -110,13 +110,13 @@ public class makeFloorTest {
 		//while (playerLoop < 100) {
 		for (int h = 0; h<floor.getFloorMap().FLOOR_HEIGHT; h++) {
 			for (int w = 0; w<floor.getFloorMap().FLOOR_WIDTH; w++) {
-					s = s + (floor.getFloorMap().getFloorTiles()[w][h].name());
+				s = s + (floor.getFloorMap().getFloorTiles()[w][h].name());
 			}
 			s = s + "\n";
 		}
 
 		//playerLoop++;
-	//	}
+		//	}
 
 		System.out.println(s);
 
@@ -127,9 +127,15 @@ public class makeFloorTest {
 		pL.modX(-1);
 		floor.getFloorMap().getFloorTiles()[pL.row()][pL.column()].setOccupied();
 
-		}
-
-
-
-
 	}
+
+
+
+
+
+}
+
+
+
+
+
