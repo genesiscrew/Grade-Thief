@@ -30,6 +30,8 @@ import items.Item;
 import items.Keys;
 import items.Movable;
 import items.Direction.Dir;
+import pacman.game.Character;
+import pacman.game.Pacman;
 
 /**
  *
@@ -48,7 +50,7 @@ public class Game {
 	public
 	// list of all game objects
 	static List<GameObject> containedItems = new ArrayList<GameObject>();
-	private ArrayList<Player> players = new ArrayList<Player>();
+	private ArrayList<characters.Character> characters = new ArrayList<characters.Character>();
 	private boolean tick;
 
 	public Game() throws IOException {
@@ -79,7 +81,7 @@ public class Game {
 		String s = "";
 		for (int h = 0; h<this.getFloor(floorNo).getFloorMap().FLOOR_HEIGHT; h++) {
 			for (int w = 0; w<this.getFloor(floorNo).getFloorMap().FLOOR_WIDTH; w++) {
-					s = s + (this.getFloor(floorNo).getFloorMap().getFloorTiles()[w][h].name());
+					s = s + (this.getFloor(floorNo).getFloorMap().getFloorTiles()[w][h].name().toLowerCase());
 			}
 			s = s + "\n";
 		}
@@ -122,6 +124,19 @@ public class Game {
 		return !this.getFloor(floorNo).getFloorMap().getFloorTiles()[targetLocation.row()][targetLocation.column()].occupied()
 				&& this.getFloor(floorNo).getFloorMap().getFloorTiles()[targetLocation.row()][targetLocation.column()] instanceof EmptyTile;
 
+	}
+/**
+ * returns a player in the game based on his UID
+ * @param parameter is the character ID
+ * @return
+ */
+	public synchronized Player player(int uid) {
+		for(characters.Character p : this.characters) {
+			if ( p instanceof Player && p.getCharacterID() == uid) {
+				return (Player) p;
+			}
+		}
+		throw new IllegalArgumentException("Invalid Character UID");
 	}
 
 	/**

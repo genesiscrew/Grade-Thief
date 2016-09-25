@@ -85,14 +85,14 @@ public class Player extends Character implements KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int code = e.getKeyCode();
-		if(code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_KP_RIGHT) {			
+		if(code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_KP_RIGHT) {
 			game.player(uid).moveRight();
 		} else if(code == KeyEvent.VK_LEFT || code == KeyEvent.VK_KP_LEFT) {
 			game.player(uid).moveLeft();
@@ -101,15 +101,17 @@ public class Player extends Character implements KeyListener {
 		} else if(code == KeyEvent.VK_DOWN) {
 			game.player(uid).moveDown();
 		}
-		
+
 	}
 
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
+
+
 
 
 

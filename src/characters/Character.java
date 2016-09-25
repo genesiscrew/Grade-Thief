@@ -27,6 +27,9 @@ public abstract class Character {
 		characterLocation = new Location(x, y);
 
 	}
+	public int getCharacterID(){
+		return this.characterID;
+	}
 
 
 
