@@ -24,18 +24,18 @@ public class checkGuardMovementTest {
 		Floor floor = createFloor();
 		game.addFloor(floor);
 
-		//Guard gaurd1 = new Guard(0, "guard1", 1, 6, 0);
+		Guard gaurd1 = new Guard(0, "guard1", 1, 6, 0);
 		Guard guard2 = new Guard(1, "guard2",5,6, 0);
 		// set gaurd's location
-		//gaurd1.setCharacterLocation(14, 0);
+		gaurd1.setCharacterLocation(14, 0);
 		guard2.setCharacterLocation(49, 0);
 
-		//((EmptyTile) game.getFloor(0).getFloorMap().getFloorTiles()[14][0]).addObjecttoTile(gaurd1);
+		((EmptyTile) game.getFloor(0).getFloorMap().getFloorTiles()[14][0]).addObjecttoTile(gaurd1);
 		 ((EmptyTile)
 		 game.getFloor(0).getFloorMap().getFloorTiles()[49][0]).addObjecttoTile(guard2);
 
 		drawBoard(floor);
-       // Thread guardThread1 = createGuardThread(game, gaurd1,700);
+        Thread guardThread1 = createGuardThread(game, gaurd1,700);
          Thread drawThread = drawGameThread(game, 200);
 		 Thread guardThread2 = createGuardThread(game, guard2, 3000);
 
@@ -45,7 +45,7 @@ public class checkGuardMovementTest {
 		// gaurd1.move(game);
 		// guard2.move(game);
 
-       // guardThread1.start();
+        guardThread1.start();
 		drawThread.start();
 
 	}
@@ -95,9 +95,7 @@ public class checkGuardMovementTest {
 				// if () {}
 				// gaurd will keep moving
 
-
-					// update direction of guard based on hardcoded route
-					// through Tilemap
+					
 
 				while(1 == 1) {
 					// Loop forever
