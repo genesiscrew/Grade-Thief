@@ -1,31 +1,42 @@
-package game.floor;
+package Tests;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import items.Container;
+import game.floor.Floor;
+import game.floor.Room;
+import game.floor.Tile;
+import game.floor.TileMap;
 import items.Door;
 import model.Game;
-/**
- *
- * @author Stefan Vrecic
- *
- */
-public class makeRoomTest {
+
+public class movePlayerinRoom {
 
 	public static void main(String[] args) throws IOException {
+		// create new game object
+		Game game;
+		try {
+			game = new Game();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// create a room
+		Room testRoom = createRoom();
+		
+		// get the tilemap of room
+		TileMap tileMap = testRoom.getRoomTileMap();
+		// draw tilemap of room
+		drawRoom(tileMap);
+		
+		
+		
 
-		// make a floor
 
-		/// load the rooms and add it.
-		// get file path
-		// make a new room
-		// put the file path into room.setTileMap(filePath)
-		// this will delegate the work to TileMap.java
-		Game game = new Game();
-
+	}
+	
+	public static Room createRoom() throws IOException{
 		Floor floor;
 		List<Room> floorRooms = new ArrayList<Room>();
 
@@ -63,9 +74,16 @@ public class makeRoomTest {
 		System.out.println(r.getRoomTileMap().getItems());
 
 		tileMap.populateRoom(r, tileMap.getItems(), null);
-
-		System.out.println("got her hoooooooooooooooooooooooooooooooooooooooooorrrrrrrrrrrrray");
-		s = "";
+		
+		return r;
+		
+	}
+	/**
+	 * draws the room tilemap into console
+	 * @param tileMap
+	 */
+	public static void drawRoom(TileMap tileMap){
+		String s = "";
 		for (int y = 0 ; y < tileMap.getMapHeight(); y++ ) {
 			for (int x = 0 ; x < tileMap.getMapWidth() ; x++) {
 				Tile t = tileMap.getTileMap()[x][y];
@@ -81,9 +99,7 @@ public class makeRoomTest {
 			s = s + "\n";
 		}
 		System.out.println(s);
-
-
-
+		
 	}
 
 }

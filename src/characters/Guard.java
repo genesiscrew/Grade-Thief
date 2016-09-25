@@ -1,6 +1,10 @@
 package characters;
 
 import java.util.ArrayList;
+/**
+ * created by hamid abubakr
+ * creates a guard object that moves along  game floor map in certain path continuosly untill it detects an intruder
+ */
 import java.util.Collections;
 
 import javax.swing.plaf.SliderUI;

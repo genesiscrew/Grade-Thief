@@ -1,5 +1,7 @@
 package Server;
 
+import model.Game;
+
 //This is for the packages
 /*import game.Game;*/
 

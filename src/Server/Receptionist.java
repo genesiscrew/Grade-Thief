@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.Callable;
 
+import model.Game;
+
 //This is for the packages
 /*import game.Game;*/
 

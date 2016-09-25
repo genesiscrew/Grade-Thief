@@ -8,6 +8,8 @@ import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import model.Game;
+
 
 //This is for the packages
 

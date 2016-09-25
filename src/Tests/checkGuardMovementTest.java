@@ -1,4 +1,4 @@
-package game.floor;
+package Tests;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -6,6 +6,11 @@ import java.util.List;
 
 import characters.Guard;
 import characters.Player;
+import game.floor.EmptyTile;
+import game.floor.Floor;
+import game.floor.FloorMap;
+import game.floor.Room;
+import game.floor.TileMap;
 import items.Door;
 import model.Game;
 
@@ -30,14 +35,14 @@ public class checkGuardMovementTest {
 		gaurd1.setCharacterLocation(14, 0);
 		guard2.setCharacterLocation(49, 0);
 
-		((EmptyTile) game.getFloor(0).getFloorMap().getFloorTiles()[14][0]).addObjecttoTile(gaurd1);
+		 ((EmptyTile) game.getFloor(0).getFloorMap().getFloorTiles()[14][0]).addObjecttoTile(gaurd1);
 		 ((EmptyTile)
 		 game.getFloor(0).getFloorMap().getFloorTiles()[49][0]).addObjecttoTile(guard2);
 
-		drawBoard(floor);
-        Thread guardThread1 = createGuardThread(game, gaurd1,700);
-         Thread drawThread = drawGameThread(game, 200);
-		 Thread guardThread2 = createGuardThread(game, guard2, 3000);
+		 game.drawBoard(0);
+         Thread guardThread1 = game.createGuardThread(gaurd1,700);
+         Thread drawThread = game.drawGameThread(200);
+		 Thread guardThread2 = game.createGuardThread(guard2, 3000);
 
 		// start the guard movement, thread stops running when intruder caught
 
@@ -50,98 +55,8 @@ public class checkGuardMovementTest {
 
 	}
 
-	private static Thread createGuardThread(Game game, Guard gaurd, int delay ) {
-		Thread guardThread = new Thread() {
-			public void run() {
-				// move the guard in a fixed loop, once he reaches certain
-				// coordinate on the Map, change destination
-				// if () {}
-				// gaurd will keep moving
 
 
-					// update direction of guard based on hardcoded route
-					// through Tilemap
-
-				try {
-					Thread.sleep(delay);
-					gaurd.move(game);
-
-
-
-				} catch(InterruptedException e) {
-					// should never happen
-				}
-
-
-
-
-
-					// draw board intp console for debugging purposes
-					//game.drawBoard(gaurd.getFloorNo());
-
-
-
-			}
-		};
-		return guardThread;
-
-	}
-
-	private static Thread drawGameThread(Game game,  int delay ) {
-		Thread drawThread = new Thread() {
-			public void run() {
-				// move the guard in a fixed loop, once he reaches certain
-				// coordinate on the Map, change destination
-				// if () {}
-				// gaurd will keep moving
-
-					
-
-				while(1 == 1) {
-					// Loop forever
-					try {
-						Thread.sleep(delay);
-						//game.clockTick();
-						 if (game.gettick()){
-
-							 game.drawBoard(0);
-							 game.tick(false);
-						 }
-
-
-					} catch(InterruptedException e) {
-						// should never happen
-					}
-				}
-
-
-
-
-
-					// draw board intp console for debugging purposes
-					//game.drawBoard(gaurd.getFloorNo());
-
-
-
-			}
-		};
-		return drawThread;
-
-	}
-
-	private static void drawBoard(Floor floor) {
-		String s = "";
-		// while (playerLoop < 100) {
-		for (int h = 0; h < floor.getFloorMap().FLOOR_HEIGHT; h++) {
-			for (int w = 0; w < floor.getFloorMap().FLOOR_WIDTH; w++) {
-				s = s + (floor.getFloorMap().getFloorTiles()[w][h].name());
-			}
-			s = s + "\n";
-		}
-
-		System.out.println(s);
-
-	}
 
 	private static Floor createFloor() throws IOException {
 		// TODO Auto-generated method stub

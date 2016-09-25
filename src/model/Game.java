@@ -26,9 +26,6 @@ import items.Item;
 import items.Keys;
 import items.Movable;
 import items.Direction.Dir;
-import pacman.game.Character;
-import pacman.game.Ghost;
-import pacman.game.Pacman;
 
 /**
  *
@@ -55,9 +52,9 @@ public class Game {
 		return floors[floorNo];
 
 	}
-	
+
 	public synchronized void clockTick() {
-	
+
 	}
 
 	/**
@@ -65,7 +62,7 @@ public class Game {
 	 */
 	public void drawBoard(int floorNo) {
 
-	
+
 		String s = "";
 		for (int h = 0; h<this.getFloor(floorNo).getFloorMap().FLOOR_HEIGHT; h++) {
 			for (int w = 0; w<this.getFloor(floorNo).getFloorMap().FLOOR_WIDTH; w++) {
@@ -74,7 +71,7 @@ public class Game {
 			s = s + "\n";
 		}
 
-	
+
 		System.out.println(s);
 
 	}
@@ -87,61 +84,10 @@ public class Game {
 	 *            activated
 	 */
 	public void setupGuards(int floorNumber) {
-		Guard gaurd1 = new Guard(0, "guard1", 1, 6);
-		Guard guard2 = new Guard(1, "guard2",6,6);
-		Player player = new Player(0, "H");
-		Distance dist = new Distance(1);
-		// set character location
-		gaurd1.setCharacterLocation(7, 7);
-		// add player object to map
-		((EmptyTile) Game.this.getFloorMap().getTileMap()[7][7]).addObjecttoTile(player);
-		Game.this.drawBoard();
+		//Guard gaurd1 = new Guard(0, "guard1", 1, 6);
+		//Guard guard2 = new Guard(1, "guard2",6,6);
 
-		// set gaurd's location
-		gaurd1.setCharacterLocation(0, 7);
-		guard2.setCharacterLocation(24, 7);
-		// add guard object to tile on map
-		((EmptyTile) Game.this.getFloorMap().getTileMap()[0][7]).addObjecttoTile(gaurd1);
-		drawBoard();
-		((EmptyTile) Game.this.getFloorMap().getTileMap()[24][7]).addObjecttoTile(guard2);
-		drawBoard();
-
-		// create a thread for the guard, so that he can move within map
-		// independent of player
-
-		Thread guardThread = new Thread() {
-			public void run() {
-				// move the guard in a fixed loop, once he reaches certain
-				// coordinate on the Map, change destination
-				// if () {}
-				// gaurd will keep moving
-
-				while (!gaurd1.checkforIntruder(Game.this)) {
-					// update direction of guard based on hardcoded route
-					// through Tilemap
-
-					// move the guard to new location
-					// remove gaurd as object from previous empty tile
-					((EmptyTile) Game.this.getFloorMap(1)[gaurd1.getCharacterLocation().row()][gaurd1
-							.getCharacterLocation().column()]).resetEmptyTile();
-					gaurd1.move();
-					try {
-						sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					// add the gaurd as object to the new empty tile
-					((EmptyTile) Game.this.getFloorMap(1)[gaurd1.getCharacterLocation().row()][gaurd1
-							.getCharacterLocation().column()]).addObjecttoTile(gaurd1);
-
-					// draw board intp console for debugging purposes
-					Game.this.drawBoard();
-
-				}
-
-			}
-		};
+		
 
 		Thread guardThread1 = new Thread() {
 			public void run() {
@@ -460,12 +406,100 @@ public class Game {
 
 	public void tick(boolean b) {
 		this.tick = b;
-		
+
 	}
 
 	public boolean gettick() {
 		// TODO Auto-generated method stub
 		return this.tick;
+	}
+
+	/**
+	 * creates a thread that draws the game board into console, this method is for debugging purposes
+	 * @param delay
+	 * @return
+	 */
+	public Thread drawGameThread(int delay) {
+		Thread drawThread = new Thread() {
+			public void run() {
+				// move the guard in a fixed loop, once he reaches certain
+				// coordinate on the Map, change destination
+				// if () {}
+				// gaurd will keep moving
+
+
+
+				while(1 == 1) {
+					// Loop forever
+					try {
+						Thread.sleep(delay);
+						//game.clockTick();
+						 if (Game.this.gettick()){
+							 Game.this.drawBoard(0);
+							 Game.this.tick(false);
+						 }
+
+
+					} catch(InterruptedException e) {
+						// should never happen
+					}
+				}
+
+
+
+
+
+					// draw board intp console for debugging purposes
+					//game.drawBoard(gaurd.getFloorNo());
+
+
+
+			}
+		};
+		return drawThread;
+
+	}
+/**
+ * creates a a thread for a guard
+ * @param gaurd object is first parameter
+ * @param delay between each movement of guard
+ * @return
+ */
+	public Thread createGuardThread(Guard gaurd, int delay) {
+		Thread guardThread = new Thread() {
+			public void run() {
+				// move the guard in a fixed loop, once he reaches certain
+				// coordinate on the Map, change destination
+				// if () {}
+				// gaurd will keep moving
+
+
+					// update direction of guard based on hardcoded route
+					// through Tilemap
+
+				try {
+					Thread.sleep(delay);
+					gaurd.move(Game.this);
+
+
+
+				} catch(InterruptedException e) {
+					// should never happen
+				}
+
+
+
+
+
+					// draw board intp console for debugging purposes
+					//game.drawBoard(gaurd.getFloorNo());
+
+
+
+			}
+		};
+		return guardThread;
+
 	}
 
 }
