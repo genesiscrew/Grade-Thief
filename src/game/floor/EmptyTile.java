@@ -48,7 +48,7 @@ public class EmptyTile implements Tile {
  * adds an object to the tile e.g. player, key etc.
  * @param any object
  */
-	public void addObjecttoTile(Object o){
+	public void addObjectToTile(Object o){
 		this.o = o;
 
 		if (o instanceof Guard) {
@@ -63,7 +63,7 @@ public class EmptyTile implements Tile {
 			this.name = ((Keys) o).itemType();
 			isOccupied = true;
 		}
-		
+
 
 
 	}
@@ -102,7 +102,7 @@ public class EmptyTile implements Tile {
 	@Override
 	public String name() {
 		if (occupied())
-			return "a";
+			return this.name;
 		return "E";
 	}
 }

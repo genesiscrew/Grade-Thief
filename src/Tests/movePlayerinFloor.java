@@ -4,62 +4,46 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import characters.Guard;
 import characters.Player;
 import game.floor.EmptyTile;
 import game.floor.Floor;
 import game.floor.FloorMap;
+import game.floor.Location;
 import game.floor.Room;
+import game.floor.Tile;
 import game.floor.TileMap;
 import items.Door;
 import model.Game;
 
-public class checkGuardMovementTest {
+public class movePlayerinFloor {
 
 	public static void main(String[] args) throws IOException {
+		// create new game object
+		Game game = null;
+		try {
+			game = new Game();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-		// make a floor
-		/// load the rooms and add it.
-		// get file path
-		// make a new room
-		// put the file path into room.setTileMap(filePath)
-		// this will delegate the work to TileMap.java
 
-		Game game = new Game();
+		Player p = new Player(0000, "Stefan", game);
+		p.setCharacterLocation(19,27);
+		Location pL = p.getCharacterLocation();
 		Floor floor = createFloor();
-		game.addFloor(floor);
+		EmptyTile tile =  (EmptyTile) floor.getFloorMap().getFloorTiles()[pL.row()][pL.column()];
+		tile.addObjectToTile(p);
+		
 
-		Guard gaurd1 = new Guard(0, "guard1", 1, 6, 0);
-		Guard guard2 = new Guard(1, "guard2",5,6, 0);
-		// set gaurd's location
-		gaurd1.setCharacterLocation(14, 0);
-		guard2.setCharacterLocation(49, 0);
 
-		 ((EmptyTile) game.getFloor(0).getFloorMap().getFloorTiles()[14][0]).addObjectToTile(gaurd1);
-		 ((EmptyTile)
-		 game.getFloor(0).getFloorMap().getFloorTiles()[49][0]).addObjectToTile(guard2);
 
-		 game.drawBoard(0);
-         Thread guardThread1 = game.createGuardThread(gaurd1,0);
-         Thread drawThread = game.drawGameThread(700);
-		 Thread guardThread2 = game.createGuardThread(guard2, 0);
 
-		// start the guard movement, thread stops running when intruder caught
-         game.display.setVisible(true);
-		 guardThread2.start();
-		// gaurd1.move(game);
-		// guard2.move(game);
 
-        guardThread1.start();
-		drawThread.start();
 
 	}
 
-
-
-
 	private static Floor createFloor() throws IOException {
-		// TODO Auto-generated method stub
 		List<Room> floorRooms = new ArrayList<Room>();
 
 		int nextX = 0;
@@ -133,6 +117,73 @@ public class checkGuardMovementTest {
 			// }
 		}
 		return floor;
+	}
+
+
+	public static Room createRoom() throws IOException{
+		Floor floor;
+		List<Room> floorRooms = new ArrayList<Room>();
+
+		int nextX = 0;
+		int nextY = 0;
+		final int ADJACENT = 1; // adjacent rooms, add extra wall
+
+		Door d = new Door(0000, "0001",0);
+		Room r = new Room(null, d);
+
+		String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
+
+		Room room_co237 = new Room(null, null);
+
+		room_co237.setTileMap(co237);
+
+		r.setTileMap(co237);
+
+		//		System.out.println("optional code " + r.roomTileMap.getOptionalCode());
+		//		System.out.println("height " + r.roomTileMap.getMapHeight());
+		//		System.out.println("width " + r.roomTileMap.getMapWidth());
+
+		TileMap tileMap = r.getRoomTileMap();
+		String s = "";
+		for (int y = 0 ; y < tileMap.getMapHeight(); y++ ) {
+			for (int x = 0 ; x < tileMap.getMapWidth() ; x++) {
+				Tile t = tileMap.getTileMap()[x][y];
+				if (t != null)
+					s = s + (tileMap.getTileMap()[x][y].getName());
+			}
+			s = s + "\n";
+		}
+
+		System.out.println(s);
+		System.out.println(r.getRoomTileMap().getItems());
+
+		tileMap.populateRoom(r, tileMap.getItems(), null);
+
+		return r;
+
+	}
+	/**
+	 * draws the room tilemap into console
+	 * @param tileMap
+	 */
+	public static void drawRoom(TileMap tileMap){
+		String s = "";
+		for (int y = 0 ; y < tileMap.getMapHeight(); y++ ) {
+			for (int x = 0 ; x < tileMap.getMapWidth() ; x++) {
+				Tile t = tileMap.getTileMap()[x][y];
+				if (t != null) {
+					if (tileMap.getTileMap()[x][y].occupied())
+						s = s  + (tileMap.getTileMap()[x][y].getObjectonTile().toString());
+					else
+						s = s + (tileMap.getTileMap()[x][y].getName());
+
+				}
+
+			}
+			s = s + "\n";
+		}
+		System.out.println(s);
+
 	}
 
 }

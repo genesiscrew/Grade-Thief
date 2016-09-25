@@ -1,5 +1,7 @@
 package characters;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import game.floor.Location;
@@ -7,8 +9,9 @@ import items.Direction;
 import items.Distance;
 import items.GameObject;
 import items.Item;
+import model.Game;
 
-public class Player extends Character {
+public class Player extends Character implements KeyListener {
 
 	Location characterLocation;
 	private boolean inRoom = false;
@@ -16,7 +19,7 @@ public class Player extends Character {
 
 
 
-	public Player(int characterID, String characterName) {
+	public Player(int characterID, String characterName, Game game) {
 		super(characterID, characterName);
 		// TODO Auto-generated constructor stub
 	}
@@ -76,6 +79,36 @@ public class Player extends Character {
 	public ArrayList<Item> getInventory(){
 		return this.items;
 
+	}
+
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		int code = e.getKeyCode();
+		if(code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_KP_RIGHT) {			
+			game.player(uid).moveRight();
+		} else if(code == KeyEvent.VK_LEFT || code == KeyEvent.VK_KP_LEFT) {
+			game.player(uid).moveLeft();
+		} else if(code == KeyEvent.VK_UP) {
+			game.player(uid).moveUp();
+		} else if(code == KeyEvent.VK_DOWN) {
+			game.player(uid).moveDown();
+		}
+		
+	}
+
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

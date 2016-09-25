@@ -236,7 +236,7 @@ public class TileMap {
                     // if container called method then we add this container into the calling container, then we add it the tile map
                     else {
                 	EmptyTile E = (EmptyTile) tile;
-                	E.addObjecttoTile(con);
+                	E.addObjectToTile(con);
                 	E.setOccupied(); System.out.println("e occupied" + E.isOccupied);
                 	tileMap.setTile(x, y, E);
                     }
@@ -255,7 +255,7 @@ public class TileMap {
 
 					EmptyTile E = (EmptyTile) tile;
 					Keys K = new Keys(id, type, keyID);
-					E.addObjecttoTile(K);
+					E.addObjectToTile(K);
 					E.setOccupied(); System.out.println("e occupied" + E.isOccupied);
 					tileMap.setTile(x, y, E);
 
@@ -272,7 +272,7 @@ public class TileMap {
 					System.out.println("adding item??");
 					EmptyTile E = (EmptyTile) tile;
 					Item i = new Item(id, type);
-					E.addObjecttoTile(i);
+					E.addObjectToTile(i);
 					E.setOccupied();
 					System.out.println("e occupied" + E.isOccupied);
 					tileMap.setTile(x, y, E);

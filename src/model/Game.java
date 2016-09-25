@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+
 import characters.Guard;
 import characters.Player;
 import game.floor.EmptyTile;
@@ -37,15 +41,24 @@ public class Game {
 	public TileMap board;
 	public Tile[][] TileMap;
 	public Floor[] floors;
+	public JFrame display;
+	public JPanel panel;
+	public JTextArea console;
 
 	public
 	// list of all game objects
 	static List<GameObject> containedItems = new ArrayList<GameObject>();
-	private ArrayList<Character> players = new ArrayList<Character>();
+	private ArrayList<Player> players = new ArrayList<Player>();
 	private boolean tick;
 
 	public Game() throws IOException {
 		floors = new Floor[1];
+		display = new JFrame();
+		panel = new JPanel();
+		console = new JTextArea(20, 20);
+		panel.add(console);
+		display.add(panel);
+		display.setSize(500, 600);
 	}
 
 	public Floor getFloor(int floorNo) {
@@ -58,7 +71,7 @@ public class Game {
 	}
 
 	/**
-	 * for debugging purposes, draws map into console
+	 * for debugging purposes, draws floor map into swing component
 	 */
 	public void drawBoard(int floorNo) {
 
@@ -72,59 +85,22 @@ public class Game {
 		}
 
 
-		System.out.println(s);
+		//System.out.println(s);
+		console.setText(s);
+		display.repaint();
 
 	}
 
 	/**
-	 * this method sets up guards within the map
+	 * this method sets up guards within the map based on floor number
 	 *
 	 * @param integer
 	 *            parameter specifying floorNumber where guards will be
 	 *            activated
 	 */
 	public void setupGuards(int floorNumber) {
-		//Guard gaurd1 = new Guard(0, "guard1", 1, 6);
-		//Guard guard2 = new Guard(1, "guard2",6,6);
-
-		
-
-		Thread guardThread1 = new Thread() {
-			public void run() {
-				// move the guard in a fixed loop, once he reaches certain
-				// coordinate on the Map, change destination
-				// if () {}
-				// gaurd will keep moving
 
 
-				while (!guard2.checkforIntruder(Game.this)) {
-					// update direction of guard based on hardcoded route
-					// through Tilemap
-
-					// move the guard to new location
-					// remove gaurd as object from previous empty tile
-					((EmptyTile) Game.this.getFloorMap(1)[guard2.getCharacterLocation().row()][guard2
-							.getCharacterLocation().column()]).resetEmptyTile();
-					guard2.move();
-					try {
-						sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					// add the gaurd as object to the new empty tile
-					((EmptyTile) Game.this.getFloorMap(1)[guard2.getCharacterLocation().row()][guard2
-							.getCharacterLocation().column()]).addObjecttoTile(guard2);
-
-					// draw board intp console for debugging purposes
-					Game.this.drawBoard();
-				}
-
-			}
-		};
-		// start the guard movement, thread stops running when intruder caught
-		guardThread.start();
-		guardThread1.start();
 
 	}
 
@@ -141,10 +117,10 @@ public class Game {
 	 *
 	 * @return true/false
 	 */
-	public boolean isValidMove(Location targetLocation) {
+	public boolean isValidMove(Location targetLocation, int floorNo) {
 
-		return !this.getFloorMap().getTileMap()[targetLocation.row()][targetLocation.column()].occupied()
-				&& this.getFloorMap().getTileMap()[targetLocation.row()][targetLocation.column()] instanceof EmptyTile;
+		return !this.getFloor(floorNo).getFloorMap().getFloorTiles()[targetLocation.row()][targetLocation.column()].occupied()
+				&& this.getFloor(floorNo).getFloorMap().getFloorTiles()[targetLocation.row()][targetLocation.column()] instanceof EmptyTile;
 
 	}
 
@@ -189,7 +165,7 @@ public class Game {
 	 * @param the item the user wants to pick up
 	 * @return
 	 */
-	public boolean pickupItem(Player player, Item item) {
+	public boolean pickupItem(Player player, Item item, int floorNo) {
 
 		if (this.isInteractableItem(item)) {
 			if (this.isContainerItem(item)) {
@@ -208,7 +184,7 @@ public class Game {
 			} else {
 				// item is not a container so we pick it up and remove it from
 				// tile in game world
-				((EmptyTile) this.getFloorMap().getTileMap()[item.getGameObjectLocation().row()][item
+				((EmptyTile) this.getFloor(floorNo).getFloorMap().getFloorTiles()[item.getGameObjectLocation().row()][item
 						.getGameObjectLocation().column()]).resetEmptyTile();
 				// only adds an item to user's inventory if the inventory is not
 				// full ie filled with less than 10 items
@@ -260,16 +236,16 @@ public class Game {
 	 *            item to be dropped
 	 * @return
 	 */
-	public boolean dropItem(Player player, Item item) {
+	public boolean dropItem(Player player, Item item, int floorNo) {
 		// first check if player is on an empty tile
-		if (this.getFloorMap().getTileMap()[player.getCharacterLocation().row()][player.getCharacterLocation()
+		if (this.getFloor(floorNo).getFloorMap().getFloorTiles()[player.getCharacterLocation().row()][player.getCharacterLocation()
 				.column()] instanceof EmptyTile) {
 			// next check it tile does not already include an item
-			if (((EmptyTile) this.getFloorMap().getTileMap()[player.getCharacterLocation().row()][player
+			if (((EmptyTile) this.getFloor(floorNo).getFloorMap().getFloorTiles()[player.getCharacterLocation().row()][player
 					.getCharacterLocation().column()]).getObjectonTile() == null) {
 				// next we add the item to the tile
-				((EmptyTile) this.getFloorMap().getTileMap()[player.getCharacterLocation().row()][player
-						.getCharacterLocation().column()]).addObjecttoTile(item);
+				((EmptyTile) this.getFloor(floorNo).getFloorMap().getFloorTiles()[player.getCharacterLocation().row()][player
+						.getCharacterLocation().column()]).addObjectToTile(item);
 				// next we remove item from player inventory
 				player.getInventory().remove(item);
 

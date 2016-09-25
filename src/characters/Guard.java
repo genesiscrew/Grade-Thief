@@ -88,8 +88,14 @@ public class Guard extends Character {
 			
 				// add the gaurd as object to the new empty tile
 				((EmptyTile) game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row()][this.getCharacterLocation()
-						.column()]).addObjecttoTile(this);
+						.column()]).addObjectToTile(this);
 				game.tick(true);
+				try {
+					Thread.sleep(700);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 				// draw board intp console for debugging purposes
 				//game.drawBoard(this.floorNo);
