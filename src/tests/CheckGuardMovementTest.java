@@ -21,10 +21,12 @@ public class CheckGuardMovementTest {
 		Game game = new Game();
 		Floor floor = createFloor();
 		game.addFloor(floor);
-
-		Guard gaurd1 = new Guard(0, "guard1", 1, 6, 0);
-		Guard guard2 = new Guard(1, "guard2",5,6, 0);
-		Guard guard3 = new Guard(1, "guard3",13,6, 0);
+		int[] dist = {6,6};
+		Guard gaurd1 = new Guard(0, "guard1", 1, dist, 0);
+		int[] dist1 = {6,3};
+		Guard guard2 = new Guard(1, "guard2",5,dist1, 0);
+		int[] dist2 = {6,1,6,1};
+		Guard guard3 = new Guard(1, "guard3",13,dist2, 0);
 		// set gaurd's location
 		gaurd1.setCharacterLocation(14, 0);
 		guard2.setCharacterLocation(49, 0);
@@ -45,8 +47,7 @@ public class CheckGuardMovementTest {
 		// start the guard movement, thread stops running when intruder caught
          game.display.setVisible(true);
 		 guardThread2.start();
-		// gaurd1.move(game);
-		// guard2.move(game);
+		
 
         guardThread1.start();
         guardThread3.start();
