@@ -1,5 +1,7 @@
-package gui;
+package unused;
 
+
+import gui.ThreeDPolygon;
 
 import java.awt.Color;
 
@@ -157,14 +159,5 @@ public class Pyramid {
         Polys[4].y = new double[]{y1, y4, y5};
         Polys[4].z = new double[]{z, z, z + height};
 
-    }
-
-    /**
-     *
-     */
-    void removePyramid() {
-//        for (int i = 0; i < 5; i++)
-//            Screen.polygons.remove(Polys[i]);
-//        Screen.pyramids.remove(this);
     }
 }

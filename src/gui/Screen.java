@@ -97,7 +97,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         ViewFrom[2] = startZ;
     }
 
-
+    @Override
     public void paintComponent(Graphics g) {
         //Clear screen and draw background color
         g.setColor(new Color(140, 180, 180));
@@ -262,8 +262,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * @param z
      */
     void moveTo(double x, double y, double z) {
-        System.out.println(x + " " + y + " " + z);
-
         // Check that the player isn't out of the maps floorPolygons
         if (positionOutOfBounds(x, y, z))
             return;
@@ -394,11 +392,37 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             room = room1;
     }
 
+
     public void jump() {
-        for (int i = 1; i < 5; i++) {
-            ViewFrom[2] += 1;
-            updateView();
-        }
+
+        Thread jumpingThread = new Thread(){
+            @Override
+            public void run(){
+                for(int i=0; i < 5; i++) {
+                    ViewFrom[2] += 2;
+                    try {
+                        Thread.sleep(30);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                for(int i=0; i < 5; i++) {
+                    ViewFrom[2] -= 2;
+                    try {
+                        Thread.sleep(30);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+
+        jumpingThread.start();
+
+//        for (int i = 1; i < 5; i++) {
+//            ViewFrom[2] += 1;
+//            updateView();
+//        }
     }
 
     @Override

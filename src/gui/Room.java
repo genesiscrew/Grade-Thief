@@ -61,13 +61,16 @@ public class Room {
         roomObjects.add(new Laptop(55, 50, 7, 5, 3, 4, Color.black));
 
         // Chairs
+        roomObjects.add(new Chair(75, 60, 0, 5, 5, 5, Color.red));
+        roomObjects.add(new Chair(75, 70, 0, 5, 5, 5, Color.red));
+        roomObjects.add(new Chair(75, 80, 0, 5, 5, 5, Color.red));
+
         roomObjects.add(new Chair(40, 60, 0, 5, 5, 5, Color.red));
         roomObjects.add(new Chair(40, 70, 0, 5, 5, 5, Color.red));
         roomObjects.add(new Chair(40, 80, 0, 5, 5, 5, Color.red));
 
-        roomObjects.add(new Chair(75, 60, 0, 5, 5, 5, Color.red));
-        roomObjects.add(new Chair(75, 70, 0, 5, 5, 5, Color.red));
-        roomObjects.add(new Chair(75, 80, 0, 5, 5, 5, Color.red));
+        roomObjects.get(0).updateDirection(60,60);
+
 
         roomObjects.add(new Player(20, 20, 0, 5, 3, 12, Color.green));
 

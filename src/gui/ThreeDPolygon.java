@@ -1,14 +1,19 @@
 package gui;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class ThreeDPolygon {
     Color c;
-    double[] x, y, z;
-    boolean draw = true, seeThrough = false;
+    public double[] x, y, z;
+    boolean draw = true;
+    boolean seeThrough = false;
     double[] CalcPos, newX, newY;
     PolygonObject drawablePolygon;
     double averageDistance;
+    Polygon polygon;
+    Color color;
+    boolean visible = true;
+    double lighting = 1;
 
     public ThreeDPolygon(double[] x, double[] y, double[] z, Color c, boolean seeThrough) {
         this.x = x;

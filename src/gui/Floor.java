@@ -10,7 +10,8 @@ import game.floor.Room;
 import game.floor.TileMap;
 
 /**
- * This is the floorPolygons of the map
+ * This is the floor of the games map. It can generate a new floor from the width and height specified.
+ *
  */
 public class Floor {
 
@@ -23,7 +24,7 @@ public class Floor {
     private Color tileColor = new Color(255, 208, 193);
 
     /**
-     *
+     * Make a new floor with the specified paramaters
      * @param xOffset
      * @param yOffset
      * @param width

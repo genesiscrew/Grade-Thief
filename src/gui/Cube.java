@@ -17,7 +17,7 @@ public class Cube implements Drawable {
     double[] angle;
 
     /**
-     * Create a new cube
+     * Make a new cube at position x, y, z. with the specified width, length, height and colour
      *
      * @param x
      * @param y

@@ -71,6 +71,10 @@ public class Chair implements Drawable{
         cubes.forEach(i -> i.removeCube());
     }
 
+    public void updateDirection(){
+        cubes.forEach(i -> i.updateDirection(60,60));
+    }
+
     @Override
     public boolean containsPoint(int x, int y, int z){
         return (this.x + this.width) > x && (this.y + this.length) > y && this.x < x && this.y < y ;

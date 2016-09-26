@@ -1,7 +1,7 @@
 package gui;
 
 /**
- * This performs calculations using vectors
+ * This performs calculations for the 3D graphics using vectors
  */
 public class Calculator {
 	static double t = 0;
@@ -17,6 +17,7 @@ public class Calculator {
 
 	/**
 	 * Get the projection from view from along the plane
+	 *
 	 * @param ViewFrom
 	 * @param x
 	 * @param y
@@ -39,6 +40,7 @@ public class Calculator {
 	}
 
 	/**
+	 *
 	 *
 	 * @param x
 	 * @param y

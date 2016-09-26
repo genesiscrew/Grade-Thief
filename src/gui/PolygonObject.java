@@ -31,7 +31,7 @@ public class PolygonObject {
     }
 
     /**
-     * Update its points
+     * Update the polygons x and y points
      * @param x
      * @param y
      */
@@ -45,7 +45,7 @@ public class PolygonObject {
     }
 
     /**
-     * Draw the polygon
+     * Draw the polygon onto the canvas
      * @param g
      */
     void drawPolygon(Graphics g) {
@@ -68,7 +68,7 @@ public class PolygonObject {
     }
 
     /**
-     *
+     * Is the mouse over the currently selected polygon?
      * @return
      */
     public boolean mouseOver() {

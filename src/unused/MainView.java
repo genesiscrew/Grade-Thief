@@ -1,4 +1,4 @@
-package view;
+package unused;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +20,7 @@ public class MainView extends Application {
      */
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-        Parent root = new FXMLLoader().load(getClass().getResource("/scenes/home_screen.fxml"));
+        Parent root = new FXMLLoader().load(getClass().getResource("/unused/scenes/home_screen.fxml"));
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
