@@ -1,12 +1,5 @@
 package gui;
 
-import gui.*;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,7 +7,6 @@ import java.util.List;
  */
 public interface Drawable {
 
-    void setRotAdd();
 
     /**
      * Update the direction the polygon is facing
@@ -28,6 +20,12 @@ public interface Drawable {
      *
      */
     void updatePoly();
+
+    /**
+     *
+     */
+    void setRotAdd();
+
 
     /**
      * Remove the cube
@@ -47,5 +45,5 @@ public interface Drawable {
      * Get all the polygons of the object
      * @return
      */
-    List<ThreeDPolygon> getPolygons();
+    List<Polygon> getPolygons();
 }

@@ -17,12 +17,12 @@ public class Room {
     /**
      * This is all the individual polygons that will be drawn
      */
-    List<ThreeDPolygon> polygons = new ArrayList<>();
+    List<Polygon> polygons = new ArrayList<>();
 
     /**
      * The polygons floorPolygons
      */
-    List<ThreeDPolygon> floorPolygons;
+    List<Polygon> floorPolygons;
 
     /**
      * The roomObjects in the room
@@ -97,19 +97,19 @@ public class Room {
         this.roomObjects = roomObjects;
     }
 
-    public List<ThreeDPolygon> getPolygons() {
+    public List<Polygon> getPolygons() {
         return polygons;
     }
 
-    public void setPolygons(List<ThreeDPolygon> polygons) {
+    public void setPolygons(List<Polygon> polygons) {
         this.polygons = polygons;
     }
 
-    public List<ThreeDPolygon> getFloorPolygons() {
+    public List<Polygon> getFloorPolygons() {
         return floorPolygons;
     }
 
-    public void setFloorPolygons(List<ThreeDPolygon> floorPolygons) {
+    public void setFloorPolygons(List<Polygon> floorPolygons) {
         this.floorPolygons = floorPolygons;
     }
 

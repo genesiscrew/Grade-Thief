@@ -17,7 +17,6 @@ import javax.swing.JTextField;
  */
 public class Main {
     static Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    static JTextField TF;
 
     public static void main(String[] args) {
         Main main = new Main();

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import game.floor.Room;
 import game.floor.TileMap;
@@ -53,12 +52,12 @@ public class Floor {
      * Return a new map being the size of the width and height set in the fields
      * @return
      */
-    public List<ThreeDPolygon> generateMap(){
-        List<ThreeDPolygon> polygonFloor = new ArrayList<>();
+    public List<Polygon> generateMap(){
+        List<Polygon> polygonFloor = new ArrayList<>();
 
         for (int y = 0; y < mapWidth; y++) {
             for (int x = 0; x < mapHeight; x++) {
-               polygonFloor.add(new ThreeDPolygon(
+               polygonFloor.add(new Polygon(
                         new double[]{(tileSize * x)+xOffset,  (tileSize * x)+xOffset,  tileSize + (tileSize * x)+ xOffset, xOffset + tileSize + (tileSize * x)},
                         new double[]{yOffset + (tileSize * y),  yOffset + tileSize + (tileSize * y), yOffset + tileSize + (tileSize * y),  yOffset + (tileSize * y)},
                         new double[]{0, 0, 0, 0}, tileColor, false));

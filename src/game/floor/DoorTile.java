@@ -51,7 +51,7 @@ public class DoorTile implements Tile  {
 	@Override
 	public String name() {
 		if (occupied())
-			return "P";
+			return "viewTo";
 		return "D";
 	}
 

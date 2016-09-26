@@ -28,9 +28,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     private Room room1 = new Room(1);
     private Room room2 = new Room(2);
 
-
     // The polygon that the mouse is currently over
-    static ThreeDPolygon polygonOver = null;
+    static Polygon polygonOver = null;
 
     final int startX = 15;
     final int startY = 5;
@@ -55,8 +54,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     static double mouseY = 0;
     static double movementSpeed = 0.5;
 
-    //FPS is a bit primitive, you can set the MaxFPS as high as u want
-    double drawFPS = 0, MaxFPS = 1000, SleepTime = 1000.0 / MaxFPS, LastRefresh = 0, StartTime = System.currentTimeMillis(), LastFPSCheck = 0, Checks = 0;
+    //FPS is a bit primitive, you can set the maxFPS as high as u want
+    double drawFPS = 0, maxFPS = 100, LastRefresh = 0, lastFPSCheck = 0, fpsCheck = 0;
 
 
     double VertLook = -0.9;  // Goes from 0.999 to -0.999, minus being looking down and + looking up
@@ -99,39 +98,39 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     @Override
     public void paintComponent(Graphics g) {
-        //Clear screen and draw background color
+        // Clear screen and draw background color
         g.setColor(new Color(140, 180, 180));
         g.fillRect(0, 0, (int) Main.ScreenSize.getWidth(), (int) Main.ScreenSize.getHeight());
 
         cameraMovement();
 
-        //Calculated all that is general for this camera position
+        // Calculated all that is general for this camera position
         Calculator.setPredeterminedInfo(this);
         controlSunAndLight();
 
-        List<ThreeDPolygon> allPolygons = new ArrayList<>();
+        List<Polygon> allPolygons = new ArrayList<>();
         // Add all polygons
         allPolygons.addAll(room.getFloorPolygons());
         room.getRoomObjects().forEach(o -> allPolygons.addAll(o.getPolygons()));
 
-        //Updates each polygon for this camera position
+        // Updates each polygon for this camera position
         for (int i = 0; i < allPolygons.size(); i++)
             allPolygons.get(i).updatePolygon(this);
 
-        //Set drawing order so closest polygons gets drawn last
+        // Set drawing order so closest polygons gets drawn last
         setOrder(allPolygons);
 
-        //Set the polygon that the mouse is currently over
+        // Set the polygon that the mouse is currently over
         // setPolygonOver();
 
-        //draw polygons in the Order that is set by the 'setOrder' function
+        // Draw polygons in the Order that is set by the 'setOrder' function
         for (int i = 0; i < polygonDrawOrder.length; i++)
             allPolygons.get(polygonDrawOrder[i]).drawPolygon(g);
 
-        //draw the cross in the center of the screen
+        // Draw the cross in the center of the screen
         drawMouseAim(g);
 
-        //FPS display
+        // FPS display
         g.drawString("FPS: " + (int) drawFPS + " (Benchmark)", 40, 40);
         sleepAndRefresh();
     }
@@ -139,7 +138,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     /**
      * This sets the order that the polygons are drawn in
      */
-    private void setOrder(List<ThreeDPolygon> polys) {
+    private void setOrder(List<Polygon> polys) {
         double[] k = new double[polys.size()];
         polygonDrawOrder = new int[polys.size()];
 
@@ -185,28 +184,27 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
     /**
-     * This calculates the frame rate
+     * This refreshes the display when required. In th meantime it simply sleeps.
      */
     private void sleepAndRefresh() {
         long timeSLU = (long) (System.currentTimeMillis() - LastRefresh);
 
-        Checks++;
-        if (Checks >= 15) {
-            drawFPS = Checks / ((System.currentTimeMillis() - LastFPSCheck) / 1000.0);
-            LastFPSCheck = System.currentTimeMillis();
-            Checks = 0;
+        fpsCheck++;
+        if (fpsCheck >= 15) {
+            drawFPS = fpsCheck / ((System.currentTimeMillis() - lastFPSCheck) / 1000.0);
+            lastFPSCheck = System.currentTimeMillis();
+            fpsCheck = 0;
         }
 
-        if (timeSLU < 1000.0 / MaxFPS) {
+        if (timeSLU < 1000.0 / maxFPS) {
             try {
-                Thread.sleep((long) (1000.0 / MaxFPS - timeSLU));
+                Thread.sleep((long) (1000.0 / maxFPS - timeSLU));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
         LastRefresh = System.currentTimeMillis();
-
         repaint();
     }
 
@@ -294,7 +292,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
     /**
-     * Checks to see if the
+     * fpsCheck to see if the
      *
      * @return
      */
@@ -392,9 +390,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             room = room1;
     }
 
-
+    /**
+     * This makes the player jump in the game. It uses a seperate thread to simulate the jumping so we can continue
+     * updating the display throughout the jump.
+     */
     public void jump() {
-
         Thread jumpingThread = new Thread(){
             @Override
             public void run(){
@@ -416,13 +416,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
                 }
             }
         };
-
         jumpingThread.start();
-
-//        for (int i = 1; i < 5; i++) {
-//            ViewFrom[2] += 1;
-//            updateView();
-//        }
     }
 
     @Override
@@ -439,7 +433,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
 
     @Override

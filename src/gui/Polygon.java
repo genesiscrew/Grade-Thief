@@ -34,9 +34,9 @@ public class Polygon {
         newY = new double[x.length];
         draw = true;
         for (int i = 0; i < x.length; i++) {
-            CalcPos = Calculator.CalculatePositionP(screen.ViewFrom, screen.ViewTo, x[i], y[i], z[i]);
-            newX[i] = (Main.ScreenSize.getWidth() / 2 - Calculator.CalcFocusPos[0]) + CalcPos[0] * Screen.zoom;
-            newY[i] = (Main.ScreenSize.getHeight() / 2 - Calculator.CalcFocusPos[1]) + CalcPos[1] * Screen.zoom;
+            CalcPos = Calculator.CalculatePositionP(screen.ViewFrom, x[i], y[i], z[i]);
+            newX[i] = (Main.ScreenSize.getWidth() / 2 - Calculator.calculatorFocusPosition[0]) + CalcPos[0] * Screen.zoom;
+            newY[i] = (Main.ScreenSize.getHeight() / 2 - Calculator.calculatorFocusPosition[1]) + CalcPos[1] * Screen.zoom;
             if (Calculator.t < 0)
                 draw = false;
         }
@@ -48,8 +48,8 @@ public class Polygon {
 
     void calcLighting(Screen screen) {
         Plane lightingPlane = new Plane(this);
-        double angle = Math.acos(((lightingPlane.NV.x * screen.LightDir[0]) +
-                (lightingPlane.NV.y * screen.LightDir[1]) + (lightingPlane.NV.z * screen.LightDir[2]))
+        double angle = Math.acos(((lightingPlane.normalVector.x * screen.LightDir[0]) +
+                (lightingPlane.normalVector.y * screen.LightDir[1]) + (lightingPlane.normalVector.z * screen.LightDir[2]))
                 / (Math.sqrt(screen.LightDir[0] * screen.LightDir[0] + screen.LightDir[1] * screen.LightDir[1] + screen.LightDir[2] *screen.LightDir[2])));
 
         lighting = 0.2 + 1 - Math.sqrt(Math.toDegrees(angle) / 180);

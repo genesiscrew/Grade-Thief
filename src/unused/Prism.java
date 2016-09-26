@@ -1,7 +1,7 @@
 package unused;
 
 
-import gui.ThreeDPolygon;
+import gui.Polygon;
 
 import java.awt.Color;
 
@@ -10,15 +10,15 @@ public class Prism {
     double[] RotAdd = new double[6];
     Color c;
     double x1, x2, x3, x4, x5, x6, y1, y2, y3, y4, y5, y6;
-    ThreeDPolygon[] Polys = new ThreeDPolygon[5];
+    Polygon[] Polys = new Polygon[5];
     double[] angle;
 
     public Prism(double x, double y, double z, double width, double length, double height, Color c) {
-        Polys[0] = new ThreeDPolygon(new double[]{x, x + width, x + width, x}, new double[]{y, y, y + length, y + length}, new double[]{z, z, z, z}, c, false);
-        Polys[1] = new ThreeDPolygon(new double[]{x, x, x + width, x + width}, new double[]{y, y, y, y}, new double[]{z, z + height, z + height, z}, c, false);
-        Polys[2] = new ThreeDPolygon(new double[]{x + width, x + width, x + width}, new double[]{y, y, y + length}, new double[]{z, z + height, z + height}, c, false);
-        Polys[3] = new ThreeDPolygon(new double[]{x, x, x + width, x + width}, new double[]{y + length, y + length, y + length, y + length}, new double[]{z, z + height, z + height, z}, c, false);
-        Polys[4] = new ThreeDPolygon(new double[]{x, x, x}, new double[]{y, y, y + length}, new double[]{z, z + height, z + height}, c, false);
+        Polys[0] = new Polygon(new double[]{x, x + width, x + width, x}, new double[]{y, y, y + length, y + length}, new double[]{z, z, z, z}, c, false);
+        Polys[1] = new Polygon(new double[]{x, x, x + width, x + width}, new double[]{y, y, y, y}, new double[]{z, z + height, z + height, z}, c, false);
+        Polys[2] = new Polygon(new double[]{x + width, x + width, x + width}, new double[]{y, y, y + length}, new double[]{z, z + height, z + height}, c, false);
+        Polys[3] = new Polygon(new double[]{x, x, x + width, x + width}, new double[]{y + length, y + length, y + length, y + length}, new double[]{z, z + height, z + height, z}, c, false);
+        Polys[4] = new Polygon(new double[]{x, x, x}, new double[]{y, y, y + length}, new double[]{z, z + height, z + height}, c, false);
 
         this.c = c;
         this.x = x;
