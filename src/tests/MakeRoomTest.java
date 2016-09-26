@@ -1,4 +1,4 @@
-package Tests;
+package tests;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +17,7 @@ import model.Game;
  * @author Stefan Vrecic
  *
  */
-public class makeRoomTest {
+public class MakeRoomTest {
 
 	public static void main(String[] args) throws IOException {
 

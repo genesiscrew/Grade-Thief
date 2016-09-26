@@ -1,4 +1,4 @@
-package Tests;
+package tests;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,18 +27,19 @@ public class PlayerInteractWithItem {
 		// add items to room
 		tileMap.populateRoom(room, tileMap.getItems(), null);
 		//create player
-		Player p = new Player(0000, "H", game);
+		Player p = new Player(0000, "H", game, 0);
+		game.addPlayer(p);
+
 		p.setCharacterLocation(5,2);
 		Location pL = p.getCharacterLocation();
 		// set user direction facing item
 		p.setDirection(Direction.Dir.EAST);
 		// add player to room
-		System.out.println(p.getName());
 		EmptyTile tile =  (EmptyTile) tileMap.getTileMap()[pL.row()][pL.column()];
 		tile.addObjectToTile(p);
 		// draw board
         game.drawRoom(tileMap);
-        Thread drawThread = game.drawGameThread(700);
+        Thread drawThread = game.drawRoomThread(700, tileMap);
         game.display.setVisible(true);
         drawThread.start();
 

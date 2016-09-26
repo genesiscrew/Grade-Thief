@@ -247,15 +247,16 @@ public class Game {
 	 *      e.g. if item is container, it will return a string containing
 	 *      description of container and of items it has inside
 	 */
-	public String inspectItem(GameObject item) {
-		if (this.isContainerItem(item)) {
+	public String inspectItem(Object item) {
+		if (item instanceof GameObject) {
+		if (this.isContainerItem((GameObject) item)) {
 			// item is container so we list through all items within it
 			if (((Container) item).getItems().isEmpty()) {
-				return "This is a " + item.itemType() + ", it has no items inside it";
+				return "This is a " + ((GameObject) item).itemType() + ", it has no items inside it";
 
 			} else {
 				String output;
-				output = "This is a " + item.itemType() + ", it has the following"
+				output = "This is a " + ((GameObject) item).itemType() + ", it has the following"
 						+ ((Container) item).getItems().size() + "inside it:\n";
 				for (int i = 0; i < ((Container) item).getItems().size(); i++) {
 					if (((Container) item).getItems().get(i) instanceof Container) {
@@ -267,7 +268,9 @@ public class Game {
 				return output;
 			}
 		}
-		return "This is a " + item.itemType();
+		return "This is a " + ((GameObject) item).itemType();
+		}
+		return null;
 	}
 
 	/**
@@ -438,7 +441,7 @@ public class Game {
 	 * @param delay
 	 * @return
 	 */
-	public Thread drawGameThread(int delay) {
+	public Thread drawFloorThread(int delay) {
 		Thread drawThread = new Thread() {
 			public void run() {
 				// move the guard in a fixed loop, once he reaches certain
@@ -453,8 +456,56 @@ public class Game {
 					try {
 						Thread.sleep(delay);
 						//game.clockTick();
+
 						 if (Game.this.gettick()){
 							 Game.this.drawBoard(0);
+							 Game.this.tick(false);
+						 }
+
+
+					} catch(InterruptedException e) {
+						// should never happen
+					}
+				}
+
+
+
+
+
+					// draw board intp console for debugging purposes
+					//game.drawBoard(gaurd.getFloorNo());
+
+
+
+			}
+		};
+		return drawThread;
+
+	}
+
+	/**
+	 * creates a thread that draws the game board into console, this method is for debugging purposes
+	 * @param delay
+	 * @return
+	 */
+	public Thread drawRoomThread(int delay, TileMap tileMap) {
+		Thread drawThread = new Thread() {
+			public void run() {
+				// move the guard in a fixed loop, once he reaches certain
+				// coordinate on the Map, change destination
+				// if () {}
+				// gaurd will keep moving
+
+
+
+				while(1 == 1) {
+					// Loop forever
+					try {
+						Thread.sleep(delay);
+						//game.clockTick();
+
+						 if (Game.this.gettick()){
+							 Game.this.drawRoom(tileMap);
 							 Game.this.tick(false);
 						 }
 
@@ -520,5 +571,10 @@ public class Game {
 		return guardThread;
 
 	}
+
+public void addPlayer(Player p) {
+	this.characters.add(p);
+	console.addKeyListener(p);
+}
 
 }

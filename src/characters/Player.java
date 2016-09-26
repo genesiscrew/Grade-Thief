@@ -4,7 +4,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
+import game.floor.EmptyTile;
 import game.floor.Location;
+import game.floor.Tile;
 import items.Direction;
 import items.Distance;
 import items.GameObject;
@@ -18,12 +20,14 @@ public class Player extends Character implements KeyListener {
 	private ArrayList<Item> items = new ArrayList<Item>();
 	private Game game;
 	private Direction.Dir dir;
+	int floorNo;
 
 
 
-	public Player(int characterID, String characterName, Game game) {
+	public Player(int characterID, String characterName, Game game, int floorNo) {
 		super(characterID, characterName);
 		this.game = game;
+		this.floorNo = floorNo;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -32,7 +36,7 @@ public class Player extends Character implements KeyListener {
 		// altars details in tile in world
 		// altars playerLocation
 	}
-	
+
 	public void setDirection(Direction.Dir dir) {
 		this.dir = dir;
 	}
@@ -113,13 +117,65 @@ public class Player extends Character implements KeyListener {
 			game.player(characterID).moveDown();
 		}
 		*/
-		System.out.println(e.getSource());
-		//if(code == KeyEvent.e || code == KeyEvent.VK_KP_RIGHT) {
+
+		if(e.getKeyChar() == 'e') {
+        if (this.checkifItemOnTile() != null) {
+        	// item is on tile so we can interact with it
+        	game.inspectItem(this.checkifItemOnTile() );
 
 
-		//}
+        }
+
+		}
 		// redraw game board
 		game.tick(true);
+
+	}
+
+
+	private Object checkifItemOnTile() {
+
+
+		if(dir.equals(Direction.Dir.EAST)) {
+			Tile tile = game.getFloor(floorNo).getFloorMap().getFloorTiles()
+					[this.getCharacterLocation().row() + 1][this.getCharacterLocation().column()];
+			if ( tile instanceof EmptyTile && tile.occupied()) {
+				return tile.getObjectonTile();
+
+			}
+
+		}
+		else if(dir.equals(Direction.Dir.WEST)) {
+			Tile tile = game.getFloor(floorNo).getFloorMap().getFloorTiles()
+					[this.getCharacterLocation().row() - 1][this.getCharacterLocation().column()];
+			if ( tile instanceof EmptyTile) {
+				return tile.occupied();
+
+			}
+
+		}
+		else if(dir.equals(Direction.Dir.SOUTH)) {
+			Tile tile = game.getFloor(floorNo).getFloorMap().getFloorTiles()
+					[this.getCharacterLocation().row()][this.getCharacterLocation().column()+1];
+			if ( tile instanceof EmptyTile) {
+				return tile.occupied();
+
+			}
+
+
+		}
+
+		else {
+			Tile tile = game.getFloor(floorNo).getFloorMap().getFloorTiles()
+					[this.getCharacterLocation().row()][this.getCharacterLocation().column()-1];
+			if ( tile instanceof EmptyTile) {
+				return tile.occupied();
+
+			}
+
+
+		}
+		return false;
 
 	}
 

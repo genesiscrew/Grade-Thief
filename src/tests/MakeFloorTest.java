@@ -1,4 +1,4 @@
-package Tests;
+package tests;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +20,7 @@ import items.Door;
 * @author Stefan Vrecic
 *
 */
-public class makeFloorTest {
+public class MakeFloorTest {
 
 	public static void main(String[] args) throws IOException {
 
@@ -104,7 +104,7 @@ public class makeFloorTest {
 			//		}
 		}
 
-		Player p = new Player(0000, "Stefan", null);
+		Player p = new Player(0000, "Stefan", null, 0);
 		p.setCharacterLocation(19,27);
 		Location pL = p.getCharacterLocation();
 		floor.getFloorMap().getFloorTiles()[pL.row()][pL.column()].setOccupied();
@@ -120,7 +120,7 @@ public class makeFloorTest {
 			s = s + "\n";
 		}
 
-	
+
 		System.out.println(s);
 
 		try {Thread.sleep(700);	}

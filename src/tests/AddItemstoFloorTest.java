@@ -1,4 +1,4 @@
-package Tests;
+package tests;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import game.floor.TileMap;
 import items.Door;
 import model.Game;
 
-public class addItemstoFloorTest {
+public class AddItemstoFloorTest {
 	public static void main(String[] args) throws IOException {
 
 		// make a floor
@@ -84,7 +84,7 @@ public class addItemstoFloorTest {
 			//		}
 		}
 
-		Player p = new Player(0000, "Stefan", game);
+		Player p = new Player(0000, "Stefan", game, 0);
 		p.setCharacterLocation(19,27);
 		Location pL = p.getCharacterLocation();
 		floor.getFloorMap().getFloorTiles()[pL.row()][pL.column()].setOccupied();
