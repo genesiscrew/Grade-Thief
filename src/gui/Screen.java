@@ -30,7 +30,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
 
     // The polygon that the mouse is currently over
-    static PolygonObject polygonOver = null;
+    static ThreeDPolygon polygonOver = null;
 
     final int startX = 15;
     final int startY = 5;
@@ -126,7 +126,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
         //draw polygons in the Order that is set by the 'setOrder' function
         for (int i = 0; i < polygonDrawOrder.length; i++)
-            allPolygons.get(polygonDrawOrder[i]).drawablePolygon.drawPolygon(g);
+            allPolygons.get(polygonDrawOrder[i]).drawPolygon(g);
 
         //draw the cross in the center of the screen
         drawMouseAim(g);
@@ -313,9 +313,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     void setPolygonOver() {
         polygonOver = null;
         for (int i = polygonDrawOrder.length - 1; i >= 0; i--)
-            if (room.getPolygons().get(polygonDrawOrder[i]).drawablePolygon.mouseOver() && room.getPolygons().get(polygonDrawOrder[i]).draw
-                    && room.getPolygons().get(polygonDrawOrder[i]).drawablePolygon.visible) {
-                polygonOver = room.getPolygons().get(polygonDrawOrder[i]).drawablePolygon;
+            if (room.getPolygons().get(polygonDrawOrder[i]).mouseOver() && room.getPolygons().get(polygonDrawOrder[i]).draw
+                    && room.getPolygons().get(polygonDrawOrder[i]).visible) {
+                polygonOver = room.getPolygons().get(polygonDrawOrder[i]);
                 break;
             }
     }

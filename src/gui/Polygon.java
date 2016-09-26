@@ -2,30 +2,31 @@ package gui;
 
 import java.awt.*;
 
-public class ThreeDPolygon {
-    Color c;
+public class Polygon {
     public double[] x, y, z;
     boolean draw = true;
     boolean seeThrough = false;
     double[] CalcPos, newX, newY;
-    PolygonObject drawablePolygon;
+   // UnusedPolygonObject drawablePolygon;
     double averageDistance;
-    Polygon polygon;
+    java.awt.Polygon polygon;
     Color color;
     boolean visible = true;
     double lighting = 1;
 
-    public ThreeDPolygon(double[] x, double[] y, double[] z, Color c, boolean seeThrough) {
+    public Polygon(double[] x, double[] y, double[] z, Color c, boolean seeThrough) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.c = c;
+        this.color = c;
         this.seeThrough = seeThrough;
         createPolygon();
     }
 
     void createPolygon() {
-        drawablePolygon = new PolygonObject(new double[x.length], new double[x.length], c, seeThrough);
+        polygon = new java.awt.Polygon();
+        for (int i = 0; i < x.length; i++)
+            polygon.addPoint((int) x[i], (int) y[i]);
     }
 
     void updatePolygon(Screen screen) {
@@ -41,9 +42,7 @@ public class ThreeDPolygon {
         }
 
         calcLighting(screen);
-
-        drawablePolygon.draw = draw;
-        drawablePolygon.updatePolygon(newX, newY);
+        updatePolygon(newX, newY);
         averageDistance = GetDist(screen);
     }
 
@@ -53,12 +52,12 @@ public class ThreeDPolygon {
                 (lightingPlane.NV.y * screen.LightDir[1]) + (lightingPlane.NV.z * screen.LightDir[2]))
                 / (Math.sqrt(screen.LightDir[0] * screen.LightDir[0] + screen.LightDir[1] * screen.LightDir[1] + screen.LightDir[2] *screen.LightDir[2])));
 
-        drawablePolygon.lighting = 0.2 + 1 - Math.sqrt(Math.toDegrees(angle) / 180);
+        lighting = 0.2 + 1 - Math.sqrt(Math.toDegrees(angle) / 180);
 
-        if (drawablePolygon.lighting > 1)
-            drawablePolygon.lighting = 1;
-        if (drawablePolygon.lighting < 0)
-            drawablePolygon.lighting = 0;
+        if (lighting > 1)
+            lighting = 1;
+        if (lighting < 0)
+            lighting = 0;
     }
 
     /**
@@ -76,5 +75,52 @@ public class ThreeDPolygon {
         return Math.sqrt((screen.ViewFrom[0] - x[i]) * (screen.ViewFrom[0] - x[i]) +
                 (screen.ViewFrom[1] - y[i]) * (screen.ViewFrom[1] - y[i]) +
                 (screen.ViewFrom[2] - z[i]) * (screen.ViewFrom[2] - z[i]));
+    }
+
+    /**
+     * Update the polygons x and y points
+     * @param x
+     * @param y
+     */
+    void updatePolygon(double[] x, double[] y) {
+        polygon.reset();
+        for (int i = 0; i < x.length; i++) {
+            polygon.xpoints[i] = (int) x[i];
+            polygon.ypoints[i] = (int) y[i];
+            polygon.npoints = x.length;
+        }
+    }
+
+
+    /**
+     * Draw the polygon onto the canvas
+     * @param g
+     */
+    void drawPolygon(Graphics g) {
+        if (draw && visible) {
+            g.setColor(new Color((int) (color.getRed() * lighting), (int) (color.getGreen() * lighting), (int) (color.getBlue() * lighting)));
+            if (seeThrough)
+                g.drawPolygon(polygon);
+            else
+                g.fillPolygon(polygon);
+            if (Screen.drawOutlines) {
+                g.setColor(new Color(0, 0, 0));
+                g.drawPolygon(polygon);
+            }
+
+            if (Screen.polygonOver == this) {
+                g.setColor(new Color(255, 255, 255, 100));
+                g.fillPolygon(polygon);
+            }
+        }
+    }
+
+
+    /**
+     * Is the mouse over the currently selected polygon?
+     * @return
+     */
+    public boolean mouseOver() {
+        return polygon.contains(Main.ScreenSize.getWidth() / 2, Main.ScreenSize.getHeight() / 2);
     }
 }
