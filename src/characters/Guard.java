@@ -51,13 +51,14 @@ public class Guard extends Character {
 	 * the method should keep running until an intruder is detected
 	 */
 	public void move(Game game) {
-
+		
 		
 		while (!this.checkforIntruder(game)) {
 		for (int i = 0; i < directionList.size(); i++) {
 
 			// set Guard's direction
 			this.dir = directionList.get(i);
+		
 			// now we move guard n steps
 			for (int x = 0; x < distance; x++) {
 				// move the guard to new location
@@ -66,6 +67,7 @@ public class Guard extends Character {
 						.column()]).resetEmptyTile();
 				// move the guard one step based on direction
 				if (this.dir.equals(Dir.EAST)) {
+				
 					this.setCharacterLocation(this.getCharacterLocation().row() + 1,
 							this.getCharacterLocation().column());
 
@@ -334,6 +336,12 @@ public class Guard extends Character {
 				directionList.add(Dir.SOUTH);
 			}
 			if (moveStrategy == 12) {
+				directionList.add(Dir.WEST);
+				directionList.add(Dir.SOUTH);
+			}
+			if (moveStrategy == 13) {
+				directionList.add(Dir.EAST);
+				directionList.add(Dir.NORTH);
 				directionList.add(Dir.WEST);
 				directionList.add(Dir.SOUTH);
 			}

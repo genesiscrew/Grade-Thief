@@ -29,7 +29,6 @@ public class PlayerInteractWithItem {
 		//create player
 		Player p = new Player(0000, "H", game, 0);
 		game.addPlayer(p);
-
 		p.setCharacterLocation(5,2);
 		Location pL = p.getCharacterLocation();
 		// set user direction facing item

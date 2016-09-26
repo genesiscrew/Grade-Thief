@@ -132,7 +132,10 @@ public class Player extends Character implements KeyListener {
 
 	}
 
-
+/**
+ * this method checks the tile directly in front of the player on the map, and returns it if any
+ * @return
+ */
 	private Object checkifItemOnTile() {
 
 

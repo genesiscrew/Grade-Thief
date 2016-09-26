@@ -18,31 +18,29 @@ public class CheckGuardMovementTest {
 
 	public static void main(String[] args) throws IOException {
 
-		// make a floor
-		/// load the rooms and add it.
-		// get file path
-		// make a new room
-		// put the file path into room.setTileMap(filePath)
-		// this will delegate the work to TileMap.java
-
 		Game game = new Game();
 		Floor floor = createFloor();
 		game.addFloor(floor);
 
 		Guard gaurd1 = new Guard(0, "guard1", 1, 6, 0);
 		Guard guard2 = new Guard(1, "guard2",5,6, 0);
+		Guard guard3 = new Guard(1, "guard3",13,6, 0);
 		// set gaurd's location
 		gaurd1.setCharacterLocation(14, 0);
 		guard2.setCharacterLocation(49, 0);
+		guard3.setCharacterLocation(14, 7);
 
 		 ((EmptyTile) game.getFloor(0).getFloorMap().getFloorTiles()[14][0]).addObjectToTile(gaurd1);
 		 ((EmptyTile)
 		 game.getFloor(0).getFloorMap().getFloorTiles()[49][0]).addObjectToTile(guard2);
+		 ((EmptyTile)
+				 game.getFloor(0).getFloorMap().getFloorTiles()[14][7]).addObjectToTile(guard3);
 
 		 game.drawBoard(0);
          Thread guardThread1 = game.createGuardThread(gaurd1,0);
          Thread drawThread = game.drawFloorThread(700);
 		 Thread guardThread2 = game.createGuardThread(guard2, 0);
+		 Thread guardThread3 = game.createGuardThread(guard3, 0);
 
 		// start the guard movement, thread stops running when intruder caught
          game.display.setVisible(true);
@@ -51,6 +49,7 @@ public class CheckGuardMovementTest {
 		// guard2.move(game);
 
         guardThread1.start();
+        guardThread3.start();
 		drawThread.start();
 
 	}
