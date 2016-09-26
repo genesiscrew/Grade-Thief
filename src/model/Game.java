@@ -30,8 +30,6 @@ import items.Item;
 import items.Keys;
 import items.Movable;
 import items.Direction.Dir;
-import pacman.game.Character;
-import pacman.game.Pacman;
 
 /**
  *
@@ -58,6 +56,8 @@ public class Game {
 		display = new JFrame();
 		panel = new JPanel();
 		console = new JTextArea(20, 20);
+		console.setEditable(false);
+
 		panel.add(console);
 		display.add(panel);
 		display.setSize(500, 600);
@@ -92,6 +92,34 @@ public class Game {
 		display.repaint();
 
 	}
+	/**
+	 * draws a room, this method is now currently used for debugging purposes
+	 * @param floorNo
+	 */
+	public void drawRoom(TileMap tileMap) {
+
+
+		 String s = "";
+			for (int y = 0 ; y < tileMap.getMapHeight(); y++ ) {
+				for (int x = 0 ; x < tileMap.getMapWidth() ; x++) {
+					Tile t = tileMap.getTileMap()[x][y];
+					if (t != null) {
+						if (tileMap.getTileMap()[x][y].occupied())
+							s = s  + (tileMap.getTileMap()[x][y].getObjectonTile().toString());
+						else
+							s = s + (tileMap.getTileMap()[x][y].getName());
+
+					}
+
+				}
+				s = s + "\n";
+			}
+
+		console.setText(s);
+		display.repaint();
+
+	}
+
 
 	/**
 	 * this method sets up guards within the map based on floor number

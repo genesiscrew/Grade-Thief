@@ -17,6 +17,7 @@ public class Player extends Character implements KeyListener {
 	private boolean inRoom = false;
 	private ArrayList<Item> items = new ArrayList<Item>();
 	private Game game;
+	private Direction.Dir dir;
 
 
 
@@ -30,7 +31,10 @@ public class Player extends Character implements KeyListener {
 	public void move(Direction dir, Distance d) {
 		// altars details in tile in world
 		// altars playerLocation
-
+	}
+	
+	public void setDirection(Direction.Dir dir) {
+		this.dir = dir;
 	}
 
 
@@ -109,6 +113,13 @@ public class Player extends Character implements KeyListener {
 			game.player(characterID).moveDown();
 		}
 		*/
+		System.out.println(e.getSource());
+		//if(code == KeyEvent.e || code == KeyEvent.VK_KP_RIGHT) {
+
+
+		//}
+		// redraw game board
+		game.tick(true);
 
 	}
 

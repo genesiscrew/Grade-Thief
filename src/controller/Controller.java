@@ -140,12 +140,12 @@ public class Controller  {
 		// create new gaurd object
 
 		// setup guard for floor 1
-		game.setupGuards(1);
+		//game.setupGuards(1);
 		//set up player on map
 		//game.setupPlayers();
-	
 
 
+return null;
 
 	}
 }

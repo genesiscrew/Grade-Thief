@@ -12,6 +12,7 @@ import game.floor.Room;
 import game.floor.RoomTile;
 import game.floor.Tile;
 import game.floor.TileMap;
+import items.Direction;
 import items.Door;
 import model.Game;
 
@@ -27,14 +28,19 @@ public class PlayerInteractWithItem {
 		tileMap.populateRoom(room, tileMap.getItems(), null);
 		//create player
 		Player p = new Player(0000, "H", game);
-		p.setCharacterLocation(5,1);
+		p.setCharacterLocation(5,2);
 		Location pL = p.getCharacterLocation();
+		// set user direction facing item
+		p.setDirection(Direction.Dir.EAST);
 		// add player to room
 		System.out.println(p.getName());
 		EmptyTile tile =  (EmptyTile) tileMap.getTileMap()[pL.row()][pL.column()];
 		tile.addObjectToTile(p);
 		// draw board
-        drawRoom(tileMap);
+        game.drawRoom(tileMap);
+        Thread drawThread = game.drawGameThread(700);
+        game.display.setVisible(true);
+        drawThread.start();
 
 
 	}
@@ -63,25 +69,7 @@ public class PlayerInteractWithItem {
 		return r;
 	}
 
-  private static void drawRoom(TileMap tileMap) {
-	  String s = "";
-		for (int y = 0 ; y < tileMap.getMapHeight(); y++ ) {
-			for (int x = 0 ; x < tileMap.getMapWidth() ; x++) {
-				Tile t = tileMap.getTileMap()[x][y];
-				if (t != null) {
-					if (tileMap.getTileMap()[x][y].occupied())
-						s = s  + (tileMap.getTileMap()[x][y].getObjectonTile().toString());
-					else
-						s = s + (tileMap.getTileMap()[x][y].getName());
 
-				}
-
-			}
-			s = s + "\n";
-		}
-		System.out.println(s);
-	  
-  }
 
 
 }
