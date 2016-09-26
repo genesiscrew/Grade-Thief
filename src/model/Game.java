@@ -425,12 +425,18 @@ public class Game {
 		sc.close();
 
 	}
-
+   /**
+    * this method notifies game that game map has been updated
+    * @param b
+    */
 	public void tick(boolean b) {
 		this.tick = b;
 
 	}
-
+   /**
+    * this method checks if game map has been updated. it is used to determine whether game gui should be refreshed
+    * @return
+    */
 	public boolean gettick() {
 		// TODO Auto-generated method stub
 		return this.tick;
