@@ -95,7 +95,7 @@ public class EmptyTile implements Tile {
 
 
 	public String toString() {
-
+        return this.name;
 		return this.getClass().getSimpleName() + " " + location.toString();
 	}
 

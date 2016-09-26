@@ -16,11 +16,13 @@ public class Player extends Character implements KeyListener {
 	Location characterLocation;
 	private boolean inRoom = false;
 	private ArrayList<Item> items = new ArrayList<Item>();
+	private Game game;
 
 
 
 	public Player(int characterID, String characterName, Game game) {
 		super(characterID, characterName);
+		this.game = game;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -62,7 +64,11 @@ public class Player extends Character implements KeyListener {
      * @returns the name of the player
      */
 	public String getName() {
-		return super.characterName;
+		return this.characterName;
+	}
+
+	public String toString() {
+		return this.characterName;
 	}
 	/**
 	 * adds an item to player's inventory
@@ -92,15 +98,23 @@ public class Player extends Character implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int code = e.getKeyCode();
+		/*
 		if(code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_KP_RIGHT) {
-			game.player(uid).moveRight();
+			game.player(characterID).moveRight();
 		} else if(code == KeyEvent.VK_LEFT || code == KeyEvent.VK_KP_LEFT) {
-			game.player(uid).moveLeft();
+			game.player(characterID).moveLeft();
 		} else if(code == KeyEvent.VK_UP) {
-			game.player(uid).moveUp();
+			game.player(characterID)).moveUp();
 		} else if(code == KeyEvent.VK_DOWN) {
-			game.player(uid).moveDown();
+			game.player(characterID).moveDown();
 		}
+		*/
+
+	}
+
+
+	private void moveRight() {
+		// TODO Auto-generated method stub
 
 	}
 
