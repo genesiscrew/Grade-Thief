@@ -32,8 +32,8 @@ public class Room {
 	}
 
 	public void setTileMap(String f)  throws IOException {
-		TileMap t = new TileMap(null, this);
-		this.roomTileMap = t.createTileMap(f);
+		//TileMap t = new TileMap(null, this);
+		//this.roomTileMap = t.createTileMap(f);
 	}
 	/**
 

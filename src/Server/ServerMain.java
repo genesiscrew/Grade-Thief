@@ -74,7 +74,7 @@ public class ServerMain {
         // game = new Game(file);
 
         // create the game world
-        game = new Game(TestConst.world, TestConst.areas);
+        //game = new Game(TestConst.world, TestConst.areas);
         clockThread = new ClockThread(DEFAULT_CLK_PERIOD, game);
         pool = Executors.newFixedThreadPool(numPlayers);
 
@@ -129,7 +129,7 @@ public class ServerMain {
             pool.submit(r);
         }
 
-        game.startTiming();
+       // game.startTiming();
         clockThread.start();
 
         // loop forever until game ends.
@@ -161,8 +161,9 @@ public class ServerMain {
         if (s != null) {
             return s;
         } else {
-            throw new GameError("Cannot create server socket");
+            //throw new GameError("Cannot create server socket");
         }
+        return null;
     }
 
     /**

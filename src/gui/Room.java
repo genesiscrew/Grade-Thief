@@ -1,7 +1,9 @@
 package gui;
 
+import game.floor.TileMap;
 import items.Chair;
 import items.Laptop;
+import items.Player;
 import items.Table;
 
 import java.awt.*;
@@ -9,7 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import game.floor.makeRoomTest;
+import tests.MakeRoomTest;
 
 /**
  * Created by wareinadam on 24/09/16.
@@ -19,70 +21,49 @@ public class Room {
     /**
      * This is all the individual polygons that will be drawn
      */
-    List<ThreeDPolygon> polygons = new ArrayList<>();
+    List<Polygon> polygons = new ArrayList<>();
 
     /**
      * The polygons floorPolygons
      */
-    List<ThreeDPolygon> floorPolygons;
+    List<Polygon> floorPolygons;
 
     /**
      * The roomObjects in the room
      */
     ArrayList<Drawable> roomObjects = new ArrayList<Drawable>();
 
-    Floor floor;
+    Floor floor = new Floor(0, 0, 10, 10);
+
+    TileMap tileMap = null;
 
     /**
      * @throws IOException
-     *
      */
-    public Room(int type) throws IOException{
-        floor = new Floor();
+    public Room(String roomName) throws IOException {
+        floor = new Floor(0, 0, 20, 20);
         this.floorPolygons = floor.generateMap();
         this.polygons = new ArrayList<>();
 
-        if(type == 1)
-            addObjectsToMap();
-        else
-            addObjectsToMap2();
-
+        addObjectsToMap(roomName);
+        floor = new Floor(0, 0, tileMap.getMapWidth(), tileMap.getMapHeight());
+        this.floorPolygons = floor.generateMap();
     }
 
-    private void addObjectsToMap() {
+    private void addObjectsToMap(String roomName) throws IOException {
+        //try {System.out.println("room1"); Thread.sleep(5000); } catch (Exception e) {}
+        //System.out.println("called once?????/");
         int wallLength = (int) (floor.getMapHeight() * floor.getTileSize()) - 5;
         int wallHeight = 50;
 
-        roomObjects.add(new Cube(0, 0, 0, 5, wallLength, wallHeight, Color.blue));
-        roomObjects.add(new Cube(5, 0, 0, wallLength - 10, 5, wallHeight, Color.blue));
-        roomObjects.add(new Cube(wallLength - 5, 0, 0, 5, wallLength, wallHeight, Color.blue));
-        roomObjects.add(new Cube(0, wallLength, 0, wallLength - 5, 5, wallHeight, Color.blue));
-
-        roomObjects.add(new Table(50, 50, 0, 20, 50, 7, Color.red));
-        roomObjects.add(new Laptop(55, 50, 7, 5, 3, 4, Color.black));
-
-        // Chairs
-        roomObjects.add(new Chair(40, 60, 0, 5, 5, 5, Color.red));
-        roomObjects.add(new Chair(40, 70, 0, 5, 5, 5, Color.red));
-        roomObjects.add(new Chair(40, 80, 0, 5, 5, 5, Color.red));
-
-        roomObjects.add(new Chair(75, 60, 0, 5, 5, 5, Color.red));
-        roomObjects.add(new Chair(75, 70, 0, 5, 5, 5, Color.red));
-        roomObjects.add(new Chair(75, 80, 0, 5, 5, 5, Color.red));
+        MakeRoomTest m = new MakeRoomTest();
+        m.createRoom(this, roomName);
     }
 
-    private void addObjectsToMap2() throws IOException {
-    	//try {System.out.println("room1"); Thread.sleep(5000); } catch (Exception e) {}
-    	//System.out.println("called once?????/");
-        int wallLength = (int) (floor.getMapHeight() * floor.getTileSize()) - 5;
-        int wallHeight = 50;
-
-    	MakeRoomTest m = new MakeRoomTest(null);
-		game.floor.Room r = m.t();
-		for (Drawable d : r.getDrawableItems()) {
-			roomObjects.add(d);
-		}
-
+//    private void addObjectsToMap() {
+//        int wallLength = (int) (floor.getMapHeight() * floor.getTileSize()) - 5;
+//        int wallHeight = 50;
+//
 //        roomObjects.add(new Cube(0, 0, 0, 5, wallLength, wallHeight, Color.blue));
 //        roomObjects.add(new Cube(5, 0, 0, wallLength - 10, 5, wallHeight, Color.blue));
 //        roomObjects.add(new Cube(wallLength - 5, 0, 0, 5, wallLength, wallHeight, Color.blue));
@@ -90,6 +71,27 @@ public class Room {
 //
 //        roomObjects.add(new Table(50, 50, 0, 20, 50, 7, Color.red));
 //        roomObjects.add(new Laptop(55, 50, 7, 5, 3, 4, Color.black));
+//
+//        // Chairs
+//        roomObjects.add(new Chair(75, 60, 0, 5, 5, 5, Color.red));
+//        roomObjects.add(new Chair(75, 70, 0, 5, 5, 5, Color.red));
+//        roomObjects.add(new Chair(75, 80, 0, 5, 5, 5, Color.red));
+//
+//        roomObjects.add(new Chair(40, 60, 0, 5, 5, 5, Color.red));
+//        roomObjects.add(new Chair(40, 70, 0, 5, 5, 5, Color.red));
+//        roomObjects.add(new Chair(40, 80, 0, 5, 5, 5, Color.red));
+//
+//        roomObjects.get(0).updateDirection(60,60);
+//
+//
+//        roomObjects.add(new Player(20, 20, 0, 5, 3, 12, Color.green));
+//
+//    }
+
+
+    public void setTileMap(String f) throws IOException {
+        TileMap t = new TileMap(null, this);
+        this.tileMap = t.createTileMap(f);
     }
 
     public ArrayList<Drawable> getRoomObjects() {
@@ -100,19 +102,19 @@ public class Room {
         this.roomObjects = roomObjects;
     }
 
-    public List<ThreeDPolygon> getPolygons() {
+    public List<Polygon> getPolygons() {
         return polygons;
     }
 
-    public void setPolygons(List<ThreeDPolygon> polygons) {
+    public void setPolygons(List<Polygon> polygons) {
         this.polygons = polygons;
     }
 
-    public List<ThreeDPolygon> getFloorPolygons() {
+    public List<Polygon> getFloorPolygons() {
         return floorPolygons;
     }
 
-    public void setFloorPolygons(List<ThreeDPolygon> floorPolygons) {
+    public void setFloorPolygons(List<Polygon> floorPolygons) {
         this.floorPolygons = floorPolygons;
     }
 
@@ -122,5 +124,17 @@ public class Room {
 
     public void setFloor(Floor floor) {
         this.floor = floor;
+    }
+
+    public void addDrawableItems(Drawable drawableItems) {
+        this.roomObjects.add(drawableItems);
+    }
+
+    public TileMap getTileMap() {
+        return tileMap;
+    }
+
+    public void setTileMap(TileMap tileMap) {
+        this.tileMap = tileMap;
     }
 }

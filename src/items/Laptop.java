@@ -2,7 +2,7 @@ package items;
 
 import gui.Cube;
 import gui.Drawable;
-import gui.ThreeDPolygon;
+import gui.Polygon;
 
 import java.awt.*;
 import java.util.*;
@@ -70,8 +70,8 @@ public class Laptop implements Drawable{
     }
 
     @Override
-    public List<ThreeDPolygon> getPolygons() {
-        List<ThreeDPolygon> allPolys = new ArrayList<>();
+    public List<Polygon> getPolygons() {
+        List<Polygon> allPolys = new ArrayList<>();
         // Add all the cubes polygons
         cubes.forEach(c -> allPolys.addAll(c.getPolygons()));
         return allPolys;

@@ -26,12 +26,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     private Room room;
 
-    private Room room1 = new Room(1);
-    private Room room2 = new Room(2);
-
+    private Room room1 = new Room("co237");
+    private Room room2 = new Room("co238");
 
     // The polygon that the mouse is currently over
-    static PolygonObject polygonOver = null;
+    static Polygon polygonOver = null;
 
     final int startX = 15;
     final int startY = 5;
@@ -56,8 +55,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     static double mouseY = 0;
     static double movementSpeed = 0.5;
 
-    //FPS is a bit primitive, you can set the MaxFPS as high as u want
-    double drawFPS = 0, MaxFPS = 1000, SleepTime = 1000.0 / MaxFPS, LastRefresh = 0, StartTime = System.currentTimeMillis(), LastFPSCheck = 0, Checks = 0;
+    //FPS is a bit primitive, you can set the maxFPS as high as u want
+    double drawFPS = 0, maxFPS = 1000, LastRefresh = 0, lastFPSCheck = 0, fpsCheck = 0;
 
 
     double VertLook = -0.9;  // Goes from 0.999 to -0.999, minus being looking down and + looking up
@@ -92,48 +91,48 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         invisibleMouse();
 
         // Load the section of the map
-        room = new Room(1);
+        room = new Room("co237");
 
         ViewFrom[0] = startX;
         ViewFrom[1] = startY;
         ViewFrom[2] = startZ;
     }
 
-
+    @Override
     public void paintComponent(Graphics g) {
-        //Clear screen and draw background color
+        // Clear screen and draw background color
         g.setColor(new Color(140, 180, 180));
         g.fillRect(0, 0, (int) Main.ScreenSize.getWidth(), (int) Main.ScreenSize.getHeight());
 
         cameraMovement();
 
-        //Calculated all that is general for this camera position
+        // Calculated all that is general for this camera position
         Calculator.setPredeterminedInfo(this);
         controlSunAndLight();
 
-        List<ThreeDPolygon> allPolygons = new ArrayList<>();
+        List<Polygon> allPolygons = new ArrayList<>();
         // Add all polygons
         allPolygons.addAll(room.getFloorPolygons());
         room.getRoomObjects().forEach(o -> allPolygons.addAll(o.getPolygons()));
 
-        //Updates each polygon for this camera position
+        // Updates each polygon for this camera position
         for (int i = 0; i < allPolygons.size(); i++)
             allPolygons.get(i).updatePolygon(this);
 
-        //Set drawing order so closest polygons gets drawn last
+        // Set drawing order so closest polygons gets drawn last
         setOrder(allPolygons);
 
-        //Set the polygon that the mouse is currently over
+        // Set the polygon that the mouse is currently over
         // setPolygonOver();
 
-        //draw polygons in the Order that is set by the 'setOrder' function
+        // Draw polygons in the Order that is set by the 'setOrder' function
         for (int i = 0; i < polygonDrawOrder.length; i++)
-            allPolygons.get(polygonDrawOrder[i]).drawablePolygon.drawPolygon(g);
+            allPolygons.get(polygonDrawOrder[i]).drawPolygon(g);
 
-        //draw the cross in the center of the screen
+        // Draw the cross in the center of the screen
         drawMouseAim(g);
 
-        //FPS display
+        // FPS display
         g.drawString("FPS: " + (int) drawFPS + " (Benchmark)", 40, 40);
         sleepAndRefresh();
     }
@@ -141,7 +140,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     /**
      * This sets the order that the polygons are drawn in
      */
-    private void setOrder(List<ThreeDPolygon> polys) {
+    private void setOrder(List<Polygon> polys) {
         double[] k = new double[polys.size()];
         polygonDrawOrder = new int[polys.size()];
 
@@ -187,28 +186,27 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
     /**
-     * This calculates the frame rate
+     * This refreshes the display when required. In th meantime it simply sleeps.
      */
     private void sleepAndRefresh() {
         long timeSLU = (long) (System.currentTimeMillis() - LastRefresh);
 
-        Checks++;
-        if (Checks >= 15) {
-            drawFPS = Checks / ((System.currentTimeMillis() - LastFPSCheck) / 1000.0);
-            LastFPSCheck = System.currentTimeMillis();
-            Checks = 0;
+        fpsCheck++;
+        if (fpsCheck >= 15) {
+            drawFPS = fpsCheck / ((System.currentTimeMillis() - lastFPSCheck) / 1000.0);
+            lastFPSCheck = System.currentTimeMillis();
+            fpsCheck = 0;
         }
 
-        if (timeSLU < 1000.0 / MaxFPS) {
+        if (timeSLU < 1000.0 / maxFPS) {
             try {
-                Thread.sleep((long) (1000.0 / MaxFPS - timeSLU));
+                Thread.sleep((long) (1000.0 / maxFPS - timeSLU));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
         LastRefresh = System.currentTimeMillis();
-
         repaint();
     }
 
@@ -216,7 +214,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * Sets the the values for the light direction
      */
     void controlSunAndLight() {
-        SunPos += 0.005;
+        //SunPos += 0.005;
         double mapSize = room.getFloor().getMapWidth() * room.getFloor().getMapWidth();
         LightDir[0] = mapSize / 2 - (mapSize / 2 + Math.cos(SunPos) * mapSize * 10);
         LightDir[1] = mapSize / 2 - (mapSize / 2 + Math.sin(SunPos) * mapSize * 10);
@@ -264,8 +262,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * @param z
      */
     void moveTo(double x, double y, double z) {
-//        System.out.println(x + " " + y + " " + z);
-
         // Check that the player isn't out of the maps floorPolygons
         if (positionOutOfBounds(x, y, z))
             return;
@@ -298,7 +294,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
     /**
-     * Checks to see if the
+     * fpsCheck to see if the
      *
      * @return
      */
@@ -317,9 +313,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     void setPolygonOver() {
         polygonOver = null;
         for (int i = polygonDrawOrder.length - 1; i >= 0; i--)
-            if (room.getPolygons().get(polygonDrawOrder[i]).drawablePolygon.mouseOver() && room.getPolygons().get(polygonDrawOrder[i]).draw
-                    && room.getPolygons().get(polygonDrawOrder[i]).drawablePolygon.visible) {
-                polygonOver = room.getPolygons().get(polygonDrawOrder[i]).drawablePolygon;
+            if (room.getPolygons().get(polygonDrawOrder[i]).mouseOver() && room.getPolygons().get(polygonDrawOrder[i]).draw
+                    && room.getPolygons().get(polygonDrawOrder[i]).visible) {
+                polygonOver = room.getPolygons().get(polygonDrawOrder[i]);
                 break;
             }
     }
@@ -398,16 +394,33 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             //room = room1;
     }
 
+    /**
+     * This makes the player jump in the game. It uses a seperate thread to simulate the jumping so we can continue
+     * updating the display throughout the jump.
+     */
     public void jump() {
-        for (int i = 1; i < 10; i++) {
-            ViewFrom[2] += 1;
-            updateView();
-        }
-
-//        for (int i = 1; i < 10; i++) {
-//            ViewFrom[2] -= 1;
-//            updateView();
-//        }
+        Thread jumpingThread = new Thread(){
+            @Override
+            public void run(){
+                for(int i=0; i < 5; i++) {
+                    ViewFrom[2] += 2;
+                    try {
+                        Thread.sleep(30);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                for(int i=0; i < 5; i++) {
+                    ViewFrom[2] -= 2;
+                    try {
+                        Thread.sleep(30);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        jumpingThread.start();
     }
 
     @Override
@@ -424,7 +437,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
 
     @Override
