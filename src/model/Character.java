@@ -25,6 +25,10 @@ public class Character {
 
 		return this.name;
 	}
+	public int getCharacterID() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 
 

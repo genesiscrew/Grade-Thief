@@ -238,7 +238,7 @@ public class TileMap {
 					else {
 						System.out.println("container :: " + name + "  is not contained any containers  " + name);
 						EmptyTile E = (EmptyTile) tile;
-						E.addObjecttoTile(con);
+						E.addObjectToTile(con);
 						E.setOccupied(); System.out.println("e occupied" + E.isOccupied);
 						tileMap.setTile(x, y, E);
 
@@ -256,7 +256,7 @@ public class TileMap {
 
 					EmptyTile E = (EmptyTile) tile;
 					Keys K = new Keys(id, type, keyID);
-					E.addObjecttoTile(K);
+					E.addObjectToTile(K);
 					E.setOccupied(); System.out.println("e occupied" + E.isOccupied);
 					tileMap.setTile(x, y, E);
 
@@ -291,7 +291,7 @@ public class TileMap {
 						System.out.println("container size + " + container.containedItems.size());
 						// TODO: if method called by container item, then add item into container list
 					} else {
-						E.addObjecttoTile(i);
+						E.addObjectToTile(i);
 						E.setOccupied();
 				//		System.out.println("e occupied" + E.isOccupied);
 						tileMap.setTile(x, y, E);

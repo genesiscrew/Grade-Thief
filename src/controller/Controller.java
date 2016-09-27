@@ -1,4 +1,4 @@
-ackage controller;
+package controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -27,7 +27,7 @@ import items.Keys;
  * @Author Adam Wareing This is the controller that handles logic from when
  *         buttons are clicked
  */
-public class Controller {
+public class Controller  {
 
 	/**
 	 * Called when the NewGame button is selected
@@ -126,11 +126,26 @@ public class Controller {
 
 	public Game generateNewGameObject(){
 		// create new game object
-		Game game = new Game();
+
+		Game game;
+		try {
+			game = new Game();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// load game map from text file
+
+		// create new gaurd object
+
 		// setup guard for floor 1
-		game.setupGuards(1);
+		//game.setupGuards(1);
 		//set up player on map
-		game.setupPlayers();
-		return game;
+		//game.setupPlayers();
+
+
+return null;
+
 	}
 }
