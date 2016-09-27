@@ -79,7 +79,7 @@ public class addItemstoFloorTest {
 			//		}
 		}
 
-		Player p = new Player(0000, "Stefan");
+		Player p = new Player(0000, "Stefan", game, 0);
 		p.setCharacterLocation(19,27);
 		Location pL = p.getCharacterLocation();
 		floor.getFloorMap().getFloorTiles()[pL.row()][pL.column()].setOccupied();
