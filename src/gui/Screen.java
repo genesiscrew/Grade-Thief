@@ -56,7 +56,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     static double movementSpeed = 0.5;
 
     //FPS is a bit primitive, you can set the maxFPS as high as u want
-    double drawFPS = 0, maxFPS = 100, LastRefresh = 0, lastFPSCheck = 0, fpsCheck = 0;
+    double drawFPS = 0, maxFPS = 1000, LastRefresh = 0, lastFPSCheck = 0, fpsCheck = 0;
 
 
     double VertLook = -0.9;  // Goes from 0.999 to -0.999, minus being looking down and + looking up

@@ -19,7 +19,7 @@ import model.Game;
  */
 public class MakeRoomTest {
 
-	public static void main(String[] args) throws IOException {
+	public void createRoom(gui.Room r) throws IOException{
 
 		// make a floor
 
@@ -38,7 +38,6 @@ public class MakeRoomTest {
 		final int ADJACENT = 1; // adjacent rooms, add extra wall
 
 		Door d = new Door(0000, "0001",0);
-		Room r = new Room(null, d);
 
 		String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
 
@@ -52,7 +51,7 @@ public class MakeRoomTest {
 		//		System.out.println("height " + r.roomTileMap.getMapHeight());
 		//		System.out.println("width " + r.roomTileMap.getMapWidth());
 
-		TileMap tileMap = r.getRoomTileMap();
+		TileMap tileMap = r.getTileMap();
 		String s = "";
 		for (int y = 0 ; y < tileMap.getMapHeight(); y++ ) {
 			for (int x = 0 ; x < tileMap.getMapWidth() ; x++) {
@@ -64,7 +63,7 @@ public class MakeRoomTest {
 		}
 
 		System.out.println(s);
-		System.out.println(r.getRoomTileMap().getItems());
+		System.out.println(r.getTileMap().getItems());
 
 		tileMap.populateRoom(r, tileMap.getItems(), null);
 
@@ -85,7 +84,5 @@ public class MakeRoomTest {
 			s = s + "\n";
 		}
 		System.out.println(s);
-
 	}
-
 }

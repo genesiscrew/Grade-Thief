@@ -16,14 +16,13 @@ import java.util.Scanner;
 
 import javax.swing.plaf.synth.SynthSpinnerUI;
 
+import gui.*;
 import items.Container;
 import items.Door;
 import items.Item;
 import items.KeyDraw;
 import items.Keys;
-import items.Laptop;
-import items.Marker;
-import items.MetalSheet;
+
 /**
  * @author Stefan Vrecic
  * Class keeps track of a room, including its height, width and the details of the room
@@ -31,7 +30,7 @@ import items.MetalSheet;
  */
 public class TileMap {
 
-	private Room room;
+	private gui.Room room;
 	private String items; // text file contains items as strings
 	private Tile[][] TileMap;
 	private int TileMapWidth = 0;
@@ -43,7 +42,7 @@ public class TileMap {
 	public int getMapHeight() { return TileMapHeight; }
 	public int getOptionalCode() { return optionalCode; }
 
-	public TileMap(Tile[][] TileMap, Room room) {
+	public TileMap(Tile[][] TileMap, gui.Room room) {
 		this.TileMap = TileMap;
 		this.room = room;
 	}
@@ -162,12 +161,10 @@ public class TileMap {
 
 	}
 
-	public void populateRoom(Room room, String String, Container container) {
-
-		if (this.room == null) { this.room = room; }
+	public void populateRoom(gui.Room room, String String, Container container) {
 
 		Scanner sc = new Scanner(String);
-		TileMap tileMap = room.getRoomTileMap();
+		TileMap tileMap = room.getTileMap();
 
 		while (sc.hasNextLine()) {
 			if (!sc.equals("")) {
@@ -184,7 +181,7 @@ public class TileMap {
 
 				int z = sc.nextInt(); // test
 // 6 1 0 1 10 10 10 container1 C 0 3 255 0 0
-				Tile tile = room.getRoomTileMap().getTileMap()[x][y];
+				Tile tile = room.getTileMap().getTileMap()[x][y];
 
 
 				//test
@@ -297,7 +294,6 @@ public class TileMap {
 						tileMap.setTile(x, y, E);
 
 						room.addDrawableItems(new KeyDraw(10*x, 10*y, z, w, h, l, new Color(red, green, blue)));
-
 					}
 
 				}
@@ -314,10 +310,10 @@ public class TileMap {
 	public void setItems(String items) {
 		this.items = items;
 	}
-	public Room getRoom() {
+	public gui.Room getRoom() {
 		return room;
 	}
-	public void setRoom(Room room) { // don't use?
+	public void setRoom(gui.Room room) { // don't use?
 		this.room = room;
 	}
 

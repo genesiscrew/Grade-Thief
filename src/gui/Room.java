@@ -1,5 +1,6 @@
 package gui;
 
+import game.floor.TileMap;
 import items.Chair;
 import items.Laptop;
 import items.Player;
@@ -10,7 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import game.floor.makeRoomTest;
 import tests.MakeRoomTest;
 
 /**
@@ -34,6 +34,8 @@ public class Room {
     ArrayList<Drawable> roomObjects = new ArrayList<Drawable>();
 
     Floor floor = new Floor(0,0,10,10);
+
+    TileMap tileMap = null;
 
     /**
      * @throws IOException
@@ -90,8 +92,8 @@ public class Room {
         int wallHeight = 50;
 
     	MakeRoomTest m = new MakeRoomTest();
-		//game.floor.Room r = m.();
-//		for (Drawable d : r.getDrawableItems()) {
+        m.createRoom(this);
+//		for (Drawable d :.getDrawableItems()) {
 //			roomObjects.add(d);
 //		}
 
@@ -102,6 +104,11 @@ public class Room {
 //
 //        roomObjects.add(new Table(50, 50, 0, 20, 50, 7, Color.red));
 //        roomObjects.add(new Laptop(55, 50, 7, 5, 3, 4, Color.black));
+    }
+
+    public void setTileMap(String f)  throws IOException {
+        TileMap t = new TileMap(null, this);
+        this.tileMap = t.createTileMap(f);
     }
 
     public ArrayList<Drawable> getRoomObjects() {
@@ -134,5 +141,17 @@ public class Room {
 
     public void setFloor(Floor floor) {
         this.floor = floor;
+    }
+
+    public void addDrawableItems(Drawable drawableItems) {
+        this.roomObjects.add(drawableItems);
+    }
+
+    public TileMap getTileMap() {
+        return tileMap;
+    }
+
+    public void setTileMap(TileMap tileMap) {
+        this.tileMap = tileMap;
     }
 }
