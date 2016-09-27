@@ -23,7 +23,7 @@
       </Text>
 
       <fx:define>
-         <Image fx:id="backImage" url="/res/images/back_img.png" />
+         <Image fx:id="backImage" url="/unused/res/images/back_img.png" />
       </fx:define>
 
       <Button layoutX="135.0" layoutY="135.0" mnemonicParsing="false" onAction="#backClickedFromSettings" style="-fx-background-color: transparent;">
