@@ -22,7 +22,8 @@ public class PlayerInteractWithItem {
 
 		Game game = new Game();
 		// create room
-		gui.Room room = new gui.Room(0);
+		// TODO
+		gui.Room room = null;
 		TileMap tileMap = room.getTileMap();
 		// add items to room
 		tileMap.populateRoom(room, tileMap.getItems(), null);

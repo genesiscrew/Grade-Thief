@@ -33,70 +33,37 @@ public class Room {
      */
     ArrayList<Drawable> roomObjects = new ArrayList<Drawable>();
 
-    Floor floor = new Floor(0,0,10,10);
+    Floor floor = new Floor(0, 0, 10, 10);
 
     TileMap tileMap = null;
 
     /**
      * @throws IOException
-     *
      */
-    public Room(int type) throws IOException{
-        floor = new Floor(0,0,20,20);
+    public Room(String roomName) throws IOException {
+        floor = new Floor(0, 0, 20, 20);
         this.floorPolygons = floor.generateMap();
         this.polygons = new ArrayList<>();
 
-        if(type == 1) {
-            addObjectsToMap();
-            floor = new Floor(0, 0, 10, 10);
-            this.floorPolygons = floor.generateMap();
-        }else {
-            addObjectsToMap2();
-            floor = new Floor(100,0,10,10);
-            this.floorPolygons = floor.generateMap();
-        }
+        addObjectsToMap(roomName);
+        floor = new Floor(0, 0, tileMap.getMapWidth(), tileMap.getMapHeight());
+        this.floorPolygons = floor.generateMap();
     }
 
-    private void addObjectsToMap() {
+    private void addObjectsToMap(String roomName) throws IOException {
+        //try {System.out.println("room1"); Thread.sleep(5000); } catch (Exception e) {}
+        //System.out.println("called once?????/");
         int wallLength = (int) (floor.getMapHeight() * floor.getTileSize()) - 5;
         int wallHeight = 50;
 
-        roomObjects.add(new Cube(0, 0, 0, 5, wallLength, wallHeight, Color.blue));
-        roomObjects.add(new Cube(5, 0, 0, wallLength - 10, 5, wallHeight, Color.blue));
-        roomObjects.add(new Cube(wallLength - 5, 0, 0, 5, wallLength, wallHeight, Color.blue));
-        roomObjects.add(new Cube(0, wallLength, 0, wallLength - 5, 5, wallHeight, Color.blue));
-
-        roomObjects.add(new Table(50, 50, 0, 20, 50, 7, Color.red));
-        roomObjects.add(new Laptop(55, 50, 7, 5, 3, 4, Color.black));
-
-        // Chairs
-        roomObjects.add(new Chair(75, 60, 0, 5, 5, 5, Color.red));
-        roomObjects.add(new Chair(75, 70, 0, 5, 5, 5, Color.red));
-        roomObjects.add(new Chair(75, 80, 0, 5, 5, 5, Color.red));
-
-        roomObjects.add(new Chair(40, 60, 0, 5, 5, 5, Color.red));
-        roomObjects.add(new Chair(40, 70, 0, 5, 5, 5, Color.red));
-        roomObjects.add(new Chair(40, 80, 0, 5, 5, 5, Color.red));
-
-        roomObjects.get(0).updateDirection(60,60);
-
-
-        roomObjects.add(new Player(20, 20, 0, 5, 3, 12, Color.green));
-
+        MakeRoomTest m = new MakeRoomTest();
+        m.createRoom(this, roomName);
     }
 
-    private void addObjectsToMap2() throws IOException {
-    	//try {System.out.println("room1"); Thread.sleep(5000); } catch (Exception e) {}
-    	//System.out.println("called once?????/");
-        int wallLength = (int) (floor.getMapHeight() * floor.getTileSize()) - 5;
-        int wallHeight = 50;
-
-    	MakeRoomTest m = new MakeRoomTest();
-        m.createRoom(this);
-//		for (Drawable d :.getDrawableItems()) {
-//			roomObjects.add(d);
-//		}
-
+//    private void addObjectsToMap() {
+//        int wallLength = (int) (floor.getMapHeight() * floor.getTileSize()) - 5;
+//        int wallHeight = 50;
+//
 //        roomObjects.add(new Cube(0, 0, 0, 5, wallLength, wallHeight, Color.blue));
 //        roomObjects.add(new Cube(5, 0, 0, wallLength - 10, 5, wallHeight, Color.blue));
 //        roomObjects.add(new Cube(wallLength - 5, 0, 0, 5, wallLength, wallHeight, Color.blue));
@@ -104,9 +71,25 @@ public class Room {
 //
 //        roomObjects.add(new Table(50, 50, 0, 20, 50, 7, Color.red));
 //        roomObjects.add(new Laptop(55, 50, 7, 5, 3, 4, Color.black));
-    }
+//
+//        // Chairs
+//        roomObjects.add(new Chair(75, 60, 0, 5, 5, 5, Color.red));
+//        roomObjects.add(new Chair(75, 70, 0, 5, 5, 5, Color.red));
+//        roomObjects.add(new Chair(75, 80, 0, 5, 5, 5, Color.red));
+//
+//        roomObjects.add(new Chair(40, 60, 0, 5, 5, 5, Color.red));
+//        roomObjects.add(new Chair(40, 70, 0, 5, 5, 5, Color.red));
+//        roomObjects.add(new Chair(40, 80, 0, 5, 5, 5, Color.red));
+//
+//        roomObjects.get(0).updateDirection(60,60);
+//
+//
+//        roomObjects.add(new Player(20, 20, 0, 5, 3, 12, Color.green));
+//
+//    }
 
-    public void setTileMap(String f)  throws IOException {
+
+    public void setTileMap(String f) throws IOException {
         TileMap t = new TileMap(null, this);
         this.tileMap = t.createTileMap(f);
     }

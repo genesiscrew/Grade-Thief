@@ -19,7 +19,7 @@ import model.Game;
  */
 public class MakeRoomTest {
 
-	public void createRoom(gui.Room r) throws IOException{
+	public void createRoom(gui.Room r, String roomName) throws IOException{
 
 		// make a floor
 
@@ -39,7 +39,7 @@ public class MakeRoomTest {
 
 		Door d = new Door(0000, "0001",0);
 
-		String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
+		String co237 = System.getProperty("user.dir") + "/src/game/floor/" + roomName;
 
 		Room room_co237 = new Room(null, null);
 
