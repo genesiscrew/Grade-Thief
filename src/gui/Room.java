@@ -34,13 +34,13 @@ public class Room {
      * The padding on the inside of the wall. It stops the player from getting too close and preventing
      * the graphics to not draw
      */
-    private final double ROOM_PADDING = 10;
+    private final double ROOM_PADDING = 5;
 
     /**
      * @throws IOException
      */
-    public Room(String roomName) throws IOException {
-        floor = new Floor(0, 0, 20, 20);
+    public Room(String roomName, int xOffset, int yOffset) throws IOException {
+        floor = new Floor(xOffset, yOffset, 20, 20);
         this.floorPolygons = floor.generateMap();
         this.polygons = new ArrayList<>();
 
@@ -100,9 +100,11 @@ public class Room {
         double mapWidth = floor.getMapWidth() * floor.getTileSize();
         double mapHeight = floor.getMapHeight() * floor.getTileSize();
 
-        if (x < floor.getxOffset() || y < floor.getyOffset() || z < 0)
+        if (x <  floor.getxOffset() + ROOM_PADDING || y < floor.getyOffset() + ROOM_PADDING)
             return true;
-        if (x > startX + mapHeight - floor.getxOffset()  || y > startY + mapWidth - floor.getyOffset())
+        if ((x + ROOM_PADDING) > (startX + mapWidth - floor.getxOffset()))
+            return true;
+        if((y + ROOM_PADDING) > (startY + mapHeight - floor.getyOffset()))
             return true;
         return false;
     }

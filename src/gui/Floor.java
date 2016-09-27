@@ -43,9 +43,8 @@ public class Floor {
             e.printStackTrace();
         }
 
-        TileMap tileMap = room_co237.getRoomTileMap();
-        // mapSize = 1 + 2 * Math.max(tileMap.getMapHeight(),tileMap.getMapWidth());
 		System.out.printf("Width: %d, Height: %d \n" , mapWidth, mapHeight);
+		System.out.printf("x: %d, y: %d \n" , xOffset, yOffset);
     }
 
     /**
@@ -55,8 +54,8 @@ public class Floor {
     public List<Polygon> generateMap(){
         List<Polygon> polygonFloor = new ArrayList<>();
 
-        for (int y = 0; y < mapWidth; y++) {
-            for (int x = 0; x < mapHeight; x++) {
+        for (int x = 0; x < mapWidth; x++) {
+            for (int y = 0; y < mapHeight; y++) {
                polygonFloor.add(new Polygon(
                         new double[]{(tileSize * x)+xOffset,  (tileSize * x)+xOffset,  tileSize + (tileSize * x)+ xOffset, xOffset + tileSize + (tileSize * x)},
                         new double[]{yOffset + (tileSize * y),  yOffset + tileSize + (tileSize * y), yOffset + tileSize + (tileSize * y),  yOffset + (tileSize * y)},

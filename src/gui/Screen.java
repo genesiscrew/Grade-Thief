@@ -26,13 +26,13 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     private Room room;
 
-    private Room room1 = new Room("co237");
-    private Room room2 = new Room("co238");
+    private Room room1 = new Room("co237", 0, 0);
+    private Room room2 = new Room("co238", 0, 0);
 
     // The polygon that the mouse is currently over
     static Polygon polygonOver = null;
 
-    final int startX = 15;
+    final int startX = 5;
     final int startY = 5;
     final int startZ = 10;
 
@@ -91,7 +91,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         invisibleMouse();
 
         // Load the section of the map
-        room = new Room("co237");
+        room = new Room("co237", startX, startY);
 
         ViewFrom[0] = startX;
         ViewFrom[1] = startY;
@@ -273,6 +273,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         ViewFrom[0] = x;
         ViewFrom[1] = y;
         ViewFrom[2] = z;
+        System.out.printf("x: %f y: %f z: %f \n", x, y, z);
         updateView();
     }
 
