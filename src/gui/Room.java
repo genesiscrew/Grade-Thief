@@ -1,12 +1,6 @@
 package gui;
 
 import game.floor.TileMap;
-import items.Chair;
-import items.Laptop;
-import items.Player;
-import items.Table;
-
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +8,8 @@ import java.util.List;
 import tests.MakeRoomTest;
 
 /**
- * Created by wareinadam on 24/09/16.
+ * @Author Adam Wareing
+ *
  */
 public class Room {
 
@@ -34,8 +29,12 @@ public class Room {
     ArrayList<Drawable> roomObjects = new ArrayList<Drawable>();
 
     Floor floor = new Floor(0, 0, 10, 10);
-
     TileMap tileMap = null;
+    /**
+     * The padding on the inside of the wall. It stops the player from getting too close and preventing
+     * the graphics to not draw
+     */
+    private final double ROOM_PADDING = 10;
 
     /**
      * @throws IOException
@@ -87,6 +86,41 @@ public class Room {
 //        roomObjects.add(new Player(20, 20, 0, 5, 3, 12, Color.green));
 //
 //    }
+    /**
+     * Is position x, y, z outside of the floorPolygons.
+     * Currently it doesn't take the z value into account, as its not required.
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @param startX
+     * @param startY
+     */
+    public boolean positionOutOfBounds(double x, double y, double z, int startX, int startY) {
+        double mapWidth = floor.getMapWidth() * floor.getTileSize();
+        double mapHeight = floor.getMapHeight() * floor.getTileSize();
+
+        if (x < floor.getxOffset() || y < floor.getyOffset() || z < 0)
+            return true;
+        if (x > startX + mapHeight - floor.getxOffset()  || y > startY + mapWidth - floor.getyOffset())
+            return true;
+        return false;
+    }
+
+
+    /**
+     * Check to see if the player is moving into an object.
+     *
+     * @return True if the player is moving into an object, false otherwise.
+     */
+    public boolean movingIntoAnObject(double x, double y, double z) {
+        for (Drawable o : roomObjects) {
+            if (o.containsPoint((int) x, (int) y, (int) z)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     public void setTileMap(String f) throws IOException {

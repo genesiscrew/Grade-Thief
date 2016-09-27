@@ -77,4 +77,12 @@ public class Floor {
     public int getMapWidth() {
         return mapWidth;
     }
+
+    public int getxOffset() {
+        return xOffset;
+    }
+
+    public int getyOffset() {
+        return yOffset;
+    }
 }
