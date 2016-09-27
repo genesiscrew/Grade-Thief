@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import gui.Drawable;
 import items.Door;
 /**
 *
@@ -22,6 +23,8 @@ public class Room {
 	private int w = -1;
 	private int h = -1;
 	List<Location> doorLocations = new ArrayList<Location>();
+	private List<Drawable> drawableItems = new ArrayList<Drawable>();
+
 
 	public Room(TileMap roomTileMap, Door door) {
 		this.roomTileMap = roomTileMap;
@@ -29,7 +32,7 @@ public class Room {
 	}
 
 	public void setTileMap(String f)  throws IOException {
-		TileMap t = new TileMap(null);
+		TileMap t = new TileMap(null, this);
 		this.roomTileMap = t.createTileMap(f);
 	}
 	/**
@@ -87,6 +90,14 @@ public class Room {
 
 	public int getH() {
 		return h;
+	}
+
+	public List<Drawable> getDrawableItems() {
+		return drawableItems;
+	}
+
+	public void addDrawableItems(Drawable drawableItems) {
+		this.drawableItems.add(drawableItems);
 	}
 
 

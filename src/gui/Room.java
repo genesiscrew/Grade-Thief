@@ -6,8 +6,11 @@ import items.Player;
 import items.Table;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import game.floor.makeRoomTest;
 
 /**
  * Created by wareinadam on 24/09/16.
@@ -32,9 +35,12 @@ public class Room {
     Floor floor = new Floor(0,0,10,10);
 
     /**
+     * @throws IOException
      *
      */
-    public Room(int type){
+    public Room(int type) throws IOException{
+        floor = new Floor();
+        this.floorPolygons = floor.generateMap();
         this.polygons = new ArrayList<>();
 
         if(type == 1) {
@@ -76,17 +82,25 @@ public class Room {
 
     }
 
-    private void addObjectsToMap2() {
+    private void addObjectsToMap2() throws IOException {
+    	//try {System.out.println("room1"); Thread.sleep(5000); } catch (Exception e) {}
+    	//System.out.println("called once?????/");
         int wallLength = (int) (floor.getMapHeight() * floor.getTileSize()) - 5;
         int wallHeight = 50;
 
-        roomObjects.add(new Cube(0, 0, 0, 5, wallLength, wallHeight, Color.blue));
-        roomObjects.add(new Cube(5, 0, 0, wallLength - 10, 5, wallHeight, Color.blue));
-        roomObjects.add(new Cube(wallLength - 5, 0, 0, 5, wallLength, wallHeight, Color.blue));
-        roomObjects.add(new Cube(0, wallLength, 0, wallLength - 5, 5, wallHeight, Color.blue));
+    	makeRoomTest m = new makeRoomTest(null);
+		game.floor.Room r = m.t();
+		for (Drawable d : r.getDrawableItems()) {
+			roomObjects.add(d);
+		}
 
-        roomObjects.add(new Table(50, 50, 0, 20, 50, 7, Color.red));
-        roomObjects.add(new Laptop(55, 50, 7, 5, 3, 4, Color.black));
+//        roomObjects.add(new Cube(0, 0, 0, 5, wallLength, wallHeight, Color.blue));
+//        roomObjects.add(new Cube(5, 0, 0, wallLength - 10, 5, wallHeight, Color.blue));
+//        roomObjects.add(new Cube(wallLength - 5, 0, 0, 5, wallLength, wallHeight, Color.blue));
+//        roomObjects.add(new Cube(0, wallLength, 0, wallLength - 5, 5, wallHeight, Color.blue));
+//
+//        roomObjects.add(new Table(50, 50, 0, 20, 50, 7, Color.red));
+//        roomObjects.add(new Laptop(55, 50, 7, 5, 3, 4, Color.black));
     }
 
     public ArrayList<Drawable> getRoomObjects() {

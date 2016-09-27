@@ -23,6 +23,9 @@ public class Laptop implements Drawable{
     private double height;
     private Color color;
 
+    public String toString() {
+    	return x + " " + y + " " + z + " " + width + " " + length + " " + height + " " + color;
+    }
     public Laptop(double x, double y, double z, double width, double length, double height, Color c) {
         cubes = new ArrayList<>();
 
@@ -30,7 +33,7 @@ public class Laptop implements Drawable{
         cubes.add(new Cube(x, y+length, z, width, LAPTOP_THICKNESS, height, c));
 
         // The base of the laptop
-        cubes.add(new Cube(x, y, z, width, length, LAPTOP_THICKNESS, c));
+       cubes.add(new Cube(x, y, z, width, length, LAPTOP_THICKNESS, c));
 
         this.color = c;
         this.x = x;
