@@ -20,6 +20,7 @@ wwwwwwwwwwwwwwwwwddww
 2 6 1 0 0 0 0 255 0 0 item1 I
 3 6 1 0 0 0 0 255 0 0 item2 I
 4 6 1 0 0 0 0 255 0 0 item3 I
+<<<<<<< HEAD
 .
 5 1 1 5 5 5 5 255 50 50 item3 I
 6 2 1 5 5 5 5 255 90 90 item4 I
@@ -31,5 +32,4 @@ wwwwwwwwwwwwwwwwwddww
 9 6 4 0 0 0 0 255 0 0 item22 I
 10 6 4 0 0 0 0 255 0 0 item33 I
 11 6 4 0 0 0 0 255 0 0 item55 I
-.
 .
