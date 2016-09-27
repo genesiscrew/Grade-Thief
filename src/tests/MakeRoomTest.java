@@ -19,6 +19,10 @@ import model.Game;
  */
 public class MakeRoomTest {
 
+	public MakeRoomTest(Object object) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public static void main(String[] args) throws IOException {
 
 		// make a floor

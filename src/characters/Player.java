@@ -121,7 +121,7 @@ public class Player extends Character implements KeyListener {
 		if(e.getKeyChar() == 'e') {
         if (this.checkifItemOnTile() != null) {
         	// item is on tile so we can interact with it
-        	game.inspectItem(this.checkifItemOnTile() );
+        	game.inspectItem(this.checkifItemOnTile());
 
 
         }
@@ -133,7 +133,7 @@ public class Player extends Character implements KeyListener {
 	}
 
 /**
- * this method checks the tile directly in front of the player on the map, and returns it if any
+ * this method checks the tile directly in front of the player on the map, and returns it if any it is on it
  * @return
  */
 	private Object checkifItemOnTile() {

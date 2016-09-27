@@ -7,6 +7,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import characters.Player;
+
 public class JAXBExample {
 	public static void main(String[] args) {
 

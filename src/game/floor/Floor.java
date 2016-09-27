@@ -13,6 +13,7 @@ public class Floor {
 	private List<Camera> cameras;
 	private FloorMap floorMap;
 
+
 	public Floor(List<Room> rooms, List<Camera> cameras, FloorMap floorMap) {
 		this.rooms = rooms;
 		this.cameras = cameras;
@@ -130,6 +131,10 @@ public class Floor {
 	WDDWWWWWWWWWWWWWWWWWWWWWWWWWWWWDDWWEEEEE
 	EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 	 */
+	public List<Room> getFloorRooms() {
+		return this.rooms;
+	}
+
 
 
 }

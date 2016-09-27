@@ -3,13 +3,14 @@ package gui;
 import items.Chair;
 import items.Laptop;
 import items.Table;
+import tests.MakeRoomTest;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import game.floor.makeRoomTest;
+
 
 /**
  * Created by wareinadam on 24/09/16.
@@ -77,7 +78,7 @@ public class Room {
         int wallLength = (int) (floor.getMapHeight() * floor.getTileSize()) - 5;
         int wallHeight = 50;
 
-    	makeRoomTest m = new makeRoomTest(null);
+    	makeRoomTest m = new MakeRoomTest(null);
 		game.floor.Room r = m.t();
 		for (Drawable d : r.getDrawableItems()) {
 			roomObjects.add(d);
