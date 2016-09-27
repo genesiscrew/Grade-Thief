@@ -1,5 +1,6 @@
 package game.floor;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,6 +11,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import javax.swing.plaf.synth.SynthSpinnerUI;
@@ -17,7 +19,11 @@ import javax.swing.plaf.synth.SynthSpinnerUI;
 import items.Container;
 import items.Door;
 import items.Item;
+import items.KeyDraw;
 import items.Keys;
+import items.Laptop;
+import items.Marker;
+import items.MetalSheet;
 /**
  * @author Stefan Vrecic
  * Class keeps track of a room, including its height, width and the details of the room
@@ -25,6 +31,7 @@ import items.Keys;
  */
 public class TileMap {
 
+	private Room room;
 	private String items; // text file contains items as strings
 	private Tile[][] TileMap;
 	private int TileMapWidth = 0;
@@ -36,8 +43,9 @@ public class TileMap {
 	public int getMapHeight() { return TileMapHeight; }
 	public int getOptionalCode() { return optionalCode; }
 
-	public TileMap(Tile[][] TileMap) {
+	public TileMap(Tile[][] TileMap, Room room) {
 		this.TileMap = TileMap;
+		this.room = room;
 	}
 
 	public Tile[][]  getTileMap() {
@@ -105,7 +113,7 @@ public class TileMap {
 
 		List<Location> doorLocs = new ArrayList<Location>();
 
-		TileMap TileMapper = new TileMap(new Tile[width][height]);
+		TileMap TileMapper = new TileMap(new Tile[width][height], null);
 
 		TileMapper.optionalCode = code;
 		TileMapper.TileMapWidth = width;
@@ -156,45 +164,47 @@ public class TileMap {
 
 	public void populateRoom(Room room, String String, Container container) {
 
-	//	System.out.println("gets into populate room?");
-//		System.out.println(String);
+		if (this.room == null) { this.room = room; }
 
-		 // File file = new File(String);
 		Scanner sc = new Scanner(String);
 		TileMap tileMap = room.getRoomTileMap();
 
 		while (sc.hasNextLine()) {
-		//	System.out.println("shouldnt be here");
 			if (!sc.equals("")) {
-//				if (sc.hasNext(".")) { sc.close(); return; }
-
-				int x;
-			//	System.out.println("gets into here?????????????????");
+				int id;
 				if (sc.hasNextInt())
-				x = sc.nextInt();
+					id  = sc.nextInt();
 				else {
 					sc.close();
 					return;
 				}
-			//	System.out.println(x);
+				// 1 6 1 0 10 10 10 255 0 0 container1 C 0 3
+				int x = sc.nextInt();
 				int y = sc.nextInt();
-			//	System.out.println(y);
 
+				int z = sc.nextInt(); // test
+// 6 1 0 1 10 10 10 container1 C 0 3 255 0 0
 				Tile tile = room.getRoomTileMap().getTileMap()[x][y];
 
-				int id = sc.nextInt();
-			//	System.out.println(id);
-				String name = sc.next();
-			//	System.out.println(name);
-				String type = sc.next();
-		//		System.out.println("type " + type);
 
+				//test
+				int w = sc.nextInt();
+				int h = sc.nextInt();
+				int l = sc.nextInt();
+				int red = sc.nextInt();
+				int green = sc.nextInt();
+				int blue = sc.nextInt();
+
+				//
+				String name = sc.next();
+				String type = sc.next();
+				// FOUND CONTAINER
 				if (type.equals("C")) {
 					// container found
 					int keyID = sc.nextInt();
-					System.out.println(keyID);
+				//	System.out.println(keyID);
 					int itemCount = sc.nextInt();
-					System.out.println(itemCount);
+				//	System.out.println(itemCount);
 					// while (itemCount > 0) {
 					// loop from each item line
 					String line = sc.nextLine();
@@ -202,50 +212,41 @@ public class TileMap {
 					while (!line.equals(".")) {
 						sb.append(line);
 						sb.append(System.lineSeparator());
-						line = sc.nextLine();
+						try {
+							line = sc.nextLine();
+						} catch (NoSuchElementException e) {break;}
 					}
 					String fileString = sb.toString();
-					System.out.println(fileString);
 
-						System.out.println("ccccccccccccccccccccccccccccccccccccccccc");
-						System.out.println("+" + fileString + "fileStringgggggggggggggggggg");
+					fileString = fileString.substring(1, fileString.length()); //trim the first blank space
+					System.out.println(fileString + "fileString");
 
-						fileString = fileString.substring(1, fileString.length()); //trim the first blank space
-//						fileString = fileString.substring(0, fileString.indexOf("."));
-						System.out.println(fileString + "fileString");
+					Container con = new Container(id, null, "box", keyID);
+					populateRoom(room, fileString, con);
 
-                    Container con = new Container(id, null, "box", keyID);
-                    // if container called mathod then we add this container into the calling container
-
-                  //  System.out.println(temp.getAbsolutePath());
-                    System.out.println("con");
-                    populateRoom(room, fileString, con);
-					//populateRoom(room, temp.getAbsolutePath(), con);
-
-                    if (container != null) {
-
-                    	container.addItem(con);
-                    	//EmptyTile E = (EmptyTile) tile;
-                    	//E.addObjecttoTile(container);
-                    	//E.setOccupied(); System.out.println("e occupied" + E.isOccupied);
-                    	//tileMap.setTile(x, y, E);
+					if (container != null) {
+						System.out.println("container :: " + name + "  is contained by container ");
+						System.out.println(con.toString());
+						container.setContainedContainer(con);
+						sc.close();
+						return ; // should return by default anyway, code placed for readability
 
 						// TODO: if method called by container item, then add item into container list
 
-                    }
-                    // if container called method then we add this container into the calling container, then we add it the tile map
-                    else {
-                	EmptyTile E = (EmptyTile) tile;
-                	E.addObjectToTile(con);
-                	E.setOccupied(); System.out.println("e occupied" + E.isOccupied);
-                	tileMap.setTile(x, y, E);
-                    }
+					}
+					// if container called method then we add this container into the calling container, then we add it the tile map
+					else {
+						System.out.println("container :: " + name + "  is not contained any containers  " + name);
+						EmptyTile E = (EmptyTile) tile;
+						E.addObjectToTile(con);
+						E.setOccupied(); System.out.println("e occupied" + E.isOccupied);
+						tileMap.setTile(x, y, E);
 
-					// itemCount--;
-					// }
+						// public Laptop(double x, double y, double z, double width, double length, double height, Color c) {
+					}
 
 				}
-
+				// FOUND KEY
 				else if (type.equals("K")) {
 					System.out.println("adding key??");
 					// Key found
@@ -259,8 +260,6 @@ public class TileMap {
 					E.setOccupied(); System.out.println("e occupied" + E.isOccupied);
 					tileMap.setTile(x, y, E);
 
-					System.out.println("w====================================================");
-					// System.out.println(container.toString());
 
 					if (container != null) {
 						container.addItem(K);
@@ -268,28 +267,37 @@ public class TileMap {
 						// TODO: if method called by container item, then add item into container list
 					}
 
-				} else {
+				}
+				// FOUND ITEM
+				else {
 					System.out.println("adding item??");
 					EmptyTile E = (EmptyTile) tile;
 					Item i = new Item(id, type);
-					E.addObjectToTile(i);
-					E.setOccupied();
-					System.out.println("e occupied" + E.isOccupied);
-					tileMap.setTile(x, y, E);
 
 					// normal item found
 					// TODO: create normal item and add it to floor tile map
 					System.out.println("w====================================================");
-				  //System.out.println(container.toString());
+					//System.out.println(container.toString());
 					System.out.println("=addddddddded itemmmmmmmmmmmmm check contianer");
 
 					if (container != null) {
 						System.out.println("=====================================");
 						container.addItem(i);
+//						E.addObjecttoTile(container);
+//						E.setOccupied();
+//						tileMap.setTile(x, y, E);
 
-						System.out.println("adding item to ocntainer g gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg");
+						System.out.println("adding item to ocntainer ggggggg");
 						System.out.println("container size + " + container.containedItems.size());
 						// TODO: if method called by container item, then add item into container list
+					} else {
+						E.addObjectToTile(i);
+						E.setOccupied();
+				//		System.out.println("e occupied" + E.isOccupied);
+						tileMap.setTile(x, y, E);
+
+						room.addDrawableItems(new KeyDraw(10*x, 10*y, z, w, h, l, new Color(red, green, blue)));
+
 					}
 
 				}
@@ -305,6 +313,12 @@ public class TileMap {
 	}
 	public void setItems(String items) {
 		this.items = items;
+	}
+	public Room getRoom() {
+		return room;
+	}
+	public void setRoom(Room room) { // don't use?
+		this.room = room;
 	}
 
 }
