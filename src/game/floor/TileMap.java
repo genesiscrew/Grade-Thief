@@ -198,8 +198,17 @@ public class TileMap {
 				//
 				String name = sc.next();
 				String type = sc.next();
+				if (type.equals("D")) { // Door
+					int doorID = sc.nextInt();
+
+					DoorTile DT = (DoorTile) tile;
+					Door D = new Door(id, type, doorID);
+					DT.setDoor(D);
+					tileMap.setTile(x, y, DT);
+
+				}
 				// FOUND CONTAINER
-				if (type.equals("C")) {
+				else if (type.equals("C")) {
 					// container found
 					int keyID = sc.nextInt();
 				//	System.out.println(keyID);

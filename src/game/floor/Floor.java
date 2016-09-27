@@ -18,6 +18,8 @@ public class Floor {
 		this.cameras = cameras;
 		this.floorMap = floorMap;
 	}
+	
+	
 /**
  *
  * @param list -- <Location>

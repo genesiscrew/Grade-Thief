@@ -77,7 +77,7 @@ public class Room {
         int wallLength = (int) (floor.getMapHeight() * floor.getTileSize()) - 5;
         int wallHeight = 50;
 
-    	makeRoomTest m = new makeRoomTest(null);
+    	MakeRoomTest m = new MakeRoomTest(null);
 		game.floor.Room r = m.t();
 		for (Drawable d : r.getDrawableItems()) {
 			roomObjects.add(d);
