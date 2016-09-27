@@ -218,7 +218,7 @@ public class TileMap {
 					fileString = fileString.substring(1, fileString.length()); //trim the first blank space
 					System.out.println(fileString + "fileString");
 
-					Container con = new Container(id, null, "box", keyID);
+					Container con = new Container(id, null, "box", keyID,0,0,0,0,0,0,new Color(0,0,0));
 					populateRoom(room, fileString, con);
 
 					if (container != null) {
@@ -259,7 +259,7 @@ public class TileMap {
 
 
 					if (container != null) {
-						container.addItem(K);
+						//container.addItem(K);
 						System.out.println("container size + " + container.getItems().size());
 						// TODO: if method called by container item, then add item into container list
 					}
@@ -269,7 +269,7 @@ public class TileMap {
 				else {
 					System.out.println("adding item??");
 					EmptyTile E = (EmptyTile) tile;
-					Item i = new Item(id, type);
+					//Item i = new Item(id, type);
 
 					// normal item found
 					// TODO: create normal item and add it to floor tile map
@@ -279,7 +279,7 @@ public class TileMap {
 
 					if (container != null) {
 						System.out.println("=====================================");
-						container.addItem(i);
+						//container.addItem(i);
 //						E.addObjecttoTile(container);
 //						E.setOccupied();
 //						tileMap.setTile(x, y, E);
@@ -288,12 +288,12 @@ public class TileMap {
 						System.out.println("container size + " + container.containedItems.size());
 						// TODO: if method called by container item, then add item into container list
 					} else {
-						E.addObjectToTile(i);
+						// TODO E.addObjectToTile(i);
 						E.setOccupied();
 				//		System.out.println("e occupied" + E.isOccupied);
 						tileMap.setTile(x, y, E);
 
-						room.addDrawableItems(new KeyDraw(10*x, 10*y, z, w, h, l, new Color(red, green, blue)));
+						room.addDrawableItems(new KeyDraw(id,type,10*x, 10*y, z, w, h, l, new Color(red, green, blue)));
 					}
 
 				}

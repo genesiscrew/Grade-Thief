@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -377,7 +378,7 @@ public class Game {
 					} catch (IOException e) {
 						// exception handling left as an exercise for the reader
 					}
-                    Container con = new Container(id, null, "box", keyID);
+                    Container con = new Container(id, null, "box", keyID,0,0,0,0,0,0,new Color(0,0,0));
                     if (container != null) {
 						// TODO: if method called by container item, then add item into container list
 					}
@@ -413,7 +414,7 @@ public class Game {
 					//if method is not called by container item, then add the container into the tile map
 					System.out.println("adding item??");
 					//EmptyTile E = (EmptyTile) tile;
-					Item i = new Item(id, type);
+					//Item i = new Item(id, type);
 					//E.addObjecttoTile(i);
 					//E.setOccupied();
 				//	System.out.println("e occupied" + E.isOccupied);
