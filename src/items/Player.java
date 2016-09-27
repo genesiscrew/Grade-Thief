@@ -11,7 +11,6 @@ import java.util.*;
  * Created by wareinadam on 24/09/16.
  */
 public class Player implements Drawable{
-    private final int TABLE_THICKNESS = 1;
     private java.util.List<Cube> cubes;
     private double x;
     private double y;
@@ -48,6 +47,18 @@ public class Player implements Drawable{
 
         // head
         cubes.add(new Cube(x+(width/4), y, z+(legHeight*2), width/2, width/1.5, legHeight/3, c));
+    }
+
+    /**
+     * Moves the player the specified amount. 0 means no change will be made.
+     * @param x
+     * @param y
+     * @param z
+     */
+    public void movePlayer(int x, int y, int z){
+        this.x += x;
+        this.y += y;
+        this.z += z;
     }
 
     @Override
