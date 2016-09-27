@@ -1,6 +1,8 @@
 package items;
 
-public class Keys extends Item implements Interactable, Movable {
+import gui.Drawable;
+
+public class Keys extends Item implements Interactable, Movable, Drawable {
 
     String description = " a key";
     int keyID;

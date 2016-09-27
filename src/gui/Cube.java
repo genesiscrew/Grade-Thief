@@ -1,21 +1,24 @@
 package gui;
 
 import java.awt.Color;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This represents a 3D cube that is rendered onto the GUI
  */
-public class Cube {
+public class Cube implements Drawable {
 
     double x, y, z, width, length, height, rotation = Math.PI * 0.75;
     double[] RotAdd = new double[4];
     Color c;
     double x1, x2, x3, x4, y1, y2, y3, y4;
-    ThreeDPolygon[] Polys = new ThreeDPolygon[6];
+    ThreeDPolygon[] polygons = new ThreeDPolygon[6];
     double[] angle;
 
     /**
      * Create a new cube
+     *
      * @param x
      * @param y
      * @param z
@@ -25,18 +28,12 @@ public class Cube {
      * @param c
      */
     public Cube(double x, double y, double z, double width, double length, double height, Color c) {
-        Polys[0] = new ThreeDPolygon(new double[]{x, x + width, x + width, x}, new double[]{y, y, y + length, y + length}, new double[]{z, z, z, z}, c, false);
-        Screen.polygonFloor.add(Polys[0]);
-        Polys[1] = new ThreeDPolygon(new double[]{x, x + width, x + width, x}, new double[]{y, y, y + length, y + length}, new double[]{z + height, z + height, z + height, z + height}, c, false);
-        Screen.polygonFloor.add(Polys[1]);
-        Polys[2] = new ThreeDPolygon(new double[]{x, x, x + width, x + width}, new double[]{y, y, y, y}, new double[]{z, z + height, z + height, z}, c, false);
-        Screen.polygonFloor.add(Polys[2]);
-        Polys[3] = new ThreeDPolygon(new double[]{x + width, x + width, x + width, x + width}, new double[]{y, y, y + length, y + length}, new double[]{z, z + height, z + height, z}, c, false);
-        Screen.polygonFloor.add(Polys[3]);
-        Polys[4] = new ThreeDPolygon(new double[]{x, x, x + width, x + width}, new double[]{y + length, y + length, y + length, y + length}, new double[]{z, z + height, z + height, z}, c, false);
-        Screen.polygonFloor.add(Polys[4]);
-        Polys[5] = new ThreeDPolygon(new double[]{x, x, x, x}, new double[]{y, y, y + length, y + length}, new double[]{z, z + height, z + height, z}, c, false);
-        Screen.polygonFloor.add(Polys[5]);
+        polygons[0] = new ThreeDPolygon(new double[]{x, x + width, x + width, x}, new double[]{y, y, y + length, y + length}, new double[]{z, z, z, z}, c, false);
+        polygons[1] = new ThreeDPolygon(new double[]{x, x + width, x + width, x}, new double[]{y, y, y + length, y + length}, new double[]{z + height, z + height, z + height, z + height}, c, false);
+        polygons[2] = new ThreeDPolygon(new double[]{x, x, x + width, x + width}, new double[]{y, y, y, y}, new double[]{z, z + height, z + height, z}, c, false);
+        polygons[3] = new ThreeDPolygon(new double[]{x + width, x + width, x + width, x + width}, new double[]{y, y, y + length, y + length}, new double[]{z, z + height, z + height, z}, c, false);
+        polygons[4] = new ThreeDPolygon(new double[]{x, x, x + width, x + width}, new double[]{y + length, y + length, y + length, y + length}, new double[]{z, z + height, z + height, z}, c, false);
+        polygons[5] = new ThreeDPolygon(new double[]{x, x, x, x}, new double[]{y, y, y + length, y + length}, new double[]{z, z + height, z + height, z}, c, false);
 
         this.c = c;
         this.x = x;
@@ -50,7 +47,8 @@ public class Cube {
         updatePoly();
     }
 
-    void setRotAdd() {
+    @Override
+    public void setRotAdd() {
         angle = new double[4];
 
         double xdif = -width / 2 + 0.00001;
@@ -96,10 +94,12 @@ public class Cube {
 
     /**
      * Update the direction the polygon is facing
+     *
      * @param toX
      * @param toY
      */
-    void updateDirection(double toX, double toY) {
+    @Override
+    public void updateDirection(double toX, double toY) {
         double xdif = toX - (x + width / 2) + 0.00001;
         double ydif = toY - (y + length / 2) + 0.00001;
 
@@ -112,15 +112,8 @@ public class Cube {
         updatePoly();
     }
 
-    /**
-     *
-     */
-    void updatePoly() {
-        for (int i = 0; i < 6; i++) {
-            Screen.polygonFloor.add(Polys[i]);
-            Screen.polygonFloor.remove(Polys[i]);
-        }
-
+    @Override
+    public void updatePoly() {
         double radius = Math.sqrt(width * width + length * length);
 
         x1 = x + width * 0.5 + radius * 0.5 * Math.cos(rotation + RotAdd[0]);
@@ -133,37 +126,44 @@ public class Cube {
         y3 = y + length * 0.5 + radius * 0.5 * Math.sin(rotation + RotAdd[2]);
         y4 = y + length * 0.5 + radius * 0.5 * Math.sin(rotation + RotAdd[3]);
 
-        Polys[0].x = new double[]{x1, x2, x3, x4};
-        Polys[0].y = new double[]{y1, y2, y3, y4};
-        Polys[0].z = new double[]{z, z, z, z};
+        polygons[0].x = new double[]{x1, x2, x3, x4};
+        polygons[0].y = new double[]{y1, y2, y3, y4};
+        polygons[0].z = new double[]{z, z, z, z};
 
-        Polys[1].x = new double[]{x4, x3, x2, x1};
-        Polys[1].y = new double[]{y4, y3, y2, y1};
-        Polys[1].z = new double[]{z + height, z + height, z + height, z + height};
+        polygons[1].x = new double[]{x4, x3, x2, x1};
+        polygons[1].y = new double[]{y4, y3, y2, y1};
+        polygons[1].z = new double[]{z + height, z + height, z + height, z + height};
 
-        Polys[2].x = new double[]{x1, x1, x2, x2};
-        Polys[2].y = new double[]{y1, y1, y2, y2};
-        Polys[2].z = new double[]{z, z + height, z + height, z};
+        polygons[2].x = new double[]{x1, x1, x2, x2};
+        polygons[2].y = new double[]{y1, y1, y2, y2};
+        polygons[2].z = new double[]{z, z + height, z + height, z};
 
-        Polys[3].x = new double[]{x2, x2, x3, x3};
-        Polys[3].y = new double[]{y2, y2, y3, y3};
-        Polys[3].z = new double[]{z, z + height, z + height, z};
+        polygons[3].x = new double[]{x2, x2, x3, x3};
+        polygons[3].y = new double[]{y2, y2, y3, y3};
+        polygons[3].z = new double[]{z, z + height, z + height, z};
 
-        Polys[4].x = new double[]{x3, x3, x4, x4};
-        Polys[4].y = new double[]{y3, y3, y4, y4};
-        Polys[4].z = new double[]{z, z + height, z + height, z};
+        polygons[4].x = new double[]{x3, x3, x4, x4};
+        polygons[4].y = new double[]{y3, y3, y4, y4};
+        polygons[4].z = new double[]{z, z + height, z + height, z};
 
-        Polys[5].x = new double[]{x4, x4, x1, x1};
-        Polys[5].y = new double[]{y4, y4, y1, y1};
-        Polys[5].z = new double[]{z, z + height, z + height, z};
+        polygons[5].x = new double[]{x4, x4, x1, x1};
+        polygons[5].y = new double[]{y4, y4, y1, y1};
+        polygons[5].z = new double[]{z, z + height, z + height, z};
     }
 
-    /**
-     * Remove the cube
-     */
-    void removeCube() {
-        for (int i = 0; i < 6; i++)
-            Screen.polygonFloor.remove(Polys[i]);
-        Screen.cubes.remove(this);
+    @Override
+    public void removeCube() {
+        // TODO
+    }
+
+    @Override
+    public boolean containsPoint(int x, int y, int z) {
+        return (this.x + this.width) > x && (this.y + this.length) > y && this.x > x && this.y > y &&
+                (this.z + this.height) > z && this.z > z;
+    }
+
+    public List<ThreeDPolygon> getPolygons(){
+        return Arrays.asList(polygons);
+
     }
 }

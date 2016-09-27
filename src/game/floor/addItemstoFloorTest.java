@@ -1,19 +1,14 @@
-package tests;
+package game.floor;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import characters.Player;
-import game.floor.Floor;
-import game.floor.FloorMap;
-import game.floor.Location;
-import game.floor.Room;
-import game.floor.TileMap;
 import items.Door;
 import model.Game;
 
-public class AddItemstoFloorTest {
+public class addItemstoFloorTest {
 	public static void main(String[] args) throws IOException {
 
 		// make a floor

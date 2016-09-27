@@ -30,7 +30,6 @@ public class MakeRoomTest {
 		// this will delegate the work to TileMap.java
 		Game game = new Game();
 
-
 		Floor floor;
 		List<Room> floorRooms = new ArrayList<Room>();
 
@@ -87,10 +86,6 @@ public class MakeRoomTest {
 		}
 		System.out.println(s);
 
-
-
 	}
-
-
 
 }

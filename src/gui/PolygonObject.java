@@ -10,7 +10,9 @@ import java.awt.Polygon;
 public class PolygonObject {
     Polygon polygon;
     Color color;
-    boolean draw = true, visible = true, seeThrough;
+    boolean draw = true;
+    boolean visible = true;
+    boolean seeThrough = false;
     double lighting = 1;
 
     /**
@@ -18,10 +20,9 @@ public class PolygonObject {
      * @param x
      * @param y
      * @param c
-     * @param n
      * @param seeThrough
      */
-    public PolygonObject(double[] x, double[] y, Color c, int n, boolean seeThrough) {
+    public PolygonObject(double[] x, double[] y, Color c, boolean seeThrough) {
         polygon = new Polygon();
         for (int i = 0; i < x.length; i++)
             polygon.addPoint((int) x[i], (int) y[i]);

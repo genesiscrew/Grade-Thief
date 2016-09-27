@@ -10,17 +10,17 @@ import game.floor.Room;
 import game.floor.TileMap;
 
 /**
- * This is the floor of the map
+ * This is the floorPolygons of the map
  */
-public class Terrain {
+public class Floor {
 
     private final int mapWidth = 30;
     private final int mapHeight = mapWidth;
 
     private double tileSize = 10;
-    private Color G = new Color(120, 100, 80);
+    private Color tileColor = new Color(255, 208, 193);
 
-    public Terrain() {
+    public Floor() {
 
     	String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
 		Room room_co237 = new Room(null, null);
@@ -48,15 +48,21 @@ public class Terrain {
 
         for (int y = 0; y < mapWidth; y++) {
             for (int x = 0; x < mapHeight - 1; x++) {
+            	if (x==0 && y ==0)
+            		tileColor = Color.black;
+            	else
+            		tileColor = new Color(255, 208, 193);
+
                polygonFloor.add(new ThreeDPolygon(
                         new double[]{(tileSize * x),  (tileSize * x),  tileSize + (tileSize * x), tileSize + (tileSize * x)},
                         new double[]{(tileSize * y),  tileSize + (tileSize * y), tileSize + (tileSize * y),  (tileSize * y)},
-                        new double[]{values1[x], values2[x], values2[x + 1],  values1[x + 1]}, G, false));
+                        new double[]{values1[x], values2[x], values2[x + 1],  values1[x + 1]}, tileColor, false));
+
+
             }
         }
         return polygonFloor;
     }
-
 
     public double getTileSize() {
         return tileSize;

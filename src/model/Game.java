@@ -37,6 +37,7 @@ import items.Direction.Dir;
  *         player interaction with game objects
  */
 public class Game {
+	private static final int MAX_INVENTORY_SIZE = 11;
 	// the tile map
 	public TileMap board;
 	public Tile[][] TileMap;
@@ -218,7 +219,7 @@ public class Game {
 				for (GameObject e : ((Container) item).getItems()) {
 					// only adds an item to user's inventory if the inventory is
 					// not full ie filled with less than 10 items
-					if (player.getInventory().size() < 11) {
+					if (player.getInventory().size() < MAX_INVENTORY_SIZE) {
 						player.addToInventory(item);
 						((Container) item).getItems().remove(item);
 					}
