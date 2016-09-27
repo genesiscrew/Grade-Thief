@@ -11,22 +11,17 @@ import java.util.List;
 /**
  * Created by wareinadam on 22/09/16.
  */
-public class Laptop implements Drawable{
+public class Laptop extends Item implements Drawable{
 
     private final int LAPTOP_THICKNESS = 1;
     private java.util.List<Cube> cubes;
-    private double x;
-    private double y;
-    private double z;
-    private double width;
-    private double length;
-    private double height;
-    private Color color;
 
     public String toString() {
     	return x + " " + y + " " + z + " " + width + " " + length + " " + height + " " + color;
     }
-    public Laptop(double x, double y, double z, double width, double length, double height, Color c) {
+
+    public Laptop(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
+        super(itemID, itemType, x, y, z, width, length, height, c);
         cubes = new ArrayList<>();
 
         // Screen
@@ -34,14 +29,6 @@ public class Laptop implements Drawable{
 
         // The base of the laptop
        cubes.add(new Cube(x, y, z, width, length, LAPTOP_THICKNESS, c));
-
-        this.color = c;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.width = width;
-        this.length = length;
-        this.height = height;
     }
 
     @Override

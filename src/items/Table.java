@@ -11,27 +11,15 @@ import java.util.List;
 /**
  * Created by wareinadam on 22/09/16.
  */
-public class Table implements Drawable {
+public class Table extends Item {
 
     private final int TABLE_THICKNESS = 1;
     private java.util.List<Cube> cubes;
-    private double x;
-    private double y;
-    private double z;
-    private double width;
-    private double length;
-    private double height;
-    private Color color;
 
-    public Table(double x, double y, double z, double width, double length, double height, Color c) {
+
+    public Table(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
+        super(itemID, itemType, x, y, z, width, length, height, c);
         cubes = new ArrayList<>();
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.width = width;
-        this.length = length;
-        this.height = height;
-        this.color = c;
 
         // First make the legs
         int legWidth = (int) (width / 4);
@@ -73,7 +61,6 @@ public class Table implements Drawable {
     public boolean containsPoint(int x, int y, int z) {
         return (this.x + this.width) > x && (this.y + this.length) > y && this.x < x && this.y < y;
         //  && (this.z + this.height) > z && this.z > z;
-
     }
 
     @Override
@@ -83,4 +70,5 @@ public class Table implements Drawable {
         cubes.forEach(c -> allPolys.addAll(c.getPolygons()));
         return allPolys;
     }
+
 }

@@ -1,10 +1,13 @@
 package gui;
 
 import game.floor.TileMap;
+
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import items.Player;
 import tests.MakeRoomTest;
 
 /**
@@ -57,35 +60,9 @@ public class Room {
 
         MakeRoomTest m = new MakeRoomTest();
         m.createRoom(this, roomName);
+        roomObjects.add(new Player(20, 20, 0, 5, 3, 12, Color.green));
     }
 
-//    private void addObjectsToMap() {
-//        int wallLength = (int) (floor.getMapHeight() * floor.getTileSize()) - 5;
-//        int wallHeight = 50;
-//
-//        roomObjects.add(new Cube(0, 0, 0, 5, wallLength, wallHeight, Color.blue));
-//        roomObjects.add(new Cube(5, 0, 0, wallLength - 10, 5, wallHeight, Color.blue));
-//        roomObjects.add(new Cube(wallLength - 5, 0, 0, 5, wallLength, wallHeight, Color.blue));
-//        roomObjects.add(new Cube(0, wallLength, 0, wallLength - 5, 5, wallHeight, Color.blue));
-//
-//        roomObjects.add(new Table(50, 50, 0, 20, 50, 7, Color.red));
-//        roomObjects.add(new Laptop(55, 50, 7, 5, 3, 4, Color.black));
-//
-//        // Chairs
-//        roomObjects.add(new Chair(75, 60, 0, 5, 5, 5, Color.red));
-//        roomObjects.add(new Chair(75, 70, 0, 5, 5, 5, Color.red));
-//        roomObjects.add(new Chair(75, 80, 0, 5, 5, 5, Color.red));
-//
-//        roomObjects.add(new Chair(40, 60, 0, 5, 5, 5, Color.red));
-//        roomObjects.add(new Chair(40, 70, 0, 5, 5, 5, Color.red));
-//        roomObjects.add(new Chair(40, 80, 0, 5, 5, 5, Color.red));
-//
-//        roomObjects.get(0).updateDirection(60,60);
-//
-//
-//        roomObjects.add(new Player(20, 20, 0, 5, 3, 12, Color.green));
-//
-//    }
     /**
      * Is position x, y, z outside of the floorPolygons.
      * Currently it doesn't take the z value into account, as its not required.

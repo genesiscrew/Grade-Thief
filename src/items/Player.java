@@ -10,15 +10,15 @@ import java.util.*;
 /**
  * Created by wareinadam on 24/09/16.
  */
-public class Player implements Drawable{
+public class Player implements Drawable {
     private java.util.List<Cube> cubes;
-    private double x;
-    private double y;
-    private double z;
-    private double width;
-    private double length;
-    private double height;
-    private Color color;
+    protected double x;
+    protected double y;
+    protected double z;
+    protected double width;
+    protected double length;
+    protected double height;
+    protected Color color;
 
     public Player(double x, double y, double z, double width, double length, double height, Color c) {
         cubes = new ArrayList<>();
@@ -32,30 +32,31 @@ public class Player implements Drawable{
 
         // First make the legs
         int legWidth = (int) (width / 2.5);
-        int legHeight = (int) (height/2);
+        int legHeight = (int) (height / 2);
         // first leg
-        cubes.add(new Cube(x, y + (legWidth/2), z, legWidth, legWidth, legHeight, c));
+        cubes.add(new Cube(x, y + (legWidth / 2), z, legWidth, legWidth, legHeight, c));
         // second leg
-        cubes.add(new Cube(x + width - legWidth, y+(legWidth/2), z, legWidth, legWidth, legHeight, c));
+        cubes.add(new Cube(x + width - legWidth, y + (legWidth / 2), z, legWidth, legWidth, legHeight, c));
 
         // body
-        cubes.add(new Cube(x, y, z+legHeight, width, width/1.5, legHeight, c));
+        cubes.add(new Cube(x, y, z + legHeight, width, width / 1.5, legHeight, c));
 
         // arms
-        cubes.add(new Cube(x+width, y, z+legHeight+(legHeight/2), width, width/1.5, legHeight/3, c));
-        cubes.add(new Cube(x-width, y, z+legHeight+(legHeight/2), width, width/1.5, legHeight/3, c));
+        cubes.add(new Cube(x + width, y, z + legHeight + (legHeight / 2), width, width / 1.5, legHeight / 3, c));
+        cubes.add(new Cube(x - width, y, z + legHeight + (legHeight / 2), width, width / 1.5, legHeight / 3, c));
 
         // head
-        cubes.add(new Cube(x+(width/4), y, z+(legHeight*2), width/2, width/1.5, legHeight/3, c));
+        cubes.add(new Cube(x + (width / 4), y, z + (legHeight * 2), width / 2, width / 1.5, legHeight / 3, c));
     }
 
     /**
      * Moves the player the specified amount. 0 means no change will be made.
+     *
      * @param x
      * @param y
      * @param z
      */
-    public void movePlayer(int x, int y, int z){
+    public void movePlayer(int x, int y, int z) {
         this.x += x;
         this.y += y;
         this.z += z;
@@ -94,5 +95,10 @@ public class Player implements Drawable{
         // Add all the cubes cubes
         cubes.forEach(c -> allPolys.addAll(c.getPolygons()));
         return allPolys;
+    }
+
+    @Override
+    public boolean pointNearObject(int x, int y, int z) {
+        return false;
     }
 }

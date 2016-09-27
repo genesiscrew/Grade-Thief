@@ -1,5 +1,7 @@
 package gui;
 
+import items.Item;
+
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
@@ -162,8 +164,14 @@ public class Cube implements Drawable {
                 (this.z + this.height) > z && this.z > z;
     }
 
-    public List<Polygon> getPolygons(){
+    public List<Polygon> getPolygons() {
         return Arrays.asList(polygons);
 
     }
+
+    @Override
+    public boolean pointNearObject(int x, int y, int z) {
+        return false;
+    }
+
 }
