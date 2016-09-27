@@ -1,7 +1,6 @@
 package items;
 
-import gui.Cube;
-import gui.Drawable;
+import gui.*;
 import gui.ThreeDPolygon;
 
 import java.awt.*;
@@ -73,7 +72,7 @@ public class MapDraw implements Drawable {
 	}
 
 	@Override
-	public List<ThreeDPolygon> getPolygons() {
+	public List<gui.Polygon> getPolygons() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -3,7 +3,7 @@ package items;
 import java.util.List;
 
 import gui.Drawable;
-import gui.ThreeDPolygon;
+import gui.Polygon;
 
 public  class Item extends GameObject implements Drawable {
 
@@ -56,7 +56,7 @@ public  class Item extends GameObject implements Drawable {
 	}
 
 	@Override
-	public List<ThreeDPolygon> getPolygons() {
+	public List<Polygon> getPolygons() {
 		// TODO Auto-generated method stub
 		return null;
 	}

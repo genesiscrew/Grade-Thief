@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import game.floor.makeRoomTest;
+import tests.MakeRoomTest;
 
 /**
  * Created by wareinadam on 24/09/16.
@@ -39,7 +40,7 @@ public class Room {
      *
      */
     public Room(int type) throws IOException{
-        floor = new Floor();
+        floor = new Floor(0,0,20,20);
         this.floorPolygons = floor.generateMap();
         this.polygons = new ArrayList<>();
 
@@ -88,11 +89,11 @@ public class Room {
         int wallLength = (int) (floor.getMapHeight() * floor.getTileSize()) - 5;
         int wallHeight = 50;
 
-    	makeRoomTest m = new makeRoomTest(null);
-		game.floor.Room r = m.t();
-		for (Drawable d : r.getDrawableItems()) {
-			roomObjects.add(d);
-		}
+    	MakeRoomTest m = new MakeRoomTest();
+		//game.floor.Room r = m.();
+//		for (Drawable d : r.getDrawableItems()) {
+//			roomObjects.add(d);
+//		}
 
 //        roomObjects.add(new Cube(0, 0, 0, 5, wallLength, wallHeight, Color.blue));
 //        roomObjects.add(new Cube(5, 0, 0, wallLength - 10, 5, wallHeight, Color.blue));
