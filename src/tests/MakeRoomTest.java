@@ -73,10 +73,10 @@ public class MakeRoomTest {
 			for (int x = 0 ; x < tileMap.getMapWidth() ; x++) {
 				Tile t = tileMap.getTileMap()[x][y];
 				if (t != null) {
-					if (tileMap.getTileMap()[x][y].occupied())
-						s = s  + (tileMap.getTileMap()[x][y].getObjectonTile().toString());
-					else
-						s = s + (tileMap.getTileMap()[x][y].getName());
+					if (tileMap.getTileMap()[x][y].occupied()){}
+						//s = s  + (tileMap.getTileMap()[x][y].getObjectonTile().toString());
+					else{}
+						//s = s + (tileMap.getTileMap()[x][y].getName());
 
 				}
 

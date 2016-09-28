@@ -16,7 +16,6 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +41,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     /**
      * This is the co-ordinates of where the player is  (x, y, z)
      */
-    double[] ViewFrom = new double[]{15, 5, 10},
+    double[] viewFrom = new double[]{15, 5, 10},
             ViewTo = new double[]{0, 0, 0},
             LightDir = new double[]{1, 1, 1};
 
@@ -77,11 +76,15 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     static boolean drawOutlines = true;
     boolean[] Keys = new boolean[4];
 
+    private GameController controller;
+    private boolean guard;
+
     /**
      * Create a new screen
-     * @throws IOException
      */
-    public Screen() throws IOException {
+    public Screen(GameController controller, boolean guard){
+        this.controller = controller;
+        this.guard = guard;
         this.addKeyListener(this);
         setFocusable(true);
 
@@ -93,16 +96,16 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         // Load the section of the map
         room = new Room("co237", startX, startY);
 
-        ViewFrom[0] = startX;
-        ViewFrom[1] = startY;
-        ViewFrom[2] = startZ;
+        viewFrom[0] = startX;
+        viewFrom[1] = startY;
+        viewFrom[2] = startZ;
     }
 
     @Override
     public void paintComponent(Graphics g) {
         // Clear screen and draw background color
         g.setColor(new Color(140, 180, 180));
-        g.fillRect(0, 0, (int) Main.ScreenSize.getWidth(), (int) Main.ScreenSize.getHeight());
+        g.fillRect(0, 0, (int) GameController.ScreenSize.getWidth(), (int) GameController.ScreenSize.getHeight());
 
         cameraMovement();
 
@@ -225,7 +228,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * Called on every refresh, this updates the direction the camera is facing
      */
     void cameraMovement() {
-        Vector ViewVector = new Vector(ViewTo[0] - ViewFrom[0], ViewTo[1] - ViewFrom[1], ViewTo[2] - ViewFrom[2]);
+        Vector ViewVector = new Vector(ViewTo[0] - viewFrom[0], ViewTo[1] - viewFrom[1], ViewTo[2] - viewFrom[2]);
         double xMove = 0, yMove = 0, zMove = 0;
         Vector VerticalVector = new Vector(0, 0, 1);
         Vector SideViewVector = ViewVector.CrossProduct(VerticalVector);
@@ -251,7 +254,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         }
 
         Vector MoveVector = new Vector(xMove, yMove, zMove);
-        moveTo(ViewFrom[0] + MoveVector.x * movementSpeed, ViewFrom[1] + MoveVector.y * movementSpeed, ViewFrom[2] + MoveVector.z * movementSpeed);
+        moveTo(viewFrom[0] + MoveVector.x * movementSpeed, viewFrom[1] + MoveVector.y * movementSpeed, viewFrom[2] + MoveVector.z * movementSpeed);
     }
 
     /**
@@ -270,10 +273,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         if (room.movingIntoAnObject(x, y, z))
             return;
 
-        ViewFrom[0] = x;
-        ViewFrom[1] = y;
-        ViewFrom[2] = z;
+        viewFrom[0] = x;
+        viewFrom[1] = y;
+        viewFrom[2] = z;
         System.out.printf("x: %f y: %f z: %f \n", x, y, z);
+        controller.updatePosition(guard, viewFrom);
         updateView();
     }
 
@@ -319,9 +323,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      */
     void updateView() {
         double r = Math.sqrt(1 - (VertLook * VertLook));
-        ViewTo[0] = ViewFrom[0] + r * Math.cos(HorLook);
-        ViewTo[1] = ViewFrom[1] + r * Math.sin(HorLook);
-        ViewTo[2] = ViewFrom[2] + VertLook;
+        ViewTo[0] = viewFrom[0] + r * Math.cos(HorLook);
+        ViewTo[1] = viewFrom[1] + r * Math.sin(HorLook);
+        ViewTo[2] = viewFrom[2] + VertLook;
     }
 
     /**
@@ -374,7 +378,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             @Override
             public void run(){
                 for(int i=0; i < 5; i++) {
-                    ViewFrom[2] += 2;
+                    viewFrom[2] += 2;
                     try {
                         Thread.sleep(30);
                     } catch (InterruptedException e) {
@@ -382,7 +386,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
                     }
                 }
                 for(int i=0; i < 5; i++) {
-                    ViewFrom[2] -= 2;
+                    viewFrom[2] -= 2;
                     try {
                         Thread.sleep(30);
                     } catch (InterruptedException e) {

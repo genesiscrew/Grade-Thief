@@ -34,7 +34,7 @@ public class Polygon {
         newY = new double[x.length];
         draw = true;
         for (int i = 0; i < x.length; i++) {
-            CalcPos = Calculator.CalculatePositionP(screen.ViewFrom, x[i], y[i], z[i]);
+            CalcPos = Calculator.CalculatePositionP(screen.viewFrom, x[i], y[i], z[i]);
             newX[i] = (Main.ScreenSize.getWidth() / 2 - Calculator.calculatorFocusPosition[0]) + CalcPos[0] * Screen.zoom;
             newY[i] = (Main.ScreenSize.getHeight() / 2 - Calculator.calculatorFocusPosition[1]) + CalcPos[1] * Screen.zoom;
             if (Calculator.t < 0)
@@ -72,9 +72,9 @@ public class Polygon {
     }
 
     double GetDistanceToP(int i, Screen screen) {
-        return Math.sqrt((screen.ViewFrom[0] - x[i]) * (screen.ViewFrom[0] - x[i]) +
-                (screen.ViewFrom[1] - y[i]) * (screen.ViewFrom[1] - y[i]) +
-                (screen.ViewFrom[2] - z[i]) * (screen.ViewFrom[2] - z[i]));
+        return Math.sqrt((screen.viewFrom[0] - x[i]) * (screen.viewFrom[0] - x[i]) +
+                (screen.viewFrom[1] - y[i]) * (screen.viewFrom[1] - y[i]) +
+                (screen.viewFrom[2] - z[i]) * (screen.viewFrom[2] - z[i]));
     }
 
     /**

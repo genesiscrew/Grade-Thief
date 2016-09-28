@@ -40,14 +40,19 @@ public class Room {
     private final double ROOM_PADDING = 5;
 
     /**
-     * @throws IOException
+     *
      */
-    public Room(String roomName, int xOffset, int yOffset) throws IOException {
+    public Room(String roomName, int xOffset, int yOffset) {
         floor = new Floor(xOffset, yOffset, 20, 20);
         this.floorPolygons = floor.generateMap();
         this.polygons = new ArrayList<>();
 
-        addObjectsToMap(roomName);
+        try {
+            addObjectsToMap(roomName);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
         floor = new Floor(0, 0, tileMap.getMapWidth(), tileMap.getMapHeight());
         this.floorPolygons = floor.generateMap();
     }

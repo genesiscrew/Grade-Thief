@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import items.Item;
 
 /**
- * This represents a character in the Game
+ * This represents a character in the GameController
  */
 public class Character {
 	// player name

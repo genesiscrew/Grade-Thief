@@ -3,7 +3,7 @@ package Server;
 import model.Game;
 
 //This is for the packages
-/*import game.Game;*/
+/*import game.GameController;*/
 
 /**
  * This class is used for periodically job. could be updating rendering panel. could be updating game status.
