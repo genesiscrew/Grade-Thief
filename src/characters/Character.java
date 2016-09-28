@@ -6,7 +6,7 @@ import items.Interactable;
 import items.Movable;
 
 // chracter class comment test
-public abstract class Character implements Movable {
+public abstract class Character {
 	String characterName;
 	public int characterID;
 	public Location characterLocation;
@@ -26,6 +26,9 @@ public abstract class Character implements Movable {
 	public void setCharacterLocation(int x, int y) {
 		characterLocation = new Location(x, y);
 
+	}
+	public int getCharacterID(){
+		return this.characterID;
 	}
 
 

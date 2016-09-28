@@ -1,0 +1,35 @@
+package saving;
+
+import java.io.File;
+import java.util.ArrayList;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+
+import characters.Player;
+
+public class JAXBExample {
+	public static void main(String[] args) {
+
+
+
+		try {
+			/// am/state-opera/home1/javahemans/workspace/grade-thief/src/saving
+			File file = new File("//am//state-opera//home1//javahemans//workspace//grade-thief//src//sample.xml");
+
+			JAXBContext jaxbContext = JAXBContext.newInstance(ArrayList.class);
+			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+			// output pretty printed
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+			/*jaxbMarshaller.marshal(sample, file);
+			jaxbMarshaller.marshal(sample, System.out);*/
+
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+
+	}
+}

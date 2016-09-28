@@ -48,10 +48,17 @@ public class Floor {
 
         for (int y = 0; y < mapWidth; y++) {
             for (int x = 0; x < mapHeight - 1; x++) {
+            	if (x==0 && y ==0)
+            		tileColor = Color.black;
+            	else
+            		tileColor = new Color(255, 208, 193);
+
                polygonFloor.add(new ThreeDPolygon(
                         new double[]{(tileSize * x),  (tileSize * x),  tileSize + (tileSize * x), tileSize + (tileSize * x)},
                         new double[]{(tileSize * y),  tileSize + (tileSize * y), tileSize + (tileSize * y),  (tileSize * y)},
                         new double[]{values1[x], values2[x], values2[x + 1],  values1[x + 1]}, tileColor, false));
+
+
             }
         }
         return polygonFloor;

@@ -9,9 +9,10 @@ import java.util.List;
  *
  */
 public class Floor {
-	List<Room> rooms;
-	List<Camera> cameras;
-	FloorMap floorMap;
+	private List<Room> rooms;
+	private List<Camera> cameras;
+	private FloorMap floorMap;
+
 
 	public Floor(List<Room> rooms, List<Camera> cameras, FloorMap floorMap) {
 		this.rooms = rooms;
@@ -49,6 +50,10 @@ public class Floor {
 	 *  Method will add room at a given position on the floor and include doors at doorLocations.
 	 */
 
+
+	public FloorMap getFloorMap() {
+		return this.floorMap;
+	}
 	public void addRoom(Room r, int sx, int sy, int w, int h, List<Location> doorLocations) {
 		// here we need to add the room on the floormap at sx, sy, spanning across and up w,h
 		// only walls and doors are added to the floor. Nothing inside the room is relevant.
@@ -67,25 +72,25 @@ public class Floor {
 					DoorTile doorTile = new DoorTile();
 					doorTile.setLocation(globalLoc);
 					//doorTile.setLocation(new Location(startX, startY)); //
-					floorMap.floorTiles[startX][startY] = doorTile;
+					floorMap.getFloorTiles()[startX][startY] = doorTile;
 				}
 
 				else if (startY == sy || startX == sx) { // the first tiles  of the room should always be walls
 					WallTile wallTile = new WallTile();
 					wallTile.setLocation(globalLoc);
-					floorMap.floorTiles[startX][startY] = wallTile;
+					floorMap.getFloorTiles()[startX][startY] = wallTile;
 				}
 
 				else if (startY == sy + h -1 || startX == sx + w - 1) { // likewise the last tile should be walls
 					WallTile wallTile= new WallTile();
 					wallTile.setLocation(globalLoc);
-					floorMap.floorTiles[startX][startY] = wallTile;
+					floorMap.getFloorTiles()[startX][startY] = wallTile;
 				}
 
 				else { // every tile WITHIN should be a RoomTile
 					RoomTile roomTile = new RoomTile();
 					roomTile.setLocation(globalLoc);
-					floorMap.floorTiles[startX][startY] = roomTile;
+					floorMap.getFloorTiles()[startX][startY] = roomTile;
 				}
 
 				startX++; // increase every iteration
@@ -126,6 +131,10 @@ public class Floor {
 	WDDWWWWWWWWWWWWWWWWWWWWWWWWWWWWDDWWEEEEE
 	EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 	 */
+	public List<Room> getFloorRooms() {
+		return this.rooms;
+	}
+
 
 
 }

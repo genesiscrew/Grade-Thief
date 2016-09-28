@@ -16,6 +16,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,8 +80,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     /**
      * Create a new screen
+     * @throws IOException
      */
-    public Screen() {
+    public Screen() throws IOException {
         this.addKeyListener(this);
         setFocusable(true);
 
@@ -262,7 +264,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * @param z
      */
     void moveTo(double x, double y, double z) {
-        System.out.println(x + " " + y + " " + z);
+//        System.out.println(x + " " + y + " " + z);
 
         // Check that the player isn't out of the maps floorPolygons
         if (positionOutOfBounds(x, y, z))
@@ -389,9 +391,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     public void loadMap(){
         if(room == room1)
-            room = room2;
+        { try {System.out.println("room1"); Thread.sleep(200); } catch (Exception e) {} room = room2; }
+          //  room = room2;
         else
-            room = room1;
+        { System.out.println("room2"); try { Thread.sleep(200); } catch (Exception e) {} room = room1; }
+            //room = room1;
     }
 
     public void jump() {

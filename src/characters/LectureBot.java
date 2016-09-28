@@ -30,7 +30,7 @@ public class LectureBot extends Character{
 		// repeat etc.
 	}
 
-	@Override
+
 	public void move(Direction dir, Distance d) {
 		// TODO Auto-generated method stub
 
