@@ -1,6 +1,5 @@
 package gui;
 
-
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -78,11 +77,12 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     private GameController controller;
     private boolean guard;
+    private items.Player otherPlayer = new items.Player(20, 20, 0, 5, 3, 12, Color.blue);
 
     /**
      * Create a new screen
      */
-    public Screen(GameController controller, boolean guard){
+    public Screen(GameController controller, boolean guard) {
         this.controller = controller;
         this.guard = guard;
         this.addKeyListener(this);
@@ -96,9 +96,15 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         // Load the section of the map
         room = new Room("co237", startX, startY);
 
-        viewFrom[0] = startX;
-        viewFrom[1] = startY;
-        viewFrom[2] = startZ;
+        if (guard) {
+            viewFrom[0] = 100;
+            viewFrom[1] = 100;
+            viewFrom[2] = 10;
+        } else {
+            viewFrom[0] = startX;
+            viewFrom[1] = startY;
+            viewFrom[2] = startZ;
+        }
     }
 
     @Override
@@ -113,10 +119,13 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         Calculator.setPredeterminedInfo(this);
         controlSunAndLight();
 
+        // All polygons that need to be drawn
         List<Polygon> allPolygons = new ArrayList<>();
-        // Add all polygons
+        // Add all polygons to the list
         allPolygons.addAll(room.getFloorPolygons());
         room.getRoomObjects().forEach(o -> allPolygons.addAll(o.getPolygons()));
+        allPolygons.addAll(updateOtherPlayersPosition());
+
 
         // Updates each polygon for this camera position
         for (int i = 0; i < allPolygons.size(); i++)
@@ -135,9 +144,25 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         // Draw the cross in the center of the screen
         drawMouseAim(g);
 
+
         // FPS display
         g.drawString("FPS: " + (int) drawFPS + " (Benchmark)", 40, 40);
         sleepAndRefresh();
+    }
+
+
+    /**
+     * @return
+     */
+    private List<Polygon> updateOtherPlayersPosition() {
+        // Lets start by getting there position from the controller and see how much they have moved
+        double[] otherPos = controller.getOtherPlayersPosition(guard);
+        double dx = otherPos[0] - otherPlayer.getX();
+        double dy = otherPos[1] - otherPlayer.getY();
+        double dz = otherPos[0] - otherPlayer.getZ();
+
+        otherPlayer.updatePosition(dx, dy, dz-5);
+        return otherPlayer.getPolygons();
     }
 
     /**
@@ -276,7 +301,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         viewFrom[0] = x;
         viewFrom[1] = y;
         viewFrom[2] = z;
-        System.out.printf("x: %f y: %f z: %f \n", x, y, z);
+        //System.out.printf("x: %f y: %f z: %f \n", x, y, z);
         controller.updatePosition(guard, viewFrom);
         updateView();
     }
@@ -360,13 +385,25 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             loadMap();
     }
 
-    public void loadMap(){
-        if(room == room1)
-        { try {System.out.println("room1"); Thread.sleep(200); } catch (Exception e) {} room = room2; }
-          //  room = room2;
-        else
-        { System.out.println("room2"); try { Thread.sleep(200); } catch (Exception e) {} room = room1; }
-            //room = room1;
+    public void loadMap() {
+        if (room == room1) {
+            try {
+                System.out.println("room1");
+                Thread.sleep(200);
+            } catch (Exception e) {
+            }
+            room = room2;
+        }
+        //  room = room2;
+        else {
+            System.out.println("room2");
+            try {
+                Thread.sleep(200);
+            } catch (Exception e) {
+            }
+            room = room1;
+        }
+        //room = room1;
     }
 
     /**
@@ -374,10 +411,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * updating the display throughout the jump.
      */
     public void jump() {
-        Thread jumpingThread = new Thread(){
+        Thread jumpingThread = new Thread() {
             @Override
-            public void run(){
-                for(int i=0; i < 5; i++) {
+            public void run() {
+                for (int i = 0; i < 5; i++) {
                     viewFrom[2] += 2;
                     try {
                         Thread.sleep(30);
@@ -385,7 +422,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
                         e.printStackTrace();
                     }
                 }
-                for(int i=0; i < 5; i++) {
+                for (int i = 0; i < 5; i++) {
                     viewFrom[2] -= 2;
                     try {
                         Thread.sleep(30);
@@ -467,4 +504,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
                 zoom -= 25 * arg0.getUnitsToScroll();
         }
     }
+
+
 }

@@ -61,6 +61,21 @@ public class Polygon {
     }
 
     /**
+     * Moves the player the specified amount. 0 means no change will be made.
+     *
+     * @param dx
+     * @param dy
+     * @param dz
+     */
+    public void updatePosition(double dx, double dy, double dz) {
+        for(int i=0; i < x.length; i++){
+            this.x[i] += dx;
+            this.y[i] += dy;
+            this.z[i] += dz;
+        }
+    }
+
+    /**
      * Calculates the average distance to the viewer
      * @return
      */

@@ -54,4 +54,12 @@ public class GameController {
             playerPosition = viewFrom;
         }
     }
+
+    public double[] getOtherPlayersPosition(boolean isGuard) {
+        if(isGuard){
+            return playerPosition;
+        }else{
+            return guardPosition;
+        }
+    }
 }

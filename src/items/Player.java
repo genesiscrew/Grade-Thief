@@ -52,14 +52,16 @@ public class Player implements Drawable {
     /**
      * Moves the player the specified amount. 0 means no change will be made.
      *
-     * @param x
-     * @param y
-     * @param z
+     * @param dx
+     * @param dy
+     * @param dz
      */
-    public void movePlayer(int x, int y, int z) {
-        this.x += x;
-        this.y += y;
-        this.z += z;
+    public void updatePosition(double dx, double dy, double dz) {
+        this.x += dx;
+        this.y += dy;
+        this.z += dz;
+
+        cubes.forEach(c -> c.updatePosition(dx, dy, dz));
     }
 
     @Override
@@ -86,7 +88,6 @@ public class Player implements Drawable {
     public boolean containsPoint(int x, int y, int z) {
         return (this.x + this.width) > x && (this.y + this.length) > y && this.x < x && this.y < y;
         //  && (this.z + this.height) > z && this.z > z;
-
     }
 
     @Override
@@ -100,5 +101,17 @@ public class Player implements Drawable {
     @Override
     public boolean pointNearObject(int x, int y, int z) {
         return false;
+    }
+
+    public double getZ() {
+        return z;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public double getX() {
+        return x;
     }
 }
