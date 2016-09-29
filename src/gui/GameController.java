@@ -11,17 +11,17 @@ public class GameController {
 
     // Players
     private Screen player;
-    private Screen guard;
 
     // Position is stored using x, y, z
     private double[] playerPosition = new double[]{15, 5, 10};
     private double[] guardPosition = new double[]{100, 100, 10};
 
     static Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    private boolean isGuard;
 
-    public GameController() {
+    public GameController(boolean isGuard) {
+        this.isGuard = isGuard;
         player = createNewGame(false);
-        guard = createNewGame(true);
     }
 
     /**
@@ -41,22 +41,36 @@ public class GameController {
     /**
      * Update the controllers understanding of the players
      *
-     * @param isGuard true: updates guard pos, false: updates players pos.
+     * @param isGuard  true: updates guard pos, false: updates players pos.
      * @param viewFrom [x,y,z] position of the player
      */
     public void updatePosition(boolean isGuard, double[] viewFrom) {
-        if(isGuard){
+        if (isGuard) {
             guardPosition = viewFrom;
-        }else{
+        } else {
             playerPosition = viewFrom;
         }
     }
 
     public double[] getOtherPlayersPosition(boolean isGuard) {
-        if(isGuard){
+        if (isGuard) {
             return playerPosition;
-        }else{
+        } else {
             return guardPosition;
         }
+    }
+
+    //This is for server
+    public double[] getPlayerPosition() {
+        if (isGuard)
+            return guardPosition;
+        return playerPosition;
+    }
+
+    public void setPlayerPosition(double[] playerPosition) {
+        if (isGuard)
+            this.guardPosition = playerPosition;
+        else
+            this.playerPosition = playerPosition;
     }
 }

@@ -9,7 +9,7 @@ public class Main {
     static Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     public static void main(String[] args) {
-        new GameController();
+        new GameController(false);
     }
 
 
