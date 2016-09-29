@@ -12,6 +12,7 @@ import characters.Player;
 public class JAXBExample {
 	public static void main(String[] args) {
 
+		ArrayList<Player> sample = new ArrayList<Player>();
 
 
 		try {
@@ -24,8 +25,8 @@ public class JAXBExample {
 			// output pretty printed
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-			/*jaxbMarshaller.marshal(sample, file);
-			jaxbMarshaller.marshal(sample, System.out);*/
+			jaxbMarshaller.marshal(sample, file);
+			jaxbMarshaller.marshal(sample, System.out);
 
 		} catch (JAXBException e) {
 			e.printStackTrace();

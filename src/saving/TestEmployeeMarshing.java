@@ -15,13 +15,17 @@ public class TestEmployeeMarshing
 	{
 		employees.setEmployees(new ArrayList<Employee>());
 
-		Employee emp = new Employee();
-		emp.setId(1);
-		emp.setFirstName("Lokesh");
-		emp.setLastName("Gupta");
-		emp.setIncome(100.0);
 
-		employees.getEmployees().add(emp);
+		for (int i = 0; i < 10; i++) {
+			Employee emp = new Employee();
+			emp.setId(i);
+			emp.setFirstName("Lokesh");
+			emp.setLastName("Gupta");
+			emp.setIncome(100.0);
+			employees.getEmployees().add(emp);
+
+		}
+
 	}
 
 	public static void main(String[] args) throws JAXBException
