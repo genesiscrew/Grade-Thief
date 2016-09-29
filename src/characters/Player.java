@@ -127,6 +127,15 @@ public class Player extends Character implements KeyListener {
         }
 
 		}
+		else if(e.getKeyChar() == 'p') {
+	        if (this.checkifItemOnTile() != null) {
+	        	// item is on tile so we can interact with it
+	        	game.pickupItem(this, (Item)this.checkifItemOnTile(), floorNo);
+
+
+	        }
+
+			}
 		// redraw game board
 		game.tick(true);
 

@@ -270,7 +270,7 @@ public class Game {
 				return output;
 			}
 		}
-		return "This is a " + ((GameObject) item).itemType();
+		System.out.println("This is a " + ((GameObject) item).itemType());
 		}
 		return null;
 	}

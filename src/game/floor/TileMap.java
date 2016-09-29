@@ -246,6 +246,7 @@ public class TileMap {
 					System.out.println(fileString + "fileString");
 
 					Container con = new Container(id, null, "box", keyID);
+					con.setGameObjectLocation(x, y);
 					populateRoom(room, fileString, con);
 
 					if (container != null) {
@@ -280,6 +281,7 @@ public class TileMap {
 
 					EmptyTile E = (EmptyTile) tile;
 					Keys K = new Keys(id, type, keyID);
+					K.setGameObjectLocation(x, y);
 					E.addObjectToTile(K);
 					E.setOccupied(); System.out.println("e occupied" + E.isOccupied);
 					tileMap.setTile(x, y, E);
@@ -298,6 +300,7 @@ public class TileMap {
 					System.out.println("is tile null " + tile);
 					EmptyTile E = (EmptyTile) tile;
 					Item i = new Item(id, type);
+					i.setGameObjectLocation(x, y);
 
 					// normal item found
 					// TODO: create normal item and add it to floor tile map
