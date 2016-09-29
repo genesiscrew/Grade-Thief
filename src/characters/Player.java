@@ -81,9 +81,6 @@ public class Player extends Character implements KeyListener {
 		return this.characterName;
 	}
 
-	public String toString() {
-		return this.characterName;
-	}
 
 	/**
 	 * adds an item to player's inventory
@@ -194,6 +191,14 @@ public class Player extends Character implements KeyListener {
 
 	}
 
-
+	@Override
+	public String toString() {
+		return "Player [characterLocation=" + characterLocation + ", inRoom=" + inRoom + ", items=" + items + ", game="
+				+ game + ", dir=" + dir + ", floorNo=" + floorNo + ", characterName=" + characterName + ", characterID="
+				+ characterID + ", getCharacterLocation()=" + getCharacterLocation() + ", getName()=" + getName()
+				+ ", getInventory()=" + getInventory() + ", checkifItemOnTile()=" + checkifItemOnTile()
+				+ ", getCharacterID()=" + getCharacterID() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
+				+ ", toString()=" + super.toString() + "]";
+	}
 
 }
