@@ -2,8 +2,7 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  * Created by wareinadam on 28/09/16.

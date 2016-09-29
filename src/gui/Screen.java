@@ -23,15 +23,15 @@ import javax.swing.JPanel;
 public class Screen extends JPanel implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 
     private Room room;
-
-    private Room room1 = new Room("co237", 0, 0);
+    private Room room1 = new Room("level", 0, 0);
     private Room room2 = new Room("co238", 0, 0);
 
     // The polygon that the mouse is currently over
     static Polygon polygonOver = null;
 
-    final int startX = 5;
-    final int startY = 5;
+    final int startX = 50;
+    final int startY = 50;
+
     final int startZ = 10;
 
     // Used for keeping mouse in center
@@ -51,7 +51,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     static double maxZoom = 2500;
     static double mouseX = 0;
     static double mouseY = 0;
-    static double movementSpeed = 0.5;
+    static double movementSpeed = 5;
 
     //FPS is a bit primitive, you can set the maxFPS as high as u want
     double drawFPS = 0, maxFPS = 1000, LastRefresh = 0, lastFPSCheck = 0, fpsCheck = 0;
@@ -98,7 +98,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         invisibleMouse();
 
         // Load the section of the map
-        room = new Room("co237", startX, startY);
+        room = new Room("level", startX, startY);
 
         if (guard) {
             viewFrom[0] = 100;
@@ -125,10 +125,13 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
         // All polygons that need to be drawn
         List<Polygon> allPolygons = new ArrayList<>();
+
         // Add all polygons to the list
-        allPolygons.addAll(room.getFloorPolygons());
-        room.getRoomObjects().forEach(o -> allPolygons.addAll(o.getPolygons()));
-        allPolygons.addAll(updateOtherPlayersPosition());
+        allPolygons.addAll(room.getFloorPolygons()); // floor tiles
+        room.getWalls().forEach(o -> allPolygons.addAll(o.getPolygons())); // walls
+        room.getRoomObjects().forEach(o -> allPolygons.addAll(o.getPolygons())); // room objects
+        //room.getDoorLocations().forEach(o -> allPolygons.addAll(o.getPolygons())); // door objects
+        allPolygons.addAll(updateOtherPlayersPosition()); // other player
 
 
         // Updates each polygon for this camera position

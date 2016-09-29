@@ -35,8 +35,16 @@ public class Room {
 		//TileMap t = new TileMap(null, this);
 		//this.roomTileMap = t.createTileMap(f);
 	}
-	/**
 
+
+
+
+
+
+
+
+
+	/**
 	 * @param sx -- start x,y
 	 * @param sy
 	 * @param w -- width, height

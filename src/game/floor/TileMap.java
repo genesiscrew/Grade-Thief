@@ -57,6 +57,7 @@ public class TileMap {
 
 	public TileMap createTileMap(String f) {
 		String map = convertFileToTileString(f);
+		System.out.println("creatTileMap method");
 		return convertStringToTileMap(map);
 	}
 
@@ -112,20 +113,22 @@ public class TileMap {
 
 		List<Location> doorLocs = new ArrayList<Location>();
 
-		TileMap TileMapper = new TileMap(new Tile[width][height], null);
+		TileMap tileMap = new TileMap(new Tile[width][height], null);
 
-		TileMapper.optionalCode = code;
-		TileMapper.TileMapWidth = width;
-		TileMapper.TileMapHeight = height;
+		tileMap.optionalCode = code;
+		tileMap.TileMapWidth = width;
+		tileMap.TileMapHeight = height;
+
 
 		String items = Tiles.substring(Tiles.lastIndexOf("*") + 2);
-		TileMapper.setItems(items);
+		tileMap.setItems(items);
 		//  System.out.println(items);
 		s.close();
-
+		//System.out.println("ti" + Tiles);
 		Tiles = Tiles.substring(Tiles.indexOf('.') + 2); // concatenate dimensions now that they are loaded
-
 		int count = 0;
+	//	System.out.println("should print tiles");
+//System.out.println(Tiles + " ?");
 
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width+1; x++){
@@ -136,19 +139,27 @@ public class TileMap {
 				if ( c == 'w') {
 					WallTile W = new WallTile();
 					W.setLocation(loc);
-					TileMapper.TileMap[x][y] = W;
+					tileMap.TileMap[x][y] = W;
 				}
-				if ( c == 'x') {
+				if ( c == 'x' || c == 'e') {
 					EmptyTile e = new EmptyTile();
 					e.setLocation(loc);
-					TileMapper.TileMap[x][y] = e;
+					tileMap.TileMap[x][y] = e;
 
-				} else if ( c == 'd') {
+				}
+				// added for the level
+				if ( c == 'r') {
+					RoomTile r = new RoomTile();
+					r.setLocation(loc);
+					tileMap.TileMap[x][y] = r;
+				}
+
+				else if ( c == 'd') {
 					System.out.println("adding door at " + loc.toString() );
 					DoorTile d = new DoorTile();
 					d.setLocation(loc);
 					d.setDoor(Door.getDoor(code)); // gets the door with the given code
-					TileMapper.TileMap[x][y] = d;
+					tileMap.TileMap[x][y] = d;
 					doorLocs.add(loc); // adds the door to list of door locations
 				}
 
@@ -156,8 +167,10 @@ public class TileMap {
 			}
 		}
 
-		TileMapper.doorLocations = doorLocs;
-		return TileMapper;
+		tileMap.doorLocations = doorLocs;
+		System.out.println("tileMapper width " + tileMap.TileMapWidth);
+
+		return tileMap;
 
 	}
 
@@ -195,8 +208,22 @@ public class TileMap {
 				//
 				String name = sc.next();
 				String type = sc.next();
+				
+				if (type.equals("D")) { // Door
+					System.out.println("=========================== ddddddddddddddddddddddd");
+					int doorID = sc.nextInt();
+
+					DoorTile DT = (DoorTile) tile;
+					Door D = new Door(id, type, doorID, room);
+					DT.setDoor(D);
+					tileMap.setTile(x, y, DT);
+					room.addDrawableItems(new DoorDraw(id, type, 10*x, 10*y, z, w, h, l, new Color(red, green, blue), D));
+					System.out.println(DT.getDoor().getRoom().toString() + " ========================= ");
+
+
+				}
 				// FOUND CONTAINER
-				if (type.equals("C")) {
+				else if (type.equals("C")) {
 					// container found
 					int keyID = sc.nextInt();
 				//	System.out.println(keyID);
@@ -268,6 +295,7 @@ public class TileMap {
 				// FOUND ITEM
 				else {
 					System.out.println("adding item??");
+					System.out.println("is tile null " + tile);
 					EmptyTile E = (EmptyTile) tile;
 					//Item i = new Item(id, type);
 

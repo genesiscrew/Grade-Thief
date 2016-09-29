@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import game.floor.Room;
+import game.floor.Tile;
 import game.floor.TileMap;
+import game.floor.WallTile;
 
 /**
+ * @Author Adam Wareing
  * This is the floor of the games map. It can generate a new floor from the width and height specified.
- *
  */
 public class Floor {
 
@@ -20,10 +22,14 @@ public class Floor {
     private int yOffset;
 
     private double tileSize = 10;
+    private final double WALL_HEIGHT = 20;
+    private final Color WALL_COLOR = new Color(79, 200, 255);
+
     private Color tileColor = new Color(255, 208, 193);
 
     /**
-     * Make a new floor with the specified paramaters
+     * Make a new floor with the specified parameters
+     *
      * @param xOffset
      * @param yOffset
      * @param width
@@ -35,35 +41,54 @@ public class Floor {
         this.xOffset = xOffset;
         this.yOffset = yOffset;
 
-    	String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
-		Room room_co237 = new Room(null, null);
+        String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
+        Room room_co237 = new Room(null, null);
         try {
             room_co237.setTileMap(co237);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-		System.out.printf("Width: %d, Height: %d \n" , mapWidth, mapHeight);
-		System.out.printf("x: %d, y: %d \n" , xOffset, yOffset);
+        System.out.printf("Width: %d, Height: %d \n", mapWidth, mapHeight);
+        System.out.printf("x: %d, y: %d \n", xOffset, yOffset);
     }
 
     /**
      * Return a new map being the size of the width and height set in the fields
+     *
      * @return
      */
-    public List<Polygon> generateMap(){
+    public List<Polygon> generateMap() {
         List<Polygon> polygonFloor = new ArrayList<>();
 
         for (int x = 0; x < mapWidth; x++) {
             for (int y = 0; y < mapHeight; y++) {
-               polygonFloor.add(new Polygon(
-                        new double[]{(tileSize * x)+xOffset,  (tileSize * x)+xOffset,  tileSize + (tileSize * x)+ xOffset, xOffset + tileSize + (tileSize * x)},
-                        new double[]{yOffset + (tileSize * y),  yOffset + tileSize + (tileSize * y), yOffset + tileSize + (tileSize * y),  yOffset + (tileSize * y)},
+                polygonFloor.add(new Polygon(
+                        new double[]{(tileSize * x) + xOffset, (tileSize * x) + xOffset, tileSize + (tileSize * x) + xOffset, xOffset + tileSize + (tileSize * x)},
+                        new double[]{yOffset + (tileSize * y), yOffset + tileSize + (tileSize * y), yOffset + tileSize + (tileSize * y), yOffset + (tileSize * y)},
                         new double[]{0, 0, 0, 0}, tileColor, false));
             }
         }
         return polygonFloor;
     }
+
+    /**
+     *
+     */
+    public List<Drawable> parseWalls(Tile[][] tileMap) {
+        List<Drawable> walls = new ArrayList<>();
+
+        for (int x = 0; x < tileMap.length; x++) {
+            for (int y = 0; y < tileMap[x].length; y++) {
+                if (tileMap[x][y] instanceof WallTile) {
+                    Cube wall = new Cube(x * tileSize, y * tileSize, 0, tileSize, tileSize, WALL_HEIGHT, WALL_COLOR);
+                    walls.add(wall);
+                }
+            }
+        }
+        return walls;
+    }
+
 
     public double getTileSize() {
         return tileSize;

@@ -10,10 +10,14 @@ import items.Door;
 
 public class DoorTile implements Tile  {
 
-	Door door;
+	private Door door;
 	Location location;
 	private boolean isOccupied = false;
 
+
+	public Door getDoor() {
+			return this.door;
+		}
 
 	public void setDoor(Door door) {
 		this.door = door;

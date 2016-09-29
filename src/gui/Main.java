@@ -1,8 +1,6 @@
 package gui;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.io.IOException;
+import java.awt.*;
 
 /**
  * This is the main class that runs the game
@@ -10,7 +8,7 @@ import java.io.IOException;
 public class Main {
     static Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         new GameController();
     }
 
