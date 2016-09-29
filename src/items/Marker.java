@@ -2,7 +2,6 @@ package items;
 
 import gui.*;
 
-
 import java.awt.*;
 import java.awt.Polygon;
 import java.util.*;

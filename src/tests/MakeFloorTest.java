@@ -14,6 +14,7 @@ import game.floor.Location;
 import game.floor.Room;
 import game.floor.TileMap;
 import items.Door;
+import model.Game;
 
 /**
 *
@@ -24,6 +25,7 @@ public class MakeFloorTest {
 
 	public static void main(String[] args) throws IOException {
 
+
 		// make a floor
 		/// load the rooms and add it.
 		// get file path
@@ -31,31 +33,27 @@ public class MakeFloorTest {
 		// put the file path into room.setTileMap(filePath)
 		// this will delegate the work to TileMap.java
 
-
 		List<gui.Room> floorRooms = new ArrayList<gui.Room>();
-
+        Game game = new Game();
 		int nextX = 0;
 		int nextY = 0;
 		final int ADJACENT = 1; // adjacent rooms, add extra wall
 
-		Door d = new Door(0000, "0001",0);
-		gui.Room r = new gui.Room("co237");
+		Door d = new Door(0000, "0001",0, null);
 
 		String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
 		String co238 = System.getProperty("user.dir") + "/src/game/floor/co238";
 		String co243 = System.getProperty("user.dir") + "/src/game/floor/co243";
 
-		Door door_co237 = new Door(0000, "237",0);
-		Door door_co238 = new Door(0000, "238",0);
-		Door door_co243 = new Door(0000, "243",0);
+
 
 		gui.Room room_co237 = new gui.Room("co237");
 		gui.Room room_co238 = new gui.Room("co238");
 		gui.Room room_co243 = new gui.Room("co243");
-//
-//		room_co237.setTileMap(co237);
-//		room_co238.setTileMap(co238);
-//		room_co243.setTileMap(co243);
+
+		Door door_co237 = new Door(0000, "237",0,room_co237);
+		Door door_co238 = new Door(0000, "238",0,room_co238);
+		Door door_co243 = new Door(0000, "243",0,room_co243);
 
 		floorRooms.add(room_co237);
 		floorRooms.add(room_co238);
@@ -65,40 +63,27 @@ public class MakeFloorTest {
 		floorMap.setFloorMap(floorMap.createFloorMap()); // creates a 2d array or tiles and adds it to FloorMap
 
 		Floor floor = new Floor(floorRooms, null, floorMap);
+		TileMap tileMap = room_co237.getTileMap();
 
-		TileMap tileMap = room_co238.getRoomTileMap();
-		System.out.println("sisssssssssssssssssssssss");
-
-		
 
 		int mapWidth = tileMap.getMapWidth();
 		int mapHeight = tileMap.getMapHeight();
-
 
 		System.out.println("bounding co238 " + mapWidth + " ht " + mapHeight);
 		room_co238.setBoundingBox(nextX, nextY, mapWidth, mapHeight);
 
 		nextX += mapWidth; // + ADJACENT;
 		System.out.println("nextX " + nextX + " width" + mapWidth);
-		nextY += 11;
+	//	nextY += 11;
 
-		tileMap = room_co237.getRoomTileMap();
-
-		mapWidth = tileMap.getMapWidth();
-		mapHeight = tileMap.getMapHeight();
 		room_co237.setBoundingBox(nextX, nextY, mapWidth, mapHeight);
 
 		nextY += mapHeight + 5; // corridor 5 tiles
-
-		mapWidth = room_co243.getRoomTileMap().getMapWidth();
-		mapHeight = room_co243.getRoomTileMap().getMapHeight();
-
-		room_co243.setBoundingBox(0, nextY, mapWidth, mapHeight);
+		room_co243.setBoundingBox(0, nextY,mapWidth, mapHeight);
 
 		for (gui.Room room : floorRooms) {
 
 			int[] bounds = room.getBoundingBox();
-			//System.out.println(room.getBoundingBox().toString());
 			floor.addRoom(room, bounds[0], bounds[1], bounds[2], bounds[3], tileMap.getDoors());
 
 			//			for (int sy = room.sy; sy <= sy+room.h; sy++) {
@@ -107,6 +92,7 @@ public class MakeFloorTest {
 			//			}
 			//		}
 		}
+
 
 		Player p = new Player(0000, "Stefan", null, 0);
 		p.setCharacterLocation(19,27);
@@ -124,6 +110,7 @@ public class MakeFloorTest {
 			s = s + "\n";
 		}
 
+		System.out.println("convert here .. convert s");
 
 		System.out.println(s);
 

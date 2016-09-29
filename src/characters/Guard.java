@@ -18,7 +18,7 @@ import items.Distance;
 import items.GameObject;
 import model.Game;
 
-public class Guard extends Character{
+public class Guard extends Character {
 
 	Direction.Dir dir;
 	ArrayList<Direction.Dir> directionList;
@@ -80,7 +80,7 @@ public class Guard extends Character{
 
 					// move the guard to new location
 					// remove gaurd as object from previous empty tile
-					((EmptyTile) game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation()
+					((EmptyTile) game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation()
 							.row()][this.getCharacterLocation().column()]).resetEmptyTile();
 					// move the guard one step based on direction
 					if (this.dir.equals(Dir.EAST)) {
@@ -106,7 +106,7 @@ public class Guard extends Character{
 					}
 
 					// add the gaurd as object to the new empty tile
-					((EmptyTile) game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation()
+					((EmptyTile) game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation()
 							.row()][this.getCharacterLocation().column()]).addObjectToTile(this);
 					game.tick(true);
 					try {
@@ -232,12 +232,12 @@ public class Guard extends Character{
 		try {
 			if (dir.equals(Dir.EAST)) {
 				for (int i = 0; i < 6; i++) {
-					if (game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row() + i][this
+					if (game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation().row() + i][this
 							.getCharacterLocation().column()] instanceof EmptyTile
-							&& game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row()
+							&& game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation().row()
 									+ i][this.getCharacterLocation().column()].occupied()
-							&& ((EmptyTile) game.getFloor(floorNo).getFloorMap()
-									.getFloorTiles()[this.getCharacterLocation().row() + i][this.getCharacterLocation()
+							&& ((EmptyTile) game.getRoom(floorNo).getTileMap().getTileMap()
+									[this.getCharacterLocation().row() + i][this.getCharacterLocation()
 											.column()]).getObjectonTile() instanceof Player) {
 						System.out.println("we have found an intruder");
 						return true;
@@ -248,12 +248,12 @@ public class Guard extends Character{
 			} else if (dir.equals(Dir.WEST)) {
 				for (int i = 0; i < 6; i++) {
 
-					if (game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row() - i][this
+					if (game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation().row() - i][this
 							.getCharacterLocation().column()] instanceof EmptyTile
-							&& game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row()
+							&& game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation().row()
 									- i][this.getCharacterLocation().column()].occupied()
-							&& ((EmptyTile) game.getFloor(floorNo).getFloorMap()
-									.getFloorTiles()[this.getCharacterLocation().row() - i][this.getCharacterLocation()
+							&& ((EmptyTile) game.getRoom(floorNo).getTileMap().getTileMap()
+									[this.getCharacterLocation().row() - i][this.getCharacterLocation()
 											.column()]).getObjectonTile() instanceof Player) {
 						System.out.println("we have found an intruder");
 						return true;
@@ -263,11 +263,11 @@ public class Guard extends Character{
 
 			} else if (dir.equals(Dir.NORTH)) {
 				for (int i = 0; i < 6; i++) {
-					if (game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row()][this
+					if (game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation().row()][this
 							.getCharacterLocation().column() - 1] instanceof EmptyTile
-							&& game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation()
+							&& game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation()
 									.row()][this.getCharacterLocation().column() - 1].occupied()
-							&& ((EmptyTile) game.getFloor(floorNo).getFloorMap().getFloorTiles()[this
+							&& ((EmptyTile) game.getRoom(floorNo).getTileMap().getTileMap()[this
 									.getCharacterLocation().row()][this.getCharacterLocation().column() - 1])
 											.getObjectonTile() instanceof Player) {
 						System.out.println("we have found an intruder");
@@ -278,11 +278,11 @@ public class Guard extends Character{
 
 			} else if (dir.equals(Dir.SOUTH)) {
 				for (int i = 0; i < 6; i++) {
-					if (game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation().row()][this
+					if (game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation().row()][this
 							.getCharacterLocation().column() + i] instanceof EmptyTile
-							&& game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCharacterLocation()
+							&& game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation()
 									.row()][this.getCharacterLocation().column() + 1].occupied()
-							&& ((EmptyTile) game.getFloor(floorNo).getFloorMap().getFloorTiles()[this
+							&& ((EmptyTile) game.getRoom(floorNo).getTileMap().getTileMap()[this
 									.getCharacterLocation().row()][this.getCharacterLocation().column() + i])
 											.getObjectonTile() instanceof Player) {
 						System.out.println("we have found an intruder");

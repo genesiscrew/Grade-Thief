@@ -59,6 +59,7 @@ public class Room {
 
         // Added by Stefan
         this.setTileMap(System.getProperty("user.dir") + "/src/game/floor/" + roomName);
+        System.out.println("" + tileMap.getItems());
         tileMap.populateRoom(this,	tileMap.getItems(), null);
 
         addObjectsToMap(roomName);
@@ -143,6 +144,7 @@ public class Room {
 
 
     public void setTileMap(String f) throws IOException {
+    	System.out.println("generating tileMap for " + f);
         TileMap t = new TileMap(null, this);
         this.tileMap = t.createTileMap(f);
     }

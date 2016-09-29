@@ -121,7 +121,7 @@ public class Player extends Character implements KeyListener {
 		if(e.getKeyChar() == 'e') {
         if (this.checkifItemOnTile() != null) {
         	// item is on tile so we can interact with it
-        	game.inspectItem(this.checkifItemOnTile());
+        	game.inspectItem(this.checkifItemOnTile() );
 
 
         }
@@ -133,14 +133,14 @@ public class Player extends Character implements KeyListener {
 	}
 
 /**
- * this method checks the tile directly in front of the player on the map, and returns it if any it is on it
+ * this method checks the tile directly in front of the player on the map, and returns it if any
  * @return
  */
 	private Object checkifItemOnTile() {
 
 
 		if(dir.equals(Direction.Dir.EAST)) {
-			Tile tile = game.getFloor(floorNo).getFloorMap().getFloorTiles()
+			Tile tile = game.getRoom(floorNo).getTileMap().getTileMap()
 					[this.getCharacterLocation().row() + 1][this.getCharacterLocation().column()];
 			if ( tile instanceof EmptyTile && tile.occupied()) {
 				return tile.getObjectonTile();
@@ -149,7 +149,7 @@ public class Player extends Character implements KeyListener {
 
 		}
 		else if(dir.equals(Direction.Dir.WEST)) {
-			Tile tile = game.getFloor(floorNo).getFloorMap().getFloorTiles()
+			Tile tile = game.getRoom(floorNo).getTileMap().getTileMap()
 					[this.getCharacterLocation().row() - 1][this.getCharacterLocation().column()];
 			if ( tile instanceof EmptyTile) {
 				return tile.occupied();
@@ -158,7 +158,7 @@ public class Player extends Character implements KeyListener {
 
 		}
 		else if(dir.equals(Direction.Dir.SOUTH)) {
-			Tile tile = game.getFloor(floorNo).getFloorMap().getFloorTiles()
+			Tile tile = game.getRoom(floorNo).getTileMap().getTileMap()
 					[this.getCharacterLocation().row()][this.getCharacterLocation().column()+1];
 			if ( tile instanceof EmptyTile) {
 				return tile.occupied();
@@ -169,7 +169,7 @@ public class Player extends Character implements KeyListener {
 		}
 
 		else {
-			Tile tile = game.getFloor(floorNo).getFloorMap().getFloorTiles()
+			Tile tile = game.getRoom(floorNo).getTileMap().getTileMap()
 					[this.getCharacterLocation().row()][this.getCharacterLocation().column()-1];
 			if ( tile instanceof EmptyTile) {
 				return tile.occupied();

@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import characters.Player;
 import game.floor.Floor;
+import game.floor.FloorMap;
+import game.floor.Location;
 import game.floor.Room;
 import game.floor.Tile;
 import game.floor.TileMap;
@@ -19,70 +22,55 @@ import model.Game;
  */
 public class MakeRoomTest {
 
-	public void createRoom(gui.Room r, String roomName) throws IOException{
+	public static void main(String[] args) throws IOException {
+
 
 		// make a floor
-
 		/// load the rooms and add it.
 		// get file path
 		// make a new room
 		// put the file path into room.setTileMap(filePath)
 		// this will delegate the work to TileMap.java
-		Game game = new Game();
 
-		Floor floor;
-		List<Room> floorRooms = new ArrayList<Room>();
-
+		List<gui.Room> floorRooms = new ArrayList<gui.Room>();
+        Game game = new Game();
 		int nextX = 0;
 		int nextY = 0;
 		final int ADJACENT = 1; // adjacent rooms, add extra wall
 
-		Door d = new Door(0000, "0001",0);
+		Door d = new Door(0000, "0001",0, null);
 
-		String co237 = System.getProperty("user.dir") + "/src/game/floor/" + roomName;
+		String co237 = System.getProperty("user.dir") + "/src/game/floor/level";
 
-		Room room_co237 = new Room(null, null);
 
-		room_co237.setTileMap(co237);
 
-		r.setTileMap(co237);
+		gui.Room room_co237 = new gui.Room("level");
 
-		//		System.out.println("optional code " + r.roomTileMap.getOptionalCode());
-		//		System.out.println("height " + r.roomTileMap.getMapHeight());
-		//		System.out.println("width " + r.roomTileMap.getMapWidth());
+		Door door_co237 = new Door(0000, "237",0,room_co237);
 
-		TileMap tileMap = r.getTileMap();
-		String s = "";
-		for (int y = 0 ; y < tileMap.getMapHeight(); y++ ) {
-			for (int x = 0 ; x < tileMap.getMapWidth() ; x++) {
-				Tile t = tileMap.getTileMap()[x][y];
-				if (t != null)
-					s = s + (tileMap.getTileMap()[x][y].getName());
+		floorRooms.add(room_co237);
+
+
+		TileMap tileMap = room_co237.getTileMap();
+
+
+		int mapWidth = tileMap.getMapWidth();
+		int mapHeight = tileMap.getMapHeight();
+String s = "";
+
+		for (int y = 0; y < mapHeight; y++) {
+			for (int x = 0; x < mapWidth; x++) {
+				s = s + tileMap.getTileMap()[x][y].getName();
 			}
 			s = s + "\n";
 		}
-
-		System.out.println(s);
-		System.out.println(r.getTileMap().getItems());
-
-		tileMap.populateRoom(r, tileMap.getItems(), null);
-
-		System.out.println("got her hoooooooooooooooooooooooooooooooooooooooooorrrrrrrrrrrrray");
-		s = "";
-		for (int y = 0 ; y < tileMap.getMapHeight(); y++ ) {
-			for (int x = 0 ; x < tileMap.getMapWidth() ; x++) {
-				Tile t = tileMap.getTileMap()[x][y];
-				if (t != null) {
-					if (tileMap.getTileMap()[x][y].occupied())
-						s = s  + (tileMap.getTileMap()[x][y].getObjectonTile().toString());
-					else
-						s = s + (tileMap.getTileMap()[x][y].getName());
-
-				}
-
-			}
-			s = s + "\n";
-		}
+<<<<<<< HEAD
 		System.out.println(s);
 	}
 }
+=======
+System.out.println(s);
+		}
+
+}
+>>>>>>> 29405cf59c178a9307e71e345c0c646631833a3e

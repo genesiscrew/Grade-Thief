@@ -41,7 +41,7 @@ public class Game {
 	// the tile map
 	public TileMap board;
 	public Tile[][] TileMap;
-	public Floor[] floors;
+	public gui.Room[] rooms;
 	public JFrame display;
 	public JPanel panel;
 	public JTextArea console;
@@ -53,7 +53,7 @@ public class Game {
 	private boolean tick;
 
 	public Game() throws IOException {
-		floors = new Floor[1];
+		rooms = new gui.Room[1];
 		display = new JFrame();
 		panel = new JPanel();
 		console = new JTextArea(20, 20);
@@ -65,8 +65,8 @@ public class Game {
 		
 	}
 
-	public Floor getFloor(int floorNo) {
-		return floors[floorNo];
+	public gui.Room getRoom(int floorNo) {
+		return rooms[floorNo];
 
 	}
 
@@ -81,9 +81,9 @@ public class Game {
 
 
 		String s = "";
-		for (int h = 0; h<this.getFloor(floorNo).getFloorMap().FLOOR_HEIGHT; h++) {
-			for (int w = 0; w<this.getFloor(floorNo).getFloorMap().FLOOR_WIDTH; w++) {
-					s = s + (this.getFloor(floorNo).getFloorMap().getFloorTiles()[w][h].name().toLowerCase());
+		for (int h = 0; h<this.getRoom(floorNo).getTileMap().getMapHeight(); h++) {
+			for (int w = 0; w<this.getRoom(floorNo).getTileMap().getMapWidth(); w++) {
+					s = s + (this.getRoom(floorNo).getTileMap().getTileMap()[w][h].name().toLowerCase());
 			}
 			s = s + "\n";
 		}
@@ -151,8 +151,8 @@ public class Game {
 	 */
 	public boolean isValidMove(Location targetLocation, int floorNo) {
 
-		return !this.getFloor(floorNo).getFloorMap().getFloorTiles()[targetLocation.row()][targetLocation.column()].occupied()
-				&& this.getFloor(floorNo).getFloorMap().getFloorTiles()[targetLocation.row()][targetLocation.column()] instanceof EmptyTile;
+		return !this.getRoom(floorNo).getTileMap().getTileMap()[targetLocation.row()][targetLocation.column()].occupied()
+				&& this.getRoom(floorNo).getTileMap().getTileMap()[targetLocation.row()][targetLocation.column()] instanceof EmptyTile;
 
 	}
 /**
@@ -229,7 +229,7 @@ public class Game {
 			} else {
 				// item is not a container so we pick it up and remove it from
 				// tile in game world
-				((EmptyTile) this.getFloor(floorNo).getFloorMap().getFloorTiles()[item.getGameObjectLocation().row()][item
+				((EmptyTile) this.getRoom(floorNo).getTileMap().getTileMap()[item.getGameObjectLocation().row()][item
 						.getGameObjectLocation().column()]).resetEmptyTile();
 				// only adds an item to user's inventory if the inventory is not
 				// full ie filled with less than 10 items
@@ -286,13 +286,13 @@ public class Game {
 	 */
 	public boolean dropItem(Player player, Item item, int floorNo) {
 		// first check if player is on an empty tile
-		if (this.getFloor(floorNo).getFloorMap().getFloorTiles()[player.getCharacterLocation().row()][player.getCharacterLocation()
+		if (this.getRoom(floorNo).getTileMap().getTileMap()[player.getCharacterLocation().row()][player.getCharacterLocation()
 				.column()] instanceof EmptyTile) {
 			// next check it tile does not already include an item
-			if (((EmptyTile) this.getFloor(floorNo).getFloorMap().getFloorTiles()[player.getCharacterLocation().row()][player
+			if (((EmptyTile) this.getRoom(floorNo).getTileMap().getTileMap()[player.getCharacterLocation().row()][player
 					.getCharacterLocation().column()]).getObjectonTile() == null) {
 				// next we add the item to the tile
-				((EmptyTile) this.getFloor(floorNo).getFloorMap().getFloorTiles()[player.getCharacterLocation().row()][player
+				((EmptyTile) this.getRoom(floorNo).getTileMap().getTileMap()[player.getCharacterLocation().row()][player
 						.getCharacterLocation().column()]).addObjectToTile(item);
 				// next we remove item from player inventory
 				player.getInventory().remove(item);
@@ -309,8 +309,8 @@ public class Game {
 
 	}
 
-	public void addFloor(Floor floor) {
-		floors[0] = floor;
+	public void addFloor(gui.Room room) {
+		rooms[0] = room;
 		//populateFloor(floor, System.getProperty("user.dir") + "/src/map", null);
 	}
 
