@@ -22,6 +22,18 @@ public class TestEmployeeMarshing
 			emp.setFirstName("Lokesh");
 			emp.setLastName("Gupta");
 			emp.setIncome(100.0);
+
+			/*ArrayList<Employee> tmp = new ArrayList<Employee>();
+
+			Employee emp1 = new Employee();
+			emp1.setId(i);
+			emp1.setFirstName("Mansour");
+			emp1.setLastName("Javaher");
+			emp1.setIncome(10000000.0);
+			tmp.add(emp1);
+
+			employees.getEmployees().add(tmp);*/
+
 			employees.getEmployees().add(emp);
 
 		}

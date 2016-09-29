@@ -1,8 +1,14 @@
 package tests;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 import characters.Player;
 import game.floor.EmptyTile;
@@ -15,6 +21,8 @@ import game.floor.TileMap;
 import items.Direction;
 import items.Door;
 import model.Game;
+import saving.Employee;
+import saving.Employees;
 
 public class PlayerInteractWithItem {
 
@@ -43,8 +51,40 @@ public class PlayerInteractWithItem {
         drawThread.start();
 
 
+		/*
+		 * try { marshalingExample(p);
+		 * System.out.println("************************************************"
+		 * ); unMarshalingExample();
+		 *
+		 * } catch (JAXBException e) { e.printStackTrace(); }
+		 */
+
 	}
 
+
+
+	private static void marshalingExample(Player pl) throws JAXBException {
+		JAXBContext jaxbContext = JAXBContext.newInstance(Employees.class);
+		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+		jaxbMarshaller.marshal(pl, System.out);
+		jaxbMarshaller.marshal(pl, new File("//am//state-opera//home1//javahemans//workspace//grade-thief//src//saving//sample1.xml"));
+	}
+
+
+	private static void unMarshalingExample() throws JAXBException {
+		JAXBContext jaxbContext = JAXBContext.newInstance(Employees.class);
+		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+		Employees emps = (Employees) jaxbUnmarshaller.unmarshal( new File("//am//state-opera//home1//javahemans//workspace//grade-thief//src//saving//sample1.xml") );
+
+		for(Employee emp : emps.getEmployees())
+		{
+			System.out.println(emp.getId());
+			System.out.println(emp.getFirstName());
+		}
+	}
 
 
 	private static Room makeRoom() throws IOException {

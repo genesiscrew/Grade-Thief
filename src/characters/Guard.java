@@ -130,7 +130,6 @@ public class Guard extends Character {
 					// move method again
 					;
 
-
 					if (x == distance[i] - 1 && i == (directionList.size() - 1)) {
 						this.reverseStrategy();
 						break;
