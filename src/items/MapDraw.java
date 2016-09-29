@@ -1,7 +1,6 @@
 package items;
 
 import gui.*;
-import gui.ThreeDPolygon;
 
 import java.awt.*;
 import java.util.*;

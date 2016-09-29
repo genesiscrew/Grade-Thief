@@ -55,8 +55,8 @@ public class Floor {
     public List<Polygon> generateMap(){
         List<Polygon> polygonFloor = new ArrayList<>();
 
-        for (int y = 0; y < mapWidth; y++) {
-            for (int x = 0; x < mapHeight; x++) {
+        for (int x = 0; x < mapWidth; x++) {
+            for (int y = 0; y < mapHeight; y++) {
                polygonFloor.add(new Polygon(
                         new double[]{(tileSize * x)+xOffset,  (tileSize * x)+xOffset,  tileSize + (tileSize * x)+ xOffset, xOffset + tileSize + (tileSize * x)},
                         new double[]{yOffset + (tileSize * y),  yOffset + tileSize + (tileSize * y), yOffset + tileSize + (tileSize * y),  yOffset + (tileSize * y)},
@@ -76,5 +76,13 @@ public class Floor {
 
     public int getMapWidth() {
         return mapWidth;
+    }
+
+    public int getxOffset() {
+        return xOffset;
+    }
+
+    public int getyOffset() {
+        return yOffset;
     }
 }

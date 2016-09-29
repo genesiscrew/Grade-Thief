@@ -26,14 +26,14 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     private Room room;
 
-    private Room room1 = new Room("co237");
+    private Room room1 = new Room("level");
     private Room room2 = new Room("co238");
 
     // The polygon that the mouse is currently over
     static Polygon polygonOver = null;
 
-    final int startX = 15;
-    final int startY = 5;
+    final int startX = 65;
+    final int startY = 65;
     final int startZ = 10;
 
     // Used for keeping mouse in center
@@ -222,7 +222,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
     /**
-     * Called when the camera is moved
+     * Called on every refresh, this updates the direction the camera is facing
      */
     void cameraMovement() {
         Vector ViewVector = new Vector(ViewTo[0] - ViewFrom[0], ViewTo[1] - ViewFrom[1], ViewTo[2] - ViewFrom[2]);
@@ -263,11 +263,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      */
     void moveTo(double x, double y, double z) {
         // Check that the player isn't out of the maps floorPolygons
-        if (positionOutOfBounds(x, y, z))
+        if (room.positionOutOfBounds(x, y, z, startX, startY))
             return;
 
         // Check that the player isn't moving into any roomObjects
-        if (movingIntoAnObject(x, y, z))
+        if (room.movingIntoAnObject(x, y, z))
             return;
 
         ViewFrom[0] = x;
@@ -276,36 +276,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         updateView();
     }
 
-    /**
-     * Is position x, y, z outside of the floorPolygons?
-     *
-     * @param x
-     * @param y
-     * @param z
-     * @return
-     */
-    private boolean positionOutOfBounds(double x, double y, double z) {
-        double mapSize = room.getFloor().getMapWidth() * room.getFloor().getTileSize();
-        if (x < 0 || y < 0 || z < 0)
-            return true;
-        if (x > startX + mapSize || y > startY + mapSize || z > startZ + mapSize)
-            return true;
-        return false;
-    }
-
-    /**
-     * fpsCheck to see if the
-     *
-     * @return
-     */
-    private boolean movingIntoAnObject(double x, double y, double z) {
-        for (Drawable o : room.getRoomObjects()) {
-            if (o.containsPoint((int) x, (int) y, (int) z)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     /**
      * Highlights the polygon that the cursor is on

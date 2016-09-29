@@ -1,9 +1,9 @@
 package gui;
 
-import sun.audio.AudioData;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
-import sun.audio.ContinuousAudioDataStream;
+//import sun.audio.AudioData;
+//import sun.audio.AudioPlayer;
+//import sun.audio.AudioStream;
+//import sun.audio.ContinuousAudioDataStream;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;

@@ -1,8 +1,6 @@
 package items;
 
 import gui.*;
-import gui.ThreeDPolygon;
-import sun.security.tools.policytool.PolicyTool;
 
 import java.awt.*;
 import java.awt.Polygon;
