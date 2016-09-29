@@ -77,7 +77,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     private GameController controller;
     private boolean guard;
-    private items.Player otherPlayer = new items.Player(20, 20, 0, 5, 3, 12, Color.blue);
+    private items.Player otherPlayer;
 
     /**
      * Create a new screen
@@ -85,6 +85,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     public Screen(GameController controller, boolean guard) {
         this.controller = controller;
         this.guard = guard;
+        if(guard)
+            otherPlayer = new items.Player(20, 20, 0, 5, 3, 12, Color.green);
+        else
+            otherPlayer = new items.Player(20, 20, 0, 5, 3, 12, Color.blue);
         this.addKeyListener(this);
         setFocusable(true);
 
@@ -160,8 +164,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         double dx = otherPos[0] - otherPlayer.getX();
         double dy = otherPos[1] - otherPlayer.getY();
         double dz = otherPos[0] - otherPlayer.getZ();
+        dz = 0;
 
-        otherPlayer.updatePosition(dx, dy, dz-5);
+        otherPlayer.updatePosition(dx, dy, dz);
         return otherPlayer.getPolygons();
     }
 

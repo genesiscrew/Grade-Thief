@@ -65,7 +65,6 @@ public class Room {
 
         MakeRoomTest m = new MakeRoomTest();
         m.createRoom(this, roomName);
-        roomObjects.add(new Player(20, 20, 0, 5, 3, 12, Color.green));
     }
 
     /**
