@@ -1,9 +1,10 @@
 package gui;
 
-import game.floor.Location;
 import game.floor.TileMap;
 import items.Door;
+import items.Item;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,38 +12,40 @@ import java.util.List;
  * @Author Adam Wareing
  */
 public class Room {
-    // a room should be laid out in a grid
-    //Tile[][] roomTileMap; // this contains the arrangement of the room
-    private TileMap roomTileMap;
     private Door door;
     private int sx = -1;
     private int sy = -1;
     private int w = -1;
     private int h = -1;
-    List<Location> doorLocations = new ArrayList<Location>();
+
+    private List<Door> doors = new ArrayList<>();
 
     /**
      * This is all the individual polygons that will be drawn
      */
-    List<Polygon> polygons = new ArrayList<>();
+    private List<Polygon> polygons = new ArrayList<>();
 
     /**
      * The polygons floorPolygons
      */
-    List<Polygon> floorPolygons;
+    private List<Polygon> floorPolygons;
 
     /**
      * The roomObjects in the room
      */
-    ArrayList<Drawable> roomObjects = new ArrayList<>();
+    private ArrayList<Item> roomObjects = new ArrayList<>();
 
     /**
      * The Walls in the room
      */
-    List<Drawable> walls = new ArrayList<>();
+    private List<Item> walls = new ArrayList<>();
 
     Floor floor = new Floor(0, 0, 10, 10);
-    TileMap tileMap = null;
+
+    Color floorColor = new Color(0,0,0);
+    TileMap tileMap;
+
+
     /**
      * The padding on the inside of the wall. It stops the player from getting too close and preventing
      * the graphics to not draw
@@ -58,17 +61,15 @@ public class Room {
         this.floorPolygons = floor.generateMap();
         this.polygons = new ArrayList<>();
 
-        // Added by Stefan
         this.setTileMap(System.getProperty("user.dir") + "/src/game/floor/" + roomName);
 
         System.out.println("" + tileMap.getItems());
         tileMap.populateRoom(this, tileMap.getItems(), null);
 
-
         floor = new Floor(0, 0, tileMap.getMapWidth(), tileMap.getMapHeight());
         this.floorPolygons = floor.generateMap();
         this.walls = floor.parseWalls(this.tileMap.getTileMap());
-
+        this.doors = floor.parseDoors(this.tileMap.getTileMap());
     }
 
     /**
@@ -101,10 +102,20 @@ public class Room {
      * @return True if the player is moving into an object, false otherwise.
      */
     public boolean movingIntoAnObject(double x, double y, double z) {
-        for (Drawable o : roomObjects) {
-            if (o.containsPoint((int) x, (int) y, (int) z)) {
+        if(isPointInAnyObjects(x,y,z, doors))
+            return true;
+        if(isPointInAnyObjects(x,y,z,walls))
+            return true;
+        if(isPointInAnyObjects(x,y,z, roomObjects))
+            return true;
+
+        return false;
+    }
+
+    private boolean isPointInAnyObjects(double x, double y, double z, List<? extends Item> objects){
+        for (Drawable o : objects) {
+            if (o.containsPoint((int) x, (int) y, (int) z))
                 return true;
-            }
         }
         return false;
     }
@@ -116,11 +127,11 @@ public class Room {
         this.tileMap = t.createTileMap(f);
     }
 
-    public ArrayList<Drawable> getRoomObjects() {
+    public ArrayList<Item> getRoomObjects() {
         return roomObjects;
     }
 
-    public void setRoomObjects(ArrayList<Drawable> roomObjects) {
+    public void setRoomObjects(ArrayList<Item> roomObjects) {
         this.roomObjects = roomObjects;
     }
 
@@ -148,7 +159,7 @@ public class Room {
         this.floor = floor;
     }
 
-    public void addDrawableItems(Drawable drawableItems) {
+    public void addItemToRoom(Item drawableItems) {
         this.roomObjects.add(drawableItems);
     }
 
@@ -175,12 +186,8 @@ public class Room {
         this.h = h;
     }
 
-    public List<Location> getDoorLocations() {
-        return this.doorLocations;
-    }
-
-    public void addDoorLocation(Location loc) {
-        this.doorLocations.add(loc);
+    public List<Door> getDoors() {
+        return this.doors;
     }
 
     public int[] getBoundingBox() {
@@ -189,10 +196,6 @@ public class Room {
 
     public int roomGetCode() {
         return this.door.code;
-    }
-
-    public TileMap getRoomTileMap() {
-        return roomTileMap;
     }
 
     public Door getDoor() {
@@ -215,8 +218,7 @@ public class Room {
         return h;
     }
 
-
-    public List<Drawable> getWalls() {
+    public List<Item> getWalls() {
         return walls;
     }
 }

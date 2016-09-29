@@ -30,47 +30,6 @@ public abstract class Item extends GameObject implements Drawable {
         this.color = c;
     }
 
-    public String toString() {
-        return "I";
-    }
-    // Location location;
-
-    @Override
-    public void setRotAdd() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void updateDirection(double toX, double toY) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void updatePoly() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void removeCube() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public boolean containsPoint(int x, int y, int z) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public List<Polygon> getPolygons() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     @Override
     public boolean pointNearObject(int x, int y, int z) {
         return false;

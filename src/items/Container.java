@@ -1,5 +1,8 @@
 package items;
 
+import gui.*;
+import gui.Polygon;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,4 +104,33 @@ public class Container extends Item implements Interactable, Movable {
     }
 
 
+    @Override
+    public void updateDirection(double toX, double toY) {
+
+    }
+
+    @Override
+    public void updatePoly() {
+
+    }
+
+    @Override
+    public void setRotAdd() {
+
+    }
+
+    @Override
+    public void removeCube() {
+
+    }
+
+    @Override
+    public boolean containsPoint(int x, int y, int z) {
+        return false;
+    }
+
+    @Override
+    public List<Polygon> getPolygons() {
+        return null;
+    }
 }

@@ -9,8 +9,6 @@ import java.awt.*;
  */
 public class GameController {
 
-    private final int NUM_OF_PLAYERS = 2;
-
     // Players
     private Screen player;
     private Screen guard;

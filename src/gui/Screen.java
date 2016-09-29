@@ -31,11 +31,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     final int startX = 50;
     final int startY = 50;
-
     final int startZ = 10;
 
     // Used for keeping mouse in center
     Robot r;
+    private boolean jumping = false;
 
     /**
      * This is the co-ordinates of where the player is  (x, y, z)
@@ -130,9 +130,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         allPolygons.addAll(room.getFloorPolygons()); // floor tiles
         room.getWalls().forEach(o -> allPolygons.addAll(o.getPolygons())); // walls
         room.getRoomObjects().forEach(o -> allPolygons.addAll(o.getPolygons())); // room objects
-        //room.getDoorLocations().forEach(o -> allPolygons.addAll(o.getPolygons())); // door objects
+        room.getDoors().forEach(d -> { // doors
+            if(d.isDraw())
+                allPolygons.addAll(d.getPolygons());
+        });
         allPolygons.addAll(updateOtherPlayersPosition()); // other player
-
 
         // Updates each polygon for this camera position
         for (int i = 0; i < allPolygons.size(); i++)
@@ -391,6 +393,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             jump();
         if (e.getKeyCode() == KeyEvent.VK_R)
             loadMap();
+        if (e.getKeyCode() == KeyEvent.VK_U)
+            changeAllDoorState();
+
     }
 
     public void loadMap() {
@@ -402,7 +407,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             }
             room = room2;
         }
-        //  room = room2;
         else {
             System.out.println("room2");
             try {
@@ -411,7 +415,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             }
             room = room1;
         }
-        //room = room1;
+    }
+
+    private void changeAllDoorState(){
+        room.getDoors().forEach(d -> d.changeState());
     }
 
     /**
@@ -419,6 +426,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * updating the display throughout the jump.
      */
     public void jump() {
+        if(jumping)
+            return;
+        jumping = true;
         Thread jumpingThread = new Thread() {
             @Override
             public void run() {
@@ -438,6 +448,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
                         e.printStackTrace();
                     }
                 }
+                jumping = false;
             }
         };
         jumpingThread.start();

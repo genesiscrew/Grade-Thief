@@ -5,10 +5,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import game.floor.*;
 import game.floor.Room;
-import game.floor.Tile;
-import game.floor.TileMap;
-import game.floor.WallTile;
+import items.Door;
+import items.Item;
+import items.Wall;
 
 /**
  * @Author Adam Wareing
@@ -23,9 +24,10 @@ public class Floor {
 
     private double tileSize = 10;
     private final double WALL_HEIGHT = 20;
-    private final Color WALL_COLOR = new Color(79, 200, 255);
 
-    private Color tileColor = new Color(255, 208, 193);
+    private final Color WALL_COLOR = new Color(79, 200, 255);
+    private final Color TILE_COLOR = new Color(255, 208, 193);
+    private final Color DOOR_COLOR = new Color(0, 0, 193);
 
     /**
      * Make a new floor with the specified parameters
@@ -66,7 +68,7 @@ public class Floor {
                 polygonFloor.add(new Polygon(
                         new double[]{(tileSize * x) + xOffset, (tileSize * x) + xOffset, tileSize + (tileSize * x) + xOffset, xOffset + tileSize + (tileSize * x)},
                         new double[]{yOffset + (tileSize * y), yOffset + tileSize + (tileSize * y), yOffset + tileSize + (tileSize * y), yOffset + (tileSize * y)},
-                        new double[]{0, 0, 0, 0}, tileColor, false));
+                        new double[]{0, 0, 0, 0}, TILE_COLOR, false));
             }
         }
         return polygonFloor;
@@ -75,18 +77,35 @@ public class Floor {
     /**
      *
      */
-    public List<Drawable> parseWalls(Tile[][] tileMap) {
-        List<Drawable> walls = new ArrayList<>();
+    public List<Item> parseWalls(Tile[][] tileMap) {
+        List<Item> walls = new ArrayList<>();
 
         for (int x = 0; x < tileMap.length; x++) {
             for (int y = 0; y < tileMap[x].length; y++) {
                 if (tileMap[x][y] instanceof WallTile) {
-                    Cube wall = new Cube(x * tileSize, y * tileSize, 0, tileSize, tileSize, WALL_HEIGHT, WALL_COLOR);
+                    Wall wall = new Wall(0, "", x * tileSize, y * tileSize, 0, tileSize, tileSize, WALL_HEIGHT, WALL_COLOR);
                     walls.add(wall);
                 }
             }
         }
         return walls;
+    }
+
+    /**
+     *
+     */
+    public List<Door> parseDoors(Tile[][] tileMap) {
+        List<Door> doors = new ArrayList<>();
+
+        for (int x = 0; x < tileMap.length; x++) {
+            for (int y = 0; y < tileMap[x].length; y++) {
+                if (tileMap[x][y] instanceof DoorTile) {
+                    Door door = new Door(0, "", x * tileSize, y * tileSize, 0, tileSize, tileSize, WALL_HEIGHT, DOOR_COLOR);
+                    doors.add(door);
+                }
+            }
+        }
+        return doors;
     }
 
 

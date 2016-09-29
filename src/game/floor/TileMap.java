@@ -2,24 +2,14 @@ package game.floor;
 
 import java.awt.Color;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import javax.swing.plaf.synth.SynthSpinnerUI;
-
-import gui.*;
 import items.Container;
 import items.Door;
-import items.Item;
 import items.KeyDraw;
 import items.Keys;
 
@@ -127,8 +117,6 @@ public class TileMap {
 		//System.out.println("ti" + Tiles);
 		Tiles = Tiles.substring(Tiles.indexOf('.') + 2); // concatenate dimensions now that they are loaded
 		int count = 0;
-	//	System.out.println("should print tiles");
-//System.out.println(Tiles + " ?");
 
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width+1; x++){
@@ -145,8 +133,8 @@ public class TileMap {
 					EmptyTile e = new EmptyTile();
 					e.setLocation(loc);
 					tileMap.TileMap[x][y] = e;
-
 				}
+
 				// added for the level
 				if ( c == 'r') {
 					RoomTile r = new RoomTile();
@@ -214,11 +202,10 @@ public class TileMap {
 					int doorID = sc.nextInt();
 
 					DoorTile DT = (DoorTile) tile;
-					Door D = new Door(id, type, doorID, room);
+					Door D = new Door(id, type, 10*x, 10*y, z, w, h, l, new Color(red, green, blue));
 					DT.setDoor(D);
 					tileMap.setTile(x, y, DT);
-					room.addDrawableItems(new DoorDraw(id, type, 10*x, 10*y, z, w, h, l, new Color(red, green, blue), D));
-					System.out.println(DT.getDoor().getRoom().toString() + " ========================= ");
+					room.addItemToRoom(new DoorDraw(id, type, 10*x, 10*y, z, w, h, l, new Color(red, green, blue), D));
 
 
 				}
@@ -321,7 +308,7 @@ public class TileMap {
 				//		System.out.println("e occupied" + E.isOccupied);
 						tileMap.setTile(x, y, E);
 
-						room.addDrawableItems(new KeyDraw(id,type,10*x, 10*y, z, w, h, l, new Color(red, green, blue)));
+						room.addItemToRoom(new KeyDraw(id,type,10*x, 10*y, z, w, h, l, new Color(red, green, blue)));
 					}
 
 				}

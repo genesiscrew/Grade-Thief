@@ -17,70 +17,64 @@ import model.Game;
 
 public class MovePlayerinFloor {
 
-	public static void main(String[] args) throws IOException {
-		// create new game object
-		Game game = null;
-		try {
-			game = new Game();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    public static void main(String[] args) throws IOException {
+        // create new game object
+        Game game = null;
+        try {
+            game = new Game();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
 
-		Player p = new Player(0000, "Stefan", game, 0);
-		p.setCharacterLocation(19,27);
-		Location pL = p.getCharacterLocation();
-		gui.Room room = createRoom();
-		EmptyTile tile =  (EmptyTile) room.getTileMap().getTileMap()[pL.row()][pL.column()];
-		tile.addObjectToTile(p);
+        Player p = new Player(0000, "Stefan", game, 0);
+        p.setCharacterLocation(19, 27);
+        Location pL = p.getCharacterLocation();
+        gui.Room room = createRoom();
+        EmptyTile tile = (EmptyTile) room.getTileMap().getTileMap()[pL.row()][pL.column()];
+        tile.addObjectToTile(p);
 
 
+    }
 
-
-
-
-
-	}
-
-	static private gui.Room createRoom() throws IOException {
-		// TODO Auto-generated method stub
-		List<gui.Room> floorRooms = new ArrayList<gui.Room>();
+    static private gui.Room createRoom() throws IOException {
+        // TODO Auto-generated method stub
+        List<gui.Room> floorRooms = new ArrayList<gui.Room>();
         Game game = new Game();
-		int nextX = 0;
-		int nextY = 0;
-		final int ADJACENT = 1; // adjacent rooms, add extra wall
+        int nextX = 0;
+        int nextY = 0;
+        final int ADJACENT = 1; // adjacent rooms, add extra wall
 
-		Door d = new Door(0000, "0001",0, null);
+        //Door d = new Door(0000, "0001",0, null);
 
-		String co237 = System.getProperty("user.dir") + "/src/game/floor/level";
-
-
-
-		gui.Room room_co237 = new gui.Room("level", 0, 0 );
-
-		Door door_co237 = new Door(0000, "237",0,room_co237);
-
-		floorRooms.add(room_co237);
+        String co237 = System.getProperty("user.dir") + "/src/game/floor/level";
 
 
-		TileMap tileMap = room_co237.getTileMap();
+        gui.Room room_co237 = new gui.Room("level", 0, 0);
+
+        //Door door_co237 = new Door(0000, "237",0,room_co237);
+
+        floorRooms.add(room_co237);
 
 
-		int mapWidth = tileMap.getMapWidth();
-		int mapHeight = tileMap.getMapHeight();
-String s = "";
+        TileMap tileMap = room_co237.getTileMap();
 
-		for (int y = 0; y < mapHeight; y++) {
-			for (int x = 0; x < mapWidth; x++) {
-				s = s + tileMap.getTileMap()[x][y].getName();
-			}
-			s = s + "\n";
-		}
-System.out.println(s);
 
-	return room_co237;
-		}
+        int mapWidth = tileMap.getMapWidth();
+        int mapHeight = tileMap.getMapHeight();
+        String s = "";
+
+        for (int y = 0; y < mapHeight; y++) {
+            for (int x = 0; x < mapWidth; x++) {
+                s = s + tileMap.getTileMap()[x][y].getName();
+            }
+            s = s + "\n";
+        }
+        System.out.println(s);
+
+        return room_co237;
+    }
 
 
 //	public static Room createRoom() throws IOException{
@@ -125,28 +119,30 @@ System.out.println(s);
 //		return r;
 //
 //	}
-	/**
-	 * draws the room tilemap into console
-	 * @param tileMap
-	 */
-	public static void drawRoom(TileMap tileMap){
-		String s = "";
-		for (int y = 0 ; y < tileMap.getMapHeight(); y++ ) {
-			for (int x = 0 ; x < tileMap.getMapWidth() ; x++) {
-				Tile t = tileMap.getTileMap()[x][y];
-				if (t != null) {
-					if (tileMap.getTileMap()[x][y].occupied())
-						s = s  + (tileMap.getTileMap()[x][y].getObjectonTile().toString());
-					else
-						s = s + (tileMap.getTileMap()[x][y].getName());
 
-				}
+    /**
+     * draws the room tilemap into console
+     *
+     * @param tileMap
+     */
+    public static void drawRoom(TileMap tileMap) {
+        String s = "";
+        for (int y = 0; y < tileMap.getMapHeight(); y++) {
+            for (int x = 0; x < tileMap.getMapWidth(); x++) {
+                Tile t = tileMap.getTileMap()[x][y];
+                if (t != null) {
+                    if (tileMap.getTileMap()[x][y].occupied())
+                        s = s + (tileMap.getTileMap()[x][y].getObjectonTile().toString());
+                    else
+                        s = s + (tileMap.getTileMap()[x][y].getName());
 
-			}
-			s = s + "\n";
-		}
-		System.out.println(s);
+                }
 
-	}
+            }
+            s = s + "\n";
+        }
+        System.out.println(s);
+
+    }
 
 }
