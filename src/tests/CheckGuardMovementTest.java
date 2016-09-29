@@ -67,7 +67,7 @@ public class CheckGuardMovementTest {
 		final int ADJACENT = 1; // adjacent rooms, add extra wall
 
 		Door d = new Door(0000, "0001", 0);
-		Room r = new Room(null, d);
+		gui.Room r = new Room(null, d);
 
 		String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
 		String co238 = System.getProperty("user.dir") + "/src/game/floor/co238";

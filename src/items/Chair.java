@@ -2,7 +2,7 @@ package items;
 
 import gui.Cube;
 import gui.Drawable;
-import gui.ThreeDPolygon;
+import gui.Polygon;
 
 import java.awt.*;
 import java.util.*;
@@ -71,14 +71,18 @@ public class Chair implements Drawable{
         cubes.forEach(i -> i.removeCube());
     }
 
+    public void updateDirection(){
+        cubes.forEach(i -> i.updateDirection(60,60));
+    }
+
     @Override
     public boolean containsPoint(int x, int y, int z){
         return (this.x + this.width) > x && (this.y + this.length) > y && this.x < x && this.y < y ;
     }
 
     @Override
-    public java.util.List<ThreeDPolygon> getPolygons() {
-        java.util.List<ThreeDPolygon> allPolys = new ArrayList<>();
+    public java.util.List<Polygon> getPolygons() {
+        java.util.List<Polygon> allPolys = new ArrayList<>();
         // Add all the cubes cubes
         cubes.forEach(c -> allPolys.addAll(c.getPolygons()));
         return allPolys;

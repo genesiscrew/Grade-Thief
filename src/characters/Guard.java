@@ -18,7 +18,7 @@ import items.Distance;
 import items.GameObject;
 import model.Game;
 
-public class Guard extends Character {
+public class Guard extends Character{
 
 	Direction.Dir dir;
 	ArrayList<Direction.Dir> directionList;

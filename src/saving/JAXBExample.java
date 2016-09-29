@@ -1,5 +1,7 @@
 package saving;
 
+import characters.Player;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -16,10 +18,10 @@ public class JAXBExample {
 
 		for (int i = 0; i < 100; i++) {
 
-			Player customer = new Player();
-			customer.setId(i);
-			customer.setName("Mansour");
-			customer.setAge(21);
+			Player customer = new Player(0,null,null,0);
+//			customer.setId(i);
+//			customer.setName("Mansour");
+//			customer.setAge(21);
 			sample.add(customer);
 		}
 

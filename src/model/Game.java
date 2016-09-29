@@ -62,6 +62,7 @@ public class Game {
 		panel.add(console);
 		display.add(panel);
 		display.setSize(500, 600);
+		
 	}
 
 	public Floor getFloor(int floorNo) {

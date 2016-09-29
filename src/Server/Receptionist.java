@@ -56,7 +56,7 @@ public class Receptionist extends Thread {
             socket.close();
         } catch (IOException e) {
             System.err.println("Player " + uid + " disconnected.");
-            game.disconnectPlayer(uid);
+            //game.disconnectPlayer(uid);
         }
     }
 

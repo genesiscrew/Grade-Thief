@@ -9,12 +9,12 @@ import java.util.List;
  *
  */
 public class Floor {
-	private List<Room> rooms;
+	private List<gui.Room> rooms;
 	private List<Camera> cameras;
 	private FloorMap floorMap;
 
 
-	public Floor(List<Room> rooms, List<Camera> cameras, FloorMap floorMap) {
+	public Floor(List<gui.Room> rooms, List<Camera> cameras, FloorMap floorMap) {
 		this.rooms = rooms;
 		this.cameras = cameras;
 		this.floorMap = floorMap;
@@ -54,7 +54,7 @@ public class Floor {
 	public FloorMap getFloorMap() {
 		return this.floorMap;
 	}
-	public void addRoom(Room r, int sx, int sy, int w, int h, List<Location> doorLocations) {
+	public void addRoom(gui.Room room, int sx, int sy, int w, int h, List<Location> doorLocations) {
 		// here we need to add the room on the floormap at sx, sy, spanning across and up w,h
 		// only walls and doors are added to the floor. Nothing inside the room is relevant.
 
@@ -131,7 +131,7 @@ public class Floor {
 	WDDWWWWWWWWWWWWWWWWWWWWWWWWWWWWDDWWEEEEE
 	EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 	 */
-	public List<Room> getFloorRooms() {
+	public List<gui.Room> getFloorRooms() {
 		return this.rooms;
 	}
 

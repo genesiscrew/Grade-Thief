@@ -1,10 +1,10 @@
 package items;
 
-import gui.Cube;
-import gui.Drawable;
-import gui.ThreeDPolygon;
+import gui.*;
+
 
 import java.awt.*;
+import java.awt.Polygon;
 import java.util.*;
 import java.util.List;
 
@@ -79,8 +79,8 @@ public class Marker implements Drawable {
 	    }
 
 	    @Override
-	    public List<ThreeDPolygon> getPolygons() {
-	        List<ThreeDPolygon> allPolys = new ArrayList<>();
+	    public List<gui.Polygon> getPolygons() {
+	        List<gui.Polygon> allPolys = new ArrayList<>();
 	        // Add all the cubes polygons
 	        cubes.forEach(c -> allPolys.addAll(c.getPolygons()));
 	        return allPolys;

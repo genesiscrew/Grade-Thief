@@ -32,14 +32,14 @@ public class MakeFloorTest {
 		// this will delegate the work to TileMap.java
 
 
-		List<Room> floorRooms = new ArrayList<Room>();
+		List<gui.Room> floorRooms = new ArrayList<gui.Room>();
 
 		int nextX = 0;
 		int nextY = 0;
 		final int ADJACENT = 1; // adjacent rooms, add extra wall
 
 		Door d = new Door(0000, "0001",0);
-		Room r = new Room(null, d);
+		gui.Room r = new gui.Room("co237");
 
 		String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
 		String co238 = System.getProperty("user.dir") + "/src/game/floor/co238";
@@ -49,13 +49,13 @@ public class MakeFloorTest {
 		Door door_co238 = new Door(0000, "238",0);
 		Door door_co243 = new Door(0000, "243",0);
 
-		Room room_co237 = new Room(null, door_co237);
-		Room room_co238 = new Room(null, door_co238);
-		Room room_co243 = new Room(null, door_co243);
-
-		room_co237.setTileMap(co237);
-		room_co238.setTileMap(co238);
-		room_co243.setTileMap(co243);
+		gui.Room room_co237 = new gui.Room("co237");
+		gui.Room room_co238 = new gui.Room("co238");
+		gui.Room room_co243 = new gui.Room("co243");
+//
+//		room_co237.setTileMap(co237);
+//		room_co238.setTileMap(co238);
+//		room_co243.setTileMap(co243);
 
 		floorRooms.add(room_co237);
 		floorRooms.add(room_co238);
@@ -67,6 +67,10 @@ public class MakeFloorTest {
 		Floor floor = new Floor(floorRooms, null, floorMap);
 
 		TileMap tileMap = room_co238.getRoomTileMap();
+		System.out.println("sisssssssssssssssssssssss");
+
+		
+
 		int mapWidth = tileMap.getMapWidth();
 		int mapHeight = tileMap.getMapHeight();
 
@@ -91,7 +95,7 @@ public class MakeFloorTest {
 
 		room_co243.setBoundingBox(0, nextY, mapWidth, mapHeight);
 
-		for (Room room : floorRooms) {
+		for (gui.Room room : floorRooms) {
 
 			int[] bounds = room.getBoundingBox();
 			//System.out.println(room.getBoundingBox().toString());

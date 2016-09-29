@@ -1,9 +1,11 @@
 package gui;
 
+
+
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.FileInputStream;
 import java.io.IOException;
-
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
@@ -12,7 +14,6 @@ import javax.swing.JTextField;
  */
 public class Main {
     static Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    static JTextField TF;
 
     public static void main(String[] args) throws IOException {
         Main main = new Main();
