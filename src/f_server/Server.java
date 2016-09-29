@@ -3,12 +3,9 @@ package f_server;
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 
 import gui.GameController;
-import model.Game;
 
 public class Server extends JFrame{
 
@@ -18,8 +15,8 @@ public class Server extends JFrame{
 	private Socket connection;
 	private PrintStream p;
 	private Scanner sc;
-	private GameController g;
-	private GameController g1;
+	private GameController guard;
+	private GameController player;
 	private Scanner getInput = new Scanner(System.in);
 
 
@@ -81,7 +78,7 @@ public class Server extends JFrame{
 		while (true) {
 			try {
 				sendData();
-				recieveData();
+				receiveData();
 			} catch (IOException e) {
 
 			}
@@ -118,20 +115,25 @@ public class Server extends JFrame{
 	private void sendData() throws IOException{
 		//Send updated board to the Clients
 		//The loop is true for now
-		double []guard = g.getOtherPlayersPosition(true);
+		double []guard = this.guard.getOtherPlayersPosition(true);
 		output.writeObject(guard);
 		output.flush();
-		double []player = g.getOtherPlayersPosition(false);
+
+		double []player = this.player.getOtherPlayersPosition(false);
 		output.writeObject(player);
 		output.flush();
 
 	}
 	//Recieve data from Clients
-	private void recieveData() throws IOException{
+	private void receiveData() throws IOException{
 		//Recieve the coordinates of the client and update the board.
 		try {
-			double []updatedGuard = (double []) input.readObject();
-			double []updatedplayer = (double []) input.readObject();
+			double[] updatedGuard = (double []) input.readObject();
+			this.guard.updatePosition(true, updatedGuard);
+			double[] updatedPlayer = (double []) input.readObject();
+			this.player.updatePosition(false, updatedPlayer);
+
+
 		}catch (ClassNotFoundException e){
 			e.printStackTrace();
 		}
