@@ -10,7 +10,6 @@ public class Door extends Item {
     public int code;
     private String itemType = "Door";
     private Cube cube;
-    private boolean draw; // false when the door is open, true when closed
 
     public Door(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
         super(itemID, itemType, x, y, z, width, length, height, c);
@@ -50,7 +49,7 @@ public class Door extends Item {
 
     @Override
     public boolean containsPoint(int x, int y, int z) {
-        return false;
+        return (this.x + this.width) > x && (this.y + this.length) > y && this.x < x && this.y < y;
     }
 
     @Override

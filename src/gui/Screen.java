@@ -1,12 +1,8 @@
 package gui;
 
-import java.awt.AWTException;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Robot;
-import java.awt.Toolkit;
+import items.Item;
+
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -16,9 +12,10 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class Screen extends JPanel implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 
@@ -35,6 +32,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     // Used for keeping mouse in center
     Robot r;
+    static Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private boolean jumping = false;
 
     /**
@@ -78,6 +76,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     private GameController controller;
     private boolean guard;
     private items.Player otherPlayer;
+    private String messageToDisplay = "";
 
     /**
      * Create a new screen
@@ -156,6 +155,14 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
         // FPS display
         g.drawString("FPS: " + (int) drawFPS + " (Benchmark)", 40, 40);
+
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        messageToDisplay = "";
+        isPlayerNearObject();
+        if(!messageToDisplay.equals("")){
+            g.drawString(messageToDisplay, (int) ScreenSize.getWidth()/2 -120, (int) ScreenSize.getHeight()/2 - 50);
+        }
+
         sleepAndRefresh();
     }
 
@@ -395,7 +402,28 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             loadMap();
         if (e.getKeyCode() == KeyEvent.VK_U)
             changeAllDoorState();
+        if(e.getKeyCode() == KeyEvent.VK_E)
+            playerWantingToInteractWithItem();
 
+    }
+
+    private void playerWantingToInteractWithItem() {
+        for(Item i : room.getRoomObjects()){
+            if(i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])){
+                showOptionPane(null);
+                i.performAction(Item.Interaction.OPEN);
+            }
+
+        }
+
+        for(Item i : room.getDoors()){
+            if(i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])){
+                showOptionPane(null);
+                i.performAction(Item.Interaction.OPEN);
+
+
+            }
+        }
     }
 
     public void loadMap() {
@@ -421,12 +449,28 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         room.getDoors().forEach(d -> d.changeState());
     }
 
+
+    private void isPlayerNearObject(){
+
+        for(Item i : room.getRoomObjects()){
+            if(i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])){
+                messageToDisplay = "Press e To Interact With The Item";
+            }
+        }
+
+        for(Item i : room.getDoors()){
+            if(i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])){
+                messageToDisplay = "Press e To Open The Door";
+            }
+        }
+    }
+
     /**
      * This makes the player jump in the game. It uses a seperate thread to simulate the jumping so we can continue
      * updating the display throughout the jump.
      */
     public void jump() {
-        if(jumping)
+        if (jumping)
             return;
         jumping = true;
         Thread jumpingThread = new Thread() {
@@ -452,6 +496,16 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             }
         };
         jumpingThread.start();
+    }
+
+
+    private void showOptionPane(Item.Interaction optionsList){
+        String[] options = new String[Item.getAllInteractions().size()];
+        Item.getAllInteractions().toArray(options);
+        int n = JOptionPane.showOptionDialog(this, "What would you like to do?", "Select option", JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+
     }
 
     @Override
@@ -523,6 +577,4 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
                 zoom -= 25 * arg0.getUnitsToScroll();
         }
     }
-
-
 }

@@ -28,13 +28,17 @@ public class GameController {
      * Create a new game and launch in full screen
      */
     public Screen createNewGame(boolean guard) {
-        JFrame F = new JFrame();
+        JFrame frame = new JFrame();
+        frame.setTitle("Grade Thief");
         Screen screenObject = new Screen(this, guard);
-        F.add(screenObject);
-        F.setUndecorated(true);
-        F.setSize(ScreenSize);
-        F.setVisible(true);
-        F.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(screenObject);
+        JLabel onScreenText = new JLabel("This is some example text");
+        onScreenText.setFont(new Font("Courier New", Font.BOLD,12));
+        //frame.add(onScreenText, SwingConstants.CENTER);
+        frame.setUndecorated(true);
+        frame.setSize(ScreenSize);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         return screenObject;
     }
 
