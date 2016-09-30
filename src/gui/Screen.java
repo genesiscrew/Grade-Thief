@@ -24,10 +24,10 @@ import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class Screen extends JPanel implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
@@ -438,11 +438,29 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 	}
 
 	private void loadGame(int i) {
-		//TODO: Needs To load the Game
+		// TODO: Needs To load the Game
+		System.out.println(SelecFile());
 	}
 
 	private void saveGame() {
-		//TODO: Needs to Save the game
+		// TODO: Needs to Save the game
+		System.out.println(SelecFile());
+	}
+
+	private String SelecFile(){
+		JFileChooser fileChooser = new JFileChooser(".");
+		int status = fileChooser.showOpenDialog(null);
+
+		if (status == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = fileChooser.getSelectedFile();
+			//System.out.println(selectedFile);
+			return selectedFile.getParent() +"/" + selectedFile.getName();
+		} else if (status == JFileChooser.CANCEL_OPTION) {
+			System.out.println("canceled");
+		}
+
+		return "Cancelled";
+
 	}
 
 	private void Help() {
