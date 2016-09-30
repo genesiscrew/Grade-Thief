@@ -3,6 +3,8 @@ package gui;
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Robot;
@@ -25,6 +27,8 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 public class Screen extends JPanel implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 
@@ -411,28 +415,63 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 	public void gameOptionPane() {
 
 		// Custom button text
-		Object[] options = { "New Game", "Save", "Load", "Help", "Exit" };
+		Object[] options = { "Save", "Load", "Help", "About Us", "Exit" };
 		int n = JOptionPane.showOptionDialog(this, "Please select the prefer optin?", "Grade Thief",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
 
 		if (n == 0) {
-			restart();
+			saveGame();
 		}
 		if (n == 1) {
-
+			loadGame(0);
 		}
 		if (n == 2) {
-
+			Help();
 		}
 		if (n == 3) {
-			//Help: Instruction for playing game and rules
-			String rules = "Rules for Game is as follow : Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, ";
-			OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules);
+			AboutUs();
 		} else if (n == 4) {
 			System.exit(0);
 
 		}
 
+	}
+
+	private void loadGame(int i) {
+		//TODO: Needs To load the Game
+	}
+
+	private void saveGame() {
+		//TODO: Needs to Save the game
+	}
+
+	private void Help() {
+		// Help: Instruction for playing game and rules
+		String rules = "Rules for Game is as follow : Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, ";
+
+		JTextArea textArea = new JTextArea(rules, 6, 20);
+		textArea.setFont(new Font("Serif", Font.ITALIC, 16));
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+		textArea.setOpaque(false);
+		textArea.setEditable(false);
+		textArea.setSize(new Dimension(400, 500));
+		OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
+
+	}
+
+	private void AboutUs() {
+		// Help: Instruction for playing game and rules
+		String rules = "Grade Thief is a Software Engineering Group Project which leads by Victoria University of Wellington. Team members are: Adam Wareing, Hamid Osman, Stefan Vrecic, Mostafa Shenavaei, Mansour Javaher";
+
+		JTextArea textArea = new JTextArea(rules, 6, 20);
+		textArea.setFont(new Font("Serif", Font.BOLD, 16));
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+		textArea.setOpaque(false);
+		textArea.setEditable(false);
+		textArea.setSize(new Dimension(400, 500));
+		OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
 
 	}
 
