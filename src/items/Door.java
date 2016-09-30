@@ -49,6 +49,8 @@ public class Door extends Item {
 
     @Override
     public boolean containsPoint(int x, int y, int z) {
+        if(!draw)
+            return false;
         return (this.x + this.width) > x && (this.y + this.length) > y && this.x < x && this.y < y;
     }
 
