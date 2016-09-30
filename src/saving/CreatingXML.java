@@ -21,35 +21,44 @@ public class CreatingXML {
          DocumentBuilder dBuilder =
             dbFactory.newDocumentBuilder();
          Document doc = dBuilder.newDocument();
+
          // root element
-         Element rootElement = doc.createElement("cars");
+         Element rootElement = doc.createElement("Players");
          doc.appendChild(rootElement);
 
-         //  supercars element
-         Element supercar = doc.createElement("supercars");
-         rootElement.appendChild(supercar);
+         //  Player element
+         Element player = doc.createElement("Player");
+         rootElement.appendChild(player);
 
          // setting attribute to element
-         Attr attr = doc.createAttribute("company");
-         attr.setValue("Ferrari");
-         supercar.setAttributeNode(attr);
+         Attr attrFloor = doc.createAttribute("Floor");
+         attrFloor.setValue("1");
+         player.setAttributeNode(attrFloor);
 
-         // carname element
-         Element carname = doc.createElement("carname");
-         Attr attrType = doc.createAttribute("type");
-         attrType.setValue("formula one");
-         carname.setAttributeNode(attrType);
-         carname.appendChild(
-         doc.createTextNode("Ferrari 101"));
-         supercar.appendChild(carname);
+         Attr charachterName = doc.createAttribute("CharachterName");
+         charachterName.setValue("Mansour");
+         player.setAttributeNode(charachterName);
 
-         Element carname1 = doc.createElement("carname");
-         Attr attrType1 = doc.createAttribute("type");
-         attrType1.setValue("sports");
-         carname1.setAttributeNode(attrType1);
-         carname1.appendChild(
-         doc.createTextNode("Ferrari 202"));
-         supercar.appendChild(carname1);
+         Attr charachterID = doc.createAttribute("CharachterID");
+         charachterID.setValue("100");
+         player.setAttributeNode(charachterID);
+
+         // Location element
+         Element location = doc.createElement("Location");
+
+         Attr xAxis = doc.createAttribute("X");
+         xAxis.setValue("50");
+         location.setAttributeNode(xAxis);
+
+         Attr yAxis = doc.createAttribute("Y");
+         yAxis.setValue("0");
+         location.setAttributeNode(yAxis);
+
+
+         location.appendChild(
+         doc.createTextNode("Message"));
+         player.appendChild(location);
+
 
          // write the content into xml file
          TransformerFactory transformerFactory =
