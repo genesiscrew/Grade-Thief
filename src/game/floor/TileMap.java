@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 import items.Chair;
 import items.Container;
+import items.Dog;
 import items.Door;
 import items.Item;
 import items.KeyDraw;
@@ -310,6 +311,10 @@ public class TileMap {
 
 						case "Chair":
 							drawItem = new Chair(id,type,10*x, 10*y, z, w, h, l, new Color(red, green, blue));
+							break;
+
+						case "Dog":
+							drawItem = new Dog(id,type,10*x, 10*y, z, w, h, l, new Color(red, green, blue));
 							break;
 						}
 						System.out.println("==================================");

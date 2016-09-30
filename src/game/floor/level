@@ -55,10 +55,8 @@ wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 *
 11 6 14 0 5 5 5 0 0 0 item55 I KeyDraw
 11 7 14 0 5 5 5 255 255 0 item55 I Table
-11 8 14 0 5 5 5 255 0 255 item55 I Chair
+11 8 14 0 5 5 5 255 0 255 item55 I Dog
 11 9 14 0 5 5 5 255 0 0 item55 I MetalSheet
 12 17 11 0 0 0 0 255 0 0 door2381 D 238
-12 18 11 0 0 0 0 255 0 0 door2382 D 238
-12 38 11 0 0 0 0 255 0 0 door2381 D 237
 12 39 11 0 0 0 0 255 0 0 door2382 D 237
 .

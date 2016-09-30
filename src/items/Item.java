@@ -70,7 +70,7 @@ public abstract class Item extends GameObject implements Drawable {
     public enum Interaction {
         OPEN,
         UNLOCK,
-        PICK_UP
+        PICK_UP, HACK,
     }
 
     public static List<String> getAllInteractions(){
