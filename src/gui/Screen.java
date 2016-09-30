@@ -12,7 +12,6 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.*;
@@ -408,21 +407,20 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
     private void playerWantingToInteractWithItem() {
-    	
+
         for(Item i : room.getRoomObjects()){
-            if(i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])){            	
-                showOptionPane(null);
-                i.performAction(Item.Interaction.OPEN);
+
+            if(i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])){
+                int n = showOptionPane(i.getInteractionsAvaliable());
+                i.performAction(i.getInteractionsAvaliable().get(n));
             }
 
         }
 
         for(Item i : room.getDoors()){
             if(i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])){
-                showOptionPane(null);
-                i.performAction(Item.Interaction.OPEN);
-
-
+                int n = showOptionPane(i.getInteractionsAvaliable());
+                i.performAction(i.getInteractionsAvaliable().get(n));
             }
         }
     }
@@ -500,13 +498,16 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
 
-    private void showOptionPane(Item.Interaction optionsList){
-        String[] options = new String[Item.getAllInteractions().size()];
-        Item.getAllInteractions().toArray(options);
+    private int showOptionPane(List<Item.Interaction> optionsList){
+        String[] options = new String[optionsList.size()];
+        for(int i=0; i < optionsList.size(); i++){
+            options[i] = optionsList.get(i).toString();
+        }
+
         int n = JOptionPane.showOptionDialog(this, "What would you like to do?", "Select option", JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 
-
+        return n;
     }
 
     @Override
