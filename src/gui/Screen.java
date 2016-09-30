@@ -418,7 +418,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
         for(Item i : room.getDoors()){
             if(i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])){
-                showOptionPane(i.get);
+                showOptionPane(null);
                 i.performAction(Item.Interaction.OPEN);
 
 
