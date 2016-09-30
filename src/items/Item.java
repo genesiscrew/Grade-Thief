@@ -14,7 +14,6 @@ public abstract class Item extends GameObject implements Drawable {
 
     public final double DETECT_PLAYER_BOUNDARY = 20;
 
-    List<String> options; // items that are interactable may have a list of options to choose from
     public int itemID;
     protected double x;
     protected double y;
@@ -40,7 +39,8 @@ public abstract class Item extends GameObject implements Drawable {
 
     public void addInteractions() {
         interactionsAvaliable = new ArrayList<>();
-        interactionsAvaliable.add(Interaction.PICK_UP);
+        interactionsAvaliable.add(Interaction.OPEN);
+        interactionsAvaliable.add(Interaction.CLOSE);
     }
 
     public boolean pointNearObject(double x, double y, double z) {
@@ -60,25 +60,20 @@ public abstract class Item extends GameObject implements Drawable {
             case OPEN:
                 draw = false;
                 break;
+            case CLOSE:
+                draw = true;
+                break;
         }
     }
 
-
-
     // Model file
-
     public enum Interaction {
         OPEN,
         UNLOCK,
-        PICK_UP
+        CLOSE, PICK_UP
     }
 
-    public static List<String> getAllInteractions(){
-        List<String> interactions = new ArrayList<>();
-        for(Interaction i : Interaction.values()){
-            interactions.add(i.toString());
-        }
-        return interactions;
+    public List<Interaction> getInteractionsAvaliable() {
+        return interactionsAvaliable;
     }
-
 }
