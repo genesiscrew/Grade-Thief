@@ -98,11 +98,6 @@ public class Player implements Drawable {
         return allPolys;
     }
 
-    @Override
-    public boolean pointNearObject(int x, int y, int z) {
-        return false;
-    }
-
     public double getZ() {
         return z;
     }
