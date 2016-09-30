@@ -34,8 +34,8 @@ public class Client {
     private PrintStream p;
     private Scanner sc;
 
-    private GameController g;
-    private GameController g1;
+    private GameController player1;
+    private GameController guard1= new GameController(true);
     private Scanner getInput = new Scanner(System.in);
 
     // Constructor
@@ -133,25 +133,33 @@ public class Client {
     private void sendData() throws IOException {
         // After each movement it send the coordinates of the client to the
         // Server
-        double []guard = g.getOtherPlayersPosition(true);
+        double []guard = guard1.getOtherPlayersPosition(true);
         output.writeObject(guard);
+       /* p = new PrintStream(connection.getOutputStream());
+
+        p.println(guard[1]);*/
         output.flush();
-        double []player = g.getOtherPlayersPosition(false);
-        output.writeObject(player);
-        output.flush();
+        //double []player = player1.getOtherPlayersPosition(false);
+        //output.writeObject(player);
+        //output.flush();
     }
 
     // recieve data from server
     private void receievData() throws IOException {
         // Server will send the updated board to the client
         try {
-            double []updatedGuard = (double []) input.readObject();
+            /*double []updatedGuard = (double []) input.readObject();
+            this.guard1.updatePosition(true, updatedGuard);*/
             double []updatedplayer = (double []) input.readObject();
+            this.player1.updatePosition(false, updatedplayer);
+
         }catch (ClassNotFoundException e){
             e.printStackTrace();
         }
 
     }
+
+
 
 }
 

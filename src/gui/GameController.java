@@ -11,7 +11,7 @@ public class GameController {
 
     // Players
     private Screen player;
-
+    //private Screen guard;
     // Position is stored using x, y, z
     private double[] playerPosition = new double[]{15, 5, 10};
     private double[] guardPosition = new double[]{100, 100, 10};
@@ -21,7 +21,9 @@ public class GameController {
 
     public GameController(boolean isGuard) {
         this.isGuard = isGuard;
-        player = createNewGame(false);
+        player = createNewGame(isGuard);
+        //guard = createNewGame(!isGuard);
+
     }
 
     /**
