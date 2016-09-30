@@ -5,7 +5,7 @@ import items.Direction;
 import items.Distance;
 import items.GameObject;
 
-public class LectureBot extends Character {
+public class LectureBot extends Character{
 
 	Location characterLocation;
 
@@ -19,7 +19,7 @@ public class LectureBot extends Character {
 	}
 
 	public void setCharacterLocation(int x, int y) {
-		super.setCharacterLocation(x, y);
+		super.setCharacterLocation(x,y);
 	}
 
 	public void moveBot(Direction dir, Distance d) { // change paramenters?
@@ -29,6 +29,7 @@ public class LectureBot extends Character {
 		// move to XYZ
 		// repeat etc.
 	}
+
 
 	public void move(Direction dir, Distance d) {
 		// TODO Auto-generated method stub
@@ -46,5 +47,7 @@ public class LectureBot extends Character {
 		// TODO Auto-generated method stub
 
 	}
+
+
 
 }

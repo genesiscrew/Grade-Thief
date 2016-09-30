@@ -37,9 +37,9 @@ public class Camera {
 	public Boolean checkforIntruder(Game game) {
 		if (dir.getDirection().equals(Dir.EAST)) {
 			for (int i = 0; i < 6; i++) {
-				if (game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCameraLocation().row() + i][this.getCameraLocation().column()] instanceof EmptyTile
-						&& game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCameraLocation().row() + i][this.getCameraLocation().column()].occupied()
-						&&  ((EmptyTile)game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCameraLocation().row() + i][this.getCameraLocation().column()]).getObjectonTile() instanceof Player) {
+				if (game.getRoom(floorNo).getTileMap().getTileMap()[this.getCameraLocation().row() + i][this.getCameraLocation().column()] instanceof EmptyTile
+						&& game.getRoom(floorNo).getTileMap().getTileMap()[this.getCameraLocation().row() + i][this.getCameraLocation().column()].occupied()
+						&&  ((EmptyTile)game.getRoom(floorNo).getTileMap().getTileMap()[this.getCameraLocation().row() + i][this.getCameraLocation().column()]).getObjectonTile() instanceof Player) {
 					System.out.println("we have found an intruder");
 					return true;
 
@@ -49,9 +49,9 @@ public class Camera {
 		} else if (dir.getDirection().equals(Dir.WEST)) {
 			for (int i = 0; i < 6; i++) {
 
-				if (game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCameraLocation().row() - i][this.getCameraLocation().column()] instanceof EmptyTile
-						&& game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCameraLocation().row() - i][this.getCameraLocation().column()].occupied()
-						&& ((EmptyTile)game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCameraLocation().row() - i][this.getCameraLocation().column()]).getObjectonTile() instanceof Player) {
+				if (game.getRoom(floorNo).getTileMap().getTileMap()[this.getCameraLocation().row() - i][this.getCameraLocation().column()] instanceof EmptyTile
+						&& game.getRoom(floorNo).getTileMap().getTileMap()[this.getCameraLocation().row() - i][this.getCameraLocation().column()].occupied()
+						&& ((EmptyTile)game.getRoom(floorNo).getTileMap().getTileMap()[this.getCameraLocation().row() - i][this.getCameraLocation().column()]).getObjectonTile() instanceof Player) {
 					System.out.println("we have found an intruder");
 					return true;
 
@@ -60,9 +60,9 @@ public class Camera {
 
 		} else if (dir.getDirection().equals(Dir.NORTH)) {
 			for (int i = 0; i < 6; i++) {
-				if (game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCameraLocation().row() ][this.getCameraLocation().column()+1] instanceof EmptyTile
-						&& game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCameraLocation().row()][this.getCameraLocation().column()+1].occupied()
-						&& ((EmptyTile)game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCameraLocation().row()][this.getCameraLocation().column()+1]).getObjectonTile() instanceof Player) {
+				if (game.getRoom(floorNo).getTileMap().getTileMap()[this.getCameraLocation().row() ][this.getCameraLocation().column()+1] instanceof EmptyTile
+						&& game.getRoom(floorNo).getTileMap().getTileMap()[this.getCameraLocation().row()][this.getCameraLocation().column()+1].occupied()
+						&& ((EmptyTile)game.getRoom(floorNo).getTileMap().getTileMap()[this.getCameraLocation().row()][this.getCameraLocation().column()+1]).getObjectonTile() instanceof Player) {
 					System.out.println("we have found an intruder");
 					return true;
 
@@ -71,9 +71,9 @@ public class Camera {
 
 		} else if (dir.getDirection().equals(Dir.SOUTH)) {
 			for (int i = 0; i < 6; i++) {
-				if (game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCameraLocation().row()][this.getCameraLocation().column()-i] instanceof EmptyTile
-						&& game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCameraLocation().row()][this.getCameraLocation().column()-1].occupied()
-						&& ((EmptyTile)game.getFloor(floorNo).getFloorMap().getFloorTiles()[this.getCameraLocation().row()][this.getCameraLocation().column()-i]).getObjectonTile() instanceof Player) {
+				if (game.getRoom(floorNo).getTileMap().getTileMap()[this.getCameraLocation().row()][this.getCameraLocation().column()-i] instanceof EmptyTile
+						&& game.getRoom(floorNo).getTileMap().getTileMap()[this.getCameraLocation().row()][this.getCameraLocation().column()-1].occupied()
+						&& ((EmptyTile)game.getRoom(floorNo).getTileMap().getTileMap()[this.getCameraLocation().row()][this.getCameraLocation().column()-i]).getObjectonTile() instanceof Player) {
 					System.out.println("we have found an intruder");
 					return true;
 

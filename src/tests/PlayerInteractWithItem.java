@@ -22,46 +22,72 @@ public class PlayerInteractWithItem {
 
 		Game game = new Game();
 		// create room
-		Room room = makeRoom();
-		TileMap tileMap = room.getRoomTileMap();
+		// TODO
+		gui.Room room = null;
+		TileMap tileMap = room.getTileMap();
 		// add items to room
 		tileMap.populateRoom(room, tileMap.getItems(), null);
-		// create player
+		//create player
 		Player p = new Player(0000, "H", game, 0);
-		System.out.println(p);
+		game.addPlayer(p);
+		p.setCharacterLocation(5,2);
+		Location pL = p.getCharacterLocation();
+		// set user direction facing item
+		p.setDirection(Direction.Dir.EAST);
+		// add player to room
+		EmptyTile tile =  (EmptyTile) tileMap.getTileMap()[pL.row()][pL.column()];
+		tile.addObjectToTile(p);
+		// draw board
+        game.drawRoom(tileMap);
+        Thread drawThread = game.drawRoomThread(700, tileMap);
+        game.display.setVisible(true);
+        drawThread.start();
 
-		/*
-		 * game.addPlayer(p); p.setCharacterLocation(5,2); Location pL =
-		 * p.getCharacterLocation(); // set user direction facing item
-		 * p.setDirection(Direction.Dir.EAST); // add player to room EmptyTile
-		 * tile = (EmptyTile) tileMap.getTileMap()[pL.row()][pL.column()];
-		 * tile.addObjectToTile(p); // draw board game.drawRoom(tileMap); Thread
-		 * drawThread = game.drawRoomThread(700, tileMap);
-		 * game.display.setVisible(true); drawThread.start();
-		 */
 
 	}
 
-	private static Room makeRoom() throws IOException {
-		// TODO Auto-generated method stub
-		Floor floor;
-		List<Room> floorRooms = new ArrayList<Room>();
 
+
+	static private gui.Room createRoom() throws IOException {
+		// TODO Auto-generated method stub
+		List<gui.Room> floorRooms = new ArrayList<gui.Room>();
+        Game game = new Game();
 		int nextX = 0;
 		int nextY = 0;
 		final int ADJACENT = 1; // adjacent rooms, add extra wall
 
-		Door d = new Door(0000, "0001", 0);
-		Room r = new Room(null, d);
+		//Door d = new Door(0000, "0001",0, null);
 
-		String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
+		String co237 = System.getProperty("user.dir") + "/src/game/floor/level";
 
-		Room room_co237 = new Room(null, null);
 
-		room_co237.setTileMap(co237);
 
-		r.setTileMap(co237);
-		return r;
-	}
+		gui.Room room_co237 = new gui.Room("level", 0 ,0 );
+
+		//Door door_co237 = new Door(0000, "237",0,room_co237);
+
+		floorRooms.add(room_co237);
+
+
+		TileMap tileMap = room_co237.getTileMap();
+
+
+		int mapWidth = tileMap.getMapWidth();
+		int mapHeight = tileMap.getMapHeight();
+String s = "";
+
+		for (int y = 0; y < mapHeight; y++) {
+			for (int x = 0; x < mapWidth; x++) {
+				s = s + tileMap.getTileMap()[x][y].getName();
+			}
+			s = s + "\n";
+		}
+System.out.println(s);
+
+	return room_co237;
+		}
+
+
+
 
 }

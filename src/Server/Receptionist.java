@@ -9,7 +9,7 @@ import java.util.concurrent.Callable;
 import model.Game;
 
 //This is for the packages
-/*import game.Game;*/
+/*import game.GameController;*/
 
 /**
  * This class represents a single thread that handles communication with a connected
@@ -56,7 +56,7 @@ public class Receptionist extends Thread {
             socket.close();
         } catch (IOException e) {
             System.err.println("Player " + uid + " disconnected.");
-            game.disconnectPlayer(uid);
+            //game.disconnectPlayer(uid);
         }
     }
 

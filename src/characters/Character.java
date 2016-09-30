@@ -21,21 +21,28 @@ public abstract class Character {
 	}
 
 	public abstract void characterInteraction(Character c);
-
 	public abstract void objectInteraction(GameObject c);
 
 	public void setCharacterLocation(int x, int y) {
 		characterLocation = new Location(x, y);
 
 	}
-
-	public int getCharacterID() {
+	public int getCharacterID(){
 		return this.characterID;
 	}
 
+
+
+
+
+
+
 	/**
-	 * To make a character move -- get location remove the player from the tile
-	 * at that location set location of character at new tile render
+	 * To make a character move --
+	 * get location
+	 * remove the player from the tile at that location
+	 * set location of character at new tile
+	 * render
 	 */
 
 }
