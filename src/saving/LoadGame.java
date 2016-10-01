@@ -17,14 +17,24 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class LoadingXML {
+public class LoadGame {
 
-	public static void main(String[] args) {
+	String fileName;
+
+
+
+	public LoadGame(String fileName) {
+		super();
+		this.fileName = fileName;
+	}
+
+
+
+	public void load() {
 		// TODO Auto-generated method stub
 
 		try {
-			File inputFile = new File(
-					"//am//state-opera//home1//javahemans//workspace//grade-thief//src//saving//sample.xml");
+			File inputFile = new File(fileName);
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder;
 

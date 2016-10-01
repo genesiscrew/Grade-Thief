@@ -14,10 +14,16 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class CreatingXML {
+public class SaveGame {
 
-	public static void main(String argv[]) {
+	String fileName;
 
+	public SaveGame(String fileName) {
+		super();
+		this.fileName = fileName;
+	}
+
+	public void save() {
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -63,7 +69,6 @@ public class CreatingXML {
 			Element item = doc.createElement("item");
 			items.appendChild(item);
 
-
 			// Item Attributes
 			Attr itemID = doc.createAttribute("itemID");
 			itemID.setValue("NULL");
@@ -101,9 +106,8 @@ public class CreatingXML {
 			itemColor.setValue("NULL");
 			item.setAttributeNode(itemColor);
 
-
-
-			//  public Item(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c)
+			// public Item(int itemID, String itemType, double x, double y,
+			// double z, double width, double length, double height, Color c)
 
 			location.appendChild(doc.createTextNode("Message"));
 			player.appendChild(location);
@@ -112,8 +116,7 @@ public class CreatingXML {
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(
-					new File("//am//state-opera//home1//javahemans//workspace//grade-thief//src//saving//sample.xml"));
+			StreamResult result = new StreamResult(new File(this.fileName));
 			transformer.transform(source, result);
 			// Output to console for testing
 			StreamResult consoleResult = new StreamResult(System.out);
@@ -122,4 +125,5 @@ public class CreatingXML {
 			e.printStackTrace();
 		}
 	}
+
 }

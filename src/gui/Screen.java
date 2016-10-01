@@ -24,12 +24,14 @@ import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+
+import saving.LoadGame;
+import saving.SaveGame;
 
 public class Screen extends JPanel implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 
@@ -440,12 +442,14 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
 	private void loadGame(int i) {
 		// TODO: Needs To load the Game
-		System.out.println(SelecFile());
+		LoadGame loadGame = new LoadGame(SelecFile());
+		loadGame.load();
 	}
 
 	private void saveGame() {
 		// TODO: Needs to Save the game
-		System.out.println(SelecFile());
+		SaveGame saveGame = new SaveGame(SelecFile());
+		saveGame.save();
 	}
 
 	private String SelecFile(){
