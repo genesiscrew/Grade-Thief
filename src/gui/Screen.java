@@ -418,22 +418,21 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 	public void gameOptionPane() {
 
 		// Custom button text
-		Object[] options = { "Save", "Load", "Help", "About Us", "Exit" };
+		Object[] options = { "Chat", "Save", "Load", "Help", "About Us", "Exit" };
 		int n = JOptionPane.showOptionDialog(this, "Please select the prefer optin?", "Grade Thief",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
 
 		if (n == 0) {
+			chat();
+		} else if (n == 1) {
 			saveGame();
-		}
-		if (n == 1) {
+		} else if (n == 2) {
 			loadGame(0);
-		}
-		if (n == 2) {
+		} else if (n == 3) {
 			Help();
-		}
-		if (n == 3) {
-			AboutUs();
 		} else if (n == 4) {
+			AboutUs();
+		} else if (n == 5) {
 			System.exit(0);
 
 		}
@@ -452,14 +451,14 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		saveGame.save();
 	}
 
-	private String SelecFile(){
+	private String SelecFile() {
 		JFileChooser fileChooser = new JFileChooser(".");
 		int status = fileChooser.showOpenDialog(null);
 
 		if (status == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = fileChooser.getSelectedFile();
-			//System.out.println(selectedFile);
-			return selectedFile.getParent() +"/" + selectedFile.getName();
+			// System.out.println(selectedFile);
+			return selectedFile.getParent() + "/" + selectedFile.getName();
 		} else if (status == JFileChooser.CANCEL_OPTION) {
 			System.out.println("canceled");
 		}
@@ -496,6 +495,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		textArea.setSize(new Dimension(400, 500));
 		OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
 
+	}
+
+	private void chat() {
+		// Help: Instruction for playing game and rules
+		System.err.println("CHAT CODES HERE");
 	}
 
 	public void restart() {
@@ -640,6 +644,281 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 			if (zoom < maxZoom)
 				zoom -= 25 * arg0.getUnitsToScroll();
 		}
+	}
+
+
+	/*========================================================================*
+	 *                                                                        *
+	 * 						SETERS AND GETTERS								  *
+	 *                                                                        *
+	 *========================================================================*/
+
+	public Room getRoom() {
+		return room;
+	}
+
+	public void setRoom(Room room) {
+		this.room = room;
+	}
+
+	public Room getRoom1() {
+		return room1;
+	}
+
+	public void setRoom1(Room room1) {
+		this.room1 = room1;
+	}
+
+	public Room getRoom2() {
+		return room2;
+	}
+
+	public void setRoom2(Room room2) {
+		this.room2 = room2;
+	}
+
+	public static Polygon getPolygonOver() {
+		return polygonOver;
+	}
+
+	public static void setPolygonOver(Polygon polygonOver) {
+		Screen.polygonOver = polygonOver;
+	}
+
+	public Robot getR() {
+		return r;
+	}
+
+	public void setR(Robot r) {
+		this.r = r;
+	}
+
+	public boolean isJumping() {
+		return jumping;
+	}
+
+	public void setJumping(boolean jumping) {
+		this.jumping = jumping;
+	}
+
+	public double[] getViewFrom() {
+		return viewFrom;
+	}
+
+	public void setViewFrom(double[] viewFrom) {
+		this.viewFrom = viewFrom;
+	}
+
+	public double[] getViewTo() {
+		return ViewTo;
+	}
+
+	public void setViewTo(double[] viewTo) {
+		ViewTo = viewTo;
+	}
+
+	public double[] getLightDir() {
+		return LightDir;
+	}
+
+	public void setLightDir(double[] lightDir) {
+		LightDir = lightDir;
+	}
+
+	public static double getZoom() {
+		return zoom;
+	}
+
+	public static void setZoom(double zoom) {
+		Screen.zoom = zoom;
+	}
+
+	public static double getMinZoom() {
+		return minZoom;
+	}
+
+	public static void setMinZoom(double minZoom) {
+		Screen.minZoom = minZoom;
+	}
+
+	public static double getMaxZoom() {
+		return maxZoom;
+	}
+
+	public static void setMaxZoom(double maxZoom) {
+		Screen.maxZoom = maxZoom;
+	}
+
+	public static double getMouseX() {
+		return mouseX;
+	}
+
+	public static void setMouseX(double mouseX) {
+		Screen.mouseX = mouseX;
+	}
+
+	public static double getMouseY() {
+		return mouseY;
+	}
+
+	public static void setMouseY(double mouseY) {
+		Screen.mouseY = mouseY;
+	}
+
+	public static double getMovementSpeed() {
+		return movementSpeed;
+	}
+
+	public static void setMovementSpeed(double movementSpeed) {
+		Screen.movementSpeed = movementSpeed;
+	}
+
+	public double getDrawFPS() {
+		return drawFPS;
+	}
+
+	public void setDrawFPS(double drawFPS) {
+		this.drawFPS = drawFPS;
+	}
+
+	public double getMaxFPS() {
+		return maxFPS;
+	}
+
+	public void setMaxFPS(double maxFPS) {
+		this.maxFPS = maxFPS;
+	}
+
+	public double getLastRefresh() {
+		return LastRefresh;
+	}
+
+	public void setLastRefresh(double lastRefresh) {
+		LastRefresh = lastRefresh;
+	}
+
+	public double getLastFPSCheck() {
+		return lastFPSCheck;
+	}
+
+	public void setLastFPSCheck(double lastFPSCheck) {
+		this.lastFPSCheck = lastFPSCheck;
+	}
+
+	public double getFpsCheck() {
+		return fpsCheck;
+	}
+
+	public void setFpsCheck(double fpsCheck) {
+		this.fpsCheck = fpsCheck;
+	}
+
+	public double getVertLook() {
+		return VertLook;
+	}
+
+	public void setVertLook(double vertLook) {
+		VertLook = vertLook;
+	}
+
+	public double getHorLook() {
+		return HorLook;
+	}
+
+	public void setHorLook(double horLook) {
+		HorLook = horLook;
+	}
+
+	public double getAimSight() {
+		return aimSight;
+	}
+
+	public void setAimSight(double aimSight) {
+		this.aimSight = aimSight;
+	}
+
+	public double getHorRotSpeed() {
+		return HorRotSpeed;
+	}
+
+	public void setHorRotSpeed(double horRotSpeed) {
+		HorRotSpeed = horRotSpeed;
+	}
+
+	public double getVertRotSpeed() {
+		return VertRotSpeed;
+	}
+
+	public void setVertRotSpeed(double vertRotSpeed) {
+		VertRotSpeed = vertRotSpeed;
+	}
+
+	public double getSunPos() {
+		return SunPos;
+	}
+
+	public void setSunPos(double sunPos) {
+		SunPos = sunPos;
+	}
+
+	public int[] getPolygonDrawOrder() {
+		return polygonDrawOrder;
+	}
+
+	public void setPolygonDrawOrder(int[] polygonDrawOrder) {
+		this.polygonDrawOrder = polygonDrawOrder;
+	}
+
+	public static boolean isDrawOutlines() {
+		return drawOutlines;
+	}
+
+	public static void setDrawOutlines(boolean drawOutlines) {
+		Screen.drawOutlines = drawOutlines;
+	}
+
+	public boolean[] getKeys() {
+		return Keys;
+	}
+
+	public void setKeys(boolean[] keys) {
+		Keys = keys;
+	}
+
+	public GameController getController() {
+		return controller;
+	}
+
+	public void setController(GameController controller) {
+		this.controller = controller;
+	}
+
+	public boolean isGuard() {
+		return guard;
+	}
+
+	public void setGuard(boolean guard) {
+		this.guard = guard;
+	}
+
+	public items.Player getOtherPlayer() {
+		return otherPlayer;
+	}
+
+	public void setOtherPlayer(items.Player otherPlayer) {
+		this.otherPlayer = otherPlayer;
+	}
+
+	public int getStartX() {
+		return startX;
+	}
+
+	public int getStartY() {
+		return startY;
+	}
+
+	public int getStartZ() {
+		return startZ;
 	}
 
 }
