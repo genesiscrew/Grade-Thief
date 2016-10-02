@@ -923,4 +923,19 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		return startZ;
 	}
 
+	public static void setStartX(double x) {
+		Screen.startX = (int) x;
+	}
+
+	public static void setStartY(double y) {
+		Screen.startY = (int) y;
+	}
+
+	public static void setStartZ(int startZ) {
+		Screen.startZ = startZ;
+	}
+
+
+
+
 }

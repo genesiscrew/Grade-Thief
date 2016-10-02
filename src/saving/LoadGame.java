@@ -89,7 +89,10 @@ public class LoadGame {
 					System.err.println("========================================== " + x + " =========" + y + "======== " );
 
 
-					GameController.setGuardPosition(new double[] { x, y, 10 });
+					/*GameController.setGuardPosition(new double[] { x, y, 10 });*/
+					GameController.getPlayer().setStartX(x);
+					GameController.getPlayer().setStartY(y);
+					GameController.getPlayer().setViewFrom(new double[] { x, y, 10 });
 				}
 			}
 

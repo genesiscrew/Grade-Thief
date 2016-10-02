@@ -10,7 +10,7 @@ import java.awt.*;
 public class GameController {
 
     // Players
-    private Screen player;
+    private static Screen player;
     //private Screen guard;
     // Position is stored using x, y, z
     private static double[] playerPosition = new double[]{15, 5, 10};
@@ -71,7 +71,7 @@ public class GameController {
 	 *========================================================================*/
 
 
-	public Screen getPlayer() {
+	public static Screen getPlayer() {
 		return player;
 	}
 
