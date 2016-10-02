@@ -31,6 +31,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import f_server.ChatClient;
+import f_server.ClientChatTest;
+import f_server.Server;
+import f_server.ServerChat;
+import f_server.ServerChatTest;
 import saving.LoadGame;
 import saving.SaveGame;
 
@@ -505,6 +510,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
 	private void chat() {
 		// Help: Instruction for playing game and rules
+		ServerChat sc = new ServerChat();
+		sc.startRunning();
 		System.err.println("CHAT CODES HERE");
 	}
 
