@@ -13,15 +13,24 @@ public class GameController {
     private Screen player;
 
     // Position is stored using x, y, z
-    private double[] playerPosition = new double[]{15, 5, 10};
+    private double[] playerPosition = new double[]{50, 100, 10};
     private double[] guardPosition = new double[]{100, 100, 10};
 
     static Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private boolean isGuard;
 
+    public double[] getGuardPosition() {
+        return guardPosition;
+    }
+
+    public void setGuardPosition(double[] guardPosition) {
+        this.guardPosition = guardPosition;
+    }
+
+
     public GameController(boolean isGuard) {
         this.isGuard = isGuard;
-        player = createNewGame(false);
+        player = createNewGame(isGuard);
     }
 
     /**
@@ -33,7 +42,7 @@ public class GameController {
         Screen screenObject = new Screen(this, guard);
         frame.add(screenObject);
         JLabel onScreenText = new JLabel("This is some example text");
-        onScreenText.setFont(new Font("Courier New", Font.BOLD,12));
+        onScreenText.setFont(new Font("Courier New", Font.BOLD, 12));
         //frame.add(onScreenText, SwingConstants.CENTER);
         frame.setUndecorated(true);
         frame.setSize(ScreenSize);
@@ -66,15 +75,10 @@ public class GameController {
 
     //This is for server
     public double[] getPlayerPosition() {
-        if (isGuard)
-            return guardPosition;
         return playerPosition;
     }
 
     public void setPlayerPosition(double[] playerPosition) {
-        if (isGuard)
-            this.guardPosition = playerPosition;
-        else
-            this.playerPosition = playerPosition;
+        this.playerPosition = playerPosition;
     }
 }

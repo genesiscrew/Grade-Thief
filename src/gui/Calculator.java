@@ -5,11 +5,23 @@ package gui;
  */
 public class Calculator {
     static double t = 0;
-    static Vector W1, W2, ViewVector, RotationVector, DirectionVector, PlaneVector1, PlaneVector2;
-    static Plane plane;
+    private static Vector w1;
+    private static Vector w2;
+    private static Vector viewVector; // The vector we are looking along (viewTo - viewFrom)
+    private static Vector rotationVector;
+    private static Vector directionVector = new Vector(1, 1, 1);
+    private static Plane plane;
     static double[] calculatorFocusPosition = new double[2];
 
-    static double[] CalculatePositionP(double[] ViewFrom, double x, double y, double z) {
+    /**
+     *
+     * @param ViewFrom
+     * @param x
+     * @param y
+     * @param z
+     * @return
+     */
+    static double[] calculatePositionP(double[] ViewFrom, double x, double y, double z) {
         double[] projP = getProjection(ViewFrom, x, y, z, plane);
         double[] drawP = getDrawP(projP[0], projP[1], projP[2]);
         return drawP;
@@ -23,19 +35,21 @@ public class Calculator {
      * @param y
      * @param z
      * @param plane
-     * @return
+     * @return array of length 3 [x,y,z].
      */
     static double[] getProjection(double[] viewFrom, double x, double y, double z, Plane plane) {
-        Vector ViewToPoint = new Vector(x - viewFrom[0], y - viewFrom[1], z - viewFrom[2]);
+        // Vector from current view to the point we are trying to calculate
+        Vector viewToPoint = new Vector(x - viewFrom[0], y - viewFrom[1], z - viewFrom[2]);
         double[] viewTo = plane.getViewTo();
 
+        // The distance from viewTo to the intersection point
         t = (plane.normalVector.x * viewTo[0] + plane.normalVector.y * viewTo[1] + plane.normalVector.z * viewTo[2]
                 - (plane.normalVector.x * viewFrom[0] + plane.normalVector.y * viewFrom[1] + plane.normalVector.z * viewFrom[2]))
-                / (plane.normalVector.x * ViewToPoint.x + plane.normalVector.y * ViewToPoint.y + plane.normalVector.z * ViewToPoint.z);
+                / (plane.normalVector.x * viewToPoint.x + plane.normalVector.y * viewToPoint.y + plane.normalVector.z * viewToPoint.z);
 
-        x = viewFrom[0] + ViewToPoint.x * t;
-        y = viewFrom[1] + ViewToPoint.y * t;
-        z = viewFrom[2] + ViewToPoint.z * t;
+        x = viewFrom[0] + viewToPoint.x * t;
+        y = viewFrom[1] + viewToPoint.y * t;
+        z = viewFrom[2] + viewToPoint.z * t;
 
         return new double[]{x, y, z};
     }
@@ -47,30 +61,30 @@ public class Calculator {
      * @return
      */
     static double[] getDrawP(double x, double y, double z) {
-        double DrawX = W2.x * x + W2.y * y + W2.z * z;
-        double DrawY = W1.x * x + W1.y * y + W1.z * z;
+        double DrawX = w2.x * x + w2.y * y + w2.z * z;
+        double DrawY = w1.x * x + w1.y * y + w1.z * z;
         return new double[]{DrawX, DrawY};
     }
 
     /**
-     * @param ViewFrom
-     * @param ViewTo
+     * This calculates the rotation
+     * @param viewFrom
+     * @param viewTo
      * @return
      */
-    static Vector getRotationVector(double[] ViewFrom, double[] ViewTo) {
-        double dx = Math.abs(ViewFrom[0] - ViewTo[0]);
-        double dy = Math.abs(ViewFrom[1] - ViewTo[1]);
+    static Vector getRotationVector(double[] viewFrom, double[] viewTo) {
+        double dx = Math.abs(viewFrom[0] - viewTo[0]);
+        double dy = Math.abs(viewFrom[1] - viewTo[1]);
         double xRot, yRot;
         xRot = dy / (dx + dy);
         yRot = dx / (dx + dy);
 
-        if (ViewFrom[1] > ViewTo[1])
+        if (viewFrom[1] > viewTo[1])
             xRot = -xRot;
-        if (ViewFrom[0] < ViewTo[0])
+        if (viewFrom[0] < viewTo[0])
             yRot = -yRot;
 
-        Vector V = new Vector(xRot, yRot, 0);
-        return V;
+        return new Vector(xRot, yRot, 0);
     }
 
     /**
@@ -80,17 +94,16 @@ public class Calculator {
      * @param screen
      */
     static void setPredeterminedInfo(Screen screen) {
-        ViewVector = new Vector(screen.ViewTo[0] - screen.viewFrom[0], screen.ViewTo[1] - screen.viewFrom[1], screen.ViewTo[2] - screen.viewFrom[2]);
-        DirectionVector = new Vector(1, 1, 1);
-        PlaneVector1 = ViewVector.CrossProduct(DirectionVector);
-        PlaneVector2 = ViewVector.CrossProduct(PlaneVector1);
-        plane = new Plane(PlaneVector1, PlaneVector2, screen.ViewTo);
+        viewVector = new Vector(screen.viewTo[0] - screen.viewFrom[0], screen.viewTo[1] - screen.viewFrom[1], screen.viewTo[2] - screen.viewFrom[2]);
+        Vector planeVector1 = viewVector.crossProduct(directionVector);
+        Vector planeVector2 = viewVector.crossProduct(planeVector1);
+        plane = new Plane(planeVector1, planeVector2, screen.viewTo);
 
-        RotationVector = Calculator.getRotationVector(screen.viewFrom, screen.ViewTo);
-        W1 = ViewVector.CrossProduct(RotationVector);
-        W2 = ViewVector.CrossProduct(W1);
+        rotationVector = Calculator.getRotationVector(screen.viewFrom, screen.viewTo);
+        w1 = viewVector.crossProduct(rotationVector);
+        w2 = viewVector.crossProduct(w1);
 
-        calculatorFocusPosition = Calculator.CalculatePositionP(screen.viewFrom, screen.ViewTo[0], screen.ViewTo[1], screen.ViewTo[2]);
+        calculatorFocusPosition = Calculator.calculatePositionP(screen.viewFrom, screen.viewTo[0], screen.viewTo[1], screen.viewTo[2]);
         calculatorFocusPosition[0] = Screen.zoom * calculatorFocusPosition[0];
         calculatorFocusPosition[1] = Screen.zoom * calculatorFocusPosition[1];
     }

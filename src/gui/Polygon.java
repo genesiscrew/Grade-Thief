@@ -6,10 +6,9 @@ public class Polygon {
     public double[] x, y, z;
     boolean draw = true;
     boolean seeThrough = false;
-    double[] CalcPos, newX, newY;
-   // UnusedPolygonObject drawablePolygon;
-    double averageDistance;
-    java.awt.Polygon polygon;
+    double[] calcPos, newX, newY;
+    double averageDistance; // average distance to the camera
+    java.awt.Polygon polygon; // the polygon we use to draw it on screen
     Color color;
     boolean visible = true;
     double lighting = 1;
@@ -23,34 +22,41 @@ public class Polygon {
         createPolygon();
     }
 
+    /**
+     * Create a java.awt polygon and add all the x and y points to it
+     */
     void createPolygon() {
         polygon = new java.awt.Polygon();
         for (int i = 0; i < x.length; i++)
             polygon.addPoint((int) x[i], (int) y[i]);
     }
 
-    void updatePolygon(Screen screen) {
+    /**
+     * Update the polygon for
+     * @param screen
+     */
+    void updatePolygon(double[] lightDirection, double[] viewFrom) {
         newX = new double[x.length];
         newY = new double[x.length];
         draw = true;
         for (int i = 0; i < x.length; i++) {
-            CalcPos = Calculator.CalculatePositionP(screen.viewFrom, x[i], y[i], z[i]);
-            newX[i] = (Main.ScreenSize.getWidth() / 2 - Calculator.calculatorFocusPosition[0]) + CalcPos[0] * Screen.zoom;
-            newY[i] = (Main.ScreenSize.getHeight() / 2 - Calculator.calculatorFocusPosition[1]) + CalcPos[1] * Screen.zoom;
+            calcPos = Calculator.calculatePositionP(viewFrom, x[i], y[i], z[i]);
+            newX[i] = (Main.ScreenSize.getWidth() / 2 - Calculator.calculatorFocusPosition[0]) + calcPos[0] * Screen.zoom;
+            newY[i] = (Main.ScreenSize.getHeight() / 2 - Calculator.calculatorFocusPosition[1]) + calcPos[1] * Screen.zoom;
             if (Calculator.t < 0)
                 draw = false;
         }
 
-        calcLighting(screen);
-        updatePolygon(newX, newY);
-        averageDistance = GetDist(screen);
+        calcLighting(lightDirection);
+        updateAWTPolygonPoints(newX, newY);
+        averageDistance = getDist(viewFrom);
     }
 
-    void calcLighting(Screen screen) {
+    void calcLighting(double[] lightDir) {
         Plane lightingPlane = new Plane(this);
-        double angle = Math.acos(((lightingPlane.normalVector.x * screen.LightDir[0]) +
-                (lightingPlane.normalVector.y * screen.LightDir[1]) + (lightingPlane.normalVector.z * screen.LightDir[2]))
-                / (Math.sqrt(screen.LightDir[0] * screen.LightDir[0] + screen.LightDir[1] * screen.LightDir[1] + screen.LightDir[2] *screen.LightDir[2])));
+        double angle = Math.acos(((lightingPlane.normalVector.x * lightDir[0]) +
+                (lightingPlane.normalVector.y * lightDir[1]) + (lightingPlane.normalVector.z * lightDir[2]))
+                / (Math.sqrt(lightDir[0] * lightDir[0] + lightDir[1] * lightDir[1] + lightDir[2] * lightDir[2])));
 
         lighting = 0.2 + 1 - Math.sqrt(Math.toDegrees(angle) / 180);
 
@@ -79,17 +85,17 @@ public class Polygon {
      * Calculates the average distance to the viewer
      * @return
      */
-    double GetDist(Screen screen) {
+    double getDist(double[] viewFrom) {
         double total = 0;
         for (int i = 0; i < x.length; i++)
-            total += GetDistanceToP(i, screen);
+            total += GetDistanceToP(i, viewFrom);
         return total / x.length;
     }
 
-    double GetDistanceToP(int i, Screen screen) {
-        return Math.sqrt((screen.viewFrom[0] - x[i]) * (screen.viewFrom[0] - x[i]) +
-                (screen.viewFrom[1] - y[i]) * (screen.viewFrom[1] - y[i]) +
-                (screen.viewFrom[2] - z[i]) * (screen.viewFrom[2] - z[i]));
+    double GetDistanceToP(int i, double[] viewFrom) {
+        return Math.sqrt((viewFrom[0] - x[i]) * (viewFrom[0] - x[i]) +
+                (viewFrom[1] - y[i]) * (viewFrom[1] - y[i]) +
+                (viewFrom[2] - z[i]) * (viewFrom[2] - z[i]));
     }
 
     /**
@@ -97,7 +103,7 @@ public class Polygon {
      * @param x
      * @param y
      */
-    void updatePolygon(double[] x, double[] y) {
+    void updateAWTPolygonPoints(double[] x, double[] y) {
         polygon.reset();
         for (int i = 0; i < x.length; i++) {
             polygon.xpoints[i] = (int) x[i];

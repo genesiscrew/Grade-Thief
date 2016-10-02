@@ -15,8 +15,7 @@ public class Server extends JFrame{
 	private Socket connection;
 	private PrintStream p;
 	private Scanner sc;
-	private GameController guard = new GameController(false);
-	private GameController player;
+	private GameController guardController = new GameController(true);
 	private Scanner getInput = new Scanner(System.in);
 
 
@@ -28,7 +27,6 @@ public class Server extends JFrame{
 				try {
 					waitForConnection();
 					setupStream();
-					//whileChatting();
 					update();
 				} catch (EOFException e) {
 					System.out.println("You got disconnected");
@@ -57,22 +55,6 @@ public class Server extends JFrame{
 	}
 
 
-	//During the chat conversation
-	private void whileChatting() throws IOException{
-		/*boolean continueType = true;
-		do {
-			while (continueType) {
-				System.out.print("Write anything man: ");
-				String message = getInput.nextLine();
-				sendMessage(message);
-				if (message.equalsIgnoreCase("END")) {
-					continueType = false;
-				}
-			}
-
-			appearMessage();
-		} while (true);*/
-	}
 
 	private void update() {
 		while (true) {
@@ -100,6 +82,26 @@ public class Server extends JFrame{
 		}
 	}
 
+
+	private void sendData() throws IOException{
+		double [] guardPos = guardController.getGuardPosition();
+		output.writeObject(guardPos);
+		output.flush();
+
+	}
+	//Recieve data from Clients
+	private void receiveData() throws IOException{
+		//Recieve the coordinates of the client and update the board.
+		try {
+			double []playerPos = (double[]) input.readObject();
+			guardController.setPlayerPosition(playerPos);
+		}catch (ClassNotFoundException e){
+			e.printStackTrace();
+		}
+
+	}
+
+
 	/*private void sendMessage(String message) throws IOException{
 		p = new PrintStream(connection.getOutputStream());
 		p.println(message);
@@ -112,32 +114,22 @@ public class Server extends JFrame{
 
 
 	//Send data to clients
-	private void sendData() throws IOException{
-		//Send updated board to the Clients
-		//The loop is true for now
-		double []guard = this.guard.getOtherPlayersPosition(true);
-		output.writeObject(guard);
-		output.flush();
 
-		/*double []player = this.player.getOtherPlayersPosition(false);
-		output.writeObject(player);*/
-		output.flush();
+	/*//During the chat conversation
+	private void whileChatting() throws IOException{
+		*//*boolean continueType = true;
+		do {
+			while (continueType) {
+				System.out.print("Write anything man: ");
+				String message = getInput.nextLine();
+				sendMessage(message);
+				if (message.equalsIgnoreCase("END")) {
+					continueType = false;
+				}
+			}
 
-	}
-	//Recieve data from Clients
-	private void receiveData() throws IOException{
-		//Recieve the coordinates of the client and update the board.
-		try {
-			double[] updatedGuard = (double []) input.readObject();
-			this.guard.updatePosition(true, updatedGuard);
-			double[] updatedPlayer = (double []) input.readObject();
-			this.player.updatePosition(false, updatedPlayer);
-
-
-		}catch (ClassNotFoundException e){
-			e.printStackTrace();
-		}
-
-	}
+			appearMessage();
+		} while (true);*//*
+	}*/
 
 }

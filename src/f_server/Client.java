@@ -1,27 +1,18 @@
 package f_server;
 
-        import java.awt.BorderLayout;
-        import java.awt.event.ActionEvent;
-        import java.awt.event.ActionListener;
         import java.io.EOFException;
         import java.io.IOException;
         import java.io.ObjectInputStream;
         import java.io.ObjectOutputStream;
         import java.io.PrintStream;
         import java.net.InetAddress;
-        import java.net.ServerSocket;
         import java.net.Socket;
         import java.util.Scanner;
 
-        import javax.swing.JScrollPane;
         import javax.swing.JTextArea;
         import javax.swing.JTextField;
-        import javax.swing.SwingUtilities;
-        import javax.tools.DocumentationTool.Location;
 
-        import characters.Player;
         import gui.GameController;
-        import model.Game;
 
 public class Client {
     private JTextField userText;
@@ -33,9 +24,7 @@ public class Client {
     private Socket connection;
     private PrintStream p;
     private Scanner sc;
-
-    private GameController g;
-    private GameController g1;
+    private GameController playerController = new GameController(false);
     private Scanner getInput = new Scanner(System.in);
 
     // Constructor
@@ -76,22 +65,7 @@ public class Client {
         System.out.println("You are now connected and you can send message!");
     }
 
-    // While game
-    private void whileGame() throws IOException {
-        boolean continueType = true;
-        do {
-            while (continueType) {
-                System.out.print("Write anything man: ");
-                String message = getInput.nextLine();
-                sendMessage(message);
-                if (message.equalsIgnoreCase("END")) {
-                    continueType = false;
-                }
-            }
 
-            appearMessage();
-        } while (true);
-    }
 
     private void update() {
         while (true) {
@@ -119,7 +93,49 @@ public class Client {
         }
     }
 
-    private void sendMessage(String message) throws IOException {
+
+
+    // Send data tu server
+    private void sendData() throws IOException {
+        // After each movement it send the coordinates of the client to the
+        // Server
+        System.out.println("Client --> Sever");
+        double []guardPos = playerController.getPlayerPosition();
+        output.writeObject(guardPos);
+        output.flush();
+    }
+
+    // recieve data from server
+    private void receievData() throws IOException {
+        // Server will send the updated board to the client
+        System.out.println("Sever --> Client");
+        try {
+            double []guardPos = (double []) input.readObject();
+            playerController.setGuardPosition(guardPos);
+        }catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    /*  // While game
+    private void whileGame() throws IOException {
+        boolean continueType = true;
+        do {
+            while (continueType) {
+                System.out.print("Write anything man: ");
+                String message = getInput.nextLine();
+                sendMessage(message);
+                if (message.equalsIgnoreCase("END")) {
+                    continueType = false;
+                }
+            }
+
+            appearMessage();
+        } while (true);
+    }*/
+
+     /*private void sendMessage(String message) throws IOException {
         p = new PrintStream(connection.getOutputStream());
         //p.println(player.getCharacterLocation().toString());
     }
@@ -127,31 +143,7 @@ public class Client {
     private void appearMessage() throws IOException {
         sc = new Scanner(connection.getInputStream());
         System.out.println(sc.nextLine());
-    }
-
-    // Send data tu server
-    private void sendData() throws IOException {
-        // After each movement it send the coordinates of the client to the
-        // Server
-        double []guard = g.getOtherPlayersPosition(true);
-        output.writeObject(guard);
-        output.flush();
-        double []player = g.getOtherPlayersPosition(false);
-        output.writeObject(player);
-        output.flush();
-    }
-
-    // recieve data from server
-    private void receievData() throws IOException {
-        // Server will send the updated board to the client
-        try {
-            double []updatedGuard = (double []) input.readObject();
-            double []updatedplayer = (double []) input.readObject();
-        }catch (ClassNotFoundException e){
-            e.printStackTrace();
-        }
-
-    }
+    }*/
 
 }
 
