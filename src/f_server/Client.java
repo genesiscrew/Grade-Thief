@@ -135,9 +135,9 @@ public class Client {
         // Server
         double []guard = guard1.getOtherPlayersPosition(true);
         output.writeObject(guard);
-       /* p = new PrintStream(connection.getOutputStream());
 
-        p.println(guard[1]);*/
+
+        p.println(guard[1]);
         output.flush();
         //double []player = player1.getOtherPlayersPosition(false);
         //output.writeObject(player);

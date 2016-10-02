@@ -1,8 +1,8 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -11,13 +11,15 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 public class OptionPane extends JDialog implements ActionListener {
-	public OptionPane(JFrame parent, String title, String message) {
+
+
+	JPanel panel = new JPanel();
+
+	public OptionPane(JFrame parent, String title, String message, Component Component) {
+
 
 		super(parent, title, true);
 
@@ -28,28 +30,13 @@ public class OptionPane extends JDialog implements ActionListener {
 		}
 
 
-		JTextArea textArea = new JTextArea(message,
-                6,
-                20);
-        textArea.setFont(new Font("Serif", Font.ITALIC, 16));
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        textArea.setOpaque(false);
-        textArea.setEditable(false);
-        new JScrollPane(textArea);
 
+		panel.add(Component);
 
-
-
-		JPanel panel = new JPanel();
-		panel.add(textArea);
 		getContentPane().add(panel);
 
 		JPanel jpanel = new JPanel();
 		JButton exitBtn = new JButton("Exit");
-
-
-
 
 
 		jpanel.add(exitBtn);
