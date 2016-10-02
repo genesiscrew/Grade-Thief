@@ -34,6 +34,14 @@ import javax.swing.JTextArea;
 import saving.FastLoad;
 import saving.FastSaving;
 
+import f_server.ChatClient;
+import f_server.ClientChatTest;
+import f_server.Server;
+import f_server.ServerChat;
+import f_server.ServerChatTest;
+import saving.LoadGame;
+import saving.SaveGame;
+
 public class Screen extends JPanel implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 
 	private Room room;
@@ -446,15 +454,16 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
 	private void loadGame(int i) {
 		// TODO: Needs To load the Game
-		/*LoadGame loadGame = new LoadGame(SelecFile());
-		loadGame.load();*/
+		/*
+		 * LoadGame loadGame = new LoadGame(SelecFile()); loadGame.load();
+		 */
 
 		FastLoad tmp;
 
-		try{
+		try {
 			tmp = new FastLoad(SelecFile(), this);
 			tmp.load();
-		} catch(Exception e){
+		} catch (Exception e) {
 
 		}
 
@@ -526,6 +535,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
 	private void chat() {
 		// Help: Instruction for playing game and rules
+		ServerChat sc = new ServerChat();
+		sc.startRunning();
 		System.err.println("CHAT CODES HERE");
 	}
 
