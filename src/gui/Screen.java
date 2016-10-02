@@ -452,7 +452,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		FastLoad tmp;
 
 		try{
-			tmp = new FastLoad(SelecFile());
+			tmp = new FastLoad(SelecFile(), this);
 			tmp.load();
 		} catch(Exception e){
 

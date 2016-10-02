@@ -4,15 +4,20 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 import gui.GameController;
+import gui.Screen;
 
 public class FastLoad {
 
 	String myFile;
+	Screen sc;
 
-	public FastLoad(String myFile) {
+	public FastLoad(String myFile, Screen sc) {
 		super();
 		this.myFile = myFile;
+		this.sc = sc;
 	}
 
 	public void load() {
@@ -69,9 +74,13 @@ public class FastLoad {
 
 			System.out.println("-----------nd of input.txt--------------");
 
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//custom title, error icon
+			JOptionPane.showMessageDialog(sc,
+			    "Please select saved version of the Grade Thief Game, This file is not belong to Grade-Thief",
+			    "Grade-Thief Loading",
+			    JOptionPane.ERROR_MESSAGE);
 		}
 
 	}

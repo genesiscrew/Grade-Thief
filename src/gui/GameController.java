@@ -2,6 +2,8 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 /**
@@ -22,9 +24,17 @@ public class GameController {
     private static boolean isGuard;
 
     public GameController(boolean isGuard) {
+
+
+
         this.isGuard = isGuard;
         player = createNewGame(isGuard);
         //guard = createNewGame(!isGuard);
+
+    	/*InputStream is = getClass().getClassLoader().getResourceAsStream("bg-music.wav");*/
+    	MakeSound ms = new MakeSound();
+    	ms.playSound("/am/state-opera/home1/javahemans/workspace/grade-thief/src/bg-music.wav");
+
 
     }
 
