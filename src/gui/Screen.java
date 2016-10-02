@@ -19,11 +19,11 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
-
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -31,8 +31,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import saving.LoadGame;
-import saving.SaveGame;
+import saving.FastLoad;
+import saving.FastSaving;
 
 public class Screen extends JPanel implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 
@@ -42,7 +42,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
 	// The polygon that the mouse is currently over
 	static Polygon polygonOver = null;
-
 
 	// Player (First Player)
 	public static int startX = 50;
@@ -447,14 +446,36 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
 	private void loadGame(int i) {
 		// TODO: Needs To load the Game
-		LoadGame loadGame = new LoadGame(SelecFile());
-		loadGame.load();
+		/*LoadGame loadGame = new LoadGame(SelecFile());
+		loadGame.load();*/
+
+		FastLoad tmp;
+
+		try{
+			tmp = new FastLoad(SelecFile());
+			tmp.load();
+		} catch(Exception e){
+
+		}
+
 	}
 
 	private void saveGame() {
 		// TODO: Needs to Save the game
-		SaveGame saveGame = new SaveGame(SelecFile());
-		saveGame.save();
+		/*
+		 * SaveGame saveGame = new SaveGame(SelecFile()); saveGame.save();
+		 */
+		FastSaving tmp;
+		try {
+
+			tmp = new FastSaving(SelecFile());
+			tmp.save();
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	private String SelecFile() {
@@ -652,12 +673,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		}
 	}
 
-
-	/*========================================================================*
-	 *                                                                        *
-	 * 						SETERS AND GETTERS								  *
-	 *                                                                        *
-	 *========================================================================*/
+	/*
+	 * ========================================================================*
+	 * * SETERS AND GETTERS * *
+	 * ========================================================================
+	 */
 
 	public Room getRoom() {
 		return room;
@@ -938,6 +958,5 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 	public static void setStartZ(int startZ) {
 		Screen.startZ = startZ;
 	}
-
 
 }
