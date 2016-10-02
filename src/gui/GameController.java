@@ -33,7 +33,7 @@ public class GameController {
 
     	/*InputStream is = getClass().getClassLoader().getResourceAsStream("bg-music.wav");*/
     	MakeSound ms = new MakeSound();
-    	ms.playSound("/am/state-opera/home1/javahemans/workspace/grade-thief/src/bg-music.wav");
+    	ms.playSound("/am/phoenix/home1/shenavmost/GradeTheft/grade-thief/src/bg-music.wav");
 
 
     }
