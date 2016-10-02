@@ -42,9 +42,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 	// The polygon that the mouse is currently over
 	static Polygon polygonOver = null;
 
-	final int startX = 50;
-	final int startY = 50;
-	final int startZ = 10;
+	// Player (First Player)
+	public static int startX = 50;
+	public static int startY = 50;
+	public static int startZ = 10;
 
 	// Used for keeping mouse in center
 	Robot r;
@@ -418,23 +419,24 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 	public void gameOptionPane() {
 
 		// Custom button text
-		Object[] options = { "Chat", "Save", "Load", "Help", "About Us", "Exit" };
+		Object[] options = { "Resume", "Chat", "Save", "Load", "Help", "About Us", "Exit" };
 		int n = JOptionPane.showOptionDialog(this, "Please select the prefer optin?", "Grade Thief",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
 
 		if (n == 0) {
-			chat();
+			// Nothing for skipping the Modal and continue game.
 		} else if (n == 1) {
-			saveGame();
+			chat();
 		} else if (n == 2) {
-			loadGame(0);
+			saveGame();
 		} else if (n == 3) {
-			Help();
+			loadGame(0);
 		} else if (n == 4) {
-			AboutUs();
+			Help();
 		} else if (n == 5) {
+			AboutUs();
+		} else if (n == 6) {
 			System.exit(0);
-
 		}
 
 	}

@@ -17,18 +17,16 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import gui.GameController;
+
 public class LoadGame {
 
 	String fileName;
-
-
 
 	public LoadGame(String fileName) {
 		super();
 		this.fileName = fileName;
 	}
-
-
 
 	public void load() {
 		// TODO Auto-generated method stub
@@ -57,17 +55,20 @@ public class LoadGame {
 					Element eElement = (Element) nNode;
 
 					System.out.println("Player CharachterID : " + eElement.getAttribute("CharachterID"));
+					System.out.println("Player LocationX : " + eElement.getAttribute("CharachterID"));
+					System.out.println("Player LocationY : " + eElement.getAttribute("CharachterID"));
 					System.out.println("Player CharachterName : " + eElement.getAttribute("CharachterName"));
 					System.out.println("Player Floor : " + eElement.getAttribute("Floor"));
-
 
 				}
 			}
 
-			System.out.println(
+			System.err.println(
 					"========================================================================================================================================================");
 
-			String expression1 = "/Players/Player/items/item";
+			double[] tmp = new double[3];
+
+			String expression1 = "/Players/Player/Location";
 			NodeList nodeList1 = (NodeList) xPath.compile(expression1).evaluate(doc, XPathConstants.NODESET);
 
 			for (int i = 0; i < nodeList1.getLength(); i++) {
@@ -78,28 +79,26 @@ public class LoadGame {
 
 					Element eElement = (Element) nNode;
 
-					System.out.println("Item itemColor : " + eElement.getAttribute("itemColor"));
-					System.out.println("Item itemHeight : " + eElement.getAttribute("itemHeight"));
-					System.out.println("Item itemID : " + eElement.getAttribute("itemID"));
-					System.out.println("Item itemLength : " + eElement.getAttribute("itemLength"));
-					System.out.println("Item itemType : " + eElement.getAttribute("itemType"));
-					System.out.println("Item itemWidth : " + eElement.getAttribute("itemWidth"));
-					System.out.println("Item itemX : " + eElement.getAttribute("itemX"));
-					System.out.println("Item itemY : " + eElement.getAttribute("itemY"));
-					System.out.println("Item itemZ : " + eElement.getAttribute("itemZ"));
+					System.out.println("PlayerY: " + eElement.getAttribute("Y"));
 
-					// <item itemColor="NULL" itemHeight="NULL" itemID="NULL"
-					// itemLength="NULL" itemType="NULL" itemWidth="NULL"
-					// itemX="NULL" itemY="NULL" itemZ="NULL" />
+					double x = Double.parseDouble(eElement.getAttribute("X"));
+					double y = Double.parseDouble(eElement.getAttribute("Y"));
+					/*double z = Double.parseDouble(eElement.getAttribute("Z"));*/
 
-					/*
-					 * System.out.println("Items : " + eElement
-					 * .getElementsByTagName("Items") .item(1)
-					 * .getTextContent());
-					 */
 
+					System.err.println("========================================== " + x + " =========" + y + "======== " );
+
+
+					GameController.setGuardPosition(new double[] { x, y, 10 });
 				}
 			}
+
+			System.out.println(GameController.getPlayerPosition());
+
+			double[] xxxxxxxxxxxxxx = GameController.getPlayerPosition();
+
+			System.out.println("HEEEEEEEEEEEREEEEEEEEEEE");
+
 
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();

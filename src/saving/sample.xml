@@ -1,17 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Players>
-      <Player CharachterID="100" CharachterName="Mansour" Floor="1">
-      <items>
-         <item itemColor="Yellow" itemHeight="50" itemID="10" itemLength="100" itemType="interactable" itemWidth="30" itemX="25" itemY="10" itemZ="0" />
-         <item itemColor="Red" itemHeight="15" itemID="2" itemLength="5" itemType="drawavke" itemWidth="100" itemX="5" itemY="4" itemZ="123" />
-      </items>
-      <Location X="50" Y="0">Message</Location>
-   </Player>
-      <Player CharachterID="100" CharachterName="Mansour" Floor="1">
-      <items>
-         <item itemColor="Black" itemHeight="520" itemID="120" itemLength="1020" itemType="interactable" itemWidth="230" itemX="225" itemY="20" itemZ="202" />
-         <item itemColor="purple" itemHeight="125" itemID="22" itemLength="52" itemType="drawable" itemWidth="1020" itemX="52" itemY="42" itemZ="1223" />
-      </items>
-      <Location X="50" Y="0">Message</Location>
-   </Player>
-</Players>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><Players><Player CharachterID="100" CharachterName="Mansour" Floor="1"><items><item itemColor="NULL" itemHeight="NULL" itemID="NULL" itemLength="NULL" itemType="NULL" itemWidth="NULL" itemX="NULL" itemY="NULL" itemZ="NULL"/></items><Location X="477.7457364084783" Y="478.8080701610148">Message</Location></Player></Players>

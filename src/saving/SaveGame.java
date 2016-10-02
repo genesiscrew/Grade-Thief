@@ -1,6 +1,5 @@
 package saving;
 
-import java.awt.Color;
 import java.io.File;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -14,6 +13,9 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import gui.GameController;
+import gui.Screen;
+
 public class SaveGame {
 
 	String fileName;
@@ -25,6 +27,18 @@ public class SaveGame {
 
 	public void save() {
 		try {
+
+
+
+
+			double[] tmp = GameController.getPlayerPosition();
+			double x = tmp[0];
+			double y = tmp[1];
+			double z = tmp[2];
+
+
+
+			System.err.println("===================================" + x + " " + y + " " + z + " " + "==========================");
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.newDocument();
@@ -54,11 +68,12 @@ public class SaveGame {
 			Element location = doc.createElement("Location");
 
 			Attr xAxis = doc.createAttribute("X");
-			xAxis.setValue("50");
+
+			xAxis.setValue(String.valueOf(x));
 			location.setAttributeNode(xAxis);
 
 			Attr yAxis = doc.createAttribute("Y");
-			yAxis.setValue("0");
+			yAxis.setValue(String.valueOf(y));
 			location.setAttributeNode(yAxis);
 
 			// root element
