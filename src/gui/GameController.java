@@ -1,6 +1,10 @@
 package gui;
 
 import javax.swing.*;
+
+import characters.GuardBot;
+import model.Game;
+
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,13 +46,17 @@ public class GameController {
      * Create a new game and launch in full screen
      */
     public Screen createNewGame(boolean guard) {
-        JFrame F = new JFrame();
+        JFrame frame = new JFrame();
+        frame.setTitle("Grade Thief");
         Screen screenObject = new Screen(this, guard);
-        F.add(screenObject);
-        F.setUndecorated(true);
-        F.setSize(ScreenSize);
-        F.setVisible(true);
-        F.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(screenObject);
+        JLabel onScreenText = new JLabel("This is some example text");
+        onScreenText.setFont(new Font("Courier New", Font.BOLD,12));
+        //frame.add(onScreenText, SwingConstants.CENTER);
+        frame.setUndecorated(true);
+        frame.setSize(ScreenSize);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         return screenObject;
     }
 
@@ -121,6 +129,43 @@ public class GameController {
 
 	public static void setGuard(boolean isGuard) {
 		GameController.isGuard = isGuard;
+	}
+	
+	public Thread createGuardThread(GuardBot gaurd, int delay) {
+		Thread guardThread = new Thread() {
+			public void run() {
+				// move the guard in a fixed loop, once he reaches certain
+				// coordinate on the Map, change destination
+				// if () {}
+				// gaurd will keep moving
+
+
+					// update direction of guard based on hardcoded route
+					// through Tilemap
+
+				try {
+					Thread.sleep(delay);
+					gaurd.move();
+
+
+
+				} catch(InterruptedException e) {
+					// should never happen
+				}
+
+
+
+
+
+					// draw board intp console for debugging purposes
+					//game.drawBoard(gaurd.getFloorNo());
+
+
+
+			}
+		};
+		return guardThread;
+
 	}
 
 

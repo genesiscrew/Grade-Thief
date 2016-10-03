@@ -75,13 +75,5 @@ public class Chair extends Item {
         return allPolys;
     }
 
-	@Override
-	public boolean pointNearObject(double x, double y, int z) {
-		   if ((this.x + DETECT_PLAYER_BOUNDARY + this.width) > x && (this.y + DETECT_PLAYER_BOUNDARY + this.length) > y
-	                && this.x - DETECT_PLAYER_BOUNDARY< x && this.y - DETECT_PLAYER_BOUNDARY< y){
-	        return true;
-	        }else{
-	            return false;
-	        }
-	}
+	
 }

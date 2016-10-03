@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import characters.GuardBot;
 import items.Chair;
 import items.Container;
 import items.Door;
@@ -206,12 +207,31 @@ public class TileMap {
 				if (type.equals("D")) { // Door
 					// System.out.println("=========================== ddddddddddddddddddddddd");
 					int doorID = sc.nextInt();
-
 					DoorTile DT = (DoorTile) tile;
 					Door D = new Door(id, type, 10*x, 10*y, z, w, h, l, new Color(red, green, blue));
 					DT.setDoor(D);
 					tileMap.setTile(x, y, DT);
 					room.addItemToRoom(new DoorDraw(id, type, 10*x, 10*y, z, w, h, l, new Color(red, green, blue), D));
+
+
+				}
+				if (type.equals("GuardBot")) { // Door
+					// System.out.println("=========================== ddddddddddddddddddddddd");
+					int moveStrategy = sc.nextInt();
+					int arrSize = sc.nextInt();
+					int[] distances = new int[arrSize];
+					for (int i = 0; i < arrSize; i++) {
+					
+						distances[i] = sc.nextInt();
+					}
+					int floorNo = sc.nextInt();
+
+					EmptyTile E = (EmptyTile) tile;
+					GuardBot guard = new GuardBot(id, type, moveStrategy, distances, floorNo, x*10, y*10, z, w*2, l*2, h*5, new Color(red, green, blue));
+					E.addObjectToTile(guard);
+					E.setOccupied(); System.out.println("e occupied" + E.isOccupied);
+					tileMap.setTile(x, y, E);
+					room.addItemToRoom(guard);
 
 
 				}
@@ -294,8 +314,10 @@ public class TileMap {
 					System.out.println("type is of type  " + type + " count");
 				// System.out.println(sc.next());
 
+				
 
-						switch (drawableItem) {
+
+						switch (type) {
 						case "KeyDraw":
 							drawItem = new KeyDraw(id,type,10*x, 10*y, z, w, h, l, new Color(red, green, blue));
 							break;
@@ -313,7 +335,7 @@ public class TileMap {
 							break;
 						}
 						System.out.println("==================================");
-						System.out.println("adding item " + drawableItem);
+						System.out.println("adding item " + type);
 					System.out.println("==================================");
 					//Item i = new Item(id, type);
 

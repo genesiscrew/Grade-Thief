@@ -91,9 +91,4 @@ public class Keys implements Interactable, Movable, Drawable {
     public List<Polygon> getPolygons() {
         return null;
     }
-
-    @Override
-    public boolean pointNearObject(double x, double y, int z) {
-        return false;
-    }
 }

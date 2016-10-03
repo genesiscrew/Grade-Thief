@@ -46,7 +46,4 @@ public interface Drawable {
      * @return
      */
     List<Polygon> getPolygons();
-
-
-    boolean pointNearObject(double x, double y, int z);
 }

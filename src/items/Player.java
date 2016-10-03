@@ -97,12 +97,6 @@ public class Player implements Drawable {
         cubes.forEach(c -> allPolys.addAll(c.getPolygons()));
         return allPolys;
     }
-
-    @Override
-    public boolean pointNearObject(double x, double y, int z) {
-        return false;
-    }
-
     public double getZ() {
         return z;
     }

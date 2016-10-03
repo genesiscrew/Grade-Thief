@@ -7,7 +7,7 @@ import items.Door;
  *         DoorTile.java instance of Tile which represents a space occupied by a door. Useful for the floor map.
  */
 
-public class DoorTile implements Tile {
+public class DoorTile extends EmptyTile {
 
     private Door door;
     Location location;

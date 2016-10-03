@@ -21,6 +21,11 @@ public class Server extends JFrame {
 	private Socket connection;
 	private PrintStream p;
 	private Scanner sc;
+<<<<<<< HEAD
+=======
+	private GameController guard = new GameController(false);
+	private GameController player;
+>>>>>>> 5a423ec1c1b30025a16405ff539e774aae6e7922
 	private Scanner getInput = new Scanner(System.in);
 
 	private GameController guard = new GameController(true);
@@ -117,9 +122,15 @@ public class Server extends JFrame {
 		this.input = input;
 	}
 
+<<<<<<< HEAD
 	public ServerSocket getServer() {
 		return server;
 	}
+=======
+		/*double []player = this.player.getOtherPlayersPosition(false);
+		output.writeObject(player);*/
+		output.flush();
+>>>>>>> 5a423ec1c1b30025a16405ff539e774aae6e7922
 
 	public void setServer(ServerSocket server) {
 		this.server = server;
