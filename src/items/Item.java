@@ -52,7 +52,7 @@ public abstract class Item extends GameObject implements Drawable {
         }
     }
 
-    public void performAction(Interaction interaction){
+    public void  performAction(Interaction interaction){
         switch (interaction){
             case PICK_UP:
                 draw = false;
