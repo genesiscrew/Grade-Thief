@@ -185,7 +185,7 @@ public class Cube implements Drawable {
     }
 
     @Override
-    public boolean pointNearObject(int x, int y, int z) {
+    public boolean pointNearObject(double x, double y, int z) {
         return false;
     }
 

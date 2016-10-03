@@ -48,5 +48,5 @@ public interface Drawable {
     List<Polygon> getPolygons();
 
 
-    boolean pointNearObject(int x, int y, int z);
+    boolean pointNearObject(double x, double y, int z);
 }

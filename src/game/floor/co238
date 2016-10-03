@@ -27,18 +27,18 @@ wxxxxxxxxxxxxw
 wddwwwwwwwwwww
 *
 1 6 1 0 10 10 10 255 0 0 container1 C 0 3
-2 6 1 0 0 0 0 255 0 0 item1 I
-3 6 1 0 0 0 0 255 0 0 item2 I
-4 6 1 0 0 0 0 255 0 0 item3 I
+2 6 1 0 0 0 0 255 0 0 item1 I KeyDraw
+3 6 1 0 0 0 0 255 0 0 item2 I KeyDraw
+4 6 1 0 0 0 0 255 0 0 item3 I KeyDraw
 .
-5 1 1 5 5 5 5 255 50 50 item3 I
-6 2 1 5 5 5 5 255 90 90 item4 I
+5 1 1 5 5 5 5 255 50 50 item3 I KeyDraw
+6 2 1 5 5 5 5 255 90 90 item4 I KeyDraw
 .
 7 6 4 0 10 10 10 200 0 100 container1 C 0 1
 8 6 4 0 0 0 0 200 0 100 container2 C 0 5
-9 6 4 0 0 0 0 255 0 0 item22 I
-10 6 4 0 0 0 0 255 0 0 item33 I
-11 6 4 0 0 0 0 255 0 0 item55 I
+9 6 4 0 0 0 0 255 0 0 item22 I KeyDraw
+10 6 4 0 0 0 0 255 0 0 item33 I KeyDraw
+11 6 4 0 0 0 0 255 0 0 item55 I KeyDraw
 .
 .
 .
