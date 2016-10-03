@@ -453,7 +453,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
         for(Item i : room.getRoomObjects()){
             if(i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])){
-                messageToDisplay = "Press e To Interact With The Item";
+                messageToDisplay = "Press e To Interact With The " + i.getClass().getSimpleName();
             }
         }
 

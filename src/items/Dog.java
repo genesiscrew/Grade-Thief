@@ -39,6 +39,8 @@ public class Dog extends Item {
         cubes.add(new Cube(x - legWidth, y + length, z , legWidth, legHeight, Dog_THICKNESS, c));
         // Draw the Dog top
         cubes.add(new Cube(x-legWidth, y, z + legHeight, width, length, Dog_THICKNESS, c));
+        // Draw dog neck
+      //  cubes.add(new Cube(x-legWidth, y, z))
 
     }
 
