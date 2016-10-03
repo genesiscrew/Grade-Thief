@@ -77,5 +77,4 @@ public class Table extends Item {
         interactionsAvaliable = new ArrayList<>();
         interactionsAvaliable.add(Interaction.SIT);
     }
-
 }

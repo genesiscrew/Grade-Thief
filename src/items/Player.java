@@ -97,7 +97,6 @@ public class Player implements Drawable {
         cubes.forEach(c -> allPolys.addAll(c.getPolygons()));
         return allPolys;
     }
-
     public double getZ() {
         return z;
     }

@@ -135,6 +135,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         allPolygons.addAll(updateOtherPlayersPosition()); // other player
 
         // Updates each polygon for this camera position
+        System.out.println(allPolygons.size());
         for (int i = 0; i < allPolygons.size(); i++)
             allPolygons.get(i).updatePolygon(this);
 
@@ -176,7 +177,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         double dy = otherPos[1] - otherPlayer.getY();
         double dz = otherPos[0] - otherPlayer.getZ();
         dz = 0;
-
+        
         otherPlayer.updatePosition(dx, dy, dz);
         return otherPlayer.getPolygons();
     }
@@ -427,19 +428,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     public void loadMap() {
         if (room == room1) {
-            try {
-                System.out.println("room1");
-                Thread.sleep(200);
-            } catch (Exception e) {
-            }
             room = room2;
         }
         else {
-            System.out.println("room2");
-            try {
-                Thread.sleep(200);
-            } catch (Exception e) {
-            }
             room = room1;
         }
     }

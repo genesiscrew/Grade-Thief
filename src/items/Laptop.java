@@ -70,4 +70,5 @@ public class Laptop extends Item implements Drawable{
         interactionsAvaliable = new ArrayList<>();
     }
 
+
 }

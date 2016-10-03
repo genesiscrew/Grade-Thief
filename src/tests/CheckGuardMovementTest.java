@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import characters.Guard;
+import characters.GuardBot;
 import characters.Player;
 import game.floor.EmptyTile;
 import game.floor.Floor;
@@ -22,11 +22,11 @@ public class CheckGuardMovementTest {
 		gui.Room room = createRoom();
 		game.addFloor(room);
 		int[] dist = {6,6};
-		Guard gaurd1 = new Guard(0, "guard1", 1, dist, 0);
+		GuardBot gaurd1 = new GuardBot(0, "guard1", 1, dist, 0);
 		int[] dist1 = {6,3};
-		Guard guard2 = new Guard(1, "guard2",5,dist1, 0);
+		GuardBot guard2 = new GuardBot(1, "guard2",5,dist1, 0);
 		int[] dist2 = {6,1,6,1};
-		Guard guard3 = new Guard(1, "guard3",13,dist2, 0);
+		GuardBot guard3 = new GuardBot(1, "guard3",13,dist2, 0);
 		// set gaurd's location
 		gaurd1.setCharacterLocation(14, 0);
 		guard2.setCharacterLocation(49, 0);

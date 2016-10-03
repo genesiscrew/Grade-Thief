@@ -70,7 +70,6 @@ public class KeyDraw extends Item {
         return x + " " + y + " " + z + " " + width + " " + length + " " + height + " " + color;
     }
 
-
     @Override
     public void addInteractions() {
         interactionsAvaliable = new ArrayList<>();

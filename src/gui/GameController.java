@@ -1,7 +1,13 @@
 package gui;
 
 import javax.swing.*;
+
+import characters.GuardBot;
+import model.Game;
+
 import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 /**
@@ -10,18 +16,30 @@ import java.awt.*;
 public class GameController {
 
     // Players
-    private Screen player;
 
+    private static Screen player;
+
+    //private Screen guard;
     // Position is stored using x, y, z
-    private double[] playerPosition = new double[]{15, 5, 10};
-    private double[] guardPosition = new double[]{100, 100, 10};
+    private static double[] playerPosition = new double[]{15, 5, 10};
+    private static double[] guardPosition = new double[]{100, 100, 10};
 
     static Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private boolean isGuard;
+    private static boolean isGuard;
 
     public GameController(boolean isGuard) {
+
+
+
         this.isGuard = isGuard;
-        player = createNewGame(false);
+        player = createNewGame(isGuard);
+        //guard = createNewGame(!isGuard);
+
+    	/*InputStream is = getClass().getClassLoader().getResourceAsStream("bg-music.wav");*/
+    	MakeSound ms = new MakeSound();
+    	ms.playSound("/home/vrecicstef/workspace/grade-thief/src/bg-music.wav");
+
+
     }
 
     /**
@@ -64,17 +82,91 @@ public class GameController {
         }
     }
 
-    //This is for server
-    public double[] getPlayerPosition() {
-        if (isGuard)
-            return guardPosition;
-        return playerPosition;
-    }
 
-    public void setPlayerPosition(double[] playerPosition) {
-        if (isGuard)
-            this.guardPosition = playerPosition;
-        else
-            this.playerPosition = playerPosition;
-    }
+
+	/*========================================================================*
+	 *                                                                        *
+	 * 						SETERS AND GETTERS								  *
+	 *                                                                        *
+	 *========================================================================*/
+
+
+	public static Screen getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(Screen player) {
+		this.player = player;
+	}
+
+	public static double[] getPlayerPosition() {
+		return playerPosition;
+	}
+
+	public static void setPlayerPosition(double[] playerPosition) {
+		GameController.playerPosition = playerPosition;
+	}
+
+	public static double[] getGuardPosition() {
+		return guardPosition;
+	}
+
+	public static void setGuardPosition(double[] guardPosition) {
+		GameController.guardPosition = guardPosition;
+	}
+
+	public static Dimension getScreenSize() {
+		return ScreenSize;
+	}
+
+	public static void setScreenSize(Dimension screenSize) {
+		ScreenSize = screenSize;
+	}
+
+	public static boolean isGuard() {
+		return isGuard;
+	}
+
+	public static void setGuard(boolean isGuard) {
+		GameController.isGuard = isGuard;
+	}
+
+	public Thread createGuardThread(GuardBot gaurd, int delay) {
+		Thread guardThread = new Thread() {
+			public void run() {
+				// move the guard in a fixed loop, once he reaches certain
+				// coordinate on the Map, change destination
+				// if () {}
+				// gaurd will keep moving
+
+
+					// update direction of guard based on hardcoded route
+					// through Tilemap
+
+				try {
+					Thread.sleep(delay);
+				//	gaurd.move();
+
+
+
+				} catch(InterruptedException e) {
+					// should never happen
+				}
+
+
+
+
+
+					// draw board intp console for debugging purposes
+					//game.drawBoard(gaurd.getFloorNo());
+
+
+
+			}
+		};
+		return guardThread;
+
+	}
+
+
 }
