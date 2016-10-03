@@ -1,6 +1,8 @@
 package gui;
 
 import items.Item;
+import items.Item.Interaction;
+import items.Player;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -25,8 +27,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     // The polygon that the mouse is currently over
     static Polygon polygonOver = null;
 
-    final int startX = 50;
-    final int startY = 50;
+    final int startX = 120;
+    final int startY = 150;
     final int startZ = 10;
 
     // Used for keeping mouse in center
@@ -74,8 +76,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     private GameController controller;
     private boolean guard;
+    private items.Player thisPlayer;
     private items.Player otherPlayer;
     private String messageToDisplay = "";
+	private boolean showInventory = false;
 
     /**
      * Create a new screen
@@ -83,6 +87,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     public Screen(GameController controller, boolean guard) {
         this.controller = controller;
         this.guard = guard;
+        this.thisPlayer = new Player(0, 0, 0, 0, 0, 0, null);
         if(guard)
             otherPlayer = new items.Player(20, 20, 0, 5, 3, 12, Color.green);
         else
@@ -127,15 +132,23 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         // Add all polygons to the list
         allPolygons.addAll(room.getFloorPolygons()); // floor tiles
         room.getWalls().forEach(o -> allPolygons.addAll(o.getPolygons())); // walls
-        room.getRoomObjects().forEach(o -> allPolygons.addAll(o.getPolygons())); // room objects
+        //room.getRoomObjects().forEach(o -> allPolygons.addAll(o.getPolygons())); // room objects
+
+        room.getRoomObjects().forEach(o -> { // doors
+            if(o.isDraw())
+            	allPolygons.addAll(o.getPolygons());
+        });
+
+
         room.getDoors().forEach(d -> { // doors
             if(d.isDraw())
                 allPolygons.addAll(d.getPolygons());
         });
+
         allPolygons.addAll(updateOtherPlayersPosition()); // other player
 
         // Updates each polygon for this camera position
-        System.out.println(allPolygons.size());
+     //   System.out.println(allPolygons.size());
         for (int i = 0; i < allPolygons.size(); i++)
             allPolygons.get(i).updatePolygon(this);
 
@@ -177,7 +190,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         double dy = otherPos[1] - otherPlayer.getY();
         double dz = otherPos[0] - otherPlayer.getZ();
         dz = 0;
-        
+
         otherPlayer.updatePosition(dx, dy, dz);
         return otherPlayer.getPolygons();
     }
@@ -404,16 +417,59 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             changeAllDoorState();
         if(e.getKeyCode() == KeyEvent.VK_E)
             playerWantingToInteractWithItem();
+        if (e.getKeyCode() == KeyEvent.VK_I)
+        	showInventory();
 
     }
 
-    private void playerWantingToInteractWithItem() {
+    private void showInventory() {
+//		if (showInventory) {
+//			showInventory = false;
+//			// ...
+//		} else if (!showInventory) {
+//			showInventory = true;
+			String[] inventoryItems = new String[thisPlayer.getInventory().size()];
+			int c = 0;
+			for (Item i : thisPlayer.getInventory()) {
+				inventoryItems[c] = i.toString();
+				c++;
+			}
+
+		     int n = JOptionPane.showOptionDialog(this, "What would you like to do?", "Select option", JOptionPane.YES_NO_CANCEL_OPTION,
+		                JOptionPane.QUESTION_MESSAGE, null, inventoryItems, inventoryItems[0]);
+		     Item selectedItem = thisPlayer.getInventory().get(n);
+		     // at this point; shou;d get the position directly infront of player
+		     // should make sure that it will not obstruct another item
+		     selectedItem.updateXYZ(viewFrom[0],
+		viewFrom[1], viewFrom[2] );
+		     selectedItem.getPolygons().forEach(ce -> ce.updatePosition( viewFrom[0],
+		    			viewFrom[1], 0.0));
+
+
+		    room.addItemToRoom(selectedItem);
+		    selectedItem.canDraw();
+
+		    thisPlayer.removeFromInventory(selectedItem);
+//		}
+
+	}
+
+	private void playerWantingToInteractWithItem() {
 
         for(Item i : room.getRoomObjects()){
 
             if(i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])){
                 int n = showOptionPane(i.getInteractionsAvaliable());
                 i.performAction(i.getInteractionsAvaliable().get(n));
+                System.out.println(i.getInteractionsAvaliable().get(n).toString());
+              if (i.getInteractionsAvaliable().get(n).equals(Interaction.TAKE)) {
+            	  thisPlayer.addToInventory(i);
+            	 System.out.println("add to inventory here");
+            	 for (Item playerItems : thisPlayer.getInventory()) {
+            		 System.out.println(playerItems);
+            	 }
+              }
+
             }
 
         }
@@ -441,12 +497,23 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
 
     private void isPlayerNearObject(){
-
+    	List<Item> removeItems = new ArrayList<Item>();
         for(Item i : room.getRoomObjects()){
+        	if (!i.isDraw()) {// nothing to display if item not rendered
+        		removeItems.add(i);
+        		continue;
+        	}
+
+
             if(i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])){
                 messageToDisplay = "Press e To Interact With The " + i.getClass().getSimpleName();
             }
         }
+
+
+    	for (Item i2 : removeItems) {
+    		room.removeRoomObject(i2);
+    	}
 
         for(Item i : room.getDoors()){
             if(i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])){

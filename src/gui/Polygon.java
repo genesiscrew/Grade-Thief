@@ -75,6 +75,15 @@ public class Polygon {
         }
     }
 
+
+    public void updatePosition2(double dx, double dy, double dz) {
+        for(int i=0; i < x.length; i++){
+            this.x[i] = dx;
+            this.y[i] = dy;
+            this.z[i] = dz;
+        }
+    }
+
     /**
      * Calculates the average distance to the viewer
      * @return

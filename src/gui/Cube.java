@@ -107,6 +107,7 @@ public class Cube implements Drawable {
         }
     }
 
+
     /**
      * Update the direction the polygon is facing
      *

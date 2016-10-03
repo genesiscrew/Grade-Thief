@@ -25,6 +25,13 @@ public abstract class Item extends GameObject implements Drawable {
     protected List<Interaction> interactionsAvaliable;
     protected boolean draw = true;
 
+    public void canDraw() {
+    	draw = !draw;
+    }
+    public boolean isDraw() {
+    	return draw;
+    }
+
     public Item(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
         super(itemID, itemType);
         this.x = x;
@@ -36,7 +43,11 @@ public abstract class Item extends GameObject implements Drawable {
         this.color = c;
         addInteractions();
     }
-
+    public void updateXYZ(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
     public void addInteractions() {
         interactionsAvaliable = new ArrayList<>();
         interactionsAvaliable.add(Interaction.OPEN);
@@ -68,7 +79,6 @@ public abstract class Item extends GameObject implements Drawable {
             	break;
             case TAKE:
             	draw = false;
-            	
             	break;
         }
     }
