@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 
 /**
- * Created by wareinadam on 28/09/16.
+ * @Author Adam Wareing
  */
 public class GameController {
 

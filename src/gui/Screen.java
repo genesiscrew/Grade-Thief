@@ -14,9 +14,6 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.List;
-
-import characters.GuardBot;
-
 import javax.swing.*;
 
 
@@ -61,15 +58,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     double lastFPSCheck = 0;
     double fpsCheck = 0;
 
-
     private ScreenUtil screenUtil = new ScreenUtil();
+    private PolygonDrawer polyDrawer;
     double sunPos = 0;
-
-    /**
-     * Will hold the order that the polygons in the ArrayList DPolygon should be drawn meaning
-     * DPolygon.get(polygonDrawOrder[0]) gets drawn first
-     */
-    int[] polygonDrawOrder;
 
     static boolean drawOutlines = true;
     boolean[] keys = new boolean[4];
@@ -91,9 +82,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             otherPlayer = new items.Player(20, 20, 0, 5, 3, 12, Color.green);
         else
             otherPlayer = new items.Player(20, 20, 0, 5, 3, 12, Color.blue);
+
         this.addKeyListener(this);
         setFocusable(true);
-
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
@@ -102,6 +93,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
         // Load the section of the map
         room = new Room("level", startX, startY);
+        this.polyDrawer = new PolygonDrawer(room, lightDir, viewFrom, controller);
 
         if (guard) {
             viewFrom[0] = 100;
@@ -128,7 +120,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         Calculator.setPredeterminedInfo(this);
         Calculator.controlSunAndLight(lightDir, room.getWidth(), sunPos);
 
-        drawPolygons(g);
+        polyDrawer.drawPolygons(g, guard, otherPlayer);
 
         // Draw the cross in the center of the screen
         screenUtil.drawMouseAim(g);
@@ -148,103 +140,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         sleepAndRefresh();
     }
 
-    private void drawPolygons(Graphics g){
-        List<Polygon> allPolygons = getAllPolygonsThatNeedToBeDrawn();
-
-        // Updates each polygon for this camera position
-        for (int i = 0; i < allPolygons.size(); i++)
-            allPolygons.get(i).updatePolygon(lightDir, viewFrom);
-
-        // Set drawing order so closest polygons gets drawn last
-        setOrder(allPolygons);
-
-        // Set the polygon that the mouse is currently over
-        // setPolygonOver();
-
-        // Draw polygons in the Order that is set by the 'setOrder' function
-        for (int i = 0; i < polygonDrawOrder.length; i++)
-            allPolygons.get(polygonDrawOrder[i]).drawPolygon(g);
-    }
-
-
-    private List<Polygon> getAllPolygonsThatNeedToBeDrawn(){
-        // All polygons that need to be drawn
-        List<Polygon> allPolygons = new ArrayList<>();
-
-        // re-closes doors previously opened by player as soon as he is not near it.
-        room.getDoors().stream().filter(i -> !i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2]) && !i.isDraw()).forEach(i -> i.changeState());
-
-        // Add all polygons to the list
-        allPolygons.addAll(room.getFloorPolygons()); // floor tiles
-        room.getWalls().forEach(o -> allPolygons.addAll(o.getPolygons())); // walls
-
-        room.getRoomObjects().forEach(o -> { // room objects
-            if (o.isDraw())
-                allPolygons.addAll(o.getPolygons());
-        });
-
-        room.getDoors().forEach(d -> { // doors
-            if (d.isDraw())
-                allPolygons.addAll(d.getPolygons());
-        });
-
-        double[] otherPos = controller.getOtherPlayersPosition(guard);
-        allPolygons.addAll(PlayerMovement.updateOtherPlayersPosition(otherPos, otherPlayer)); // other player
-        // Adds polygons from all guard bots
-        for (GuardBot r : this.controller.getGuardList()) {
-            allPolygons.addAll(PlayerMovement.updateGuardBotPosition(r.getName(), controller) );
-        }
-        return allPolygons;
-    }
-
-
-    /**
-     * This sets the order that the polygons are drawn in
-     */
-    private void setOrder(List<Polygon> polys) {
-        double[] k = new double[polys.size()];
-        polygonDrawOrder = new int[polys.size()];
-
-        for (int i = 0; i < polys.size(); i++) {
-            k[i] = polys.get(i).averageDistance;
-            polygonDrawOrder[i] = i;
-        }
-
-        double temp;
-        int temp2;
-        for (int a = 0; a < k.length - 1; a++)
-            for (int b = 0; b < k.length - 1; b++)
-                if (k[b] < k[b + 1]) {
-                    temp = k[b];
-                    temp2 = polygonDrawOrder[b];
-                    polygonDrawOrder[b] = polygonDrawOrder[b + 1];
-                    k[b] = k[b + 1];
-
-                    polygonDrawOrder[b + 1] = temp2;
-                    k[b + 1] = temp;
-                }
-    }
-
-/*    *//**
-     * This hides the mouse cursor so we can use the cross hairs instead
-     *//*
-    private void invisibleMouse() {
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        BufferedImage cursorImage = new BufferedImage(1, 1, BufferedImage.TRANSLUCENT);
-        Cursor invisibleCursor = toolkit.createCustomCursor(cursorImage, new Point(0, 0), "InvisibleCursor");
-        setCursor(invisibleCursor);
-    }
-
-    *//**
-     * This aims the mouse on the graphics
-     *
-     * @param g
-     *//*
-    private void drawMouseAim(Graphics g) {
-        g.setColor(Color.black);
-        g.drawLine((int) (Main.ScreenSize.getWidth() / 2 - AIM_SIGHT), (int) (Main.ScreenSize.getHeight() / 2), (int) (Main.ScreenSize.getWidth() / 2 + AIM_SIGHT), (int) (Main.ScreenSize.getHeight() / 2));
-        g.drawLine((int) (Main.ScreenSize.getWidth() / 2), (int) (Main.ScreenSize.getHeight() / 2 - AIM_SIGHT), (int) (Main.ScreenSize.getWidth() / 2), (int) (Main.ScreenSize.getHeight() / 2 + AIM_SIGHT));
-    }*/
 
     /**
      * This refreshes the display when required. In the meantime it simply sleeps.
@@ -349,30 +244,22 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     private void playerWantingToInteractWithItem() {
 
-        for (Item i : room.getRoomObjects()) {
+        room.getRoomObjects().stream().filter(i -> i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])).forEach(i -> {
 
-            if (i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
-                int n = showOptionPane(i.getInteractionsAvaliable());
-                i.performAction(i.getInteractionsAvaliable().get(n));
-                System.out.println(i.getInteractionsAvaliable().get(n).toString());
-                if (i.getInteractionsAvaliable().get(n).equals(Interaction.TAKE)) {
-                    currentPlayer.addToInventory(i);
-                    System.out.println("add to inventory here");
-                    for (Item playerItems : currentPlayer.getInventory()) {
-                        System.out.println(playerItems);
-                    }
-                }
-
+            int n = showOptionPane(i.getInteractionsAvaliable());
+            i.performAction(i.getInteractionsAvaliable().get(n));
+            System.out.println(i.getInteractionsAvaliable().get(n).toString());
+            if (i.getInteractionsAvaliable().get(n).equals(Interaction.TAKE)) {
+                currentPlayer.addToInventory(i);
+                System.out.println("add to inventory here");
+                currentPlayer.getInventory().forEach(System.out::println);
             }
+        });
 
-        }
-
-        for (Item i : room.getDoors()) {
-            if (i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
-                int n = showOptionPane(i.getInteractionsAvaliable());
-                i.performAction(i.getInteractionsAvaliable().get(n));
-            }
-        }
+        room.getDoors().stream().filter(i -> i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])).forEach(i -> {
+            int n = showOptionPane(i.getInteractionsAvaliable());
+            i.performAction(i.getInteractionsAvaliable().get(n));
+        });
     }
 
     public void loadMap() {
