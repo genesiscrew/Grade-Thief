@@ -12,7 +12,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,17 +54,15 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     static double mouseX = 0;
     static double mouseY = 0;
 
-    //FPS is a bit primitive, you can set the maxFPS as high as u want
-    double drawFPS = 0, maxFPS = 1000, LastRefresh = 0, lastFPSCheck = 0, fpsCheck = 0;
+    // FPS
+    double drawFPS = 0;
+    double maxFPS = 1000;
+    double lastRefresh = 0;
+    double lastFPSCheck = 0;
+    double fpsCheck = 0;
 
 
-    double VertLook = -0.9;  // Goes from 0.999 to -0.999, minus being looking down and + looking up
-    double HorLook = 0;     // takes any number and goes round in radians
-    double aimSight = 4; // Changes the size of the center-cross.
-
-    // The lower HorRotSpeed or VertRotSpeed, the faster the camera will rotate in those directions
-    double HorRotSpeed = 900;
-    double VertRotSpeed = 2200;
+    private ScreenUtil screenUtil = new ScreenUtil();
     double sunPos = 0;
 
     /**
@@ -82,7 +79,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     private items.Player currentPlayer;
     private items.Player otherPlayer;
     private String messageToDisplay = "";
-    private boolean showInventory = false;
 
     /**
      * Create a new screen
@@ -101,7 +97,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
-        invisibleMouse();
+        Cursor cursor = screenUtil.invisibleMouse();
+        setCursor(cursor);
 
         // Load the section of the map
         room = new Room("level", startX, startY);
@@ -134,7 +131,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         drawPolygons(g);
 
         // Draw the cross in the center of the screen
-        drawMouseAim(g);
+        screenUtil.drawMouseAim(g);
 
         // FPS display
         g.drawString("FPS: " + (int) drawFPS + "(Benchmark)", 40, 40);
@@ -200,17 +197,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         return allPolygons;
     }
 
-//    /**
-//     * this method updates the guard bot position
-//     *
-//     * @return
-//     */
-//    private List<Polygon> updateGuardBotPosition(String guardName) {
-//        // Lets start by getting there position from the controller and see how much they have moved
-//        GuardBot g = controller.getGuardBot(guardName);
-//        g.move(); // move the guard bot and update position based on heading
-//        return g.getPolygons();
-//    }
 
     /**
      * This sets the order that the polygons are drawn in
@@ -225,23 +211,23 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         }
 
         double temp;
-        int tempr;
+        int temp2;
         for (int a = 0; a < k.length - 1; a++)
             for (int b = 0; b < k.length - 1; b++)
                 if (k[b] < k[b + 1]) {
                     temp = k[b];
-                    tempr = polygonDrawOrder[b];
+                    temp2 = polygonDrawOrder[b];
                     polygonDrawOrder[b] = polygonDrawOrder[b + 1];
                     k[b] = k[b + 1];
 
-                    polygonDrawOrder[b + 1] = tempr;
+                    polygonDrawOrder[b + 1] = temp2;
                     k[b + 1] = temp;
                 }
     }
 
-    /**
+/*    *//**
      * This hides the mouse cursor so we can use the cross hairs instead
-     */
+     *//*
     private void invisibleMouse() {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         BufferedImage cursorImage = new BufferedImage(1, 1, BufferedImage.TRANSLUCENT);
@@ -249,22 +235,22 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         setCursor(invisibleCursor);
     }
 
-    /**
+    *//**
      * This aims the mouse on the graphics
      *
      * @param g
-     */
+     *//*
     private void drawMouseAim(Graphics g) {
         g.setColor(Color.black);
-        g.drawLine((int) (Main.ScreenSize.getWidth() / 2 - aimSight), (int) (Main.ScreenSize.getHeight() / 2), (int) (Main.ScreenSize.getWidth() / 2 + aimSight), (int) (Main.ScreenSize.getHeight() / 2));
-        g.drawLine((int) (Main.ScreenSize.getWidth() / 2), (int) (Main.ScreenSize.getHeight() / 2 - aimSight), (int) (Main.ScreenSize.getWidth() / 2), (int) (Main.ScreenSize.getHeight() / 2 + aimSight));
-    }
+        g.drawLine((int) (Main.ScreenSize.getWidth() / 2 - AIM_SIGHT), (int) (Main.ScreenSize.getHeight() / 2), (int) (Main.ScreenSize.getWidth() / 2 + AIM_SIGHT), (int) (Main.ScreenSize.getHeight() / 2));
+        g.drawLine((int) (Main.ScreenSize.getWidth() / 2), (int) (Main.ScreenSize.getHeight() / 2 - AIM_SIGHT), (int) (Main.ScreenSize.getWidth() / 2), (int) (Main.ScreenSize.getHeight() / 2 + AIM_SIGHT));
+    }*/
 
     /**
      * This refreshes the display when required. In the meantime it simply sleeps.
      */
     private void sleepAndRefresh() {
-        long timeSLU = (long) (System.currentTimeMillis() - LastRefresh);
+        long timeSLU = (long) (System.currentTimeMillis() - lastRefresh);
 
         fpsCheck++;
         if (fpsCheck >= 15) {
@@ -281,42 +267,24 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             }
         }
 
-        LastRefresh = System.currentTimeMillis();
+        lastRefresh = System.currentTimeMillis();
         repaint();
     }
 
 
-    /**
-     * Called when the mouse is moved, calculates the amount it was moved and sets the vert and horizontal looking angles
-     * It also updates the view
-     *
-     * @param NewMouseX
-     * @param NewMouseY
-     */
-    void mouseMovement(double NewMouseX, double NewMouseY) {
-        double difX = (NewMouseX - Main.ScreenSize.getWidth() / 2);
-        double difY = (NewMouseY - Main.ScreenSize.getHeight() / 2);
-        difY *= 6 - Math.abs(VertLook) * 5;
-        VertLook -= difY / VertRotSpeed;
-        HorLook += difX / HorRotSpeed;
 
-        if (VertLook > 0.999)
-            VertLook = 0.999;
-
-        if (VertLook < -0.999)
-            VertLook = -0.999;
-
-        updateView();
-    }
 
     /**
      * Sets the x, y, z that the player is looking at
      */
     void updateView() {
-        double r = Math.sqrt(1 - (VertLook * VertLook));
-        viewTo[0] = viewFrom[0] + r * Math.cos(HorLook);
-        viewTo[1] = viewFrom[1] + r * Math.sin(HorLook);
-        viewTo[2] = viewFrom[2] + VertLook;
+        double verticalLook = screenUtil.getVerticalLook();
+        double horizontalLook = screenUtil.getHorizontalLook();
+        double r = Math.sqrt(1 - (verticalLook * verticalLook));
+
+        viewTo[0] = viewFrom[0] + r * Math.cos(horizontalLook);
+        viewTo[1] = viewFrom[1] + r * Math.sin(horizontalLook);
+        viewTo[2] = viewFrom[2] + verticalLook;
     }
 
     /**
@@ -479,18 +447,20 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     @Override
     public void mouseDragged(MouseEvent arg0) {
-        mouseMovement(arg0.getX(), arg0.getY());
+        screenUtil.mouseMovement(arg0.getX(), arg0.getY());
         mouseX = arg0.getX();
         mouseY = arg0.getY();
         centerMouse();
+        updateView();
     }
 
     @Override
     public void mouseMoved(MouseEvent arg0) {
-        mouseMovement(arg0.getX(), arg0.getY());
+        screenUtil.mouseMovement(arg0.getX(), arg0.getY());
         mouseX = arg0.getX();
         mouseY = arg0.getY();
         centerMouse();
+        updateView();
     }
 
     @Override
