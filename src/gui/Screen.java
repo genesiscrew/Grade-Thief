@@ -1,5 +1,6 @@
 package gui;
 
+import items.Door;
 import items.Item;
 import items.Item.Interaction;
 import items.Player;
@@ -15,6 +16,8 @@ import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+
+import characters.GuardBot;
 
 import javax.swing.*;
 
@@ -132,16 +135,21 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         // All polygons that need to be drawn
         List<Polygon> allPolygons = new ArrayList<>();
 
+        // re-closes doors previously opened by player as soon as he is not near it.
+        for (Item i : room.getDoors()) {
+            if (!i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2]) && !((Door) i).isDraw()) {
+                ((Door) i).changeState();
+            }
+        }
+
         // Add all polygons to the list
         allPolygons.addAll(room.getFloorPolygons()); // floor tiles
         room.getWalls().forEach(o -> allPolygons.addAll(o.getPolygons())); // walls
-        //room.getRoomObjects().forEach(o -> allPolygons.addAll(o.getPolygons())); // room objects
 
-        room.getRoomObjects().forEach(o -> { // doors
+        room.getRoomObjects().forEach(o -> { // room objects
             if (o.isDraw())
                 allPolygons.addAll(o.getPolygons());
         });
-
 
         room.getDoors().forEach(d -> { // doors
             if (d.isDraw())
@@ -149,9 +157,15 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         });
 
         allPolygons.addAll(updateOtherPlayersPosition()); // other player
+        // adds polygons from all guard bots
+        for (GuardBot r : this.controller.getGuardList()) {
+
+            allPolygons.addAll(this.updateGuardBotPosition(r.getName()));
+
+        }
+
 
         // Updates each polygon for this camera position
-        //   System.out.println(allPolygons.size());
         for (int i = 0; i < allPolygons.size(); i++)
             allPolygons.get(i).updatePolygon(lightDir, viewFrom);
 
@@ -168,9 +182,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         // Draw the cross in the center of the screen
         drawMouseAim(g);
 
-
         // FPS display
-        g.drawString("FPS: " + (int) drawFPS + " (Benchmark)", 40, 40);
+        g.drawString("FPS: " + (int) drawFPS + "(Benchmark)", 40, 40);
 
         g.setFont(new Font("Arial", Font.BOLD, 20));
         messageToDisplay = "";
@@ -183,6 +196,16 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
 
+    private List<Polygon> updateGuardsPosition() {
+        // TODO Auto-generated method stub
+        List<Polygon> guards = new ArrayList<Polygon>();
+        for (GuardBot g : this.room.guardList) {
+            guards.addAll(g.getPolygons());
+        }
+
+        return guards;
+    }
+
     /**
      * @return
      */
@@ -191,11 +214,23 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         double[] otherPos = controller.getOtherPlayersPosition(guard);
         double dx = otherPos[0] - otherPlayer.getX();
         double dy = otherPos[1] - otherPlayer.getY();
-        double dz = otherPos[0] - otherPlayer.getZ();
-        dz = 0;
+        double dz = otherPos[2] - otherPlayer.getZ();
 
         otherPlayer.updatePosition(dx, dy, dz);
         return otherPlayer.getPolygons();
+    }
+
+    /**
+     * this method updates the guard bot position
+     *
+     * @return
+     */
+    private List<Polygon> updateGuardBotPosition(String guardName) {
+        // Lets start by getting there position from the controller and see how much they have moved
+        double[] otherPos = controller.getOtherBotPosition(guardName);
+        GuardBot g = controller.getGuardBot(guardName);
+        g.move(); // move the guardbot and update position based on heading
+        return g.getPolygons();
     }
 
     /**
@@ -247,7 +282,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
     /**
-     * This refreshes the display when required. In th meantime it simply sleeps.
+     * This refreshes the display when required. In the meantime it simply sleeps.
      */
     private void sleepAndRefresh() {
         long timeSLU = (long) (System.currentTimeMillis() - LastRefresh);
@@ -437,8 +472,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         Item selectedItem = thisPlayer.getInventory().get(n);
         // at this point; shou;d get the position directly infront of player
         // should make sure that it will not obstruct another item
-        selectedItem.moveItemBy(viewFrom[0]-selectedItem.getX(),
-                viewFrom[1] - selectedItem.getY(), 0 );
+        selectedItem.moveItemBy(viewFrom[0] - selectedItem.getX(),
+                viewFrom[1] - selectedItem.getY(), 0);
 //        selectedItem.getPolygons().forEach(ce -> ce.updatePosition(viewFrom[0],
 //                viewFrom[1], 0.0));
         room.addItemToRoom(selectedItem);
@@ -632,6 +667,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         }
     }
 
+
     public void setStartX(double startX) {
         this.startX = (int) startX;
     }
@@ -642,5 +678,27 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     public void setViewFrom(double[] viewFrom) {
         this.viewFrom = viewFrom;
+    }
+
+    /**
+     * starts all guard bots moving in different threads
+     */
+    /*
+    public void startGuardsMovement() {
+
+		List<Thread> threads = new ArrayList<Thread>();
+		for (int i = 0; i < this.room.guardList.size(); i++) {
+		 threads.add(this.room.guardList.get(i).startMovement(this));
+
+		}
+
+		threads.forEach(d -> d.start());
+
+
+	}
+	*/
+    public double[] getPlayerView() {
+        // TODO Auto-generated method stub
+        return this.viewFrom;
     }
 }

@@ -222,7 +222,7 @@ public class TileMap {
 					int arrSize = sc.nextInt();
 					int[] distances = new int[arrSize];
 					for (int i = 0; i < arrSize; i++) {
-					
+
 						distances[i] = sc.nextInt();
 					}
 					int floorNo = sc.nextInt();
@@ -232,7 +232,8 @@ public class TileMap {
 					E.addObjectToTile(guard);
 					E.setOccupied(); System.out.println("e occupied" + E.isOccupied);
 					tileMap.setTile(x, y, E);
-					room.addItemToRoom(guard);
+					//room.addItemToRoom(guard);
+					room.addGuardtoRoom(guard);
 
 
 				}
@@ -315,7 +316,7 @@ public class TileMap {
 					System.out.println("type is of type  " + type + " count");
 				// System.out.println(sc.next());
 
-				
+
 
 
 						switch (type) {

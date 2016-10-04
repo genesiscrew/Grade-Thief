@@ -96,5 +96,4 @@ public class DoorDraw extends Item {
 	            return false;
 	        }
 	}
-
 }

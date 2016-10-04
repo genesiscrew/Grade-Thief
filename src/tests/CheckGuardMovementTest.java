@@ -18,7 +18,7 @@ public class CheckGuardMovementTest {
 
 	public static void main(String[] args) throws IOException {
 
-		Game game = new Game();
+/*		Game game = new Game();
 		gui.Room room = createRoom();
 		game.addFloor(room);
 		int[] dist = {6,6};
@@ -28,6 +28,7 @@ public class CheckGuardMovementTest {
 //		int[] dist2 = {6,1,6,1};
 //		GuardBot guard3 = new GuardBot(1, "guard3",13,dist2, 0);
 		// set gaurd's location
+<<<<<<< HEAD
 //		gaurd1.setCharacterLocation(14, 0);
 //		guard2.setCharacterLocation(49, 0);
 //		guard3.setCharacterLocation(14, 7);
@@ -52,6 +53,31 @@ public class CheckGuardMovementTest {
 //        guardThread1.start();
 //        guardThread3.start();
 //		drawThread.start();
+=======
+		gaurd1.setCharacterLocation(14, 0);
+		guard2.setCharacterLocation(49, 0);
+		guard3.setCharacterLocation(14, 7);
+
+		 ((EmptyTile) game.getRoom(0).getTileMap().getTileMap()[14][0]).addObjectToTile(gaurd1);
+		 ((EmptyTile)
+		 game.getRoom(0).getTileMap().getTileMap()[49][0]).addObjectToTile(guard2);
+		 ((EmptyTile)
+				 game.getRoom(0).getTileMap().getTileMap()[14][7]).addObjectToTile(guard3);
+
+		 game.drawBoard(0);
+         Thread guardThread1 = game.createGuardThread(gaurd1,0);
+         Thread drawThread = game.drawFloorThread(700);
+		 Thread guardThread2 = game.createGuardThread(guard2, 0);
+		 Thread guardThread3 = game.createGuardThread(guard3, 0);
+
+		// start the guard movement, thread stops running when intruder caught
+         game.display.setVisible(true);
+		 guardThread2.start();
+
+
+        guardThread1.start();
+        guardThread3.start();
+		drawThread.start(); */
 
 	}
 
@@ -69,8 +95,6 @@ public class CheckGuardMovementTest {
 		//Door d = new Door(0000, "0001",0, null);
 
 		String co237 = System.getProperty("user.dir") + "/src/game/floor/level";
-
-
 
 		gui.Room room_co237 = new gui.Room("level", 0, 0);
 
