@@ -17,7 +17,7 @@ public class Room {
     private Door door;
     private int sx = -1;
     private int sy = -1;
-    private int w = -1;
+    private int width = -1;
     private int h = -1;
     List<GuardBot> guardList;
 
@@ -187,7 +187,7 @@ public class Room {
     public void setBoundingBox(int sx, int sy, int w, int h) {
         this.sx = sx;
         this.sy = sy;
-        this.w = w;
+        this.width = w;
         this.h = h;
     }
 
@@ -196,7 +196,7 @@ public class Room {
     }
 
     public int[] getBoundingBox() {
-        return new int[]{sx, sy, w, h};
+        return new int[]{sx, sy, width, h};
     }
 
     public int roomGetCode() {
@@ -215,8 +215,8 @@ public class Room {
         return sy;
     }
 
-    public int getW() {
-        return w;
+    public int getWidth() {
+        return width;
     }
 
     public int getH() {

@@ -1,6 +1,5 @@
 package gui;
 
-import items.Door;
 import items.Item;
 import items.Item.Interaction;
 import items.Player;
@@ -38,9 +37,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     public static int startY = 150;
     public static int startZ = 10;
 
-    Robot r;     // Used for keeping mouse in center
+    Robot r; // Used for keeping mouse in center
     static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private boolean jumping = false;
 
     /**
      * This is the co-ordinates of where the player is  (x, y, z)
@@ -68,7 +66,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     // The lower HorRotSpeed or VertRotSpeed, the faster the camera will rotate in those directions
     double HorRotSpeed = 900;
     double VertRotSpeed = 2200;
-    double SunPos = 0;
+    double sunPos = 0;
 
     /**
      * Will hold the order that the polygons in the ArrayList DPolygon should be drawn meaning
@@ -81,7 +79,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     private GameController controller;
     private boolean guard;
-    private items.Player thisPlayer;
+    private items.Player currentPlayer;
     private items.Player otherPlayer;
     private String messageToDisplay = "";
     private boolean showInventory = false;
@@ -92,7 +90,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     public Screen(GameController controller, boolean guard) {
         this.controller = controller;
         this.guard = guard;
-        this.thisPlayer = new Player(0, 0, 0, 0, 0, 0, null);
+        this.currentPlayer = new Player(0, 0, 0, 0, 0, 0, null);
         if (guard)
             otherPlayer = new items.Player(20, 20, 0, 5, 3, 12, Color.green);
         else
@@ -131,17 +129,53 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
         // Calculated all that is general for this camera position
         Calculator.setPredeterminedInfo(this);
-        controlSunAndLight();
+        Calculator.controlSunAndLight(lightDir, room.getWidth(), sunPos);
 
+        drawPolygons(g);
+
+        // Draw the cross in the center of the screen
+        drawMouseAim(g);
+
+        // FPS display
+        g.drawString("FPS: " + (int) drawFPS + "(Benchmark)", 40, 40);
+
+        // Message display
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        messageToDisplay = "";
+        isPlayerNearObject();
+        if (!messageToDisplay.equals("")) {
+            g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120, (int) screenSize.getHeight() / 2 - 50);
+        }
+
+        // Redraw
+        sleepAndRefresh();
+    }
+
+    private void drawPolygons(Graphics g){
+        List<Polygon> allPolygons = getAllPolygonsThatNeedToBeDrawn();
+
+        // Updates each polygon for this camera position
+        for (int i = 0; i < allPolygons.size(); i++)
+            allPolygons.get(i).updatePolygon(lightDir, viewFrom);
+
+        // Set drawing order so closest polygons gets drawn last
+        setOrder(allPolygons);
+
+        // Set the polygon that the mouse is currently over
+        // setPolygonOver();
+
+        // Draw polygons in the Order that is set by the 'setOrder' function
+        for (int i = 0; i < polygonDrawOrder.length; i++)
+            allPolygons.get(polygonDrawOrder[i]).drawPolygon(g);
+    }
+
+
+    private List<Polygon> getAllPolygonsThatNeedToBeDrawn(){
         // All polygons that need to be drawn
         List<Polygon> allPolygons = new ArrayList<>();
 
         // re-closes doors previously opened by player as soon as he is not near it.
-        for (Item i : room.getDoors()) {
-            if (!i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2]) && !((Door) i).isDraw()) {
-                ((Door) i).changeState();
-            }
-        }
+        room.getDoors().stream().filter(i -> !i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2]) && !i.isDraw()).forEach(i -> i.changeState());
 
         // Add all polygons to the list
         allPolygons.addAll(room.getFloorPolygons()); // floor tiles
@@ -157,71 +191,26 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
                 allPolygons.addAll(d.getPolygons());
         });
 
-        allPolygons.addAll(updateOtherPlayersPosition()); // other player
-        // adds polygons from all guard bots
-        for (GuardBot r : this.controller.getGuardList()) {
-
-            allPolygons.addAll(this.updateGuardBotPosition(r.getName()));
-
-        }
-
-
-        // Updates each polygon for this camera position
-        for (int i = 0; i < allPolygons.size(); i++)
-            allPolygons.get(i).updatePolygon(lightDir, viewFrom);
-
-        // Set drawing order so closest polygons gets drawn last
-        setOrder(allPolygons);
-
-        // Set the polygon that the mouse is currently over
-        // setPolygonOver();
-
-        // Draw polygons in the Order that is set by the 'setOrder' function
-        for (int i = 0; i < polygonDrawOrder.length; i++)
-            allPolygons.get(polygonDrawOrder[i]).drawPolygon(g);
-
-        // Draw the cross in the center of the screen
-        drawMouseAim(g);
-
-        // FPS display
-        g.drawString("FPS: " + (int) drawFPS + "(Benchmark)", 40, 40);
-
-        g.setFont(new Font("Arial", Font.BOLD, 20));
-        messageToDisplay = "";
-        isPlayerNearObject();
-        if (!messageToDisplay.equals("")) {
-            g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120, (int) screenSize.getHeight() / 2 - 50);
-        }
-
-        sleepAndRefresh();
-    }
-
-    /**
-     * @return
-     */
-    private List<Polygon> updateOtherPlayersPosition() {
-        // Lets start by getting there position from the controller and see how much they have moved
         double[] otherPos = controller.getOtherPlayersPosition(guard);
-        double dx = otherPos[0] - otherPlayer.getX();
-        double dy = otherPos[1] - otherPlayer.getY();
-        double dz = otherPos[2] - otherPlayer.getZ();
-
-        otherPlayer.updatePosition(dx, dy, dz);
-        return otherPlayer.getPolygons();
+        allPolygons.addAll(PlayerMovement.updateOtherPlayersPosition(otherPos, otherPlayer)); // other player
+        // Adds polygons from all guard bots
+        for (GuardBot r : this.controller.getGuardList()) {
+            allPolygons.addAll(PlayerMovement.updateGuardBotPosition(r.getName(), controller) );
+        }
+        return allPolygons;
     }
 
-    /**
-     * this method updates the guard bot position
-     *
-     * @return
-     */
-    private List<Polygon> updateGuardBotPosition(String guardName) {
-        // Lets start by getting there position from the controller and see how much they have moved
-        double[] otherPos = controller.getOtherBotPosition(guardName);
-        GuardBot g = controller.getGuardBot(guardName);
-        g.move(); // move the guard bot and update position based on heading
-        return g.getPolygons();
-    }
+//    /**
+//     * this method updates the guard bot position
+//     *
+//     * @return
+//     */
+//    private List<Polygon> updateGuardBotPosition(String guardName) {
+//        // Lets start by getting there position from the controller and see how much they have moved
+//        GuardBot g = controller.getGuardBot(guardName);
+//        g.move(); // move the guard bot and update position based on heading
+//        return g.getPolygons();
+//    }
 
     /**
      * This sets the order that the polygons are drawn in
@@ -296,17 +285,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         repaint();
     }
 
-    /**
-     * Sets the the values for the light direction
-     */
-    void controlSunAndLight() {
-        //SunPos += 0.005;
-        double mapSize = room.getFloor().getMapWidth() * room.getFloor().getMapWidth();
-        lightDir[0] = mapSize / 2 - (mapSize / 2 + Math.cos(SunPos) * mapSize * 10);
-        lightDir[1] = mapSize / 2 - (mapSize / 2 + Math.sin(SunPos) * mapSize * 10);
-        lightDir[2] = -200;
-    }
-
 
     /**
      * Called when the mouse is moved, calculates the amount it was moved and sets the vert and horizontal looking angles
@@ -368,7 +346,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
             System.exit(0);
         if (e.getKeyCode() == KeyEvent.VK_SPACE)
-            jump();
+            currentPlayer.jump(viewFrom);
         if (e.getKeyCode() == KeyEvent.VK_R)
             loadMap();
         if (e.getKeyCode() == KeyEvent.VK_U)
@@ -380,16 +358,16 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
     private void showInventory() {
-        String[] inventoryItems = new String[thisPlayer.getInventory().size()];
+        String[] inventoryItems = new String[currentPlayer.getInventory().size()];
         int c = 0;
-        for (Item i : thisPlayer.getInventory()) {
+        for (Item i : currentPlayer.getInventory()) {
             inventoryItems[c] = i.toString();
             c++;
         }
 
         int n = JOptionPane.showOptionDialog(this, "What would you like to do?", "Select option", JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, inventoryItems, inventoryItems[0]);
-        Item selectedItem = thisPlayer.getInventory().get(n);
+        Item selectedItem = currentPlayer.getInventory().get(n);
         // at this point; shou;d get the position directly infront of player
         // should make sure that it will not obstruct another item
         selectedItem.moveItemBy(viewFrom[0] - selectedItem.getX(),
@@ -398,7 +376,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         room.addItemToRoom(selectedItem);
         selectedItem.canDraw();
 
-        thisPlayer.removeFromInventory(selectedItem);
+        currentPlayer.removeFromInventory(selectedItem);
     }
 
     private void playerWantingToInteractWithItem() {
@@ -410,9 +388,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
                 i.performAction(i.getInteractionsAvaliable().get(n));
                 System.out.println(i.getInteractionsAvaliable().get(n).toString());
                 if (i.getInteractionsAvaliable().get(n).equals(Interaction.TAKE)) {
-                    thisPlayer.addToInventory(i);
+                    currentPlayer.addToInventory(i);
                     System.out.println("add to inventory here");
-                    for (Item playerItems : thisPlayer.getInventory()) {
+                    for (Item playerItems : currentPlayer.getInventory()) {
                         System.out.println(playerItems);
                     }
                 }
@@ -468,38 +446,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         }
     }
 
-    /**
-     * This makes the player jump in the game. It uses a seperate thread to simulate the jumping so we can continue
-     * updating the display throughout the jump.
-     */
-    public void jump() {
-        if (jumping)
-            return;
-        jumping = true;
-        Thread jumpingThread = new Thread() {
-            @Override
-            public void run() {
-                for (int i = 0; i < 5; i++) {
-                    viewFrom[2] += 2;
-                    try {
-                        Thread.sleep(30);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                for (int i = 0; i < 5; i++) {
-                    viewFrom[2] -= 2;
-                    try {
-                        Thread.sleep(30);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                jumping = false;
-            }
-        };
-        jumpingThread.start();
-    }
+
 
 
     private int showOptionPane(List<Item.Interaction> optionsList) {

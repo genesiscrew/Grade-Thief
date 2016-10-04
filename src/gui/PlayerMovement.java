@@ -1,5 +1,10 @@
 package gui;
 
+import characters.GuardBot;
+import items.Player;
+
+import java.util.List;
+
 /**
  * @Author Adam Wareing
  */
@@ -76,5 +81,30 @@ public class PlayerMovement {
 //            }
 //    }
 
+
+    /**
+     * @return
+     */
+    public static List<Polygon> updateOtherPlayersPosition(double[] otherPos, Player otherPlayer ) {
+        // Lets start by getting there position from the controller and see how much they have moved
+        double dx = otherPos[0] - otherPlayer.getX();
+        double dy = otherPos[1] - otherPlayer.getY();
+        double dz = otherPos[2] - otherPlayer.getZ();
+
+        otherPlayer.updatePosition(dx, dy, dz);
+        return otherPlayer.getPolygons();
+    }
+
+    /**
+     * this method updates the guard bot position
+     *
+     * @return
+     */
+    public static List<Polygon> updateGuardBotPosition(String guardName, GameController controller) {
+        // Lets start by getting there position from the controller and see how much they have moved
+        GuardBot g = controller.getGuardBot(guardName);
+        g.move(); // move the guard bot and update position based on heading
+        return g.getPolygons();
+    }
 
 }

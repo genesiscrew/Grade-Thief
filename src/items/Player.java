@@ -20,6 +20,7 @@ public class Player implements Drawable {
     protected double length;
     protected double height;
     protected Color color;
+    protected boolean jumping;
 
     private List<Item> inventory; // = new ArrayList<Item> ();
 
@@ -124,4 +125,36 @@ public class Player implements Drawable {
 	public void addToInventory(Item item) {
 		this.inventory.add(item);
 	}
+
+    /**
+     * This makes the player jump in the game. It uses a seperate thread to simulate the jumping so we can continue
+     * updating the display throughout the jump.
+     */
+    public void jump(double[] viewFrom) {
+        if (jumping)
+            return;
+        Thread jumpingThread = new Thread() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 5; i++) {
+                    viewFrom[2] += 2;
+                    try {
+                        Thread.sleep(30);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                for (int i = 0; i < 5; i++) {
+                    viewFrom[2] -= 2;
+                    try {
+                        Thread.sleep(30);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                jumping = false;
+            }
+        };
+        jumpingThread.start();
+    }
 }

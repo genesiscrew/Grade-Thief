@@ -107,4 +107,14 @@ public class Calculator {
         calculatorFocusPosition[0] = Screen.zoom * calculatorFocusPosition[0];
         calculatorFocusPosition[1] = Screen.zoom * calculatorFocusPosition[1];
     }
+
+    /**
+     * Sets the the values for the light direction
+     */
+    static void controlSunAndLight(double[] lightDir, double mapSize, double sunPos) {
+        //sunPos += 0.005;
+        lightDir[0] = mapSize / 2 - (mapSize / 2 + Math.cos(sunPos) * mapSize * 10);
+        lightDir[1] = mapSize / 2 - (mapSize / 2 + Math.sin(sunPos) * mapSize * 10);
+        lightDir[2] = -200;
+    }
 }
