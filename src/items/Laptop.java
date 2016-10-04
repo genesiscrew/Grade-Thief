@@ -3,6 +3,7 @@ package items;
 import gui.Cube;
 import gui.Drawable;
 import gui.Polygon;
+import items.Item.Interaction;
 
 import java.awt.*;
 import java.util.*;
@@ -63,4 +64,11 @@ public class Laptop extends Item implements Drawable{
         cubes.forEach(c -> allPolys.addAll(c.getPolygons()));
         return allPolys;
     }
+
+    @Override
+    public void addInteractions() {
+        interactionsAvaliable = new ArrayList<>();
+    }
+
+
 }

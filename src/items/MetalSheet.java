@@ -2,6 +2,8 @@ package items;
 
 import gui.*;
 import gui.Polygon;
+import items.Item.Interaction;
+
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -65,6 +67,12 @@ public class MetalSheet extends Item {
 
     public String toString() {
         return x + " " + y + " " + z + " " + width + " " + length + " " + height + " " + color;
+    }
+
+    @Override
+    public void addInteractions() {
+        interactionsAvaliable = new ArrayList<>();
+        interactionsAvaliable.add(Interaction.TAKE);
     }
 
 }

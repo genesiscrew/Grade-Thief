@@ -6,6 +6,7 @@ import gui.Polygon;
 
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by wareinadam on 24/09/16.
@@ -20,7 +21,10 @@ public class Player implements Drawable {
     protected double height;
     protected Color color;
 
+    private List<Item> inventory; // = new ArrayList<Item> ();
+
     public Player(double x, double y, double z, double width, double length, double height, Color c) {
+    	inventory = new ArrayList<Item>();
         cubes = new ArrayList<>();
         this.x = x;
         this.y = y;
@@ -97,7 +101,6 @@ public class Player implements Drawable {
         cubes.forEach(c -> allPolys.addAll(c.getPolygons()));
         return allPolys;
     }
-
     public double getZ() {
         return z;
     }
@@ -109,4 +112,16 @@ public class Player implements Drawable {
     public double getX() {
         return x;
     }
+
+	public List<Item> getInventory() {
+		return inventory;
+	}
+
+	public void removeFromInventory(Item item) {
+		this.inventory.remove(item);
+	}
+
+	public void addToInventory(Item item) {
+		this.inventory.add(item);
+	}
 }

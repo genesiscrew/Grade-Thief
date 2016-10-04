@@ -12,7 +12,7 @@ import gui.Drawable;
  */
 public abstract class Item extends GameObject implements Drawable {
 
-    public final double DETECT_PLAYER_BOUNDARY = 20;
+    public final double DETECT_PLAYER_BOUNDARY = 5;
 
     public int itemID;
     protected double x;
@@ -25,6 +25,13 @@ public abstract class Item extends GameObject implements Drawable {
     protected List<Interaction> interactionsAvaliable;
     protected boolean draw = true;
 
+    public void canDraw() {
+    	draw = !draw;
+    }
+    public boolean isDraw() {
+    	return draw;
+    }
+
     public Item(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
         super(itemID, itemType);
         this.x = x;
@@ -36,7 +43,11 @@ public abstract class Item extends GameObject implements Drawable {
         this.color = c;
         addInteractions();
     }
-
+    public void updateXYZ(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
     public void addInteractions() {
         interactionsAvaliable = new ArrayList<>();
         interactionsAvaliable.add(Interaction.OPEN);
@@ -63,6 +74,12 @@ public abstract class Item extends GameObject implements Drawable {
             case CLOSE:
                 draw = true;
                 break;
+            case SIT:
+            	System.out.println("sit down");
+            	break;
+            case TAKE:
+            	draw = false;
+            	break;
         }
     }
 
@@ -70,7 +87,7 @@ public abstract class Item extends GameObject implements Drawable {
     public enum Interaction {
         OPEN,
         UNLOCK,
-        CLOSE, PICK_UP
+        CLOSE, PICK_UP, SIT, TAKE
     }
 
     public List<Interaction> getInteractionsAvaliable() {

@@ -1,149 +1,111 @@
 package f_server;
 
-        import java.io.EOFException;
-        import java.io.IOException;
-        import java.io.ObjectInputStream;
-        import java.io.ObjectOutputStream;
-        import java.io.PrintStream;
-        import java.net.InetAddress;
-        import java.net.Socket;
-        import java.util.Scanner;
-
-        import javax.swing.JTextArea;
-        import javax.swing.JTextField;
-
-        import gui.GameController;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.util.Scanner;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import gui.GameController;
 
 public class Client {
-    private JTextField userText;
-    private JTextArea chatWindow;
-    private ObjectOutputStream output;
-    private ObjectInputStream input;
-    private String message = "";
-    private String serverIP;
-    private Socket connection;
-    private PrintStream p;
-    private Scanner sc;
-    private GameController playerController = new GameController(false);
-    private Scanner getInput = new Scanner(System.in);
+	private JTextField userText;
+	private JTextArea chatWindow;
+	private ObjectOutputStream output;
+	private ObjectInputStream input;
+	private String message = "";
+	private String serverIP;
+	private Socket connection;
+	private PrintStream p;
+	private Scanner sc;
+	private GameController player = new GameController(false);
+	private Scanner getInput = new Scanner(System.in);
 
-    // Constructor
-    public Client(String host) {
-        serverIP = host;
-    }
+	// Constructor
+	public Client(String host) {
+		serverIP = host;
+	}
 
-    // Connect to server
-    public void startRunning() {
-        try {
+	// Connect to server
+	public void startRunning() {
+		try {
+			connectionToServer();
+			setupStreams();
+			update();
 
-            connectionToServer();
-            setupStreams();
-            // whileGame();
-            update();
+		} catch (EOFException e) {
+			System.out.println("Client terminated connection");
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} finally {
+			closeCrap();
+		}
+	}
 
-        } catch (EOFException e) {
-            System.out.println("Client terminated connection");
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        } finally {
-            closeCrap();
-        }
-    }
+	// Connecting to Server
+	private void connectionToServer() throws IOException {
+		System.out.println("Attempting connection...");
+		connection = new Socket(InetAddress.getByName(serverIP), 6789);
+		System.out.println("Connected to: " + connection.getInetAddress().getHostName());
+	}
 
-    // Connecting to Server
-    private void connectionToServer() throws IOException {
-        System.out.println("Attempting connection...");
-        connection = new Socket(InetAddress.getByName(serverIP), 6789);
-        System.out.println("Connected to: " + connection.getInetAddress().getHostName());
-    }
+	// set up the stream to send and receive message!
+	private void setupStreams() throws IOException {
+		output = new ObjectOutputStream(connection.getOutputStream());
+		output.flush();
+		input = new ObjectInputStream(connection.getInputStream());
+		System.out.println("You are now connected");
+	}
 
-    // set up the stream to send and recieve message!
-    private void setupStreams() throws IOException {
-        output = new ObjectOutputStream(connection.getOutputStream());
-        output.flush();
-        input = new ObjectInputStream(connection.getInputStream());
-        System.out.println("You are now connected and you can send message!");
-    }
+	private void update() throws IOException {
+		while (true) {
+			sendData();
+			recieveData();
+		}
+	}
+
+	private void sendData() throws IOException {
+		double[] playerPos = player.getPlayerPosition();
+		output.writeDouble(playerPos[0]);
+		output.flush();
+		output.writeDouble(playerPos[1]);
+		output.flush();
+		output.writeDouble(playerPos[2]);
+		output.flush();
+	}
+
+	private void recieveData() throws IOException {
+
+		try {
+			double guardPosX = (double) input.readDouble();
+			double guardPosY = (double) input.readDouble();
+			double guardPosZ = (double) input.readDouble();
+			double[] newPos = new double[] { guardPosX, guardPosY, guardPosZ };
+			player.setGuardPosition(newPos);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+
+	// close streams and sockets after you are done chatting!!
+	private void closeCrap() {
+		System.out.println("Closing connectin...");
+		try {
+
+			output.close();
+			input.close();
+			connection.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 
-
-    private void update() {
-        while (true) {
-            try {
-                sendData();
-                receievData();
-            } catch (IOException e) {
-
-            }
-
-        }
-    }
-
-    // close after its done
-    private void closeCrap() {
-        System.out.println("Closing the chat");
-        try {
-
-            output.close();
-            input.close();
-            connection.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
-    // Send data tu server
-    private void sendData() throws IOException {
-        // After each movement it send the coordinates of the client to the
-        // Server
-        System.out.println("Client --> Sever");
-        double []guardPos = playerController.getPlayerPosition();
-        output.writeObject(guardPos);
-        output.flush();
-    }
-
-    // recieve data from server
-    private void receievData() throws IOException {
-        // Server will send the updated board to the client
-        System.out.println("Sever --> Client");
-        try {
-            double []guardPos = (double []) input.readObject();
-            playerController.setGuardPosition(guardPos);
-        }catch (ClassNotFoundException e){
-            e.printStackTrace();
-        }
-
-    }
-
-    /*  // While game
-    private void whileGame() throws IOException {
-        boolean continueType = true;
-        do {
-            while (continueType) {
-                System.out.print("Write anything man: ");
-                String message = getInput.nextLine();
-                sendMessage(message);
-                if (message.equalsIgnoreCase("END")) {
-                    continueType = false;
-                }
-            }
-
-            appearMessage();
-        } while (true);
-    }*/
-
-     /*private void sendMessage(String message) throws IOException {
-        p = new PrintStream(connection.getOutputStream());
-        //p.println(player.getCharacterLocation().toString());
-    }
-
-    private void appearMessage() throws IOException {
-        sc = new Scanner(connection.getInputStream());
-        System.out.println(sc.nextLine());
-    }*/
 
 }
-
