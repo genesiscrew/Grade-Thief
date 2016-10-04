@@ -34,9 +34,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     // The polygon that the mouse is currently over
     static Polygon polygonOver = null;
 
-    int startX = 120;
-    int startY = 150;
-    int startZ = 10;
+    public static int startX = 120;
+    public static int startY = 150;
+    public static int startZ = 10;
 
     Robot r;     // Used for keeping mouse in center
     static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -56,7 +56,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     static double maxZoom = 2500;
     static double mouseX = 0;
     static double mouseY = 0;
-    static double movementSpeed = 5;
 
     //FPS is a bit primitive, you can set the maxFPS as high as u want
     double drawFPS = 0, maxFPS = 1000, LastRefresh = 0, lastFPSCheck = 0, fpsCheck = 0;
@@ -78,7 +77,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     int[] polygonDrawOrder;
 
     static boolean drawOutlines = true;
-    boolean[] Keys = new boolean[4];
+    boolean[] keys = new boolean[4];
 
     private GameController controller;
     private boolean guard;
@@ -126,7 +125,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         g.setColor(new Color(140, 180, 180));
         g.fillRect(0, 0, (int) GameController.ScreenSize.getWidth(), (int) GameController.ScreenSize.getHeight());
 
-        cameraMovement();
+        PlayerMovement.cameraMovement(viewTo, viewFrom, keys, room);
+        controller.updatePosition(guard, viewFrom);
+        updateView();
 
         // Calculated all that is general for this camera position
         Calculator.setPredeterminedInfo(this);
@@ -195,17 +196,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         sleepAndRefresh();
     }
 
-
-    private List<Polygon> updateGuardsPosition() {
-        // TODO Auto-generated method stub
-        List<Polygon> guards = new ArrayList<Polygon>();
-        for (GuardBot g : this.room.guardList) {
-            guards.addAll(g.getPolygons());
-        }
-
-        return guards;
-    }
-
     /**
      * @return
      */
@@ -229,7 +219,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         // Lets start by getting there position from the controller and see how much they have moved
         double[] otherPos = controller.getOtherBotPosition(guardName);
         GuardBot g = controller.getGuardBot(guardName);
-        g.move(); // move the guardbot and update position based on heading
+        g.move(); // move the guard bot and update position based on heading
         return g.getPolygons();
     }
 
@@ -317,76 +307,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         lightDir[2] = -200;
     }
 
-    /**
-     * Called on every refresh, this updates the direction the camera is facing
-     */
-    void cameraMovement() {
-        Vector viewVector = new Vector(viewTo[0] - viewFrom[0], viewTo[1] - viewFrom[1], viewTo[2] - viewFrom[2]);
-        double xMove = 0, yMove = 0, zMove = 0;
-        Vector verticalVector = new Vector(0, 0, 1);
-        Vector sideViewVector = viewVector.crossProduct(verticalVector);
-
-        if (Keys[0]) {
-            xMove += viewVector.x;
-            yMove += viewVector.y;
-        }
-
-        if (Keys[2]) {
-            xMove -= viewVector.x;
-            yMove -= viewVector.y;
-        }
-
-        if (Keys[1]) {
-            xMove += sideViewVector.x;
-            yMove += sideViewVector.y;
-        }
-
-        if (Keys[3]) {
-            xMove -= sideViewVector.x;
-            yMove -= sideViewVector.y;
-        }
-
-        Vector MoveVector = new Vector(xMove, yMove, zMove);
-        moveTo(viewFrom[0] + MoveVector.x * movementSpeed, viewFrom[1] + MoveVector.y * movementSpeed, viewFrom[2] + MoveVector.z * movementSpeed);
-    }
-
-    /**
-     * Move the player to x, y, z
-     *
-     * @param x
-     * @param y
-     * @param z
-     */
-    void moveTo(double x, double y, double z) {
-        // Check that the player isn't out of the maps floorPolygons
-        if (room.positionOutOfBounds(x, y, z, startX, startY))
-            return;
-
-        // Check that the player isn't moving into any roomObjects
-        if (room.movingIntoAnObject(x, y, z))
-            return;
-
-        viewFrom[0] = x;
-        viewFrom[1] = y;
-        viewFrom[2] = z;
-        //System.out.printf("x: %f y: %f z: %f \n", x, y, z);
-        controller.updatePosition(guard, viewFrom);
-        updateView();
-    }
-
-
-    /**
-     * Highlights the polygon that the cursor is on
-     */
-    void setPolygonOver() {
-        polygonOver = null;
-        for (int i = polygonDrawOrder.length - 1; i >= 0; i--)
-            if (room.getPolygons().get(polygonDrawOrder[i]).mouseOver() && room.getPolygons().get(polygonDrawOrder[i]).draw
-                    && room.getPolygons().get(polygonDrawOrder[i]).visible) {
-                polygonOver = room.getPolygons().get(polygonDrawOrder[i]);
-                break;
-            }
-    }
 
     /**
      * Called when the mouse is moved, calculates the amount it was moved and sets the vert and horizontal looking angles
@@ -436,13 +356,13 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_W)
-            Keys[0] = true;
+            keys[0] = true;
         if (e.getKeyCode() == KeyEvent.VK_A)
-            Keys[1] = true;
+            keys[1] = true;
         if (e.getKeyCode() == KeyEvent.VK_S)
-            Keys[2] = true;
+            keys[2] = true;
         if (e.getKeyCode() == KeyEvent.VK_D)
-            Keys[3] = true;
+            keys[3] = true;
         if (e.getKeyCode() == KeyEvent.VK_O)
             drawOutlines = !drawOutlines;
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
@@ -474,14 +394,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         // should make sure that it will not obstruct another item
         selectedItem.moveItemBy(viewFrom[0] - selectedItem.getX(),
                 viewFrom[1] - selectedItem.getY(), 0);
-//        selectedItem.getPolygons().forEach(ce -> ce.updatePosition(viewFrom[0],
-//                viewFrom[1], 0.0));
+
         room.addItemToRoom(selectedItem);
         selectedItem.canDraw();
 
         thisPlayer.removeFromInventory(selectedItem);
-//		}
-
     }
 
     private void playerWantingToInteractWithItem() {
@@ -600,13 +517,13 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_W)
-            Keys[0] = false;
+            keys[0] = false;
         if (e.getKeyCode() == KeyEvent.VK_A)
-            Keys[1] = false;
+            keys[1] = false;
         if (e.getKeyCode() == KeyEvent.VK_S)
-            Keys[2] = false;
+            keys[2] = false;
         if (e.getKeyCode() == KeyEvent.VK_D)
-            Keys[3] = false;
+            keys[3] = false;
     }
 
     @Override
@@ -680,25 +597,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         this.viewFrom = viewFrom;
     }
 
-    /**
-     * starts all guard bots moving in different threads
-     */
-    /*
-    public void startGuardsMovement() {
-
-		List<Thread> threads = new ArrayList<Thread>();
-		for (int i = 0; i < this.room.guardList.size(); i++) {
-		 threads.add(this.room.guardList.get(i).startMovement(this));
-
-		}
-
-		threads.forEach(d -> d.start());
-
-
-	}
-	*/
     public double[] getPlayerView() {
-        // TODO Auto-generated method stub
         return this.viewFrom;
     }
 }

@@ -83,18 +83,17 @@ public class Room {
      * @param x
      * @param y
      * @param z
-     * @param startX
-     * @param startY
      */
-    public boolean positionOutOfBounds(double x, double y, double z, int startX, int startY) {
+    public boolean positionOutOfBounds(double x, double y, double z) {
+
         double mapWidth = floor.getMapWidth() * floor.getTileSize();
         double mapHeight = floor.getMapHeight() * floor.getTileSize();
 
         if (x < floor.getxOffset() + ROOM_PADDING || y < floor.getyOffset() + ROOM_PADDING)
             return true;
-        if ((x + ROOM_PADDING) > (startX + mapWidth - floor.getxOffset()))
+        if ((x + ROOM_PADDING) > (Screen.startX + mapWidth - floor.getxOffset()))
             return true;
-        if ((y + ROOM_PADDING) > (startY + mapHeight - floor.getyOffset()))
+        if ((y + ROOM_PADDING) > (Screen.startY + mapHeight - floor.getyOffset()))
             return true;
         return false;
     }
