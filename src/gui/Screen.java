@@ -145,7 +145,13 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
                 allPolygons.addAll(d.getPolygons());
         });
         allPolygons.addAll(updateOtherPlayersPosition()); // other player
-        allPolygons.addAll(this.updateGuardBotPosition()); // move guard bot
+     // adds polygons from all guard bots
+        for (GuardBot r: this.controller.getGuardList()) {
+
+        	allPolygons.addAll(this.updateGuardBotPosition(r.getName()));
+
+        }
+
 
 
         // Updates each polygon for this camera position
@@ -209,10 +215,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     /** this method updates the guard bot position
      * @return
      */
-    private List<Polygon> updateGuardBotPosition() {
+    private List<Polygon> updateGuardBotPosition(String guardName) {
         // Lets start by getting there position from the controller and see how much they have moved
-        double[] otherPos = controller.getOtherBotPosition("guard1");
-        GuardBot g = controller.getGuardBot("guard1");
+        double[] otherPos = controller.getOtherBotPosition(guardName);
+        GuardBot g = controller.getGuardBot(guardName);
         g.move(); // move the guardbot and update position based on heading
         return g.getPolygons();
     }

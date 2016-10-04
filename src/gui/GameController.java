@@ -25,6 +25,7 @@ public class GameController {
     private static double[] playerPosition = new double[]{15, 5, 10};
     private static double[] guardPosition = new double[]{100, 100, 10};
     GuardBot gaurd1;
+    GuardBot guard2;
 
 	private ArrayList<GuardBot> guardList;
 
@@ -47,6 +48,7 @@ public class GameController {
 
     	for (GuardBot g:guardList) {
     		if (g.getName().equals(guardName)) {
+    			//System.out.println(guardName);
     			return g;
     		}
     	}
@@ -76,11 +78,16 @@ public class GameController {
     }
 
     private void setupGuardbots(Screen screen) {
-    	int[] dist = {35,30};
-		gaurd1 = new GuardBot(12, "guard1", 5, dist, 0, 47*10,
-				3*10, 0, 5, 3, 12, new Color(0, 0, 0));
+    	int[] dist = {10,10,10,10};
+		gaurd1 = new GuardBot(12, "guard1", 14, dist, 0, 47*10,
+				25*10, 0, 5, 3, 12, new Color(0, 0, 0));
 		gaurd1.setScreen(screen);
+		int[] dist2 = {12,35};
+		guard2 = new GuardBot(12, "guard2", 5, dist2, 0, 47*10,
+				2*10, 0, 5, 3, 12, new Color(0, 0, 0));
+		guard2.setScreen(screen);
         guardList.add(gaurd1);
+        guardList.add(guard2);
        
 		
 	}
@@ -162,6 +169,11 @@ public class GameController {
 
 		return new double[]{g.getX(), g.getY(), g.getZ()};
 
+	}
+	
+	public ArrayList<GuardBot> getGuardList() {
+		
+		return this.guardList;
 	}
 
 
