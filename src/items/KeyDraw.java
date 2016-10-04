@@ -12,7 +12,6 @@ import java.util.List;
  * Created by Stefan Vrecic on 22/09/16.
  */
 public class KeyDraw extends Item {
-    private java.util.List<Cube> cubes;
 
 
     public KeyDraw(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
@@ -22,7 +21,6 @@ public class KeyDraw extends Item {
         System.out.println("height " + height);
         System.out.println("height " + height);
 
-        cubes = new ArrayList<>();
         cubes.add(new Cube(x, y, z, width, length, height, c));
         cubes.add(new Cube(x, y + (length / 4), z + height, width, length / 2, height, c.darker().darker()));
 

@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import gui.Cube;
 import gui.Drawable;
 
 
@@ -24,6 +25,8 @@ public abstract class Item extends GameObject implements Drawable {
     protected Color color;
     protected List<Interaction> interactionsAvaliable;
     protected boolean draw = true;
+    protected java.util.List<Cube> cubes;
+
 
     public void canDraw() {
     	draw = !draw;
@@ -41,12 +44,15 @@ public abstract class Item extends GameObject implements Drawable {
         this.length = length;
         this.height = height;
         this.color = c;
+        this.cubes = new ArrayList<>();
         addInteractions();
     }
-    public void updateXYZ(double x, double y, double z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    public void moveItemBy(double dx, double dy, double dz) {
+        this.x += dx;
+        this.y += dy;
+        this.z += dz;
+
+        cubes.forEach(c -> c.updatePosition(dx, dy, dz));
     }
     public void addInteractions() {
         interactionsAvaliable = new ArrayList<>();
@@ -81,6 +87,18 @@ public abstract class Item extends GameObject implements Drawable {
             	draw = false;
             	break;
         }
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public double getZ() {
+        return z;
     }
 
     // Model file

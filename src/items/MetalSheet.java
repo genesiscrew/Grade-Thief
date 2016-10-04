@@ -12,7 +12,6 @@ import java.util.List;
  * Created by Stefan Vrecic on 22/09/16.
  */
 public class MetalSheet extends Item {
-    private java.util.List<Cube> cubes;
 
 
     public MetalSheet(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
@@ -21,9 +20,6 @@ public class MetalSheet extends Item {
         System.out.println("height " + height);
         System.out.println("height " + height);
         System.out.println("height " + height);
-
-        cubes = new ArrayList<>();
-
 
         cubes.add(new Cube(x, y, z, width, length, height, c));
         // Tube

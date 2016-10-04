@@ -82,7 +82,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     private items.Player thisPlayer;
     private items.Player otherPlayer;
     private String messageToDisplay = "";
-	private boolean showInventory = false;
+    private boolean showInventory = false;
 
     /**
      * Create a new screen
@@ -91,7 +91,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         this.controller = controller;
         this.guard = guard;
         this.thisPlayer = new Player(0, 0, 0, 0, 0, 0, null);
-        if(guard)
+        if (guard)
             otherPlayer = new items.Player(20, 20, 0, 5, 3, 12, Color.green);
         else
             otherPlayer = new items.Player(20, 20, 0, 5, 3, 12, Color.blue);
@@ -138,20 +138,20 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         //room.getRoomObjects().forEach(o -> allPolygons.addAll(o.getPolygons())); // room objects
 
         room.getRoomObjects().forEach(o -> { // doors
-            if(o.isDraw())
-            	allPolygons.addAll(o.getPolygons());
+            if (o.isDraw())
+                allPolygons.addAll(o.getPolygons());
         });
 
 
         room.getDoors().forEach(d -> { // doors
-            if(d.isDraw())
+            if (d.isDraw())
                 allPolygons.addAll(d.getPolygons());
         });
 
         allPolygons.addAll(updateOtherPlayersPosition()); // other player
 
         // Updates each polygon for this camera position
-     //   System.out.println(allPolygons.size());
+        //   System.out.println(allPolygons.size());
         for (int i = 0; i < allPolygons.size(); i++)
             allPolygons.get(i).updatePolygon(lightDir, viewFrom);
 
@@ -175,8 +175,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         g.setFont(new Font("Arial", Font.BOLD, 20));
         messageToDisplay = "";
         isPlayerNearObject();
-        if(!messageToDisplay.equals("")){
-            g.drawString(messageToDisplay, (int) screenSize.getWidth()/2 -120, (int) screenSize.getHeight()/2 - 50);
+        if (!messageToDisplay.equals("")) {
+            g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120, (int) screenSize.getHeight() / 2 - 50);
         }
 
         sleepAndRefresh();
@@ -418,67 +418,59 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             loadMap();
         if (e.getKeyCode() == KeyEvent.VK_U)
             changeAllDoorState();
-        if(e.getKeyCode() == KeyEvent.VK_E)
+        if (e.getKeyCode() == KeyEvent.VK_E)
             playerWantingToInteractWithItem();
         if (e.getKeyCode() == KeyEvent.VK_I)
-        	showInventory();
-
+            showInventory();
     }
 
     private void showInventory() {
-//		if (showInventory) {
-//			showInventory = false;
-//			// ...
-//		} else if (!showInventory) {
-//			showInventory = true;
-			String[] inventoryItems = new String[thisPlayer.getInventory().size()];
-			int c = 0;
-			for (Item i : thisPlayer.getInventory()) {
-				inventoryItems[c] = i.toString();
-				c++;
-			}
+        String[] inventoryItems = new String[thisPlayer.getInventory().size()];
+        int c = 0;
+        for (Item i : thisPlayer.getInventory()) {
+            inventoryItems[c] = i.toString();
+            c++;
+        }
 
-		     int n = JOptionPane.showOptionDialog(this, "What would you like to do?", "Select option", JOptionPane.YES_NO_CANCEL_OPTION,
-		                JOptionPane.QUESTION_MESSAGE, null, inventoryItems, inventoryItems[0]);
-		     Item selectedItem = thisPlayer.getInventory().get(n);
-		     // at this point; shou;d get the position directly infront of player
-		     // should make sure that it will not obstruct another item
-		     selectedItem.updateXYZ(viewFrom[0],
-		viewFrom[1], viewFrom[2] );
-		     selectedItem.getPolygons().forEach(ce -> ce.updatePosition( viewFrom[0],
-		    			viewFrom[1], 0.0));
+        int n = JOptionPane.showOptionDialog(this, "What would you like to do?", "Select option", JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null, inventoryItems, inventoryItems[0]);
+        Item selectedItem = thisPlayer.getInventory().get(n);
+        // at this point; shou;d get the position directly infront of player
+        // should make sure that it will not obstruct another item
+        selectedItem.moveItemBy(viewFrom[0]-selectedItem.getX(),
+                viewFrom[1] - selectedItem.getY(), 0 );
+//        selectedItem.getPolygons().forEach(ce -> ce.updatePosition(viewFrom[0],
+//                viewFrom[1], 0.0));
+        room.addItemToRoom(selectedItem);
+        selectedItem.canDraw();
 
-
-		    room.addItemToRoom(selectedItem);
-		    selectedItem.canDraw();
-
-		    thisPlayer.removeFromInventory(selectedItem);
+        thisPlayer.removeFromInventory(selectedItem);
 //		}
 
-	}
+    }
 
-	private void playerWantingToInteractWithItem() {
+    private void playerWantingToInteractWithItem() {
 
-        for(Item i : room.getRoomObjects()){
+        for (Item i : room.getRoomObjects()) {
 
-            if(i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])){
+            if (i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
                 int n = showOptionPane(i.getInteractionsAvaliable());
                 i.performAction(i.getInteractionsAvaliable().get(n));
                 System.out.println(i.getInteractionsAvaliable().get(n).toString());
-              if (i.getInteractionsAvaliable().get(n).equals(Interaction.TAKE)) {
-            	  thisPlayer.addToInventory(i);
-            	 System.out.println("add to inventory here");
-            	 for (Item playerItems : thisPlayer.getInventory()) {
-            		 System.out.println(playerItems);
-            	 }
-              }
+                if (i.getInteractionsAvaliable().get(n).equals(Interaction.TAKE)) {
+                    thisPlayer.addToInventory(i);
+                    System.out.println("add to inventory here");
+                    for (Item playerItems : thisPlayer.getInventory()) {
+                        System.out.println(playerItems);
+                    }
+                }
 
             }
 
         }
 
-        for(Item i : room.getDoors()){
-            if(i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])){
+        for (Item i : room.getDoors()) {
+            if (i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
                 int n = showOptionPane(i.getInteractionsAvaliable());
                 i.performAction(i.getInteractionsAvaliable().get(n));
             }
@@ -488,38 +480,37 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     public void loadMap() {
         if (room == room1) {
             room = room2;
-        }
-        else {
+        } else {
             room = room1;
         }
     }
 
-    private void changeAllDoorState(){
+    private void changeAllDoorState() {
         room.getDoors().forEach(d -> d.changeState());
     }
 
 
-    private void isPlayerNearObject(){
-    	List<Item> removeItems = new ArrayList<Item>();
-        for(Item i : room.getRoomObjects()){
-        	if (!i.isDraw()) {// nothing to display if item not rendered
-        		removeItems.add(i);
-        		continue;
-        	}
+    private void isPlayerNearObject() {
+        List<Item> removeItems = new ArrayList<Item>();
+        for (Item i : room.getRoomObjects()) {
+            if (!i.isDraw()) {// nothing to display if item not rendered
+                removeItems.add(i);
+                continue;
+            }
 
 
-            if(i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])){
+            if (i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
                 messageToDisplay = "Press e To Interact With The " + i.getClass().getSimpleName();
             }
         }
 
 
-    	for (Item i2 : removeItems) {
-    		room.removeRoomObject(i2);
-    	}
+        for (Item i2 : removeItems) {
+            room.removeRoomObject(i2);
+        }
 
-        for(Item i : room.getDoors()){
-            if(i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])){
+        for (Item i : room.getDoors()) {
+            if (i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
                 messageToDisplay = "Press e To Open The Door";
             }
         }
@@ -559,9 +550,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
 
-    private int showOptionPane(List<Item.Interaction> optionsList){
+    private int showOptionPane(List<Item.Interaction> optionsList) {
         String[] options = new String[optionsList.size()];
-        for(int i=0; i < optionsList.size(); i++){
+        for (int i = 0; i < optionsList.size(); i++) {
             options[i] = optionsList.get(i).toString();
         }
 

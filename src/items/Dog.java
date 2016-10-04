@@ -14,12 +14,10 @@ import java.util.List;
 public class Dog extends Item {
 
     private final int Dog_THICKNESS = 1;
-    private java.util.List<Cube> cubes;
 
 
     public Dog(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
         super(itemID, itemType, x, y, z, width, length, height, c);
-        cubes = new ArrayList<>();
 
         // First make the legs
         int legWidth = (int) (width / 4);

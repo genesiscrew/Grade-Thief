@@ -12,14 +12,10 @@ import java.util.List;
  */
 public class Marker extends Item {
 
-    private java.util.List<Cube> cubes;
 
     public Marker(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
         super(itemID, itemType, x, y, z, width, length, height, c);
         System.out.println("height " + height);
-
-        cubes = new ArrayList<>();
-
 
         cubes.add(new Cube(x, y, z, width, length, (0.8) * height, c));
         cubes.add(new Cube(x, y, z + ((0.8) * height), width, length, (0.2) * height, c.darker().darker()));

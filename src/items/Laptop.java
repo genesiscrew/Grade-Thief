@@ -15,7 +15,6 @@ import java.util.List;
 public class Laptop extends Item implements Drawable{
 
     private final int LAPTOP_THICKNESS = 1;
-    private java.util.List<Cube> cubes;
 
     public String toString() {
     	return x + " " + y + " " + z + " " + width + " " + length + " " + height + " " + color;
@@ -23,7 +22,6 @@ public class Laptop extends Item implements Drawable{
 
     public Laptop(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
         super(itemID, itemType, x, y, z, width, length, height, c);
-        cubes = new ArrayList<>();
 
         // Screen
         cubes.add(new Cube(x, y+length, z, width, LAPTOP_THICKNESS, height, c));

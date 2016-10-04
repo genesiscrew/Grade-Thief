@@ -34,9 +34,9 @@ public class GameController {
 
         //guard = createNewGame(!isGuard);
 
-    	/*InputStream is = getClass().getClassLoader().getResourceAsStream("bg-music.wav");*/
-/*    	MakeSound ms = new MakeSound();
-    	ms.playSound("/home/vrecicstef/workspace/grade-thief/src/bg-music.wav");*/
+    	InputStream is = getClass().getClassLoader().getResourceAsStream("bg-music.wav");
+  	MakeSound ms = new MakeSound();
+    	ms.playSound("src/bg-music.wav");
     }
 
     /**
