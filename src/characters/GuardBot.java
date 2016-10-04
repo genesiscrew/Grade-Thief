@@ -17,14 +17,16 @@ import game.floor.Location;
 import gui.Cube;
 import gui.Drawable;
 import gui.Polygon;
+import gui.Screen;
 import items.Direction;
 import items.Direction.Dir;
 import items.Distance;
 import items.GameObject;
 import items.Item;
+import items.Player;
 import model.Game;
 
-public class GuardBot extends Item implements Drawable {
+public class GuardBot extends Player implements Drawable {
 
 	Direction.Dir dir;
 	ArrayList<Direction.Dir> directionList;
@@ -42,6 +44,11 @@ public class GuardBot extends Item implements Drawable {
 	protected double length;
 	protected double height;
 	protected Color color;
+	public Screen screen;
+	private int i;
+	private int u;
+	private int itemID;
+	private String itemType;
 
 	/**
 	 * Contructor for guard object
@@ -58,10 +65,11 @@ public class GuardBot extends Item implements Drawable {
 	 * @param floorNo:
 	 *            represents the floor number the guard belongs to
 	 */
-	public GuardBot(int itemID, String itemType, int moveStrategy, int[] distance, int floorNo, double x,
-			double y, double z, double width, double length, double height, Color c) {
-
-		super(itemID, itemType, x, y, z, width, length, height, c);
+	public GuardBot(int itemID, String itemType, int moveStrategy, int[] distance, int floorNo, double x, double y,
+			double z, double width, double length, double height, Color c) {
+		super(x, y, z, width, length, height, c);
+		this.itemID = itemID;
+		this.itemType = itemType;
 		this.moveStrategy = moveStrategy;
 		strategy = new GuardStrategy(moveStrategy);
 		directionList = strategy.getDirectionList();
@@ -71,112 +79,97 @@ public class GuardBot extends Item implements Drawable {
 		cubes = new ArrayList<>();
 		this.x = x;
 		this.y = y;
-		this.z = z;
+		this.z = 10;
 		this.width = width;
 		this.length = length;
 		this.height = height;
 		this.color = c;
-		  // First make the legs
-        int legWidth = (int) (width / 2.5);
-        int legHeight = (int) (height / 2);
-        // first leg
-        cubes.add(new Cube(x, y + (legWidth / 2), z, legWidth, legWidth, legHeight, c));
-        // second leg
-        cubes.add(new Cube(x + width - legWidth, y + (legWidth / 2), z, legWidth, legWidth, legHeight, c));
+		// First make the legs
+		int legWidth = (int) (width / 2.5);
+		int legHeight = (int) (height / 2);
+		// first leg
+		cubes.add(new Cube(x, y + (legWidth / 2), z, legWidth, legWidth, legHeight, c));
+		// second leg
+		cubes.add(new Cube(x + width - legWidth, y + (legWidth / 2), z, legWidth, legWidth, legHeight, c));
 
-        // body
-        cubes.add(new Cube(x, y, z + legHeight, width, width / 1.5, legHeight, c));
+		// body
+		cubes.add(new Cube(x, y, z + legHeight, width, width / 1.5, legHeight, c));
 
-        // arms
-        cubes.add(new Cube(x + width, y, z + legHeight + (legHeight / 2), width, width / 1.5, legHeight / 3, c));
-        cubes.add(new Cube(x - width, y, z + legHeight + (legHeight / 2), width, width / 1.5, legHeight / 3, c));
+		// arms
+		cubes.add(new Cube(x + width, y, z + legHeight + (legHeight / 2), width, width / 1.5, legHeight / 3, c));
+		cubes.add(new Cube(x - width, y, z + legHeight + (legHeight / 2), width, width / 1.5, legHeight / 3, c));
 
-        // head
-        cubes.add(new Cube(x + (width / 4), y, z + (legHeight * 2), width / 2, width / 1.5, legHeight / 3, c));
+		// head
+		cubes.add(new Cube(x + (width / 4), y, z + (legHeight * 2), width / 2, width / 1.5, legHeight / 3, c));
 
 	}
 
-
-
-	/**
-	 * this method moves the guard along a path specified by the move strategy,
-	 * the method should keep running until an intruder is detected
-	 */
 	/*
-	public void move(Game game) {
+	 *
+	 * /** this method moves the guard along a path specified by the move
+	 * strategy, the method should keep running until an intruder is detected
+	 */
 
-		while (!this.checkforIntruder(game)) {
-			for (int i = 0; i < directionList.size(); i++) {
+	public void move() {
 
-				// set Guard's direction
-				this.dir = directionList.get(i);
+		// set Guard's direction
+		this.dir = directionList.get(i);
 
-				// now we move guard n steps
-				for (int x = 0; x < distance[i]; x++) {
+		// move the guard to new location based on strategy
+		// Guard has n moves equal to distance specified in
+		// strategy,
+		if (!this.checkforIntruder()) {
+			if (u == (distance[i] - 1) * 20 && i < (directionList.size() - 1)) {
+				i++;
+				u = 0;
 
-					// move the guard to new location
-					// remove gaurd as object from previous empty tile
-					((EmptyTile) game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation().row()][this
-							.getCharacterLocation().column()]).resetEmptyTile();
-					// move the guard one step based on direction
-					if (this.dir.equals(Dir.EAST)) {
+			}
+			// now we reverse the movement directions (if
+			// required
+			// e.g. north south path does not require reversal
+			// but a north west path would need to go back to origin
+			// through
+			// east south) when the guard reaches last square in path
+			// and
+			// run the
+			// move method again
+			else if (u == (distance[i] - 1) * 20 && i == (directionList.size() - 1)) {
+				this.reverseStrategy();
+				i = 0;
+				u = 0;
 
-						this.setCharacterLocation(this.getCharacterLocation().row() + 1,
-								this.getCharacterLocation().column());
-
-					} else if (this.dir.equals(Dir.WEST)) {
-
-						this.setCharacterLocation(this.getCharacterLocation().row() - 1,
-								this.getCharacterLocation().column());
-
-					} else if (this.dir.equals(Dir.NORTH)) {
-
-						this.setCharacterLocation(this.getCharacterLocation().row(),
-								this.getCharacterLocation().column() - 1);
-
-					} else if (this.dir.equals(Dir.SOUTH)) {
-
-						this.setCharacterLocation(this.getCharacterLocation().row(),
-								this.getCharacterLocation().column() + 1);
-
-					}
-
-					// add the gaurd as object to the new empty tile
-					((EmptyTile) game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation().row()][this
-							.getCharacterLocation().column()]).addObjectToTile(this);
-					game.tick(true);
-					try {
-						Thread.sleep(700);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-					// draw board intp console for debugging purposes
-					// game.drawBoard(this.floorNo);
-					// Guard has move n moves equal to distance specified in
-					// strategy, now we reverse the movement directions (if
-					// required
-					// e.g. north south path does not require reversal
-					// but a north west path would need to go back to origin
-					// through
-					// east south) when the guard reaches last square in path
-					// and
-					// run the
-					// move method again
-					;
-
-					if (x == distance[i] - 1 && i == (directionList.size() - 1)) {
-						this.reverseStrategy();
-						break;
-					}
-				}
 			}
 
+			if (this.dir.equals(Dir.EAST)) {
+
+				updatePosition(0.5, 0, 0);
+
+				u++;
+
+			} else if (this.dir.equals(Dir.WEST)) {
+
+				updatePosition(-0.5, 0, 0);
+
+				u++;
+
+				;
+
+			} else if (this.dir.equals(Dir.NORTH)) {
+
+				updatePosition(0, -0.5, 0);
+				u++;
+
+			} else if (this.dir.equals(Dir.SOUTH)) {
+
+				updatePosition(0, 0.5, 0);
+				u++;
+
+			}
+
+			;
 		}
 
 	}
-	*/
 
 	public int getFloorNo() {
 
@@ -263,80 +256,60 @@ public class GuardBot extends Item implements Drawable {
 		}
 
 	}
-	/*
 
-	public Boolean checkforIntruder(Game game) {
+	public Boolean checkforIntruder() {
 		try {
 			if (dir.equals(Dir.EAST)) {
-				for (int i = 0; i < 6; i++) {
-					if (game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation().row() + i][this
-							.getCharacterLocation().column()] instanceof EmptyTile
-							&& game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation().row()
-									+ i][this.getCharacterLocation().column()].occupied()
-							&& ((EmptyTile) game.getRoom(floorNo).getTileMap()
-									.getTileMap()[this.getCharacterLocation().row() + i][this.getCharacterLocation()
-											.column()]).getObjectonTile() instanceof Player) {
-						System.out.println("we have found an intruder");
-						return true;
 
-					}
+				int guardlocation = (int) Math.round(this.y);
+				int playerlocation = (int) Math.round(this.screen.getPlayerView()[1]);
+				System.out.println(this.screen.getPlayerView()[1] + " " + this.y + i);
+				if ((playerlocation - guardlocation) > 0 && (playerlocation - guardlocation) < 100) {
+					System.out.println("we have found an intruder");
+					return true;
+
 				}
 
 			} else if (dir.equals(Dir.WEST)) {
-				for (int i = 0; i < 6; i++) {
 
-					if (game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation().row() - i][this
-							.getCharacterLocation().column()] instanceof EmptyTile
-							&& game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation().row()
-									- i][this.getCharacterLocation().column()].occupied()
-							&& ((EmptyTile) game.getRoom(floorNo).getTileMap()
-									.getTileMap()[this.getCharacterLocation().row() - i][this.getCharacterLocation()
-											.column()]).getObjectonTile() instanceof Player) {
-						System.out.println("we have found an intruder");
-						return true;
+				int guardlocation = (int) Math.round(this.y);
+				int playerlocation = (int) Math.round(this.screen.getPlayerView()[1]);
+				System.out.println(this.screen.getPlayerView()[1] + " " + this.y + i);
+				if ((playerlocation - guardlocation) > 0 && (playerlocation - guardlocation) < 100) {
+					System.out.println("we have found an intruder");
+					return true;
 
-					}
 				}
 
 			} else if (dir.equals(Dir.NORTH)) {
-				for (int i = 0; i < 6; i++) {
-					if (game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation().row()][this
-							.getCharacterLocation().column() - 1] instanceof EmptyTile
-							&& game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation().row()][this
-									.getCharacterLocation().column() - 1].occupied()
-							&& ((EmptyTile) game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation()
-									.row()][this.getCharacterLocation().column() - 1])
-											.getObjectonTile() instanceof Player) {
-						System.out.println("we have found an intruder");
-						return true;
 
-					}
+				int guardlocation = (int) Math.round(this.y);
+				int playerlocation = (int) Math.round(this.screen.getPlayerView()[1]);
+				System.out.println(this.screen.getPlayerView()[1] + " " + this.y + i);
+				if ((guardlocation - playerlocation) > 0 && (guardlocation - playerlocation) < 100) {
+					System.out.println("we have found an intruder");
+					return true;
+
 				}
 
 			} else if (dir.equals(Dir.SOUTH)) {
-				for (int i = 0; i < 6; i++) {
-					if (game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation().row()][this
-							.getCharacterLocation().column() + i] instanceof EmptyTile
-							&& game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation().row()][this
-									.getCharacterLocation().column() + 1].occupied()
-							&& ((EmptyTile) game.getRoom(floorNo).getTileMap().getTileMap()[this.getCharacterLocation()
-									.row()][this.getCharacterLocation().column() + i])
-											.getObjectonTile() instanceof Player) {
-						System.out.println("we have found an intruder");
-						return true;
 
-					}
+				System.out.println(this.screen.getPlayerView()[1] + " " + this.y + i);
+				int guardlocation = (int) Math.round(this.y);
+				int playerlocation = (int) Math.round(this.screen.getPlayerView()[1]);
+				if ((playerlocation - guardlocation) > 0 && (playerlocation - guardlocation) < 100) {
+					System.out.println("we have found an intruder");
+					return true;
+
 				}
 
 			}
 
-		} catch (Exception e) {
-			// Do nothing For Guard Quadratic Vision.
+		} catch (Exception e) { // Do nothing For Guard Quadratic Vision.
 
 		}
 		return false;
 	}
-	*/
 
 	private boolean moveIsValid(Location p, GameObject c) {
 
@@ -344,8 +317,6 @@ public class GuardBot extends Item implements Drawable {
 
 		// !board.squareAt(newPosition).isOccupied()
 	}
-
-	
 
 	/**
 	 * this inner class returns an arraylist of directions based on strategy
@@ -425,22 +396,20 @@ public class GuardBot extends Item implements Drawable {
 
 	}
 
+	/**
+	 * Moves the guard the specified amount. 0 means no change will be made.
+	 *
+	 * @param dx
+	 * @param dy
+	 * @param dz
+	 */
+	public void updatePosition(double dx, double dy, double dz) {
+		this.x += dx;
+		this.y += dy;
+		this.z += dz;
 
-	 /**
-     * Moves the guard the specified amount. 0 means no change will be made.
-     *
-     * @param dx
-     * @param dy
-     * @param dz
-     */
-    public void updatePosition(double dx, double dy, double dz) {
-        this.x += dx;
-        this.y += dy;
-        this.z += dz;
-
-        cubes.forEach(c -> c.updatePosition(dx, dy, dz));
-    }
-
+		cubes.forEach(c -> c.updatePosition(dx, dy, dz));
+	}
 
 	@Override
 	public void updateDirection(double toX, double toY) {
@@ -456,7 +425,7 @@ public class GuardBot extends Item implements Drawable {
 
 	@Override
 	public void setRotAdd() {
-		  cubes.forEach(i -> i.setRotAdd());
+		cubes.forEach(i -> i.setRotAdd());
 
 	}
 
@@ -489,6 +458,44 @@ public class GuardBot extends Item implements Drawable {
 
 	public double getX() {
 		return x;
+	}
+
+	public Thread createGuardThread(GuardBot gaurd, int delay) {
+		Thread guardThread = new Thread() {
+			public void run() {
+				// move the guard in a fixed loop, once he reaches certain
+				// coordinate on the Map, change destination
+				// if () {}
+				// gaurd will keep moving
+
+				// update direction of guard based on hardcoded route
+				// through Tilemap
+
+				try {
+					Thread.sleep(delay);
+					GuardBot.this.move();
+
+				} catch (InterruptedException e) {
+					// should never happen
+				}
+
+				// draw board intp console for debugging purposes
+				// game.drawBoard(gaurd.getFloorNo());
+
+			}
+		};
+		return guardThread;
+
+	}
+
+	public String getName() {
+
+		return this.itemType;
+	}
+
+	public void setScreen(Screen screen) {
+		this.screen = screen;
+
 	}
 
 }

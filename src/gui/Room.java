@@ -8,6 +8,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import characters.GuardBot;
+
 /**
  * @Author Adam Wareing
  */
@@ -17,6 +19,7 @@ public class Room {
     private int sy = -1;
     private int w = -1;
     private int h = -1;
+    List<GuardBot> guardList;
 
     private List<Door> doors = new ArrayList<>();
 
@@ -60,6 +63,7 @@ public class Room {
         floor = new Floor(xOffset, yOffset, 20, 20);
         this.floorPolygons = floor.generateMap();
         this.polygons = new ArrayList<>();
+        this.guardList = new ArrayList<GuardBot>();
 
         this.setTileMap(System.getProperty("user.dir") + "/src/game/floor/" + roomName);
 
@@ -221,4 +225,13 @@ public class Room {
     public List<Item> getWalls() {
         return walls;
     }
+
+	public void addGuardtoRoom(GuardBot guard) {
+
+		guardList.add(guard);
+
+	}
+	  public List<Door> getGuards() {
+	        return this.doors;
+	    }
 }

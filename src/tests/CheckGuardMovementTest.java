@@ -18,7 +18,7 @@ public class CheckGuardMovementTest {
 
 	public static void main(String[] args) throws IOException {
 
-		Game game = new Game();
+/*		Game game = new Game();
 		gui.Room room = createRoom();
 		game.addFloor(room);
 		int[] dist = {6,6};
@@ -51,7 +51,7 @@ public class CheckGuardMovementTest {
 
         guardThread1.start();
         guardThread3.start();
-		drawThread.start();
+		drawThread.start(); */
 
 	}
 

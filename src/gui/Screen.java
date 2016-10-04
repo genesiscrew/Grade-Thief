@@ -12,9 +12,12 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.*;
+
+import characters.GuardBot;
 
 public class Screen extends JPanel implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 
@@ -127,15 +130,18 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         // Add all polygons to the list
         allPolygons.addAll(room.getFloorPolygons()); // floor tiles
         room.getWalls().forEach(o -> allPolygons.addAll(o.getPolygons())); // walls
+
         room.getRoomObjects().forEach(o -> allPolygons.addAll(o.getPolygons())); // room objects
         room.getDoors().forEach(d -> { // doors
             if(d.isDraw())
                 allPolygons.addAll(d.getPolygons());
         });
         allPolygons.addAll(updateOtherPlayersPosition()); // other player
+        allPolygons.addAll(this.updateGuardBotPosition()); // move guard bot
+
 
         // Updates each polygon for this camera position
-        System.out.println(allPolygons.size());
+
         for (int i = 0; i < allPolygons.size(); i++)
             allPolygons.get(i).updatePolygon(this);
 
@@ -154,7 +160,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
 
         // FPS display
-        g.drawString("FPS: " + (int) drawFPS + " (Benchmark)", 40, 40);
+        g.drawString("FPS: " + (int) drawFPS + "(Benchmark)", 40, 40);
 
         g.setFont(new Font("Arial", Font.BOLD, 20));
         messageToDisplay = "";
@@ -163,11 +169,22 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             g.drawString(messageToDisplay, (int) ScreenSize.getWidth()/2 -120, (int) ScreenSize.getHeight()/2 - 50);
         }
 
+		//System.out.println(viewFrom[0] + " " + viewFrom[1] + " "  + viewFrom[2]);
         sleepAndRefresh();
     }
 
 
-    /**
+    private List<Polygon> updateGuardsPosition() {
+		// TODO Auto-generated method stub
+		List<Polygon> guards = new ArrayList<Polygon>();
+		for (GuardBot g: this.room.guardList) {
+			guards.addAll(g.getPolygons());
+		}
+
+		return guards;
+	}
+
+	/**
      * @return
      */
     private List<Polygon> updateOtherPlayersPosition() {
@@ -175,11 +192,26 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         double[] otherPos = controller.getOtherPlayersPosition(guard);
         double dx = otherPos[0] - otherPlayer.getX();
         double dy = otherPos[1] - otherPlayer.getY();
-        double dz = otherPos[0] - otherPlayer.getZ();
-        dz = 0;
-        
+        double dz = otherPos[2] - otherPlayer.getZ();
+
         otherPlayer.updatePosition(dx, dy, dz);
         return otherPlayer.getPolygons();
+    }
+
+    /**
+     * @return
+     */
+    private List<Polygon> updateGuardBotPosition() {
+        // Lets start by getting there position from the controller and see how much they have moved
+        double[] otherPos = controller.getOtherBotPosition("guard1");
+        GuardBot g = controller.getGuardBot("guard1");
+        //double dx = otherPos[0] - g.getX();
+        //double dy = otherPos[1] - g.getY();
+       // double dz = otherPos[2] - g.getZ();
+        //dz = 0;
+
+        g.move(); // move the guardbot and update position based on heading
+        return g.getPolygons();
     }
 
     /**
@@ -231,7 +263,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
     /**
-     * This refreshes the display when required. In th meantime it simply sleeps.
+     * This refreshes the display when required. In the meantime it simply sleeps.
      */
     private void sleepAndRefresh() {
         long timeSLU = (long) (System.currentTimeMillis() - LastRefresh);
@@ -568,4 +600,26 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
                 zoom -= 25 * arg0.getUnitsToScroll();
         }
     }
+  /**
+   * starts all guard bots moving in different threads
+   */
+    /*
+	public void startGuardsMovement() {
+
+		List<Thread> threads = new ArrayList<Thread>();
+		for (int i = 0; i < this.room.guardList.size(); i++) {
+		 threads.add(this.room.guardList.get(i).startMovement(this));
+
+		}
+
+		threads.forEach(d -> d.start());
+
+
+	}
+	*/
+
+public double[] getPlayerView() {
+	// TODO Auto-generated method stub
+	return this.viewFrom;
+}
 }

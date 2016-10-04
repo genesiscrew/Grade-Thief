@@ -557,7 +557,7 @@ public class Game {
 
 				try {
 					Thread.sleep(delay);
-					gaurd.move(Game.this);
+					//gaurd.move(Game.this);
 
 
 

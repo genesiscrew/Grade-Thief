@@ -8,6 +8,7 @@ import model.Game;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 
 /**
@@ -23,14 +24,15 @@ public class GameController {
     // Position is stored using x, y, z
     private static double[] playerPosition = new double[]{15, 5, 10};
     private static double[] guardPosition = new double[]{100, 100, 10};
+    GuardBot gaurd1;
+
+	private ArrayList<GuardBot> guardList;
 
     static Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private static boolean isGuard;
 
     public GameController(boolean isGuard) {
-
-
-
+        guardList = new ArrayList<GuardBot>();
         this.isGuard = isGuard;
         player = createNewGame(isGuard);
         //guard = createNewGame(!isGuard);
@@ -39,6 +41,16 @@ public class GameController {
     	MakeSound ms = new MakeSound();
     	ms.playSound("/am/courtenay/home1/abubakhami/Mansour/grade-thief/src/bg-music.wav");
 
+
+    }
+    public GuardBot getGuardBot(String guardName) {
+
+    	for (GuardBot g:guardList) {
+    		if (g.getName().equals(guardName)) {
+    			return g;
+    		}
+    	}
+    	return null;
 
     }
 
@@ -50,6 +62,8 @@ public class GameController {
         frame.setTitle("Grade Thief");
         Screen screenObject = new Screen(this, guard);
         frame.add(screenObject);
+        /// starts all guardbots movements
+
         JLabel onScreenText = new JLabel("This is some example text");
         onScreenText.setFont(new Font("Courier New", Font.BOLD,12));
         //frame.add(onScreenText, SwingConstants.CENTER);
@@ -57,10 +71,20 @@ public class GameController {
         frame.setSize(ScreenSize);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setupGuardbots(screenObject);
         return screenObject;
     }
 
-    /**
+    private void setupGuardbots(Screen screen) {
+    	int[] dist = {35,30};
+		gaurd1 = new GuardBot(12, "guard1", 5, dist, 0, 47*10,
+				3*10, 0, 5, 3, 12, new Color(0, 0, 0));
+		gaurd1.setScreen(screen);
+        guardList.add(gaurd1);
+       
+		
+	}
+	/**
      * Update the controllers understanding of the players
      *
      * @param isGuard  true: updates guard pos, false: updates players pos.
@@ -75,11 +99,12 @@ public class GameController {
     }
 
     public double[] getOtherPlayersPosition(boolean isGuard) {
-        if (isGuard) {
-            return playerPosition;
-        } else {
-            return guardPosition;
-        }
+    	   if (isGuard) {
+               return playerPosition;
+           } else {
+               return guardPosition;
+           }
+
     }
 
 
@@ -130,43 +155,15 @@ public class GameController {
 	public static void setGuard(boolean isGuard) {
 		GameController.isGuard = isGuard;
 	}
-	
-	public Thread createGuardThread(GuardBot gaurd, int delay) {
-		Thread guardThread = new Thread() {
-			public void run() {
-				// move the guard in a fixed loop, once he reaches certain
-				// coordinate on the Map, change destination
-				// if () {}
-				// gaurd will keep moving
 
+	public double[] getOtherBotPosition(String string) {
+		// TODO Auto-generated method stub
+		GuardBot g = this.getGuardBot(string);
 
-					// update direction of guard based on hardcoded route
-					// through Tilemap
-
-				try {
-					Thread.sleep(delay);
-					gaurd.move();
-
-
-
-				} catch(InterruptedException e) {
-					// should never happen
-				}
-
-
-
-
-
-					// draw board intp console for debugging purposes
-					//game.drawBoard(gaurd.getFloorNo());
-
-
-
-			}
-		};
-		return guardThread;
+		return new double[]{g.getX(), g.getY(), g.getZ()};
 
 	}
+
 
 
 }
