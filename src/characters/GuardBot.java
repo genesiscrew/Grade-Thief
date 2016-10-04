@@ -116,11 +116,14 @@ public class GuardBot extends Player implements Drawable {
 
 		// move the guard to new location based on strategy
 		// Guard has n moves equal to distance specified in
-		// strategy,
+		// strategy, however if a player is detected within the direction he is facing,
+		//the bot stops moving and alerts other player
+		// player as guard of his location
 		if (!this.checkforIntruder()) {
 			if (u == (distance[i] - 1) * 20 && i < (directionList.size() - 1)) {
 				i++;
 				u = 0;
+				this.updateDirection(x, y);
 
 			}
 			// we reverse the movement directions (if
@@ -255,15 +258,22 @@ public class GuardBot extends Player implements Drawable {
 		}
 
 	}
-
+/**
+ * this method checks whether there are any intruders within a certain range of view of the bot.
+ *  the guard bot can only detect a player in front of him
+ * or in his side views, but he can not detect a player behind him,
+ * hence a player can sneak through safely if he stays behind the guard.
+ * @return
+ */
 	public Boolean checkforIntruder() {
 		try {
 			if (dir.equals(Dir.EAST)) {
 
-				int guardlocation = (int) Math.round(this.y);
-				int playerlocation = (int) Math.round(this.screen.getPlayerView()[1]);
-				System.out.println(this.screen.getPlayerView()[1] + " " + this.y + i);
-				if ((playerlocation - guardlocation) > 0 && (playerlocation - guardlocation) < 100) {
+				int guardlocation = (int) Math.round(this.x);
+				int playerlocation = (int) Math.round(this.screen.getPlayerView()[0]);
+				int yOffset = (int) Math.round(this.screen.getPlayerView()[1]) - (int) Math.round(this.y);
+				//System.out.println(this.screen.getPlayerView()[1] + " " + this.y + i);
+				if ((playerlocation-guardlocation) > 0 && (playerlocation-guardlocation) < 100 & Math.abs(yOffset) < 100) {
 					System.out.println("we have found an intruder");
 					return true;
 
@@ -271,10 +281,11 @@ public class GuardBot extends Player implements Drawable {
 
 			} else if (dir.equals(Dir.WEST)) {
 
-				int guardlocation = (int) Math.round(this.y);
-				int playerlocation = (int) Math.round(this.screen.getPlayerView()[1]);
-				System.out.println(this.screen.getPlayerView()[1] + " " + this.y + i);
-				if ((playerlocation - guardlocation) > 0 && (playerlocation - guardlocation) < 100) {
+				int guardlocation = (int) Math.round(this.x);
+				int playerlocation = (int) Math.round(this.screen.getPlayerView()[0]);
+				int yOffset = (int) Math.round(this.screen.getPlayerView()[1]) - (int) Math.round(this.y);
+				//System.out.println(this.screen.getPlayerView()[1] + " " + this.y + i);
+				if ((guardlocation-playerlocation) > 0 && (guardlocation-playerlocation) < 100 & Math.abs(yOffset) < 100) {
 					System.out.println("we have found an intruder");
 					return true;
 
@@ -284,8 +295,9 @@ public class GuardBot extends Player implements Drawable {
 
 				int guardlocation = (int) Math.round(this.y);
 				int playerlocation = (int) Math.round(this.screen.getPlayerView()[1]);
-				System.out.println(this.screen.getPlayerView()[1] + " " + this.y + i);
-				if ((guardlocation - playerlocation) > 0 && (guardlocation - playerlocation) < 100) {
+				int xOffset = (int) Math.round(this.screen.getPlayerView()[0]) - (int) Math.round(this.x);
+				//System.out.println(this.screen.getPlayerView()[1] + " " + this.y + i);
+				if ((guardlocation - playerlocation) > 0 && (guardlocation - playerlocation) < 100 & Math.abs(xOffset) < 100) {
 					System.out.println("we have found an intruder");
 					return true;
 
@@ -293,11 +305,12 @@ public class GuardBot extends Player implements Drawable {
 
 			} else if (dir.equals(Dir.SOUTH)) {
 
-				System.out.println(this.screen.getPlayerView()[1] + " " + this.y + i);
+				//System.out.println(this.screen.getPlayerView()[1] + " " + this.y + i);
 				int guardlocation = (int) Math.round(this.y);
 				int playerlocation = (int) Math.round(this.screen.getPlayerView()[1]);
-				if ((playerlocation - guardlocation) > 0 && (playerlocation - guardlocation) < 100) {
-					System.out.println("we have found an intruder");
+				int xOffset = (int) Math.round(this.screen.getPlayerView()[0]) - (int) Math.round(this.x);
+				if ((playerlocation - guardlocation) > 0 && (playerlocation - guardlocation) < 100 && Math.abs(xOffset) < 100) {
+					System.out.println("we have found an intruder" + xOffset);
 					return true;
 
 				}

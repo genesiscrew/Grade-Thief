@@ -127,8 +127,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
         // All polygons that need to be drawn
         List<Polygon> allPolygons = new ArrayList<>();
-        
-        // check doors
+
+        // re-closes doors previously opened by player as soon as he is not near it.
         for(Item i : room.getDoors()){
             if(!i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2]) &&   !((Door) i).isDraw()){
                ((Door) i).changeState();
