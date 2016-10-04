@@ -1,5 +1,6 @@
 package gui;
 
+import items.Door;
 import items.Item;
 
 import java.awt.*;
@@ -126,6 +127,13 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
         // All polygons that need to be drawn
         List<Polygon> allPolygons = new ArrayList<>();
+        
+        // check doors
+        for(Item i : room.getDoors()){
+            if(!i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2]) &&   !((Door) i).isDraw()){
+               ((Door) i).changeState();
+            }
+        }
 
         // Add all polygons to the list
         allPolygons.addAll(room.getFloorPolygons()); // floor tiles
@@ -198,18 +206,13 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         return otherPlayer.getPolygons();
     }
 
-    /**
+    /** this method updates the guard bot position
      * @return
      */
     private List<Polygon> updateGuardBotPosition() {
         // Lets start by getting there position from the controller and see how much they have moved
         double[] otherPos = controller.getOtherBotPosition("guard1");
         GuardBot g = controller.getGuardBot("guard1");
-        //double dx = otherPos[0] - g.getX();
-        //double dy = otherPos[1] - g.getY();
-       // double dz = otherPos[2] - g.getZ();
-        //dz = 0;
-
         g.move(); // move the guardbot and update position based on heading
         return g.getPolygons();
     }

@@ -32,7 +32,6 @@ public class GuardBot extends Player implements Drawable {
 	ArrayList<Direction.Dir> directionList;
 	int moveStrategy;
 	GuardStrategy strategy;
-
 	Location characterLocation;
 	private int[] distance;
 	private int floorNo;
@@ -124,7 +123,7 @@ public class GuardBot extends Player implements Drawable {
 				u = 0;
 
 			}
-			// now we reverse the movement directions (if
+			// we reverse the movement directions (if
 			// required
 			// e.g. north south path does not require reversal
 			// but a north west path would need to go back to origin
