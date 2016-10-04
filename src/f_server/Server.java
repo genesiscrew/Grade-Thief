@@ -3,36 +3,33 @@ package f_server;
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
+import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 import gui.GameController;
+import model.Game;
 
-public class Server extends JFrame{
+public class Server{
 
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
 	private ServerSocket server;
 	private Socket connection;
-	private PrintStream p;
-	private Scanner sc;
-	private GameController guard = new GameController(false);
-	private GameController player;
-	private Scanner getInput = new Scanner(System.in);
+	private GameController guard = new GameController(true);
 
-
-	//set up and run the server
-	public void startRunning(){
+	public void startRunning() {
 		try {
+
 			server = new ServerSocket(6789, 100);
-			while(true){
+			while (true) {
 				try {
 					waitForConnection();
 					setupStream();
-					//whileChatting();
-					update();
+				    update();
 				} catch (EOFException e) {
 					System.out.println("You got disconnected");
-				}finally {
+				} finally {
 					closeCrap();
 				}
 			}
@@ -41,15 +38,13 @@ public class Server extends JFrame{
 		}
 	}
 
-	//Wait for connection, then display connection information
-	private void waitForConnection() throws IOException{
+	private void waitForConnection() throws IOException {
 		System.out.println("Waiting for someone to connect...");
 		connection = server.accept();
 		System.out.println("Now connected to" + connection.getInetAddress().getHostName());
 	}
 
-
-	private void setupStream() throws IOException{
+	private void setupStream() throws IOException {
 		output = new ObjectOutputStream(connection.getOutputStream());
 		output.flush();
 		input = new ObjectInputStream(connection.getInputStream());
@@ -57,37 +52,37 @@ public class Server extends JFrame{
 	}
 
 
-	//During the chat conversation
-	private void whileChatting() throws IOException{
-		/*boolean continueType = true;
-		do {
-			while (continueType) {
-				System.out.print("Write anything man: ");
-				String message = getInput.nextLine();
-				sendMessage(message);
-				if (message.equalsIgnoreCase("END")) {
-					continueType = false;
-				}
-			}
-
-			appearMessage();
-		} while (true);*/
-	}
-
-	private void update() {
+	private void update() throws IOException {
 		while (true) {
-			try {
-				sendData();
-				receiveData();
-			} catch (IOException e) {
-
-			}
-
+			sendData();
+			recieveData();
 		}
 	}
 
-	//close streams and sockets after you are done chatting!!
-	private void closeCrap(){
+	private void sendData() throws IOException {
+		double []guardPos = guard.getGuardPosition();
+		output.writeDouble(guardPos[0]);
+		output.flush();
+		output.writeDouble(guardPos[1]);
+		output.flush();
+		output.writeDouble(guardPos[2]);
+		output.flush();
+	}
+
+	private void recieveData() throws IOException {
+		try {
+			double playerPosX = (double) input.readDouble();
+			double playerPosY = (double) input.readDouble();
+			double playerPosZ = (double) input.readDouble();
+			double[] newPos = new double[]{playerPosX,playerPosY,playerPosZ};
+			guard.setPlayerPosition(newPos);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+
+	private void closeCrap() {
 		System.out.println("Closing connectin...");
 		try {
 
@@ -100,44 +95,46 @@ public class Server extends JFrame{
 		}
 	}
 
-	/*private void sendMessage(String message) throws IOException{
-		p = new PrintStream(connection.getOutputStream());
-		p.println(message);
+	public ObjectOutputStream getOutput() {
+		return output;
 	}
 
-	private void appearMessage() throws IOException{
-		sc = new Scanner(connection.getInputStream());
-		System.out.println(sc.nextLine());
-	}*/
-
-
-	//Send data to clients
-	private void sendData() throws IOException{
-		//Send updated board to the Clients
-		//The loop is true for now
-		double []guard = this.guard.getOtherPlayersPosition(true);
-		output.writeObject(guard);
-		output.flush();
-
-		/*double []player = this.player.getOtherPlayersPosition(false);
-		output.writeObject(player);*/
-		output.flush();
-
+	public void setOutput(ObjectOutputStream output) {
+		this.output = output;
 	}
-	//Recieve data from Clients
-	private void receiveData() throws IOException{
-		//Recieve the coordinates of the client and update the board.
-		try {
-			double[] updatedGuard = (double []) input.readObject();
-			this.guard.updatePosition(true, updatedGuard);
-			double[] updatedPlayer = (double []) input.readObject();
-			this.player.updatePosition(false, updatedPlayer);
 
-
-		}catch (ClassNotFoundException e){
-			e.printStackTrace();
-		}
-
+	public ObjectInputStream getInput() {
+		return input;
 	}
+
+	public void setInput(ObjectInputStream input) {
+		this.input = input;
+	}
+
+	public ServerSocket getServer() {
+		return server;
+	}
+
+	public void setServer(ServerSocket server) {
+		this.server = server;
+	}
+
+	public Socket getConnection() {
+		return connection;
+	}
+
+	public void setConnection(Socket connection) {
+		this.connection = connection;
+	}
+
+	public GameController getGuard() {
+		return guard;
+	}
+
+	public void setGuard(GameController guard) {
+		this.guard = guard;
+	}
+
+
 
 }

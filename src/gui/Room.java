@@ -120,7 +120,9 @@ public class Room {
         return false;
     }
 
-
+    public void removeRoomObject(Item item) {
+    	roomObjects.remove(item);
+    }
     public void setTileMap(String f) {
         System.out.println("generating tileMap for " + f);
         TileMap t = new TileMap(null, this);

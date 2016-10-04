@@ -53,6 +53,11 @@ weeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeew
 weeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeew
 wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 *
-11 6 14 0 0 0 0 255 0 0 item55 I
-12 39 11 0 0 0 0 255 0 0 door2382 D 237
+
+11 6 14 0 5 5 5 0 80 0 item55 KeyDraw
+11 7 14 0 5 5 5 255 255 0 item55 Table
+11 9 14 0 5 5 5 255 0 255 item55 Dog
+11 11 14 0 5 5 5 255 0 0 item55 MetalSheet
+.
+>>>>>>> 0167c5bdd48f79dceebac9e53cbbb232f3cfdfb4
 .

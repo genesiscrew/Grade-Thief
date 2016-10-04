@@ -3,6 +3,7 @@ package items;
 import gui.Cube;
 import gui.Drawable;
 import gui.Polygon;
+import items.Item.Interaction;
 
 import java.awt.*;
 import java.util.*;
@@ -71,4 +72,9 @@ public class Table extends Item {
         return allPolys;
     }
 
+    @Override
+    public void addInteractions() {
+        interactionsAvaliable = new ArrayList<>();
+        interactionsAvaliable.add(Interaction.SIT);
+    }
 }

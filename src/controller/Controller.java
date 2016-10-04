@@ -1,5 +1,8 @@
 package controller;
 
+import java.io.File;
+import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -9,9 +12,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Game;
 import model.GameLoader;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * @Author Adam Wareing This is the controller that handles logic from when

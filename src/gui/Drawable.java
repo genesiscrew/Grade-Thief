@@ -46,5 +46,4 @@ public interface Drawable {
      * @return
      */
     List<Polygon> getPolygons();
-
 }

@@ -66,4 +66,6 @@ public class Door extends Item {
     public boolean isDraw() {
         return draw;
     }
+
+	
 }
