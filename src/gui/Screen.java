@@ -29,22 +29,12 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     // The polygon that the mouse is currently over
     static Polygon polygonOver = null;
 
-    public static int startX = 120;
-    public static int startY = 150;
-    public static int startZ = 10;
+
 
     Robot r; // Used for keeping mouse in center
     static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-    /**
-     * This is the co-ordinates of where the player is  (x, y, z)
-     */
-    double[] viewFrom = new double[]{15, 5, 10},
-            viewTo = new double[]{0, 0, 0},
-            lightDir = new double[]{1, 1, 1};
-
-
-    // The smaller the zoom the more zoomed out you are and visa versa, although altering too far from 1000 will make it look pretty weird
+    // The smaller the zoom the more zoomed out you are, visa versa for the other direction
     static double zoom = 1000;
     static double minZoom = 500;
     static double maxZoom = 2500;
@@ -92,18 +82,12 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         setCursor(cursor);
 
         // Load the section of the map
-        room = new Room("level", startX, startY);
-        this.polyDrawer = new PolygonDrawer(room, lightDir, viewFrom, controller);
+        room = new Room("level", PolygonDrawer.startX, PolygonDrawer.startY);
+        this.polyDrawer = new PolygonDrawer(room, controller, guard);
 
-        if (guard) {
-            viewFrom[0] = 100;
-            viewFrom[1] = 100;
-            viewFrom[2] = 10;
-        } else {
-            viewFrom[0] = startX;
-            viewFrom[1] = startY;
-            viewFrom[2] = startZ;
-        }
+        double[] viewFrom = polyDrawer.getViewFrom();
+
+
     }
 
     @Override
@@ -112,15 +96,19 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         g.setColor(new Color(140, 180, 180));
         g.fillRect(0, 0, (int) GameController.ScreenSize.getWidth(), (int) GameController.ScreenSize.getHeight());
 
+        double[] viewFrom = polyDrawer.getViewFrom();
+        double[] lightDir = polyDrawer.getLightDir();
+        double[] viewTo = polyDrawer.getViewTo();
+
         PlayerMovement.cameraMovement(viewTo, viewFrom, keys, room);
         controller.updatePosition(guard, viewFrom);
-        updateView();
+        screenUtil.updateView(viewTo, viewFrom);
 
         // Calculated all that is general for this camera position
         Calculator.setPredeterminedInfo(this);
         Calculator.controlSunAndLight(lightDir, room.getWidth(), sunPos);
 
-        polyDrawer.drawPolygons(g, guard, otherPlayer);
+        polyDrawer.drawPolygons(g, otherPlayer);
 
         // Draw the cross in the center of the screen
         screenUtil.drawMouseAim(g);
@@ -167,21 +155,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
 
-
-
-    /**
-     * Sets the x, y, z that the player is looking at
-     */
-    void updateView() {
-        double verticalLook = screenUtil.getVerticalLook();
-        double horizontalLook = screenUtil.getHorizontalLook();
-        double r = Math.sqrt(1 - (verticalLook * verticalLook));
-
-        viewTo[0] = viewFrom[0] + r * Math.cos(horizontalLook);
-        viewTo[1] = viewFrom[1] + r * Math.sin(horizontalLook);
-        viewTo[2] = viewFrom[2] + verticalLook;
-    }
-
     /**
      * Centre the mouse in the centre of the screen
      */
@@ -209,7 +182,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
             System.exit(0);
         if (e.getKeyCode() == KeyEvent.VK_SPACE)
-            currentPlayer.jump(viewFrom);
+            currentPlayer.jump(polyDrawer.getViewFrom());
         if (e.getKeyCode() == KeyEvent.VK_R)
             loadMap();
         if (e.getKeyCode() == KeyEvent.VK_U)
@@ -220,6 +193,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             showInventory();
     }
 
+    /**
+     * Show the player inventory on screen
+     */
     private void showInventory() {
         String[] inventoryItems = new String[currentPlayer.getInventory().size()];
         int c = 0;
@@ -231,8 +207,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         int n = JOptionPane.showOptionDialog(this, "What would you like to do?", "Select option", JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, inventoryItems, inventoryItems[0]);
         Item selectedItem = currentPlayer.getInventory().get(n);
-        // at this point; shou;d get the position directly infront of player
-        // should make sure that it will not obstruct another item
+        double[] viewFrom = polyDrawer.getViewFrom();
         selectedItem.moveItemBy(viewFrom[0] - selectedItem.getX(),
                 viewFrom[1] - selectedItem.getY(), 0);
 
@@ -242,18 +217,19 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         currentPlayer.removeFromInventory(selectedItem);
     }
 
+
+    /**
+     * A player is wanting to interact with an item
+     */
     private void playerWantingToInteractWithItem() {
+        double[] viewFrom = polyDrawer.getViewFrom();
 
         room.getRoomObjects().stream().filter(i -> i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])).forEach(i -> {
-
             int n = showOptionPane(i.getInteractionsAvaliable());
             i.performAction(i.getInteractionsAvaliable().get(n));
             System.out.println(i.getInteractionsAvaliable().get(n).toString());
-            if (i.getInteractionsAvaliable().get(n).equals(Interaction.TAKE)) {
+            if (i.getInteractionsAvaliable().get(n).equals(Interaction.TAKE))
                 currentPlayer.addToInventory(i);
-                System.out.println("add to inventory here");
-                currentPlayer.getInventory().forEach(System.out::println);
-            }
         });
 
         room.getDoors().stream().filter(i -> i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])).forEach(i -> {
@@ -262,6 +238,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         });
     }
 
+    /**
+     * Load the map, switches between room one and two
+     */
     public void loadMap() {
         if (room == room1) {
             room = room2;
@@ -270,51 +249,56 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         }
     }
 
+    /**
+     * Change all door states. If the doors unlocked it will be locked, and vice versa.
+     */
     private void changeAllDoorState() {
         room.getDoors().forEach(d -> d.changeState());
     }
 
 
+    /**
+     * Determines if a player is near an door or room object
+     */
     private void isPlayerNearObject() {
-        List<Item> removeItems = new ArrayList<Item>();
+        double[] viewFrom = polyDrawer.getViewFrom();
+        List<Item> removeItems = new ArrayList<>();
+
         for (Item i : room.getRoomObjects()) {
-            if (!i.isDraw()) {// nothing to display if item not rendered
+            // Nothing to display if item not rendered
+            if (!i.isDraw()) {
                 removeItems.add(i);
                 continue;
             }
 
-
-            if (i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
+            if (i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2]))
                 messageToDisplay = "Press e To Interact With The " + i.getClass().getSimpleName();
-            }
         }
 
-
-        for (Item i2 : removeItems) {
+        for (Item i2 : removeItems)
             room.removeRoomObject(i2);
-        }
 
-        for (Item i : room.getDoors()) {
-            if (i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
-                messageToDisplay = "Press e To Open The Door";
-            }
-        }
+        room.getDoors().stream().filter(i -> i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])).forEach(i -> {
+            messageToDisplay = "Press e To Open The Door";
+        });
     }
 
 
-
-
+    /**
+     * Show an options panel where the user can select from a list of interactions of an item
+     *
+     * @param optionsList
+     * @return
+     */
     private int showOptionPane(List<Item.Interaction> optionsList) {
         String[] options = new String[optionsList.size()];
-        for (int i = 0; i < optionsList.size(); i++) {
+        for (int i = 0; i < optionsList.size(); i++)
             options[i] = optionsList.get(i).toString();
-        }
 
-        int n = JOptionPane.showOptionDialog(this, "What would you like to do?", "Select option", JOptionPane.YES_NO_CANCEL_OPTION,
+        return JOptionPane.showOptionDialog(this, "What would you like to do?", "Select option", JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-
-        return n;
     }
+
 
     @Override
     public void keyReleased(KeyEvent e) {
@@ -338,7 +322,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         mouseX = arg0.getX();
         mouseY = arg0.getY();
         centerMouse();
-        updateView();
+        screenUtil.updateView(polyDrawer.getViewTo(), polyDrawer.getViewFrom());
     }
 
     @Override
@@ -347,7 +331,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         mouseX = arg0.getX();
         mouseY = arg0.getY();
         centerMouse();
-        updateView();
+        screenUtil.updateView(polyDrawer.getViewTo(), polyDrawer.getViewFrom());
     }
 
     @Override
@@ -390,18 +374,31 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
 
     public void setStartX(double startX) {
-        this.startX = (int) startX;
+        PolygonDrawer.startX = (int) startX;
     }
 
     public void setStartY(double startY) {
-        this.startY = (int) startY;
+        PolygonDrawer.startY = (int) startY;
     }
 
     public void setViewFrom(double[] viewFrom) {
-        this.viewFrom = viewFrom;
+        polyDrawer.setViewFrom(viewFrom);
     }
 
     public double[] getPlayerView() {
-        return this.viewFrom;
+        return polyDrawer.getViewFrom();
     }
+
+    public double[] getViewFrom() {
+        return polyDrawer.getViewFrom();
+    }
+
+    public double[] getLightDir() {
+        return polyDrawer.getLightDir();
+    }
+
+    public double[] getViewTo() {
+        return polyDrawer.getViewTo();
+    }
+
 }

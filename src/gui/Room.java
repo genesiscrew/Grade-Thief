@@ -91,9 +91,9 @@ public class Room {
 
         if (x < floor.getxOffset() + ROOM_PADDING || y < floor.getyOffset() + ROOM_PADDING)
             return true;
-        if ((x + ROOM_PADDING) > (Screen.startX + mapWidth - floor.getxOffset()))
+        if ((x + ROOM_PADDING) > (PolygonDrawer.startX + mapWidth - floor.getxOffset()))
             return true;
-        if ((y + ROOM_PADDING) > (Screen.startY + mapHeight - floor.getyOffset()))
+        if ((y + ROOM_PADDING) > (PolygonDrawer.startY + mapHeight - floor.getyOffset()))
             return true;
         return false;
     }

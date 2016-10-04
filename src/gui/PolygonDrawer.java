@@ -2,12 +2,12 @@ package gui;
 
 import characters.GuardBot;
 import items.Player;
+
 import java.awt.*;
 import java.util.*;
 
 /**
  * @Author Adam Wareing
- *
  */
 public class PolygonDrawer {
 
@@ -17,18 +17,37 @@ public class PolygonDrawer {
      */
     private int[] polygonDrawOrder;
     private Room room;
-    private double[] lightDir;
-    private double[] viewFrom;
+
+    private double[] lightDir; // where the light is coming from
+    private double[] viewFrom; // where the player currently is viewing from
+    private double[] viewTo; // where the player is looking to
+
+    public static int startX = 120;
+    public static int startY = 150;
+    public static int startZ = 10;
+
+    private boolean guard;
     private GameController controller;
 
-    public PolygonDrawer(Room room, double[] lightDir, double[] viewFrom, GameController controller) {
+    public PolygonDrawer(Room room, GameController controller, boolean guard) {
         this.room = room;
-        this.lightDir = lightDir;
-        this.viewFrom = viewFrom;
+        viewFrom = new double[]{15, 5, 10};
+        viewTo = new double[]{0, 0, 0};
+        lightDir = new double[]{1, 1, 1};
         this.controller = controller;
+
+        if (guard) {
+            viewFrom[0] = 100;
+            viewFrom[1] = 100;
+            viewFrom[2] = 10;
+        } else {
+            viewFrom[0] = startX;
+            viewFrom[1] = startY;
+            viewFrom[2] = startZ;
+        }
     }
 
-    public void drawPolygons(Graphics g, boolean guard, Player otherPlayer){
+    public void drawPolygons(Graphics g, Player otherPlayer) {
         java.util.List<Polygon> allPolygons = getAllPolygonsThatNeedToBeDrawn(guard, otherPlayer);
 
         // Updates each polygon for this camera position
@@ -47,7 +66,7 @@ public class PolygonDrawer {
     }
 
 
-    private java.util.List<Polygon> getAllPolygonsThatNeedToBeDrawn(boolean guard, Player otherPlayer){
+    private java.util.List<Polygon> getAllPolygonsThatNeedToBeDrawn(boolean guard, Player otherPlayer) {
         // All polygons that need to be drawn
         java.util.List<Polygon> allPolygons = new ArrayList<>();
 
@@ -72,7 +91,7 @@ public class PolygonDrawer {
         allPolygons.addAll(PlayerMovement.updateOtherPlayersPosition(otherPos, otherPlayer)); // other player
         // Adds polygons from all guard bots
         for (GuardBot r : this.controller.getGuardList()) {
-            allPolygons.addAll(PlayerMovement.updateGuardBotPosition(r.getName(), controller) );
+            allPolygons.addAll(PlayerMovement.updateGuardBotPosition(r.getName(), controller));
         }
         return allPolygons;
     }
@@ -103,5 +122,21 @@ public class PolygonDrawer {
                     polygonDrawOrder[b + 1] = temp2;
                     k[b + 1] = temp;
                 }
+    }
+
+    public double[] getViewFrom() {
+        return viewFrom;
+    }
+
+    public double[] getLightDir() {
+        return lightDir;
+    }
+
+    public double[] getViewTo() {
+        return viewTo;
+    }
+
+    public void setViewFrom(double[] viewFrom) {
+        this.viewFrom = viewFrom;
     }
 }
