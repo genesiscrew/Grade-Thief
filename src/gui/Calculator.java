@@ -95,19 +95,16 @@ public class Calculator {
      */
     static void setPredeterminedInfo(Screen screen) {
 
-        double[] viewFrom = screen.getViewFrom();
-        double[] viewTo = screen.getViewFrom();
-
-        viewVector = new Vector(viewTo[0] - viewFrom[0], viewTo[1] - viewFrom[1], viewTo[2] - viewFrom[2]);
+        viewVector = new Vector(screen.viewTo[0] - screen.viewFrom[0], screen.viewTo[1] - screen.viewFrom[1], screen.viewTo[2] - screen.viewFrom[2]);
         Vector planeVector1 = viewVector.crossProduct(directionVector);
         Vector planeVector2 = viewVector.crossProduct(planeVector1);
-        plane = new Plane(planeVector1, planeVector2, viewTo);
+        plane = new Plane(planeVector1, planeVector2, screen.viewTo);
 
-        rotationVector = Calculator.getRotationVector(viewFrom, viewTo);
+        rotationVector = Calculator.getRotationVector(screen.viewFrom, screen.viewTo);
         w1 = viewVector.crossProduct(rotationVector);
         w2 = viewVector.crossProduct(w1);
 
-        calculatorFocusPosition = Calculator.calculatePositionP(viewFrom, viewTo[0], viewTo[1], viewTo[2]);
+        calculatorFocusPosition = Calculator.calculatePositionP(screen.viewFrom, screen.viewTo[0], screen.viewTo[1], screen.viewTo[2]);
         calculatorFocusPosition[0] = Screen.zoom * calculatorFocusPosition[0];
         calculatorFocusPosition[1] = Screen.zoom * calculatorFocusPosition[1];
     }

@@ -85,26 +85,13 @@ public class PlayerMovement {
     /**
      * @return
      */
-    public static List<Polygon> updateOtherPlayersPosition(double[] otherPos, Player otherPlayer) {
+    public static List<Polygon> updateOtherPlayersPosition(double[] otherPos, Player otherPlayer ) {
         // Lets start by getting there position from the controller and see how much they have moved
         double dx = otherPos[0] - otherPlayer.getX();
         double dy = otherPos[1] - otherPlayer.getY();
         double dz = otherPos[2] - otherPlayer.getZ();
 
         otherPlayer.updatePosition(dx, dy, dz);
-        return otherPlayer.getPolygons();
-    }
-
-    /**
-     * @return
-     */
-    public static List<Polygon> updateOtherPlayersPosition(double[] otherPos, double[] otherPlayerCurrentPosition, Player otherPlayer) {
-        // Lets start by getting there position from the controller and see how much they have moved
-        double dx = otherPos[0] - otherPlayerCurrentPosition[0];
-        double dy = otherPos[1] - otherPlayerCurrentPosition[1];
-        double dz = otherPos[2] - otherPlayerCurrentPosition[2];
-
-        otherPlayer.updatePosition(otherPlayerCurrentPosition[0], otherPlayerCurrentPosition[1], otherPlayerCurrentPosition[2]);
         return otherPlayer.getPolygons();
     }
 
