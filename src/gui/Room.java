@@ -17,7 +17,7 @@ public class Room {
     private Door door;
     private int sx = -1;
     private int sy = -1;
-    private int w = -1;
+    private int width = -1;
     private int h = -1;
     List<GuardBot> guardList;
 
@@ -83,18 +83,17 @@ public class Room {
      * @param x
      * @param y
      * @param z
-     * @param startX
-     * @param startY
      */
-    public boolean positionOutOfBounds(double x, double y, double z, int startX, int startY) {
+    public boolean positionOutOfBounds(double x, double y, double z) {
+
         double mapWidth = floor.getMapWidth() * floor.getTileSize();
         double mapHeight = floor.getMapHeight() * floor.getTileSize();
 
         if (x < floor.getxOffset() + ROOM_PADDING || y < floor.getyOffset() + ROOM_PADDING)
             return true;
-        if ((x + ROOM_PADDING) > (startX + mapWidth - floor.getxOffset()))
+        if ((x + ROOM_PADDING) > (Screen.startX + mapWidth - floor.getxOffset()))
             return true;
-        if ((y + ROOM_PADDING) > (startY + mapHeight - floor.getyOffset()))
+        if ((y + ROOM_PADDING) > (Screen.startY + mapHeight - floor.getyOffset()))
             return true;
         return false;
     }
@@ -124,7 +123,9 @@ public class Room {
         return false;
     }
 
-
+    public void removeRoomObject(Item item) {
+    	roomObjects.remove(item);
+    }
     public void setTileMap(String f) {
         System.out.println("generating tileMap for " + f);
         TileMap t = new TileMap(null, this);
@@ -186,7 +187,7 @@ public class Room {
     public void setBoundingBox(int sx, int sy, int w, int h) {
         this.sx = sx;
         this.sy = sy;
-        this.w = w;
+        this.width = w;
         this.h = h;
     }
 
@@ -195,7 +196,7 @@ public class Room {
     }
 
     public int[] getBoundingBox() {
-        return new int[]{sx, sy, w, h};
+        return new int[]{sx, sy, width, h};
     }
 
     public int roomGetCode() {
@@ -214,8 +215,8 @@ public class Room {
         return sy;
     }
 
-    public int getW() {
-        return w;
+    public int getWidth() {
+        return width;
     }
 
     public int getH() {

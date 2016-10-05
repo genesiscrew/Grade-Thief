@@ -8,8 +8,7 @@ import model.Game;
 
 public class ClientRun {
 	public static void main(String[] args) throws IOException {
-
-		Client mos = new Client("130.195.6.151/23");
+		Client mos = new Client("130.195.4.172");
 		mos.startRunning();
 	}
 }

@@ -557,9 +557,8 @@ public class Game {
 
 				try {
 					Thread.sleep(delay);
+
 					//gaurd.move(Game.this);
-
-
 
 				} catch(InterruptedException e) {
 					// should never happen

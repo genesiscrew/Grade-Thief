@@ -51,6 +51,7 @@ public class Server{
 		System.out.println("Stream are now setup! ");
 	}
 
+
 	private void update() throws IOException {
 		while (true) {
 			sendData();
