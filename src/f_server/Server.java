@@ -1,28 +1,21 @@
 package f_server;
 
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintStream;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.io.*;
+import java.net.*;
 import java.util.Scanner;
-
-import javax.swing.JFrame;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
 import gui.GameController;
+import model.Game;
 
-public class Server extends JFrame {
+public class Server{
 
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
 	private ServerSocket server;
 	private Socket connection;
-	private PrintStream p;
-	private Scanner sc;
-	private Scanner getInput = new Scanner(System.in);
-
 	private GameController guard = new GameController(true);
 
 	public void startRunning() {
@@ -33,7 +26,7 @@ public class Server extends JFrame {
 				try {
 					waitForConnection();
 					setupStream();
-					update();
+				    update();
 				} catch (EOFException e) {
 					System.out.println("You got disconnected");
 				} finally {
@@ -58,6 +51,7 @@ public class Server extends JFrame {
 		System.out.println("Stream are now setup! ");
 	}
 
+
 	private void update() throws IOException {
 		while (true) {
 			sendData();
@@ -66,7 +60,7 @@ public class Server extends JFrame {
 	}
 
 	private void sendData() throws IOException {
-		double[] guardPos = guard.getGuardPosition();
+		double []guardPos = guard.getGuardPosition();
 		output.writeDouble(guardPos[0]);
 		output.flush();
 		output.writeDouble(guardPos[1]);
@@ -80,7 +74,7 @@ public class Server extends JFrame {
 			double playerPosX = (double) input.readDouble();
 			double playerPosY = (double) input.readDouble();
 			double playerPosZ = (double) input.readDouble();
-			double[] newPos = new double[] { playerPosX, playerPosY, playerPosZ };
+			double[] newPos = new double[]{playerPosX,playerPosY,playerPosZ};
 			guard.setPlayerPosition(newPos);
 
 		} catch (Exception e) {
@@ -140,5 +134,7 @@ public class Server extends JFrame {
 	public void setGuard(GameController guard) {
 		this.guard = guard;
 	}
+
+
 
 }

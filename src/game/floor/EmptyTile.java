@@ -1,6 +1,6 @@
 package game.floor;
 
-import characters.Guard;
+import characters.GuardBot;
 import characters.Player;
 import items.Keys;
 import model.Character;
@@ -51,7 +51,7 @@ public class EmptyTile implements Tile {
 	public void addObjectToTile(Object o){
 		this.o = o;
 
-		if (o instanceof Guard) {
+		if (o instanceof GuardBot) {
 			this.name = "G";
 			isOccupied = true;
 		}

@@ -1,6 +1,7 @@
 package items;
 
 import gui.*;
+import items.Item.Interaction;
 
 import java.awt.*;
 import java.util.*;
@@ -67,6 +68,12 @@ public class MapDraw extends Item {
     public List<gui.Polygon> getPolygons() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void addInteractions() {
+        interactionsAvaliable = new ArrayList<>();
+        interactionsAvaliable.add(Interaction.TAKE);
     }
 
 }

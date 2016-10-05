@@ -1,28 +1,16 @@
 package f_server;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
-
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.tools.DocumentationTool.Location;
-
-import characters.Guard;
-import characters.Player;
 import gui.GameController;
-import model.Game;
 
 public class Client {
 	private JTextField userText;
@@ -117,5 +105,7 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
+
+
 
 }

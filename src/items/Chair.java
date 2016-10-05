@@ -74,4 +74,6 @@ public class Chair extends Item {
         cubes.forEach(c -> allPolys.addAll(c.getPolygons()));
         return allPolys;
     }
+
+	
 }

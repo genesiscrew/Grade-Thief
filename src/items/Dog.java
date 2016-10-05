@@ -3,7 +3,6 @@ package items;
 import gui.Cube;
 import gui.Drawable;
 import gui.Polygon;
-import items.Item.Interaction;
 
 import java.awt.*;
 import java.util.*;
@@ -12,16 +11,17 @@ import java.util.List;
 /**
  * Created by wareinadam on 22/09/16.
  */
-public class Table extends Item {
+public class Dog extends Item {
 
-    private final int TABLE_THICKNESS = 1;
+    private final int Dog_THICKNESS = 1;
 
-    public Table(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
+
+    public Dog(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
         super(itemID, itemType, x, y, z, width, length, height, c);
 
         // First make the legs
         int legWidth = (int) (width / 4);
-        int legHeight = (int) (height - TABLE_THICKNESS);
+        int legHeight = (int) (height - Dog_THICKNESS);
         // first leg
         cubes.add(new Cube(x, y, z, legWidth, legWidth, legHeight, c));
         // first leg + width
@@ -31,8 +31,15 @@ public class Table extends Item {
         // oposite corner to first leg
         cubes.add(new Cube(x + width - legWidth, y + length - legWidth, z, legWidth, legWidth, legHeight, c));
 
-        // Draw the table top
-        cubes.add(new Cube(x, y, z + legHeight, width, length, TABLE_THICKNESS, c));
+        // add dog leg
+
+        cubes.add(new Cube(x + width, y + length, z , legWidth, legHeight, Dog_THICKNESS, c));
+        cubes.add(new Cube(x - legWidth, y + length, z , legWidth, legHeight, Dog_THICKNESS, c));
+        // Draw the Dog top
+        cubes.add(new Cube(x-legWidth, y, z + legHeight, width, length, Dog_THICKNESS, c));
+        // Draw dog neck
+      //  cubes.add(new Cube(x-legWidth, y, z))
+
     }
 
     @Override
@@ -69,9 +76,4 @@ public class Table extends Item {
         return allPolys;
     }
 
-    @Override
-    public void addInteractions() {
-        interactionsAvaliable = new ArrayList<>();
-        interactionsAvaliable.add(Interaction.SIT);
-    }
 }
