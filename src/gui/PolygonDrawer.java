@@ -136,6 +136,10 @@ public class PolygonDrawer {
         return viewTo;
     }
 
+    public void setViewTo(double[] viewTo) {
+        this.viewTo = viewTo;
+    }
+
     public void setViewFrom(double[] viewFrom) {
         this.viewFrom = viewFrom;
     }

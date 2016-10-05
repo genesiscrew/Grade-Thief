@@ -34,7 +34,7 @@ public class GameController {
 
 
     public GameController(boolean isGuard) {
-        guardList = new ArrayList<GuardBot>();
+        guardList = new ArrayList<>();
         this.isGuard = isGuard;
         player = createNewGame(isGuard);
 

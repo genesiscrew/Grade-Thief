@@ -29,8 +29,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     // The polygon that the mouse is currently over
     static Polygon polygonOver = null;
 
-
-
     Robot r; // Used for keeping mouse in center
     static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -84,10 +82,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         // Load the section of the map
         room = new Room("level", PolygonDrawer.startX, PolygonDrawer.startY);
         this.polyDrawer = new PolygonDrawer(room, controller, guard);
-
-        double[] viewFrom = polyDrawer.getViewFrom();
-
-
     }
 
     @Override
@@ -102,7 +96,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
         PlayerMovement.cameraMovement(viewTo, viewFrom, keys, room);
         controller.updatePosition(guard, viewFrom);
-        screenUtil.updateView(viewTo, viewFrom);
+        polyDrawer.setViewTo(screenUtil.updateView(viewTo, viewFrom));
 
         // Calculated all that is general for this camera position
         Calculator.setPredeterminedInfo(this);

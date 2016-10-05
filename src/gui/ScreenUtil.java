@@ -64,14 +64,14 @@ public class ScreenUtil {
     /**
      * Sets the x, y, z that the player is looking at
      */
-    void updateView(double[] viewTo, double[] viewFrom) {
+    public double[] updateView(double[] viewTo, double[] viewFrom) {
         double r = Math.sqrt(1 - (verticalLook * verticalLook));
         viewTo[0] = viewFrom[0] + r * Math.cos(horizontalLook);
         viewTo[1] = viewFrom[1] + r * Math.sin(horizontalLook);
         viewTo[2] = viewFrom[2] + verticalLook;
+        System.out.println(viewTo[0] + " " + viewTo[1] + " " + viewTo[2]);
+        return viewTo;
     }
-
-
 
     public double getVerticalLook() {
         return verticalLook;
