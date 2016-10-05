@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import characters.GuardBot;
+
 /**
  * Created by wareinadam on 28/09/16.
  */
