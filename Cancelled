@@ -1,1 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><Players><Player CharachterID="100" CharachterName="Mansour" Floor="1"><items><item itemColor="NULL" itemHeight="NULL" itemID="NULL" itemLength="NULL" itemType="NULL" itemWidth="NULL" itemX="NULL" itemY="NULL" itemZ="NULL"/></items><Location X="459.72231724294636" Y="458.2165988043727">Message</Location></Player></Players>
+120.0,150.0,10.0
+Yellow,100,1000,1000,Drawable,1000,50,50,5
+====================================================================
