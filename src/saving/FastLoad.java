@@ -140,6 +140,27 @@ public class FastLoad {
 						KeyDraw tmp3 = new KeyDraw(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength,
 								ItemHeight, itemColor);
 						items.add(tmp3);
+						items.contains(tmp3);
+						for (int j = 0; j < items.size(); j++) {
+							if(items.get(j).equals(tmp3)){
+
+								List<Item> roomObj = sc.getRoom().getRoomObjects();
+
+								for (int j2 = 0; j2 < roomObj.size(); j2++) {
+									if(roomObj.get(j2).getItemID() == tmp3.itemID){
+										roomObj.remove(j2);
+									}
+								}
+								double[] viewFrom = sc.getViewFrom();
+								items.get(j).moveItemBy(viewFrom[0] - items.get(j).getX(), viewFrom[1] - items.get(j).getY(), 0);
+								sc.getRoom().addItemToRoom(items.get(j));
+								items.get(j).canDraw();
+
+							}
+						}
+
+
+
 						break;
 					case "Keys":
 						/*
@@ -162,6 +183,18 @@ public class FastLoad {
 						MapDraw tmp7 = new MapDraw(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength,
 								ItemHeight, itemColor);
 						items.add(tmp7);
+						items.contains(tmp7);
+						for (int j = 0; j < items.size(); j++) {
+							if(items.get(j).equals(tmp7)){
+								double[] viewFrom = sc.getViewFrom();
+								items.get(j).moveItemBy(viewFrom[0] - items.get(j).getX(), viewFrom[1] - items.get(j).getY(), 0);
+								sc.getRoom().addItemToRoom(items.get(j));
+								items.get(j).canDraw();
+
+							}
+						}
+
+
 						break;
 					case "Marker":
 						Marker tmp8 = new Marker(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength,
