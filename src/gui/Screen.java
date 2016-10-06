@@ -501,7 +501,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		}
 	}
 
-
 	public static int getStartX() {
 		return startX;
 	}
@@ -546,11 +545,20 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		return viewFrom;
 	}
 
-	public void setX(double x){
+	public void setX(double x) {
 		viewFrom[0] = x;
 	}
 
-	public void setY(double x){
+	public void setY(double x) {
 		viewFrom[1] = x;
 	}
+
+	public items.Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	public void setCurrentPlayer(items.Player currentPlayer) {
+		this.currentPlayer = currentPlayer;
+	}
+
 }
