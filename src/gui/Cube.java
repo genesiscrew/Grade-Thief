@@ -89,8 +89,24 @@ public class Cube implements Drawable {
         RotAdd[1] = angle[1] + 0.25 * Math.PI;
         RotAdd[2] = angle[2] + 0.25 * Math.PI;
         RotAdd[3] = angle[3] + 0.25 * Math.PI;
-
     }
+
+    /**
+     * Update the cubes position by the amount specified.
+     * @param dx
+     * @param dy
+     * @param dz
+     */
+    public void updatePosition(double dx, double dy, double dz){
+        this.x += dx;
+        this.y += dy;
+        this.z += dz;
+
+        for(Polygon p : polygons){
+            p.updatePosition(dx, dy, dz);
+        }
+    }
+
 
     /**
      * Update the direction the polygon is facing
@@ -162,7 +178,7 @@ public class Cube implements Drawable {
                 (this.z + this.height) > z && this.z > z;
     }
 
-    public List<Polygon> getPolygons(){
+    public List<Polygon> getPolygons() {
         return Arrays.asList(polygons);
 
     }

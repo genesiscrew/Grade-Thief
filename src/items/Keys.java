@@ -1,14 +1,17 @@
 package items;
 
 import gui.Drawable;
+import gui.Polygon;
 
-public class Keys extends Item implements Interactable, Movable, Drawable {
+import java.util.List;
+
+public class Keys implements Interactable, Movable, Drawable {
 
     String description = " a key";
     int keyID;
 
 	public Keys(int itemID, String itemType, int keyID) {
-		super(itemID, itemType);
+		//super(itemID, itemType);
 		this.keyID = keyID;
 	}
 
@@ -16,7 +19,7 @@ public class Keys extends Item implements Interactable, Movable, Drawable {
 		return "K";
 	}
     public String itemType() {
-        return itemType;
+        return null;
     }
 
     @Override
@@ -57,5 +60,35 @@ public class Keys extends Item implements Interactable, Movable, Drawable {
     @Override
     public void move(Direction dir, Distance d) {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void updateDirection(double toX, double toY) {
+
+    }
+
+    @Override
+    public void updatePoly() {
+
+    }
+
+    @Override
+    public void setRotAdd() {
+
+    }
+
+    @Override
+    public void removeCube() {
+
+    }
+
+    @Override
+    public boolean containsPoint(int x, int y, int z) {
+        return false;
+    }
+
+    @Override
+    public List<Polygon> getPolygons() {
+        return null;
     }
 }

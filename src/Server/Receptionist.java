@@ -9,7 +9,7 @@ import java.util.concurrent.Callable;
 import model.Game;
 
 //This is for the packages
-/*import game.Game;*/
+/*import game.GameController;*/
 
 /**
  * This class represents a single thread that handles communication with a connected

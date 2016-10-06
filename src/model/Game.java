@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,7 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import characters.Guard;
+import characters.GuardBot;
 import characters.Player;
 import game.floor.EmptyTile;
 import game.floor.Floor;
@@ -62,7 +63,6 @@ public class Game {
 		panel.add(console);
 		display.add(panel);
 		display.setSize(500, 600);
-		
 	}
 
 	public gui.Room getRoom(int floorNo) {
@@ -270,7 +270,7 @@ public class Game {
 				return output;
 			}
 		}
-		System.out.println("This is a " + ((GameObject) item).itemType());
+		return "This is a " + ((GameObject) item).itemType();
 		}
 		return null;
 	}
@@ -378,7 +378,7 @@ public class Game {
 					} catch (IOException e) {
 						// exception handling left as an exercise for the reader
 					}
-                    Container con = new Container(id, null, "box", keyID);
+                    Container con = new Container(id, null, "box", keyID,0,0,0,0,0,0,new Color(0,0,0));
                     if (container != null) {
 						// TODO: if method called by container item, then add item into container list
 					}
@@ -414,7 +414,7 @@ public class Game {
 					//if method is not called by container item, then add the container into the tile map
 					System.out.println("adding item??");
 					//EmptyTile E = (EmptyTile) tile;
-					Item i = new Item(id, type);
+					//Item i = new Item(id, type);
 					//E.addObjecttoTile(i);
 					//E.setOccupied();
 				//	System.out.println("e occupied" + E.isOccupied);
@@ -543,7 +543,7 @@ public class Game {
  * @param delay between each movement of guard
  * @return
  */
-	public Thread createGuardThread(Guard gaurd, int delay) {
+	public Thread createGuardThread(GuardBot gaurd, int delay) {
 		Thread guardThread = new Thread() {
 			public void run() {
 				// move the guard in a fixed loop, once he reaches certain
@@ -557,9 +557,8 @@ public class Game {
 
 				try {
 					Thread.sleep(delay);
-					gaurd.move(Game.this);
 
-
+					//gaurd.move(Game.this);
 
 				} catch(InterruptedException e) {
 					// should never happen

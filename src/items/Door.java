@@ -1,35 +1,70 @@
 package items;
 
-import game.floor.Room;
+import gui.Cube;
+import gui.Polygon;
 
-public class Door extends GameObject {
-	public int code;
-	public int keyID;
-	public String itemType = "Door";
-	public int itemID = 1111;
-	private gui.Room room;
+import java.awt.*;
+import java.util.List;
 
-	public Door(int itemID, String itemType, int keyID, gui.Room room) { //, int code, int keyID) {
-		super(itemID, itemType);
-		this.itemType = itemType;
-		this.itemID = itemID;
-		this.code = code;
-		this.keyID = keyID;
-		this.room = room;
-	}
+public class Door extends Item {
+    public int code;
+    private String itemType = "Door";
 
-	public String itemType() {
-		return itemType;
-	}
+    public Door(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
+        super(itemID, itemType, x, y, z, width, length, height, c);
+        cubes.add(new Cube(x, y, z, width, length, height, c));
+        this.draw = true;
+    }
 
-	public static Door getDoor(int doorCode) {
-		// read map for door Code
-		// return door
-		return null;
-	}
+    public String itemType() {
+        return itemType;
+    }
 
-	public gui.Room getRoom() {
-		return this.room;
-	}
+    public static Door getDoor(int doorCode) {
+        // read map for door Code
+        // return door
+        return null;
+    }
 
+    @Override
+    public void updateDirection(double toX, double toY) {
+
+    }
+
+    @Override
+    public void updatePoly() {
+
+    }
+
+    @Override
+    public void setRotAdd() {
+
+    }
+
+    @Override
+    public void removeCube() {
+
+    }
+
+    @Override
+    public boolean containsPoint(int x, int y, int z) {
+        if(!draw)
+            return false;
+        return (this.x + this.width) > x && (this.y + this.length) > y && this.x < x && this.y < y;
+    }
+
+    @Override
+    public List<Polygon> getPolygons() {
+        return cubes.get(0).getPolygons();
+    }
+
+    public void changeState(){
+        draw = !draw;
+    }
+
+    public boolean isDraw() {
+        return draw;
+    }
+
+	
 }

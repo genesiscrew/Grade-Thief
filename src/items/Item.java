@@ -1,68 +1,114 @@
 package items;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
+import gui.Cube;
 import gui.Drawable;
-import gui.Polygon;
-
-public  class Item extends GameObject implements Drawable {
-
-	List<String> options; // items that are interactable may have a list of options to choose from
-	// items should also have a GameWorld Position
-	public int itemID;
 
 
-	public Item( int itemID, String itemType ) {
-		super(itemID, itemType);
+/**
+ * @Author Adam Wareing
+ */
+public abstract class Item extends GameObject implements Drawable {
+
+    public final double DETECT_PLAYER_BOUNDARY = 5;
+
+    public int itemID;
+    protected double x;
+    protected double y;
+    protected double z;
+    protected double width;
+    protected double length;
+    protected double height;
+    protected Color color;
+    protected List<Interaction> interactionsAvaliable;
+    protected boolean draw = true;
+    protected java.util.List<Cube> cubes;
 
 
+    public void canDraw() {
+    	draw = !draw;
+    }
+    public boolean isDraw() {
+    	return draw;
+    }
 
+    public Item(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
+        super(itemID, itemType);
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.width = width;
+        this.length = length;
+        this.height = height;
+        this.color = c;
+        this.cubes = new ArrayList<>();
+        addInteractions();
+    }
+    public void moveItemBy(double dx, double dy, double dz) {
+        this.x += dx;
+        this.y += dy;
+        this.z += dz;
 
-	}
+        cubes.forEach(c -> c.updatePosition(dx, dy, dz));
+    }
+    public void addInteractions() {
+        interactionsAvaliable = new ArrayList<>();
+        interactionsAvaliable.add(Interaction.OPEN);
+        interactionsAvaliable.add(Interaction.CLOSE);
+    }
 
-	public String toString() {
-		return "I";
-	}
-	// Location location;
+    public boolean pointNearObject(double x, double y, double z) {
+        if ((this.x + DETECT_PLAYER_BOUNDARY + this.width) > x && (this.y + DETECT_PLAYER_BOUNDARY + this.length) > y
+                && this.x - DETECT_PLAYER_BOUNDARY< x && this.y - DETECT_PLAYER_BOUNDARY< y){
+        return true;
+        }else{
+            return false;
+        }
+    }
 
-	@Override
-	public void setRotAdd() {
-		// TODO Auto-generated method stub
-		
-	}
+    public void  performAction(Interaction interaction){
+        switch (interaction){
+            case PICK_UP:
+                draw = false;
+                break;
+            case OPEN:
+                draw = false;
+                break;
+            case CLOSE:
+                draw = true;
+                break;
+            case SIT:
+            	System.out.println("sit down");
+            	break;
+            case TAKE:
+            	draw = false;
+            	break;
+        }
+    }
 
-	@Override
-	public void updateDirection(double toX, double toY) {
-		// TODO Auto-generated method stub
-		
-	}
+    public double getX() {
+        return x;
+    }
 
-	@Override
-	public void updatePoly() {
-		// TODO Auto-generated method stub
-		
-	}
+    public double getY() {
+        return y;
+    }
 
-	@Override
-	public void removeCube() {
-		// TODO Auto-generated method stub
-		
-	}
+    public double getZ() {
+        return z;
+    }
 
-	@Override
-	public boolean containsPoint(int x, int y, int z) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    // Model file
+    public enum Interaction {
+        OPEN,
+        UNLOCK,
+        CLOSE, PICK_UP, SIT, TAKE
+    }
 
-	@Override
-	public List<Polygon> getPolygons() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
-	// Model file
-
+    public List<Interaction> getInteractionsAvaliable() {
+        return interactionsAvaliable;
+    }
 }

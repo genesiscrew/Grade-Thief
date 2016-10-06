@@ -13,7 +13,7 @@ import model.Game;
 
 //This is for the packages
 
-/*import game.Game;
+/*import game.GameController;
 import game.GameError;
 import game.TestConst;*/
 
@@ -71,10 +71,10 @@ public class ServerMain {
         int numPlayers = parseInt(2, 4);
 
         // Parsing a file to construct the world
-        // game = new Game(file);
+        // game = new GameController(file);
 
         // create the game world
-        //game = new Game(TestConst.world, TestConst.areas);
+        //game = new GameController(TestConst.world, TestConst.areas);
         clockThread = new ClockThread(DEFAULT_CLK_PERIOD, game);
         pool = Executors.newFixedThreadPool(numPlayers);
 

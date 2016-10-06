@@ -9,7 +9,7 @@ public class MakeLevelTest {
 
 
 	String level1 = System.getProperty("user.dir") + "/src/game/floor/level";
-	gui.Room room_level1 = new gui.Room("level");
+	gui.Room room_level1 = new gui.Room("level",0,0);
 
 
 

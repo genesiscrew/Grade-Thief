@@ -8,9 +8,9 @@ import gui.Cube;
 import gui.Drawable;
 import gui.Polygon;
 import items.Door;
+import items.Item;
 
-public class DoorDraw implements Drawable {
-	private final int MARKER_THICKNESS = 5;
+public class DoorDraw extends Item {
 
     private java.util.List<Cube> cubes;
     private double x;
@@ -26,8 +26,10 @@ public class DoorDraw implements Drawable {
     	return x + " " + y + " " + z + " " + width + " " + length + " " + height + " " + color + " door " + door;
     }
 
-    public DoorDraw(double x, double y, double z, double width, double length, double height, Color c, Door door) {
-    	System.out.println("height " + height);
+    public DoorDraw(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c, Door door) {
+        super(itemID, itemType, x, y, z, width, length, height, c);
+
+        System.out.println("height " + height);
     	System.out.println("height " + height);
     	System.out.println("height " + height);
     	System.out.println("height " + height);
@@ -85,4 +87,13 @@ public class DoorDraw implements Drawable {
         cubes.forEach(c -> allPolys.addAll(c.getPolygons()));
         return allPolys;
     }
+
+	public boolean pointNearObject(double x, double y, int z) {
+		   if ((this.x + DETECT_PLAYER_BOUNDARY + this.width) > x && (this.y + DETECT_PLAYER_BOUNDARY + this.length) > y
+	                && this.x - DETECT_PLAYER_BOUNDARY< x && this.y - DETECT_PLAYER_BOUNDARY< y){
+	        return true;
+	        }else{
+	            return false;
+	        }
+	}
 }

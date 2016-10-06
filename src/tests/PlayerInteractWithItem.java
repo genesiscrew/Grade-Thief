@@ -23,15 +23,14 @@ public class PlayerInteractWithItem {
 		Game game = new Game();
 		// create room
 		// TODO
-		gui.Room room = createRoom();
-		game.addFloor(room);
+		gui.Room room = null;
 		TileMap tileMap = room.getTileMap();
 		// add items to room
 		tileMap.populateRoom(room, tileMap.getItems(), null);
 		//create player
 		Player p = new Player(0000, "H", game, 0);
 		game.addPlayer(p);
-		p.setCharacterLocation(4,1);
+		p.setCharacterLocation(5,2);
 		Location pL = p.getCharacterLocation();
 		// set user direction facing item
 		p.setDirection(Direction.Dir.EAST);
@@ -57,15 +56,15 @@ public class PlayerInteractWithItem {
 		int nextY = 0;
 		final int ADJACENT = 1; // adjacent rooms, add extra wall
 
-		Door d = new Door(0000, "0001",0, null);
+		//Door d = new Door(0000, "0001",0, null);
 
-		String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
+		String co237 = System.getProperty("user.dir") + "/src/game/floor/level";
 
 
 
-		gui.Room room_co237 = new gui.Room("co237");
+		gui.Room room_co237 = new gui.Room("level", 0 ,0 );
 
-		Door door_co237 = new Door(0000, "237",0,room_co237);
+		//Door door_co237 = new Door(0000, "237",0,room_co237);
 
 		floorRooms.add(room_co237);
 

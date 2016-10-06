@@ -2,26 +2,22 @@ package game.floor;
 
 import java.awt.Color;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import javax.swing.plaf.synth.SynthSpinnerUI;
-
-import gui.*;
+import characters.GuardBot;
+import items.Chair;
 import items.Container;
+import items.Dog;
 import items.Door;
 import items.Item;
 import items.KeyDraw;
 import items.Keys;
+import items.MetalSheet;
+import items.Table;
 
 /**
  * @author Stefan Vrecic
@@ -57,7 +53,7 @@ public class TileMap {
 
 	public TileMap createTileMap(String f) {
 		String map = convertFileToTileString(f);
-		System.out.println("creatTileMap method");
+		//System.out.println("creatTileMap method");
 		return convertStringToTileMap(map);
 	}
 
@@ -113,22 +109,20 @@ public class TileMap {
 
 		List<Location> doorLocs = new ArrayList<Location>();
 
-		TileMap TileMapper = new TileMap(new Tile[width][height], null);
+		TileMap tileMap = new TileMap(new Tile[width][height], null);
 
-		TileMapper.optionalCode = code;
-		TileMapper.TileMapWidth = width;
-		TileMapper.TileMapHeight = height;
+		tileMap.optionalCode = code;
+		tileMap.TileMapWidth = width;
+		tileMap.TileMapHeight = height;
 
 
 		String items = Tiles.substring(Tiles.lastIndexOf("*") + 2);
-		TileMapper.setItems(items);
+		tileMap.setItems(items);
 		//  System.out.println(items);
 		s.close();
 		//System.out.println("ti" + Tiles);
 		Tiles = Tiles.substring(Tiles.indexOf('.') + 2); // concatenate dimensions now that they are loaded
 		int count = 0;
-	//	System.out.println("should print tiles");
-//System.out.println(Tiles + " ?");
 
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width+1; x++){
@@ -139,27 +133,27 @@ public class TileMap {
 				if ( c == 'w') {
 					WallTile W = new WallTile();
 					W.setLocation(loc);
-					TileMapper.TileMap[x][y] = W;
+					tileMap.TileMap[x][y] = W;
 				}
 				if ( c == 'x' || c == 'e') {
 					EmptyTile e = new EmptyTile();
 					e.setLocation(loc);
-					TileMapper.TileMap[x][y] = e;
-
+					tileMap.TileMap[x][y] = e;
 				}
+
 				// added for the level
 				if ( c == 'r') {
 					RoomTile r = new RoomTile();
 					r.setLocation(loc);
-					TileMapper.TileMap[x][y] = r;
+					tileMap.TileMap[x][y] = r;
 				}
 
 				else if ( c == 'd') {
-					System.out.println("adding door at " + loc.toString() );
+					//System.out.println("adding door at " + loc.toString() );
 					DoorTile d = new DoorTile();
 					d.setLocation(loc);
 					d.setDoor(Door.getDoor(code)); // gets the door with the given code
-					TileMapper.TileMap[x][y] = d;
+					tileMap.TileMap[x][y] = d;
 					doorLocs.add(loc); // adds the door to list of door locations
 				}
 
@@ -167,15 +161,15 @@ public class TileMap {
 			}
 		}
 
-		TileMapper.doorLocations = doorLocs;
-		System.out.println("tileMapper width " + TileMapper.TileMapWidth);
+		tileMap.doorLocations = doorLocs;
+	//	System.out.println("tileMapper width " + tileMap.TileMapWidth);
 
-		return TileMapper;
+		return tileMap;
 
 	}
 
 	public void populateRoom(gui.Room room, String String, Container container) {
-
+//int count = 0;
 		Scanner sc = new Scanner(String);
 		TileMap tileMap = room.getTileMap();
 
@@ -206,19 +200,38 @@ public class TileMap {
 				int blue = sc.nextInt();
 
 				//
-				String name = sc.next();
+				String drawableItem = sc.next();
 				String type = sc.next();
-				
-				if (type.equals("D")) { // Door
-					System.out.println("=========================== ddddddddddddddddddddddd");
-					int doorID = sc.nextInt();
 
+				if (type.equals("D")) { // Door
+					// System.out.println("=========================== ddddddddddddddddddddddd");
+					int doorID = sc.nextInt();
 					DoorTile DT = (DoorTile) tile;
-					Door D = new Door(id, type, doorID, room);
+					Door D = new Door(id, type, 10*x, 10*y, z, w, h, l, new Color(red, green, blue));
 					DT.setDoor(D);
 					tileMap.setTile(x, y, DT);
-					room.addDrawableItems(new DoorDraw(10*x, 10*y, z, w, h, l, new Color(red, green, blue), D));
-					System.out.println(DT.getDoor().getRoom().toString() + " ========================= ");
+					room.addItemToRoom(new DoorDraw(id, type, 10*x, 10*y, z, w, h, l, new Color(red, green, blue), D));
+
+
+				}
+				if (type.equals("GuardBot")) { // Door
+					// System.out.println("=========================== ddddddddddddddddddddddd");
+					int moveStrategy = sc.nextInt();
+					int arrSize = sc.nextInt();
+					int[] distances = new int[arrSize];
+					for (int i = 0; i < arrSize; i++) {
+
+						distances[i] = sc.nextInt();
+					}
+					int floorNo = sc.nextInt();
+
+					EmptyTile E = (EmptyTile) tile;
+					GuardBot guard = new GuardBot(id, type, moveStrategy, distances, floorNo, x*10, y*10, z, w*2, l*2, h*5, new Color(red, green, blue));
+					E.addObjectToTile(guard);
+					E.setOccupied(); System.out.println("e occupied" + E.isOccupied);
+					tileMap.setTile(x, y, E);
+					//room.addItemToRoom(guard);
+					room.addGuardtoRoom(guard);
 
 
 				}
@@ -245,12 +258,11 @@ public class TileMap {
 					fileString = fileString.substring(1, fileString.length()); //trim the first blank space
 					System.out.println(fileString + "fileString");
 
-					Container con = new Container(id, null, "box", keyID);
-					con.setGameObjectLocation(x, y);
+					Container con = new Container(id, null, "box", keyID,0,0,0,0,0,0,new Color(0,0,0));
 					populateRoom(room, fileString, con);
 
 					if (container != null) {
-						System.out.println("container :: " + name + "  is contained by container ");
+						System.out.println("container :: " + drawableItem + "  is contained by container ");
 						System.out.println(con.toString());
 						container.setContainedContainer(con);
 						sc.close();
@@ -261,7 +273,7 @@ public class TileMap {
 					}
 					// if container called method then we add this container into the calling container, then we add it the tile map
 					else {
-						System.out.println("container :: " + name + "  is not contained any containers  " + name);
+						System.out.println("container :: " + drawableItem + "  is not contained any containers  " + drawableItem);
 						EmptyTile E = (EmptyTile) tile;
 						E.addObjectToTile(con);
 						E.setOccupied(); System.out.println("e occupied" + E.isOccupied);
@@ -281,14 +293,13 @@ public class TileMap {
 
 					EmptyTile E = (EmptyTile) tile;
 					Keys K = new Keys(id, type, keyID);
-					K.setGameObjectLocation(x, y);
 					E.addObjectToTile(K);
 					E.setOccupied(); System.out.println("e occupied" + E.isOccupied);
 					tileMap.setTile(x, y, E);
 
 
 					if (container != null) {
-						container.addItem(K);
+						//container.addItem(K);
 						System.out.println("container size + " + container.getItems().size());
 						// TODO: if method called by container item, then add item into container list
 					}
@@ -296,11 +307,41 @@ public class TileMap {
 				}
 				// FOUND ITEM
 				else {
-					System.out.println("adding item??");
-					System.out.println("is tile null " + tile);
 					EmptyTile E = (EmptyTile) tile;
-					Item i = new Item(id, type);
-					i.setGameObjectLocation(x, y);
+					Item drawItem = null;
+			//		count++;
+					System.out.println("==================================");
+					System.out.println("type is of type  " + type + " count");
+				// System.out.println(sc.next());
+
+
+
+
+						switch (type) {
+						case "KeyDraw":
+							drawItem = new KeyDraw(id,type,10*x, 10*y, z, w, h, l, new Color(red, green, blue));
+							break;
+
+						case "Table":
+							drawItem = new Table(id,type,10*x, 10*y, z, w, h, l, new Color(red, green, blue));
+							break;
+
+						case "MetalSheet":
+							drawItem = new MetalSheet(id,type,10*x, 10*y, z, w, h, l, new Color(red, green, blue));
+							break;
+
+						case "Chair":
+							drawItem = new Chair(id,type,10*x, 10*y, z, w, h, l, new Color(red, green, blue));
+							break;
+
+						/*case "Dog":
+							drawItem = new Dog(id,type,10*x, 10*y, z, w, h, l, new Color(red, green, blue));
+							break;
+						*/}
+						System.out.println("==================================");
+						System.out.println("adding item " + type);
+					System.out.println("==================================");
+					//Item i = new Item(id, type);
 
 					// normal item found
 					// TODO: create normal item and add it to floor tile map
@@ -310,21 +351,24 @@ public class TileMap {
 
 					if (container != null) {
 						System.out.println("=====================================");
-						container.addItem(i);
+						//container.addItem(i);
 //						E.addObjecttoTile(container);
 //						E.setOccupied();
 //						tileMap.setTile(x, y, E);
 
-						System.out.println("adding item to ocntainer ggggggg");
-						System.out.println("container size + " + container.containedItems.size());
+				//	System.out.println("adding item to ocntainer ggggggg");
+					//	System.out.println("container size + " + container.containedItems.size());
 						// TODO: if method called by container item, then add item into container list
 					} else {
-						E.addObjectToTile(i);
+						// TODO E.addObjectToTile(i);
 						E.setOccupied();
 				//		System.out.println("e occupied" + E.isOccupied);
 						tileMap.setTile(x, y, E);
 
-						room.addDrawableItems(new KeyDraw(10*x, 10*y, z, w, h, l, new Color(red, green, blue)));
+					//	Item drawItem = new
+						if (drawItem != null)
+							room.addItemToRoom(drawItem);
+						//room.addItemToRoom(new KeyDraw(id,type,10*x, 10*y, z, w, h, l, new Color(red, green, blue)));
 					}
 
 				}
