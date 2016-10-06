@@ -1,7 +1,6 @@
 package saving;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import javax.swing.JOptionPane;
@@ -33,17 +32,17 @@ public class FastLoad {
 				if (i == 0) {
 					System.out.println("================== New Player: ================== ");
 					String l[] = line.split(",");
-					System.out.println("X=" + l[0] + "Y=" + l[1] + "Z=" + l[2]);
+					System.out.println(" X= " + l[0] + " Y= " + l[1] + " Z= " + l[2]);
 
 					double x = Double.parseDouble(l[0]);
 					double y = Double.parseDouble(l[1]);
 					double z = Double.parseDouble(l[2]);
 
-					GameController.getPlayer().setStartX(x);
-					GameController.getPlayer().setStartY(y);
-					GameController.getPlayer().setStartY(z);
+					GameController.getPlayer().setX(x);
+					GameController.getPlayer().setY(y);
 
-					GameController.getPlayer().setViewFrom(new double[] { x, y, z });
+
+					//GameController.getPlayer().setViewFrom(new double[] { 100, 100, 100 });
 					i++;
 				} else if (line.startsWith("=")) {
 					i = 0;
@@ -71,6 +70,8 @@ public class FastLoad {
 				}
 
 			}
+
+			double[] pos = GameController.getPlayer().getViewFrom();
 
 			System.out.println("-----------nd of input.txt--------------");
 
