@@ -78,7 +78,8 @@ public class GuardBot extends Player implements Drawable {
 		cubes = new ArrayList<>();
 		this.x = x;
 		this.y = y;
-		this.z = 10;
+
+		this.z = 0;
 		this.width = width;
 		this.length = length;
 		this.height = height;
@@ -124,7 +125,9 @@ public class GuardBot extends Player implements Drawable {
 			if (u == (distance[i] - 1) * 20 && i < (directionList.size() - 1)) {
 				i++;
 				u = 0;
+
 				this.updateDirection(x, y);
+
 
 			}
 			// we reverse the movement directions (if
@@ -146,28 +149,27 @@ public class GuardBot extends Player implements Drawable {
 			if (this.dir.equals(Dir.EAST)) {
 
 				updatePosition(0.5, 0, 0);
-
+				this.updateDirection();
 				u++;
 
 			} else if (this.dir.equals(Dir.WEST)) {
-
 				updatePosition(-0.5, 0, 0);
-
+				this.updateDirection();
 				u++;
-
 				;
 
 			} else if (this.dir.equals(Dir.NORTH)) {
-
+				this.updateDirection();
 				updatePosition(0, -0.5, 0);
+
 				u++;
 
 			} else if (this.dir.equals(Dir.SOUTH)) {
-
+				this.updateDirection();
 				updatePosition(0, 0.5, 0);
 				u++;
 
-			}
+			} 
 
 			;
 		}
@@ -265,7 +267,11 @@ public class GuardBot extends Player implements Drawable {
 	 * of view of the bot. the guard bot can only detect a player in front of
 	 * him or in his side views, but he can not detect a player behind him,
 	 * hence a player can sneak through safely if he stays behind the guard.
+<<<<<<< HEAD
+	 *
+=======
 	 * 
+>>>>>>> 2d70b7b8245372138344437e41ff988dd0455bd9
 	 * @return
 	 */
 	public Boolean checkforIntruder() {
@@ -275,8 +281,8 @@ public class GuardBot extends Player implements Drawable {
 				int guardlocation = (int) Math.round(this.x);
 				int playerlocation = (int) Math.round(this.screen.getPlayerView()[0]);
 				int yOffset = (int) Math.round(this.screen.getPlayerView()[1]) - (int) Math.round(this.y);
-				// System.out.println(this.screen.getPlayerView()[1] + " " +
-				// this.y + i);
+
+
 				if ((playerlocation - guardlocation) > 0
 						&& (playerlocation - guardlocation) < 100 & Math.abs(yOffset) < 100) {
 					System.out.println("we have found an intruder");
@@ -289,8 +295,6 @@ public class GuardBot extends Player implements Drawable {
 				int guardlocation = (int) Math.round(this.x);
 				int playerlocation = (int) Math.round(this.screen.getPlayerView()[0]);
 				int yOffset = (int) Math.round(this.screen.getPlayerView()[1]) - (int) Math.round(this.y);
-				// System.out.println(this.screen.getPlayerView()[1] + " " +
-				// this.y + i);
 				if ((guardlocation - playerlocation) > 0
 						&& (guardlocation - playerlocation) < 100 & Math.abs(yOffset) < 100) {
 					System.out.println("we have found an intruder");
@@ -303,8 +307,7 @@ public class GuardBot extends Player implements Drawable {
 				int guardlocation = (int) Math.round(this.y);
 				int playerlocation = (int) Math.round(this.screen.getPlayerView()[1]);
 				int xOffset = (int) Math.round(this.screen.getPlayerView()[0]) - (int) Math.round(this.x);
-				// System.out.println(this.screen.getPlayerView()[1] + " " +
-				// this.y + i);
+
 				if ((guardlocation - playerlocation) > 0
 						&& (guardlocation - playerlocation) < 100 & Math.abs(xOffset) < 100) {
 					System.out.println("we have found an intruder");
@@ -314,8 +317,6 @@ public class GuardBot extends Player implements Drawable {
 
 			} else if (dir.equals(Dir.SOUTH)) {
 
-				// System.out.println(this.screen.getPlayerView()[1] + " " +
-				// this.y + i);
 				int guardlocation = (int) Math.round(this.y);
 				int playerlocation = (int) Math.round(this.screen.getPlayerView()[1]);
 				int xOffset = (int) Math.round(this.screen.getPlayerView()[0]) - (int) Math.round(this.x);
@@ -415,6 +416,12 @@ public class GuardBot extends Player implements Drawable {
 				directionList.add(Dir.WEST);
 				directionList.add(Dir.NORTH);
 				directionList.add(Dir.EAST);
+
+				if (moveStrategy == 15) {
+					directionList.add(Dir.WEST);
+					directionList.add(Dir.NORTH);
+					directionList.add(Dir.EAST);
+					directionList.add(Dir.SOUTH);
 				
 			if (moveStrategy == 15) {
 				directionList.add(Dir.WEST);
@@ -422,6 +429,7 @@ public class GuardBot extends Player implements Drawable {
 				directionList.add(Dir.EAST);
 				directionList.add(Dir.SOUTH);
 				}
+			}
 			}
 		}
 
@@ -446,6 +454,54 @@ public class GuardBot extends Player implements Drawable {
 
 		cubes.forEach(c -> c.updatePosition(dx, dy, dz));
 	}
+
+/**
+ * changes the direction the bot is facing
+ */
+	public void updateDirection() {
+		if (this.dir.equals(Direction.Dir.EAST) || this.dir.equals(Direction.Dir.WEST)) {
+			cubes.clear();
+			// First make the legs
+			int legWidth = (int) (width / 2.5);
+			int legHeight = (int) (height / 2);
+			// first leg
+			cubes.add(new Cube(x + (legWidth / 2), y, z, legWidth, legWidth, legHeight, color));
+			// second leg
+			cubes.add(new Cube(x + (legWidth / 2), y + width - legWidth, z, legWidth, legWidth, legHeight, color));
+
+			// body
+			cubes.add(new Cube(x, y, z + legHeight, width, width, legHeight, color));
+
+			// arms
+			cubes.add(new Cube(x, y + length, z + legHeight + (legHeight / 2), width, width / 1, legHeight / 3, color));
+			cubes.add(new Cube(x, y - length, z + legHeight + (legHeight / 2), width, width / 1, legHeight / 3, color));
+
+			// head
+			cubes.add(new Cube(x, y + (length / 4), z + (legHeight * 2), width / 2, width / 1.5, legHeight / 3, color));
+		} else {
+			cubes.clear();
+			// First make the legs
+			int legWidth = (int) (width / 2.5);
+			int legHeight = (int) (height / 2);
+			// first leg
+			cubes.add(new Cube(x, y + (legWidth / 2), z, legWidth, legWidth, legHeight, color));
+			// second leg
+			cubes.add(new Cube(x + width - legWidth, y + (legWidth / 2), z, legWidth, legWidth, legHeight, color));
+
+			// body
+			cubes.add(new Cube(x, y, z + legHeight, width, width / 1.5, legHeight, color));
+
+			// arms
+			cubes.add(
+					new Cube(x + width, y, z + legHeight + (legHeight / 2), width, width / 1.5, legHeight / 3, color));
+			cubes.add(
+					new Cube(x - width, y, z + legHeight + (legHeight / 2), width, width / 1.5, legHeight / 3, color));
+
+			// head
+			cubes.add(new Cube(x + (width / 4), y, z + (legHeight * 2), width / 2, width / 1.5, legHeight / 3, color));
+		}
+		}
+
 
 	@Override
 	public void updateDirection(double toX, double toY) {
