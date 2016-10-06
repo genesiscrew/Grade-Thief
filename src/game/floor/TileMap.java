@@ -3,6 +3,7 @@ package game.floor;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -16,6 +17,7 @@ import items.Door;
 import items.Item;
 import items.KeyDraw;
 import items.Keys;
+import items.Laptop;
 import items.MetalSheet;
 import items.Table;
 
@@ -334,10 +336,10 @@ public class TileMap {
 							drawItem = new Chair(id,type,10*x, 10*y, z, w, h, l, new Color(red, green, blue));
 							break;
 
-						/*case "Dog":
+						case "Dog":
 							drawItem = new Dog(id,type,10*x, 10*y, z, w, h, l, new Color(red, green, blue));
 							break;
-						*/}
+						}
 						System.out.println("==================================");
 						System.out.println("adding item " + type);
 					System.out.println("==================================");

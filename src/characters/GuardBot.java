@@ -78,6 +78,7 @@ public class GuardBot extends Player implements Drawable {
 		cubes = new ArrayList<>();
 		this.x = x;
 		this.y = y;
+
 		this.z = 0;
 		this.width = width;
 		this.length = length;
@@ -125,6 +126,9 @@ public class GuardBot extends Player implements Drawable {
 				i++;
 				u = 0;
 
+				this.updateDirection(x, y);
+
+
 			}
 			// we reverse the movement directions (if
 			// required
@@ -146,21 +150,15 @@ public class GuardBot extends Player implements Drawable {
 
 				updatePosition(0.5, 0, 0);
 				this.updateDirection();
-
 				u++;
 
 			} else if (this.dir.equals(Dir.WEST)) {
-
 				updatePosition(-0.5, 0, 0);
 				this.updateDirection();
-
 				u++;
-
 				;
 
 			} else if (this.dir.equals(Dir.NORTH)) {
-				cubes.clear();
-
 				this.updateDirection();
 				updatePosition(0, -0.5, 0);
 
@@ -169,10 +167,9 @@ public class GuardBot extends Player implements Drawable {
 			} else if (this.dir.equals(Dir.SOUTH)) {
 				this.updateDirection();
 				updatePosition(0, 0.5, 0);
-
 				u++;
 
-			}
+			} 
 
 			;
 		}
@@ -270,7 +267,11 @@ public class GuardBot extends Player implements Drawable {
 	 * of view of the bot. the guard bot can only detect a player in front of
 	 * him or in his side views, but he can not detect a player behind him,
 	 * hence a player can sneak through safely if he stays behind the guard.
+<<<<<<< HEAD
 	 *
+=======
+	 * 
+>>>>>>> 2d70b7b8245372138344437e41ff988dd0455bd9
 	 * @return
 	 */
 	public Boolean checkforIntruder() {
@@ -280,6 +281,8 @@ public class GuardBot extends Player implements Drawable {
 				int guardlocation = (int) Math.round(this.x);
 				int playerlocation = (int) Math.round(this.screen.getPlayerView()[0]);
 				int yOffset = (int) Math.round(this.screen.getPlayerView()[1]) - (int) Math.round(this.y);
+
+
 				if ((playerlocation - guardlocation) > 0
 						&& (playerlocation - guardlocation) < 100 & Math.abs(yOffset) < 100) {
 					System.out.println("we have found an intruder");
@@ -304,6 +307,7 @@ public class GuardBot extends Player implements Drawable {
 				int guardlocation = (int) Math.round(this.y);
 				int playerlocation = (int) Math.round(this.screen.getPlayerView()[1]);
 				int xOffset = (int) Math.round(this.screen.getPlayerView()[0]) - (int) Math.round(this.x);
+
 				if ((guardlocation - playerlocation) > 0
 						&& (guardlocation - playerlocation) < 100 & Math.abs(xOffset) < 100) {
 					System.out.println("we have found an intruder");
@@ -418,7 +422,14 @@ public class GuardBot extends Player implements Drawable {
 					directionList.add(Dir.NORTH);
 					directionList.add(Dir.EAST);
 					directionList.add(Dir.SOUTH);
+				
+			if (moveStrategy == 15) {
+				directionList.add(Dir.WEST);
+				directionList.add(Dir.NORTH);
+				directionList.add(Dir.EAST);
+				directionList.add(Dir.SOUTH);
 				}
+			}
 			}
 		}
 
@@ -443,6 +454,7 @@ public class GuardBot extends Player implements Drawable {
 
 		cubes.forEach(c -> c.updatePosition(dx, dy, dz));
 	}
+
 /**
  * changes the direction the bot is facing
  */
@@ -487,8 +499,13 @@ public class GuardBot extends Player implements Drawable {
 
 			// head
 			cubes.add(new Cube(x + (width / 4), y, z + (legHeight * 2), width / 2, width / 1.5, legHeight / 3, color));
-
 		}
+		}
+
+
+	@Override
+	public void updateDirection(double toX, double toY) {
+		cubes.forEach(i -> i.updateDirection(toX, toY));
 
 	}
 
