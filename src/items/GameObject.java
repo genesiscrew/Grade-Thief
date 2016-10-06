@@ -31,6 +31,30 @@ public abstract class GameObject {
 
 	}
 
+	public String getItemType() {
+		return itemType;
+	}
+
+	public void setItemType(String itemType) {
+		this.itemType = itemType;
+	}
+
+	public int getItemID() {
+		return itemID;
+	}
+
+	public void setItemID(int itemID) {
+		this.itemID = itemID;
+	}
+
+	public Location getObjectLocation() {
+		return objectLocation;
+	}
+
+	public void setObjectLocation(Location objectLocation) {
+		this.objectLocation = objectLocation;
+	}
+
 
 
 }

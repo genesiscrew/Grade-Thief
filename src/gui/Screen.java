@@ -277,7 +277,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 					if (i.getInteractionsAvaliable().get(n).equals(Interaction.TAKE)) {
 						currentPlayer.addToInventory(i);
 						System.out.println("add to inventory here");
+<<<<<<< HEAD
 						  System.out.println(room.getRoomObjects().size());
+=======
+						System.err.println(viewFrom[0] + ", " + viewFrom[1]);
+>>>>>>> bb2c2584f263ab24d6b391c734504395c59e81e2
 						currentPlayer.getInventory().forEach(System.out::println);
 					}
 				});
@@ -519,7 +523,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		}
 	}
 
-
 	public static int getStartX() {
 		return startX;
 	}
@@ -564,11 +567,46 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		return viewFrom;
 	}
 
-	public void setX(double x){
+	public void setX(double x) {
 		viewFrom[0] = x;
 	}
 
-	public void setY(double x){
+	public void setY(double x) {
 		viewFrom[1] = x;
 	}
+
+	public items.Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	public void setCurrentPlayer(items.Player currentPlayer) {
+		this.currentPlayer = currentPlayer;
+	}
+
+	public Room getRoom() {
+		return room;
+	}
+
+	public void setRoom(Room room) {
+		this.room = room;
+	}
+
+	public Room getRoom1() {
+		return room1;
+	}
+
+	public void setRoom1(Room room1) {
+		this.room1 = room1;
+	}
+
+	public Room getRoom2() {
+		return room2;
+	}
+
+	public void setRoom2(Room room2) {
+		this.room2 = room2;
+	}
+
+
+
 }
