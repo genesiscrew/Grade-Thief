@@ -68,7 +68,16 @@ public class Room {
         this.setTileMap(System.getProperty("user.dir") + "/src/game/floor/" + roomName);
 
       //  System.out.println("" + tileMap.getItems());
+
+	
+
+       
         tileMap.populateRoom(this, tileMap.getItems(), null);
+        
+        
+ 
+
+		
 
         floor = new Floor(0, 0, tileMap.getMapWidth(), tileMap.getMapHeight());
         this.floorPolygons = floor.generateMap();

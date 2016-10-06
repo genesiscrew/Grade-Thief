@@ -29,6 +29,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import game.floor.EmptyTile;
+import game.floor.Tile;
 import items.Item;
 import items.Item.Interaction;
 import items.Player;
@@ -129,10 +131,15 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		// Clear screen and draw background color
 		g.setColor(new Color(140, 180, 180));
 		g.fillRect(0, 0, (int) GameController.ScreenSize.getWidth(), (int) GameController.ScreenSize.getHeight());
-
+		// resets tile the user is currently located at
+		((EmptyTile) this.room.getTileMap().getTileMap()[(int) (viewFrom[0]/10)][(int) (viewFrom[1]/10)])
+		.resetEmptyTile();
 		PlayerMovement.cameraMovement(viewTo, viewFrom, keys, room);
 		controller.updatePosition(guard, viewFrom);
 		updateView();
+		// adds the player to his new coordinate on tilemap
+		((EmptyTile) this.room.getTileMap().getTileMap()[(int) (viewFrom[0]/10)][(int) (viewFrom[1]/10)])
+		.addObjectToTile(this.currentPlayer);
 
 		// Calculated all that is general for this camera position
 		Calculator.setPredeterminedInfo(this);
@@ -153,8 +160,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		if (!messageToDisplay.equals("")) {
 			g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120,
 					(int) screenSize.getHeight() / 2 - 50);
-		}
-
+		} 
 		// Redraw
 		sleepAndRefresh();
 	}
@@ -189,6 +195,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 	 * Sets the x, y, z that the player is looking at
 	 */
 	void updateView() {
+		
 		double verticalLook = screenUtil.getVerticalLook();
 		double horizontalLook = screenUtil.getHorizontalLook();
 		double r = Math.sqrt(1 - (verticalLook * verticalLook));
@@ -196,6 +203,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		viewTo[0] = viewFrom[0] + r * Math.cos(horizontalLook);
 		viewTo[1] = viewFrom[1] + r * Math.sin(horizontalLook);
 		viewTo[2] = viewFrom[2] + verticalLook;
+		
 	}
 
 	/**
@@ -251,7 +259,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		// at this point; shou;d get the position directly infront of player
 		// should make sure that it will not obstruct another item
 		selectedItem.moveItemBy(viewFrom[0] - selectedItem.getX(), viewFrom[1] - selectedItem.getY(), 0);
-
+      
 		room.addItemToRoom(selectedItem);
 		selectedItem.canDraw();
 
@@ -269,6 +277,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 					if (i.getInteractionsAvaliable().get(n).equals(Interaction.TAKE)) {
 						currentPlayer.addToInventory(i);
 						System.out.println("add to inventory here");
+						  System.out.println(room.getRoomObjects().size());
 						currentPlayer.getInventory().forEach(System.out::println);
 					}
 				});
@@ -303,10 +312,16 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 				messageToDisplay = "Press e To Interact With The " + i.getClass().getSimpleName();
 			}
 		}
-
+		
 		for (Item i2 : removeItems) {
+			
 			room.removeRoomObject(i2);
+			((EmptyTile) room.getTileMap().getTileMap()[(int) i2.getX()/10][(int) i2.getY()/10]).resetEmptyTile();
+				
+		
 		}
+	
+		
 
 		for (Item i : room.getDoors()) {
 			if (i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
@@ -484,6 +499,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		if (arg0.getButton() == MouseEvent.BUTTON3)
 			if (polygonOver != null)
 				polygonOver.seeThrough = false;
+	}
+	public Tile[][] getRoomMap(){
+		return this.room.getTileMap().getTileMap();
 	}
 
 	@Override
