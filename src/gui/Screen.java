@@ -132,14 +132,25 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		g.setColor(new Color(140, 180, 180));
 		g.fillRect(0, 0, (int) GameController.ScreenSize.getWidth(), (int) GameController.ScreenSize.getHeight());
 		// resets tile the user is currently located at
+		try {
 		((EmptyTile) this.room.getTileMap().getTileMap()[(int) (viewFrom[0]/10)][(int) (viewFrom[1]/10)])
 		.resetEmptyTile();
+		}
+		catch (Exception e) {
+			
+			
+		}
 		PlayerMovement.cameraMovement(viewTo, viewFrom, keys, room);
 		controller.updatePosition(guard, viewFrom);
 		updateView();
 		// adds the player to his new coordinate on tilemap
+		try {
 		((EmptyTile) this.room.getTileMap().getTileMap()[(int) (viewFrom[0]/10)][(int) (viewFrom[1]/10)])
 		.addObjectToTile(this.currentPlayer);
+		}
+		catch (Exception e) {
+			
+		}
 
 		// Calculated all that is general for this camera position
 		Calculator.setPredeterminedInfo(this);
