@@ -194,8 +194,10 @@ public class TileMap {
 		while (sc.hasNextLine()) {
 			if (!sc.equals("")) {
 				int id;
-				if (sc.hasNextInt())
+				if (sc.hasNextInt()) {
 					id = sc.nextInt();
+					System.out.println(id);
+				}
 				else {
 					sc.close();
 					return;
@@ -282,15 +284,15 @@ public class TileMap {
 																				// first
 																				// blank
 																				// space
-					System.out.println(fileString + "fileString");
+					//System.out.println(fileString + "fileString");
 
 					Container con = new Container(id, null, "box", keyID, 0, 0, 0, 0, 0, 0, new Color(0, 0, 0));
 					populateRoom(room, fileString, con);
 
 					if (container != null) {
-						System.out.println("container :: " + drawableItem + "  is contained by container ");
+						//System.out.println("container :: " + drawableItem + "  is contained by container ");
 						System.out.println(con.toString());
-						container.setContainedContainer(con);
+						//container.setContainedContainer(con);
 						sc.close();
 						return; // should return by default anyway, code placed
 								// for readability
@@ -302,12 +304,12 @@ public class TileMap {
 					// if container called method then we add this container
 					// into the calling container, then we add it the tile map
 					else {
-						System.out.println(
-								"container :: " + drawableItem + "  is not contained any containers  " + drawableItem);
+						//System.out.println(
+							//	"container :: " + drawableItem + "  is not contained any containers  " + drawableItem);
 						EmptyTile E = (EmptyTile) tile;
 						E.addObjectToTile(con);
 						E.setOccupied();
-						System.out.println("e occupied" + E.isOccupied);
+						//System.out.println("e occupied" + E.isOccupied);
 						tileMap.setTile(x, y, E);
 
 						// public Laptop(double x, double y, double z, double
@@ -317,7 +319,7 @@ public class TileMap {
 				}
 				// FOUND KEY
 				else if (type.equals("K")) {
-					System.out.println("adding key??");
+					//System.out.println("adding key??");
 					// Key found
 					int keyID = sc.nextInt();
 					System.out.println(keyID);
@@ -327,12 +329,12 @@ public class TileMap {
 					Keys K = new Keys(id, type, keyID);
 					E.addObjectToTile(K);
 					E.setOccupied();
-					System.out.println("e occupied" + E.isOccupied);
+					//System.out.println("e occupied" + E.isOccupied);
 					tileMap.setTile(x, y, E);
 
 					if (container != null) {
 						// container.addItem(K);
-						System.out.println("container size + " + container.getItems().size());
+						//System.out.println("container size + " + container.getItems().size());
 						// TODO: if method called by container item, then add
 						// item into container list
 					}
@@ -343,8 +345,8 @@ public class TileMap {
 					EmptyTile E = (EmptyTile) tile;
 					Item drawItem = null;
 					// count++;
-					System.out.println("==================================");
-					System.out.println("type is of type  " + type + " count");
+					//System.out.println("==================================");
+					//System.out.println("type is of type  " + type + " count");
 					// System.out.println(sc.next());
 
 					switch (type) {
@@ -368,19 +370,19 @@ public class TileMap {
 						drawItem = new Dog(id, type, 10 * x, 10 * y, z, w, h, l, new Color(red, green, blue));
 						break;
 					}
-					System.out.println("==================================");
-					System.out.println("adding item " + type);
-					System.out.println("==================================");
+					//System.out.println("==================================");
+					//System.out.println("adding item " + type);
+					//System.out.println("==================================");
 					// Item i = new Item(id, type);
 
 					// normal item found
 					// TODO: create normal item and add it to floor tile map
-					System.out.println("w====================================================");
+					//System.out.println("w====================================================");
 					// System.out.println(container.toString());
-					System.out.println("=addddddddded itemmmmmmmmmmmmm check contianer");
+					//System.out.println("=addddddddded itemmmmmmmmmmmmm check contianer");
 
 					if (container != null) {
-						System.out.println("=====================================");
+						//System.out.println("=====================================");
 						// container.addItem(i);
 						// E.addObjecttoTile(container);
 						// E.setOccupied();

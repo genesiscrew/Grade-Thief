@@ -14,7 +14,7 @@ public abstract class Item extends GameObject implements Drawable {
 
 	public final double DETECT_PLAYER_BOUNDARY = 5;
 
-	public int itemID;
+
 	protected double x;
 	protected double y;
 	protected double z;
@@ -103,13 +103,6 @@ public abstract class Item extends GameObject implements Drawable {
 		return z;
 	}
 
-	public int getItemID() {
-		return itemID;
-	}
-
-	public void setItemID(int itemID) {
-		this.itemID = itemID;
-	}
 
 	public double getWidth() {
 		return width;

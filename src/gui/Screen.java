@@ -160,7 +160,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		if (!messageToDisplay.equals("")) {
 			g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120,
 					(int) screenSize.getHeight() / 2 - 50);
-		} 
+		}
 		// Redraw
 		sleepAndRefresh();
 	}
@@ -195,7 +195,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 	 * Sets the x, y, z that the player is looking at
 	 */
 	void updateView() {
-		
+
 		double verticalLook = screenUtil.getVerticalLook();
 		double horizontalLook = screenUtil.getHorizontalLook();
 		double r = Math.sqrt(1 - (verticalLook * verticalLook));
@@ -203,7 +203,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		viewTo[0] = viewFrom[0] + r * Math.cos(horizontalLook);
 		viewTo[1] = viewFrom[1] + r * Math.sin(horizontalLook);
 		viewTo[2] = viewFrom[2] + verticalLook;
-		
+
 	}
 
 	/**
@@ -259,7 +259,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		// at this point; shou;d get the position directly infront of player
 		// should make sure that it will not obstruct another item
 		selectedItem.moveItemBy(viewFrom[0] - selectedItem.getX(), viewFrom[1] - selectedItem.getY(), 0);
-      
+
 		room.addItemToRoom(selectedItem);
 		selectedItem.canDraw();
 
@@ -277,11 +277,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 					if (i.getInteractionsAvaliable().get(n).equals(Interaction.TAKE)) {
 						currentPlayer.addToInventory(i);
 						System.out.println("add to inventory here");
-<<<<<<< HEAD
-						  System.out.println(room.getRoomObjects().size());
-=======
-						System.err.println(viewFrom[0] + ", " + viewFrom[1]);
->>>>>>> bb2c2584f263ab24d6b391c734504395c59e81e2
 						currentPlayer.getInventory().forEach(System.out::println);
 					}
 				});
@@ -316,16 +311,16 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 				messageToDisplay = "Press e To Interact With The " + i.getClass().getSimpleName();
 			}
 		}
-		
+
 		for (Item i2 : removeItems) {
-			
+
 			room.removeRoomObject(i2);
 			((EmptyTile) room.getTileMap().getTileMap()[(int) i2.getX()/10][(int) i2.getY()/10]).resetEmptyTile();
-				
-		
+
+
 		}
-	
-		
+
+
 
 		for (Item i : room.getDoors()) {
 			if (i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
