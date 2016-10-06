@@ -49,21 +49,18 @@ public class FastLoad {
 
 					System.out.println(" X= " + l[0] + " Y= " + l[1] + " Z= " + l[2]);
 
-
 					double x = Double.parseDouble(l[0]);
 					double y = Double.parseDouble(l[1]);
 					double z = Double.parseDouble(l[2]);
 
-
 					GameController.getPlayer().setX(x);
 					GameController.getPlayer().setY(y);
-
 
 					// GameController.getPlayer().setViewFrom(new double[] {
 					// 100, 100, 100 });
 
-					//GameController.getPlayer().setViewFrom(new double[] { 100, 100, 100 });
-
+					// GameController.getPlayer().setViewFrom(new double[] {
+					// 100, 100, 100 });
 
 					i++;
 				} else if (line.startsWith("=")) {
@@ -113,55 +110,34 @@ public class FastLoad {
 					System.out.println(" itemZ :" + itemTokens[10]);
 					double ItemZ = Double.parseDouble(itemTokens[10]);
 
-					/*
-					 * (int itemID, String itemType, double x, double y, double
-					 * z, double width, double length, double height, Color c)
-					 */
-
 					Color itemColor = new Color(ItemRed, ItemGreen, ItemBlue);
 
 					switch (ItemType) {
+
 					case "Chair":
 						Chair tmp = new Chair(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength, ItemHeight,
 								itemColor);
 						items.add(tmp);
 						break;
+
 					case "Container":
 						Chair tmp1 = new Chair(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength, ItemHeight,
 								itemColor);
 						items.add(tmp1);
 						break;
+
 					case "Dog":
 						Dog tmp2 = new Dog(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength, ItemHeight,
 								itemColor);
 						items.add(tmp2);
 						break;
+
 					case "KeyDraw":
 						KeyDraw tmp3 = new KeyDraw(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength,
 								ItemHeight, itemColor);
 						items.add(tmp3);
-						items.contains(tmp3);
-						for (int j = 0; j < items.size(); j++) {
-							if(items.get(j).equals(tmp3)){
-
-								List<Item> roomObj = sc.getRoom().getRoomObjects();
-
-								for (int j2 = 0; j2 < roomObj.size(); j2++) {
-									if(roomObj.get(j2).getItemID() == tmp3.itemID){
-										roomObj.remove(j2);
-									}
-								}
-								double[] viewFrom = sc.getViewFrom();
-								items.get(j).moveItemBy(viewFrom[0] - items.get(j).getX(), viewFrom[1] - items.get(j).getY(), 0);
-								sc.getRoom().addItemToRoom(items.get(j));
-								items.get(j).canDraw();
-
-							}
-						}
-
-
-
 						break;
+
 					case "Keys":
 						/*
 						 * Keys tmp4 = new Keys(ItemID, ItemType, ItemX, ItemY,
@@ -173,61 +149,63 @@ public class FastLoad {
 								ItemHeight, itemColor);
 						items.add(tmp5);
 						break;
+
 					case "Map":
 						/*
 						 * Map tmp6 = new Map(ItemID, ItemType, ItemX, ItemY,
 						 * ItemZ, ItemWidth, ItemLength, ItemHeight, itemColor);
 						 */
 						break;
+
 					case "MapDraw":
 						MapDraw tmp7 = new MapDraw(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength,
 								ItemHeight, itemColor);
 						items.add(tmp7);
-						items.contains(tmp7);
-						for (int j = 0; j < items.size(); j++) {
-							if(items.get(j).equals(tmp7)){
-								double[] viewFrom = sc.getViewFrom();
-								items.get(j).moveItemBy(viewFrom[0] - items.get(j).getX(), viewFrom[1] - items.get(j).getY(), 0);
-								sc.getRoom().addItemToRoom(items.get(j));
-								items.get(j).canDraw();
-
-							}
-						}
-
-
 						break;
+
 					case "Marker":
 						Marker tmp8 = new Marker(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength,
 								ItemHeight, itemColor);
 						items.add(tmp8);
 						break;
+
 					case "MetalSheet":
 						MetalSheet tmp9 = new MetalSheet(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength,
 								ItemHeight, itemColor);
 						items.add(tmp9);
 						break;
+
 					case "Table":
 						Table tmp10 = new Table(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength,
 								ItemHeight, itemColor);
 						items.add(tmp10);
 						break;
+
 					default:
 						break;
 					}
 
-					/*
-					 * out.println(red + ", " + green + ", " + blue + ", " +
-					 * itemHeight + ", " + itemID + ", " + length + ", " +
-					 * itemType + ", " + itemWidth + ", " + X + ", " + Y + ", "
-					 * + Z);
-					 */
 				}
 
 			}
 
+			List<Item> roomObj = sc.getRoom().getRoomObjects();
+
+			for (int j = 0; j < items.size(); j++) {
+
+				for (int j2 = 0; j2 < roomObj.size(); j2++) {
+					if (roomObj.get(j2).getItemID() == items.get(j).getItemID()) {
+						roomObj.remove(j2);
+					}
+				}
+				double[] viewFrom = sc.getViewFrom();
+				items.get(j).moveItemBy(viewFrom[0] - items.get(j).getX(), viewFrom[1] - items.get(j).getY(), 0);
+				sc.getRoom().addItemToRoom(items.get(j));
+				items.get(j).canDraw();
+
+			}
 
 			double[] pos = GameController.getPlayer().getViewFrom();
-
 
 			System.out.println("-----------nd of input.txt--------------");
 
