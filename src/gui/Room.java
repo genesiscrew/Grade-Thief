@@ -1,5 +1,6 @@
 package gui;
 
+import game.floor.Location;
 import game.floor.TileMap;
 import items.Door;
 import items.Item;
@@ -20,6 +21,7 @@ public class Room {
     private int width = -1;
     private int h = -1;
     List<GuardBot> guardList;
+    Location playerStart;
 
     private List<Door> doors = new ArrayList<>();
 
@@ -244,4 +246,10 @@ public class Room {
 	  public List<Door> getGuards() {
 	        return this.doors;
 	    }
+	  public void setPlayerStart(int x, int y) {
+		  playerStart = new Location(x,y);
+	  }
+	  public Location getPlayerStart() {
+		  return playerStart;
+	  }
 }
