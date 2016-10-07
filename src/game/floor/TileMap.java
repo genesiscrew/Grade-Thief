@@ -193,15 +193,36 @@ public class TileMap {
 
 		while (sc.hasNextLine()) {
 			if (!sc.equals("")) {
-				int id;
+				int id = 0;
+
+
 				if (sc.hasNextInt()) {
 					id = sc.nextInt();
 					System.out.println(id);
 				}
+
+
+
 				else {
 					sc.close();
 					return;
 				}
+
+//				if (id == -1) {
+//
+//				//	System.out.println("found door" + sc.next() + "  "+ sc.next() + " code " + sc.next());
+//					int xPos = sc.nextInt();
+//					int yPos = sc.nextInt();
+//					int doorCode = sc.nextInt();
+//					Tile tile = room.getTileMap().getTileMap()[xPos][yPos];
+//					Door door = new Door(doorCode, "Door", 0, 0, 0, 0, 0, 0, null);
+//					DoorTile DT = (DoorTile) tile;
+//				//	DT.setDoorCode(doorCode);
+//					DT.setDoor(door);
+//					tileMap.setTile(xPos, yPos, DT);
+//					continue;
+//				}
+
 				// 1 6 1 0 10 10 10 255 0 0 container1 C 0 3
 				int x = sc.nextInt();
 				int y = sc.nextInt();
@@ -230,8 +251,8 @@ public class TileMap {
 					Door D = new Door(id, type, 10 * x, 10 * y, z, w, h, l, new Color(red, green, blue));
 					DT.setDoor(D);
 					tileMap.setTile(x, y, DT);
-					room.addItemToRoom(
-							new DoorDraw(id, type, 10 * x, 10 * y, z, w, h, l, new Color(red, green, blue), D));
+//					room.addItemToRoom(
+//							new DoorDraw(id, type, 10 * x, 10 * y, z, w, h, l, new Color(red, green, blue), D));
 
 				}
 				if (type.equals("GuardBot")) { // Door

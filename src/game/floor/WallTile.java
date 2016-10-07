@@ -4,7 +4,7 @@ package game.floor;
 * @author Stefan Vrecic
 *
 */
-public class WallTile implements Tile  {
+public class WallTile extends EmptyTile implements Tile  {
 
 	Location location;
 	private final boolean isOccupied = false; // wall tiles can NEVER be occupied

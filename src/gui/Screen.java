@@ -30,7 +30,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import game.floor.EmptyTile;
+import game.floor.Location;
 import game.floor.Tile;
+import game.floor.TileMap;
 import items.Item;
 import items.Item.Interaction;
 import items.Player;
@@ -94,7 +96,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 	/**
 	 * Create a new screen
 	 */
-	public Screen(GameController controller, boolean guard) {
+	public Screen(GameController controller, boolean guard, String roomName) {
 		this.controller = controller;
 		this.guard = guard;
 		this.currentPlayer = new Player(0, 0, 0, 0, 0, 0, null);
@@ -112,7 +114,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		setCursor(cursor);
 
 		// Load the section of the map
-		room = new Room("level", startX, startY);
+		room = new Room(roomName, startX, startY);
 		this.polyDrawer = new PolygonDrawer(room, lightDir, viewFrom, controller);
 
 		if (guard) {
@@ -126,6 +128,20 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		}
 	}
 
+	public Location getPlayerLocation() {
+//		System.out.println("=========================================================");
+//		System.out.println("=========================================================");
+//		System.out.println(viewFrom[0]/10);
+//		System.out.println(viewFrom[1]/10);
+//
+//		System.out.println("=========================================================");
+//		Tile t= this.room.getTileMap().getTileMap()[(int) (viewFrom[0]/10)][(int) (viewFrom[1]/10)];
+//		Location loc = t.tileLocation();
+		return new Location((int) (viewFrom[0]/10), (int) (viewFrom[1]/10));
+	//	return loc;
+
+	}
+
 	@Override
 	public void paintComponent(Graphics g) {
 		// Clear screen and draw background color
@@ -137,8 +153,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		.resetEmptyTile();
 		}
 		catch (Exception e) {
-			
-			
+
+
 		}
 		PlayerMovement.cameraMovement(viewTo, viewFrom, keys, room);
 		controller.updatePosition(guard, viewFrom);
@@ -149,7 +165,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		.addObjectToTile(this.currentPlayer);
 		}
 		catch (Exception e) {
-			
+
 		}
 
 		// Calculated all that is general for this camera position
@@ -162,7 +178,12 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		screenUtil.drawMouseAim(g);
 
 		// FPS display
+		g.setColor(Color.WHITE);
 		g.drawString("FPS: " + (int) drawFPS + "(Benchmark)", 40, 40);
+
+		Location l = getPlayerLocation();
+		if (l != null)
+			g.drawString("Loc" + l.row() + " , " + l.column(), 40, 60);
 
 		// Message display
 		g.setFont(new Font("Arial", Font.BOLD, 20));
@@ -244,7 +265,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		if (e.getKeyCode() == KeyEvent.VK_SPACE)
 			currentPlayer.jump(viewFrom);
 		if (e.getKeyCode() == KeyEvent.VK_R)
-			loadMap();
+			//loadMap();
 		if (e.getKeyCode() == KeyEvent.VK_U)
 			changeAllDoorState();
 		if (e.getKeyCode() == KeyEvent.VK_E)
@@ -295,15 +316,30 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		room.getDoors().stream().filter(i -> i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])).forEach(i -> {
 			int n = showOptionPane(i.getInteractionsAvaliable());
 			i.performAction(i.getInteractionsAvaliable().get(n));
+
+			if ( n == 0 ) // doorOpened
+			{
+				Location l = getPlayerLocation();
+
+				if (l.row() == 53 && l.column() == 1) { // hard coded to switch floor
+					System.out.println("load new floor");
+					loadMap();
+					//this.controller.loadNewMap("co238");
+				}
+
+			}
 		});
 	}
 
 	public void loadMap() {
-		if (room == room1) {
+		room = new Room("co238", 20, 20);
+		polyDrawer.updateRoom(room);
+
+	/*	if (room == room1) {
 			room = room2;
 		} else {
 			room = room1;
-		}
+		}*/
 	}
 
 	private void changeAllDoorState() {
@@ -319,7 +355,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 			}
 
 			if (i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
-				messageToDisplay = "Press e To Interact With The " + i.getClass().getSimpleName();
+				// messageToDisplay = "Press e To Interact With The " + i.getClass().getSimpleName();
+
+
+				messageToDisplay = "Door" + i.getItemID();
 			}
 		}
 
@@ -335,7 +374,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
 		for (Item i : room.getDoors()) {
 			if (i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
-				messageToDisplay = "Press e To Open The Door";
+				//messageToDisplay = "Press e To Open The Door";
+			//	Location l = getPlayerLocation();
+				//if (this.room.getTileMap().getTileMap()[l.row()][l.column()];
+				messageToDisplay = "Press e " +  i.itemID;
 			}
 		}
 	}

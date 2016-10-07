@@ -12,7 +12,7 @@ import gui.Drawable;
  */
 public abstract class Item extends GameObject implements Drawable {
 
-	public final double DETECT_PLAYER_BOUNDARY = 5;
+	public final double DETECT_PLAYER_BOUNDARY = 10;
 
 
 	protected double x;
@@ -116,6 +116,9 @@ public abstract class Item extends GameObject implements Drawable {
 		return length;
 	}
 
+//	public int getItemID() {
+//		return this.itemID;
+//	}
 	public void setLength(double length) {
 		this.length = length;
 	}

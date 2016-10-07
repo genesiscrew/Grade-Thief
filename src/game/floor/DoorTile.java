@@ -10,8 +10,18 @@ import items.Door;
 public class DoorTile extends EmptyTile {
 
     private Door door;
+    private int doorCode = 0;
     Location location;
     private boolean isOccupied = false;
+
+
+    public int doorCode() {
+    	return this.doorCode;
+    }
+
+    public void setDoorCode(int doorCode) {
+    	this.doorCode = doorCode;
+    }
 
 
     public Door getDoor() {

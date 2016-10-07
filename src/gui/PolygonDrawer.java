@@ -104,4 +104,8 @@ public class PolygonDrawer {
                     k[b + 1] = temp;
                 }
     }
+
+	public void updateRoom(Room room2) {
+		this.room = room2;
+	}
 }
