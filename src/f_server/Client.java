@@ -19,7 +19,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.tools.DocumentationTool.Location;
 
-import characters.Guard;
 import characters.Player;
 import gui.GameController;
 import model.Game;
