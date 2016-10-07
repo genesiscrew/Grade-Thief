@@ -1,6 +1,7 @@
 package gui;
 
 import characters.GuardBot;
+import game.floor.Location;
 import items.Player;
 import java.awt.*;
 import java.util.*;
@@ -20,6 +21,7 @@ public class PolygonDrawer {
     private double[] lightDir;
     private double[] viewFrom;
     private GameController controller;
+	private ArrayList<Location> polygonxy;
 
     public PolygonDrawer(Room room, double[] lightDir, double[] viewFrom, GameController controller) {
         this.room = room;
@@ -32,8 +34,13 @@ public class PolygonDrawer {
         java.util.List<Polygon> allPolygons = getAllPolygonsThatNeedToBeDrawn(guard, otherPlayer);
 
         // Updates each polygon for this camera position
-        for (int i = 0; i < allPolygons.size(); i++)
+        for (int i = 0; i < allPolygons.size(); i++) {
             allPolygons.get(i).updatePolygon(lightDir, viewFrom);
+          
+           
+    
+       
+        }
 
         // Set drawing order so closest polygons gets drawn last
         setOrder(allPolygons);
@@ -42,8 +49,13 @@ public class PolygonDrawer {
         // setPolygonOver();
 
         // Draw polygons in the Order that is set by the 'setOrder' function
-        for (int i = 0; i < polygonDrawOrder.length; i++)
+        for (int i = 0; i < polygonDrawOrder.length; i++) {
             allPolygons.get(polygonDrawOrder[i]).drawPolygon(g);
+        //Font font = new Font("Verdana", Font.BOLD, 12); 
+       // allPolygons.get(polygonDrawOrder[i]).polygon.a
+        //allPolygons.get(i).wrapTextToPolygon(g, "Hello", font, Color.black, allPolygons.get(i).polygon,
+        		//polygonxy.get(i).row()*10, polygonxy.get(i).column()*10, 10);
+        }
     }
 
 
@@ -84,6 +96,7 @@ public class PolygonDrawer {
     private void setOrder(java.util.List<Polygon> polys) {
         double[] k = new double[polys.size()];
         polygonDrawOrder = new int[polys.size()];
+        polygonxy = new ArrayList<Location>();
 
         for (int i = 0; i < polys.size(); i++) {
             k[i] = polys.get(i).averageDistance;
@@ -101,6 +114,8 @@ public class PolygonDrawer {
                     k[b] = k[b + 1];
 
                     polygonDrawOrder[b + 1] = temp2;
+                    polygonxy.add(new Location(a,b));
+                  
                     k[b + 1] = temp;
                 }
     }

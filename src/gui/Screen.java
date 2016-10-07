@@ -129,16 +129,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
     public Location getPlayerLocation() {
-//		System.out.println("=========================================================");
-//		System.out.println("=========================================================");
-//		System.out.println(viewFrom[0]/10);
-//		System.out.println(viewFrom[1]/10);
-//
-//		System.out.println("=========================================================");
-//		Tile t= this.room.getTileMap().getTileMap()[(int) (viewFrom[0]/10)][(int) (viewFrom[1]/10)];
-//		Location loc = t.tileLocation();
         return new Location((int) (viewFrom[0]/10), (int) (viewFrom[1]/10));
-    //	return loc;
 
     }
 
@@ -173,6 +164,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         Calculator.controlSunAndLight(lightDir, room.getWidth(), sunPos);
 
         polyDrawer.drawPolygons(g, guard, otherPlayer);
+        g.drawString("Hello", 1, 8);
 
         // Draw the cross in the center of the screen
         screenUtil.drawMouseAim(g);
@@ -324,7 +316,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
                 if (l.row() == 53 && l.column() == 1) { // hard coded to switch floor
                     System.out.println("load new floor");
                     loadMap("co238");
-                    //this.controller.loadNewMap("co238");
                 }
 
             }
@@ -338,6 +329,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         room.setPlayerStart(4*10, 4*10);
         viewFrom[0] = room.getPlayerStart().row();
         viewFrom[1] = room.getPlayerStart().column();
+        this.controller.setupGuardbots(map, this);
          polyDrawer.updateRoom(room);
     }
 

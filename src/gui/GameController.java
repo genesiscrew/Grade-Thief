@@ -28,7 +28,8 @@ public class GameController {
 	GuardBot gaurd1;
 	GuardBot guard2;
 
-	private ArrayList<GuardBot> guardList;
+	private ArrayList<GuardBot> guardList1;
+	private ArrayList<GuardBot> guardList2;
 
 	private Screen screenObject;
 
@@ -38,7 +39,7 @@ public class GameController {
 	private static boolean isGuard;
 
 	public GameController(boolean isGuard) {
-		guardList = new ArrayList<>();
+		guardList1 = new ArrayList<>();
 		this.isGuard = isGuard;
 		player = createNewGame(isGuard);
 
@@ -58,7 +59,7 @@ public class GameController {
 
 	public GuardBot getGuardBot(String guardName) {
 
-		for (GuardBot g : guardList) {
+		for (GuardBot g : guardList1) {
 			if (g.getName().equals(guardName)) {
 				// System.out.println(guardName);
 				return g;
@@ -85,19 +86,19 @@ public class GameController {
 		frame.setSize(ScreenSize);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setupGuardbots(screenObject);
+		//this.setupGuardbots(screenObject);
 		return screenObject;
 	}
 
-	private void setupGuardbots(Screen screen) {
+	public void setupGuardbots(String map, Screen screen) {
 		int[] dist = { 10, 10, 10, 10 };
 		gaurd1 = new GuardBot(12, "guard1", 14, dist, 0, 47 * 10, 25 * 10, 0, 5, 3, 12, new Color(0, 0, 0));
 		gaurd1.setScreen(screen);
 		int[] dist2 = { 12, 35 };
 		guard2 = new GuardBot(12, "guard2", 5, dist2, 0, 47 * 10, 2 * 10, 0, 5, 3, 12, new Color(0, 0, 0));
 		guard2.setScreen(screen);
-		guardList.add(gaurd1);
-		guardList.add(guard2);
+		guardList1.add(gaurd1);
+		guardList1.add(guard2);
 
 	}
 
@@ -189,31 +190,11 @@ public class GameController {
 	}
 
 	public ArrayList<GuardBot> getGuardList() {
-		return this.guardList;
+		return this.guardList1;
 	}
 
 	public double[] getOtherBotPosition(String guardName) {
 		return null;
 	}
 
-	public void loadNewMap(String string) {
-		frame.setVisible(false);
-        frame.removeAll();
-		this.screenObject = new Screen(this,false,string);
-		frame.add(screenObject);
-
-		/// starts all guardbots movements
-
-		JLabel onScreenText = new JLabel("This is some example text");
-		onScreenText.setFont(new Font("Courier New", Font.BOLD, 12));
-		// frame.add(onScreenText, SwingConstants.CENTER);
-		//frame.setUndecorated(true);
-		frame.setSize(ScreenSize);
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setupGuardbots(screenObject);
-
-
-
-	}
 }
