@@ -10,6 +10,11 @@ import java.net.Socket;
 import java.util.Scanner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.tools.DocumentationTool.Location;
+
+import characters.Player;
+
 import gui.GameController;
 
 public class Client {

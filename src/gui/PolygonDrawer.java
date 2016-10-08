@@ -30,17 +30,17 @@ public class PolygonDrawer {
         this.controller = controller;
     }
 
-    public void drawPolygons(Graphics g, boolean guard, Player otherPlayer){
+    public void drawPolygons(Graphics g, boolean guard, Player otherPlayer, int timer){
         java.util.List<Polygon> allPolygons = getAllPolygonsThatNeedToBeDrawn(guard, otherPlayer);
 
         // Updates each polygon for this camera position
-        for (int i = 0; i < allPolygons.size(); i++) 
+        for (int i = 0; i < allPolygons.size(); i++)
             allPolygons.get(i).updatePolygon(lightDir, viewFrom);
-          
-           
-    
-       
-        
+
+
+
+
+
 
         // Set drawing order so closest polygons gets drawn last
         setOrder(allPolygons);
@@ -49,13 +49,10 @@ public class PolygonDrawer {
         // setPolygonOver();
 
         // Draw polygons in the Order that is set by the 'setOrder' function
-        for (int i = 0; i < polygonDrawOrder.length; i++) 
-            allPolygons.get(polygonDrawOrder[i]).drawPolygon(g, (int)viewFrom[0], (int)viewFrom[1]);
-        //Font font = new Font("Verdana", Font.BOLD, 12); 
-       // allPolygons.get(polygonDrawOrder[i]).polygon.a
-        //allPolygons.get(i).wrapTextToPolygon(g, "Hello", font, Color.black, allPolygons.get(i).polygon,
-        		//polygonxy.get(i).row()*10, polygonxy.get(i).column()*10, 10);
-        
+
+        for (int i = 0; i < polygonDrawOrder.length; i++)
+            allPolygons.get(polygonDrawOrder[i]).drawPolygon(g, guard, timer);
+
     }
 
 
@@ -114,8 +111,6 @@ public class PolygonDrawer {
                     k[b] = k[b + 1];
 
                     polygonDrawOrder[b + 1] = temp2;
-                    //polygonxy.add(new Location(a,b));
-                  
                     k[b + 1] = temp;
                 }
     }

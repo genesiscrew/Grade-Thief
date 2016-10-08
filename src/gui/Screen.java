@@ -48,6 +48,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     private Room room;
     private Room room1 = new Room("level", 0, 0);
     private Room room2 = new Room("co238", 0, 0);
+    public int timer;
 
     // The polygon that the mouse is currently over
     static Polygon polygonOver = null;
@@ -162,9 +163,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         // Calculated all that is general for this camera position
         Calculator.setPredeterminedInfo(this);
         Calculator.controlSunAndLight(lightDir, room.getWidth(), sunPos);
+        if (timer > 0) {
+        	timer--;
 
-        polyDrawer.drawPolygons(g, guard, otherPlayer);
-        g.drawString("Hello", 1, 8);
+        }
+        polyDrawer.drawPolygons(g, guard, otherPlayer, timer);
 
         // Draw the cross in the center of the screen
         screenUtil.drawMouseAim(g);
@@ -313,20 +316,33 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             {
                 Location l = getPlayerLocation();
 
-                if (l.row() == 53 && l.column() == 1) { // hard coded to switch floor
-                    System.out.println("load new floor");
-                    loadMap("co238");
-                }
+                if (l.row() == 80 && l.column() == 5) // hard coded to switch floor
+                    loadMap("level2", 1);
+                else if(l.row() == 80 && l.column() == 29)
+                	loadMap("level2", 2);
+                else if(l.row() == 1 && l.column() == 5)
+                	loadMap("level", 1);
+                else if(l.row() == 1 && l.column() == 21)
+                	loadMap("level", 2);
 
             }
         });
     }
 
-    public void loadMap(String map) {
+    public void loadMap(String map, int id) {
 
         maxFPS = drawFPS;
         room = new Room(map, 20, 20);
-        room.setPlayerStart(4*10, 4*10);
+
+        if(map.equals("level2") && id==1)
+        	room.setPlayerStart(2*10, 6*10);
+        else if(map.equals("level2") && id == 2)
+        	room.setPlayerStart(2*10, 22*10);
+        else if(map.equals("level") && id == 1)
+        	room.setPlayerStart(80*10, 5*10);
+        else if(map.equals("level") && id == 2)
+        	room.setPlayerStart(80*10, 29*10);
+
         viewFrom[0] = room.getPlayerStart().row();
         viewFrom[1] = room.getPlayerStart().column();
         this.controller.setupGuardbots(map, this);
