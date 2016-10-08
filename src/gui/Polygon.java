@@ -1,11 +1,12 @@
 package gui;
 
+
 import java.awt.*;
 
 public class Polygon {
     public double[] x, y, z;
     boolean draw = true;
-    boolean seeThrough = false;
+    public boolean seeThrough = false;
     double[] calcPos, newX, newY;
     double averageDistance; // average distance to the camera
     java.awt.Polygon polygon; // the polygon we use to draw it on screen
@@ -27,10 +28,8 @@ public class Polygon {
      */
     void createPolygon() {
         polygon = new java.awt.Polygon();
-        for (int i = 0; i < x.length; i++) {
+        for (int i = 0; i < x.length; i++)
             polygon.addPoint((int) x[i], (int) y[i]);
-        }
-        
     }
 
     /**
@@ -128,7 +127,7 @@ public class Polygon {
      * Draw the polygon onto the canvas
      * @param g
      */
-    void drawPolygon(Graphics g) {
+    void drawPolygon(Graphics g, int X, int Y) {
         if (draw && visible) {
             g.setColor(new Color((int) (color.getRed() * lighting), (int) (color.getGreen() * lighting), (int) (color.getBlue() * lighting)));
             if (seeThrough)
@@ -145,69 +144,18 @@ public class Polygon {
                 g.fillPolygon(polygon);
             }
         }
-        
-        
-            //g.drawString("Hello", (int)x[2], (int)y[9]);
-        
-    }
-    /*
-    public static void wrapTextToPolygon(Graphics g, String text, Font font, Color color, java.awt.Polygon shape, int x, int y, int border)
-    {
-        FontMetrics m = g.getFontMetrics(font);
-        java.awt.Shape poly = shape;
-        int num = 0;
-        String[] words = new String[1];
-        if(text.contains(" "))
-        {
-            words = text.split(" ");
-        }
-        else words[0] = text;
-        int yi = m.getHeight() + border;
-        num = 0;
-        while(num != words.length)
-        {
-            String word = words[num];
-            Rectangle rect = new Rectangle((poly.getBounds().width / 2) - (m.stringWidth(word) / 2) + x - border - 1, y + yi, m.stringWidth(word) + (border * 2) + 2, m.getHeight());
-            while(!poly.contains(rect))
-            {
-                yi += m.getHeight();
-                rect.y = y + yi;
-                if(yi >= poly.getBounds().height) break;
-            }
-            int i = 1;
-            while(true)
-            {
-                if(words.length < num + i + 1)
-                {
-                    num += i - 1;
-                    break;
-                }
-                rect.width += m.stringWidth(words[num + i]) + (border * 2);
-                rect.x -= m.stringWidth(words[num + i]) / 2 - border;
-                if(poly.contains(rect))
-                {
-                    word += " " + words[num + i];
-                }
-                else
-                {
-                    num += i - 1;
-                    break;
-                }
-                i = i + 1;
-            }
-            if(yi < poly.getBounds().height)
-            {
-                g.drawString(word, (poly.getBounds().width / 2) - (m.stringWidth(word) / 2) + x, y + yi);
-            }
-            else
-            {
-                break;
-            }
-            yi += m.getHeight();
-            num += 1;
+        // creates a map on the screen
+        for (int i = 0; i < x.length; i++){
+        String s = "*";
+       // System.out.println( X + " " + (int)x[i]);
+        	if ((int)x[i] == X && (int) y[i] == Y) {
+        		s = "Y";
+        		
+        	}
+            g.drawString(s, (int) x[i]/2, (int) y[i]/2);
         }
     }
- */
+
 
     /**
      * Is the mouse over the currently selected polygon?

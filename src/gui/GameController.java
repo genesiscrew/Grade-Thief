@@ -86,7 +86,7 @@ public class GameController {
 		frame.setSize(ScreenSize);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//this.setupGuardbots(screenObject);
+		this.setupGuardbots("level", screenObject);
 		return screenObject;
 	}
 

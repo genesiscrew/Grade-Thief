@@ -50,7 +50,7 @@ public class PolygonDrawer {
 
         // Draw polygons in the Order that is set by the 'setOrder' function
         for (int i = 0; i < polygonDrawOrder.length; i++) 
-            allPolygons.get(polygonDrawOrder[i]).drawPolygon(g);
+            allPolygons.get(polygonDrawOrder[i]).drawPolygon(g, (int)viewFrom[0], (int)viewFrom[1]);
         //Font font = new Font("Verdana", Font.BOLD, 12); 
        // allPolygons.get(polygonDrawOrder[i]).polygon.a
         //allPolygons.get(i).wrapTextToPolygon(g, "Hello", font, Color.black, allPolygons.get(i).polygon,
@@ -96,7 +96,7 @@ public class PolygonDrawer {
     private void setOrder(java.util.List<Polygon> polys) {
         double[] k = new double[polys.size()];
         polygonDrawOrder = new int[polys.size()];
-        polygonxy = new ArrayList<Location>();
+        //polygonxy = new ArrayList<Location>();
 
         for (int i = 0; i < polys.size(); i++) {
             k[i] = polys.get(i).averageDistance;
@@ -114,7 +114,7 @@ public class PolygonDrawer {
                     k[b] = k[b + 1];
 
                     polygonDrawOrder[b + 1] = temp2;
-                    polygonxy.add(new Location(a,b));
+                    //polygonxy.add(new Location(a,b));
                   
                     k[b + 1] = temp;
                 }
