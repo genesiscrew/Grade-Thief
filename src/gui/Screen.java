@@ -121,7 +121,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         if (guard) {
             viewFrom[0] = 100;
             viewFrom[1] = 100;
-            viewFrom[2] = 10;
+            viewFrom[2] = 50;
         } else {
             viewFrom[0] = startX;
             viewFrom[1] = startY;
@@ -168,6 +168,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         }
         //System.out.println(timer);
         polyDrawer.drawPolygons(g, guard, otherPlayer, timer);
+
 
 
         // Draw the cross in the center of the screen
