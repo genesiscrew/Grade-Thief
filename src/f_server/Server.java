@@ -75,8 +75,10 @@ public class Server{
 			double playerPosY = (double) input.readDouble();
 			double playerPosZ = (double) input.readDouble();
 			double[] newPos = new double[]{playerPosX,playerPosY,0};
+			int timer = (int) input.readInt();
+			guard.getPlayer().timer = timer;
 			guard.setPlayerPosition(newPos);
-
+			//System.err.println(timer);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
