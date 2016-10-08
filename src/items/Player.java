@@ -23,6 +23,7 @@ public class Player implements Drawable {
     protected boolean jumping;
 
     private List<Item> inventory; // = new ArrayList<Item> ();
+	private String roomName;
 
     public Player(double x, double y, double z, double width, double length, double height, Color c) {
     	inventory = new ArrayList<Item>();
@@ -157,4 +158,13 @@ public class Player implements Drawable {
         };
         jumpingThread.start();
     }
+
+	public void setRoom(String roomName) {
+		this.roomName = roomName;
+
+	}
+
+	public String getRoomName() {
+	return this.roomName;
+	}
 }

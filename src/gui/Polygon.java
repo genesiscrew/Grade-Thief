@@ -151,7 +151,7 @@ public class Polygon {
 				g.fillPolygon(polygon);
 			}
 		}
-	
+
 	}
 
 	/**
@@ -162,31 +162,38 @@ public class Polygon {
 	public boolean mouseOver() {
 		return polygon.contains(Main.ScreenSize.getWidth() / 2, Main.ScreenSize.getHeight() / 2);
 	}
-
+/**
+ *  creates a map on the screen for the guard only. it only appears when the player is detected by a guard
+ *  and is only shown for a certain amount of time.
+ * @param g
+ * @param guard : a boolean value to specify whether the player is guardd or not
+ * @param timer : timer to determine the period the map will appear for
+ * @param X : x coordinate of other player, this is needed to determine where to draw the red circle
+ * @param Y : y coordinate of other player, this is needed to determine where to draw the red circle
+ */
 	public void drawMap(Graphics g, boolean guard, int timer, double X, double Y) {
-	// creates a map on the screen for the guard only
-		
-		//if (timer > 0) {
 
-			//if (guard) {
+
+		if (timer > 0) {
+
+			if (guard) {
 				for (int i = 0; i < x.length; i++) {
 					String s = "*";
 
-					if ((int)x[i]-(int)X == 0 && (int)y[i]-(int)Y == 0 ) {
+					if ((int) x[i] - (int) X == 0 && (int) y[i] - (int) Y == 0) {
 						System.out.println("I AM HERE");
-						  g.setColor(Color.red);
-						  s = "\u25CF";
-						  g.drawString(s, (int) x[i] / 2, (int) y[i] / 2);
-						  break;
-					}
-					else {
+						g.setColor(Color.red);
+						s = "\u25CF";
+						g.drawString(s, (int) x[i] / 2, (int) y[i] / 2);
+						break;
+					} else {
 						g.setColor(Color.black);
-					g.drawString(s, (int) x[i] / 2, (int) y[i] / 2);
+						g.drawString(s, (int) x[i] / 2, (int) y[i] / 2);
 					}
 				}
 			}
 
-		//}
-		
-	//}
+		}
+
+	}
 }

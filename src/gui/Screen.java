@@ -93,6 +93,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     private items.Player currentPlayer;
     private items.Player otherPlayer;
     private String messageToDisplay = "";
+	private String messageToDisplay2;
 
     /**
      * Create a new screen
@@ -101,10 +102,13 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         this.controller = controller;
         this.guard = guard;
         this.currentPlayer = new Player(0, 0, 0, 0, 0, 0, null);
+        this.currentPlayer.setRoom(roomName);
         if (guard)
             otherPlayer = new items.Player(20, 20, 0, 5, 3, 12, Color.green);
         else
             otherPlayer = new items.Player(20, 20, 0, 5, 3, 12, Color.blue);
+        
+        otherPlayer.setRoom(roomName);
 
         this.addKeyListener(this);
         setFocusable(true);
@@ -167,8 +171,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         	timer--;
         }
         //System.out.println(timer);
-        polyDrawer.drawPolygons(g, guard, otherPlayer, timer);
-     
+        polyDrawer.drawPolygons(g, guard, otherPlayer, timer, currentPlayer.getRoomName());
+
 
 
         // Draw the cross in the center of the screen
@@ -190,11 +194,30 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120,
                     (int) screenSize.getHeight() / 2 - 50);
         }
+        messageToDisplay2 = "";
+        isPlayerDetected();
+        if (!messageToDisplay2.equals("")) {
+            g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120,
+                    (int) screenSize.getHeight() / 2 - 50);
+        }
+
         // Redraw
         sleepAndRefresh();
     }
 
-    public boolean isGuard() {
+    private void isPlayerDetected() {
+		if (timer == 199) {
+			// player has been detected
+			if (guard) {
+				messageToDisplay2 = "Intruder has been detected!";
+
+			}
+
+		}
+
+	}
+
+	public boolean isGuard() {
     	return this.guard;
 
     }
@@ -341,15 +364,22 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         maxFPS = drawFPS;
         room = new Room(map, 20, 20);
 
-        if(map.equals("level2") && id==1)
+        if(map.equals("level2") && id==1){
+        	this.currentPlayer.setRoom("level2");
         	room.setPlayerStart(2*10, 6*10);
-        else if(map.equals("level2") && id == 2)
+        }
+        else if(map.equals("level2") && id == 2){
+        	this.currentPlayer.setRoom("level2");
         	room.setPlayerStart(2*10, 22*10);
-        else if(map.equals("level") && id == 1)
+        }
+        else if(map.equals("level") && id == 1){
+        	this.currentPlayer.setRoom("level");
         	room.setPlayerStart(80*10, 5*10);
-        else if(map.equals("level") && id == 2)
+        }
+        else if(map.equals("level") && id == 2){
+        	this.currentPlayer.setRoom("level");
         	room.setPlayerStart(80*10, 29*10);
-
+        }
         viewFrom[0] = room.getPlayerStart().row();
         viewFrom[1] = room.getPlayerStart().column();
         this.controller.setupGuardbots(map, this);
