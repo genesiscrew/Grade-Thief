@@ -191,10 +191,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         // Redraw
         sleepAndRefresh();
     }
-    
+
     public boolean isGuard() {
     	return this.guard;
-    	
+
     }
 
     /**

@@ -267,11 +267,7 @@ public class GuardBot extends Player implements Drawable {
 	 * of view of the bot. the guard bot can only detect a player in front of
 	 * him or in his side views, but he can not detect a player behind him,
 	 * hence a player can sneak through safely if he stays behind the guard.
-<<<<<<< HEAD
-	 *
-=======
-	 *
->>>>>>> 2d70b7b8245372138344437e41ff988dd0455bd9
+
 	 * @return
 	 */
 	public Boolean checkforIntruder() {
@@ -287,7 +283,7 @@ public class GuardBot extends Player implements Drawable {
 				if ((playerlocation - guardlocation) > 0
 						&& (playerlocation - guardlocation) < 100 & Math.abs(yOffset) < 100) {
 					System.out.println("we have found an intruder");
-					this.screen.timer = 3000;
+					this.screen.timer = 30000000;
 					return true;
 
 				}
@@ -300,7 +296,7 @@ public class GuardBot extends Player implements Drawable {
 				if ((guardlocation - playerlocation) > 0
 						&& (guardlocation - playerlocation) < 100 & Math.abs(yOffset) < 100) {
 					System.out.println("we have found an intruder");
-					this.screen.timer = 3000;
+					this.screen.timer = 30000000;
 					return true;
 
 				}
@@ -314,7 +310,7 @@ public class GuardBot extends Player implements Drawable {
 				if ((guardlocation - playerlocation) > 0
 						&& (guardlocation - playerlocation) < 100 & Math.abs(xOffset) < 100) {
 					System.out.println("we have found an intruder");
-					this.screen.timer = 3000;
+					this.screen.timer = 30000000;
 					return true;
 
 				}
@@ -327,7 +323,7 @@ public class GuardBot extends Player implements Drawable {
 				if ((playerlocation - guardlocation) > 0 && (playerlocation - guardlocation) < 100
 						&& Math.abs(xOffset) < 100) {
 					System.out.println("we have found an intruder" + xOffset);
-					this.screen.timer = 3000;
+					this.screen.timer = 30000000;
 					return true;
 
 				}
