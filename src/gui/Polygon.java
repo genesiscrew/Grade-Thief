@@ -130,8 +130,10 @@ public class Polygon {
 	 * @param g
 	 * @param guard
 	 * @param timer
+	 * @param Y
+	 * @param X
 	 */
-	void drawPolygon(Graphics g, boolean guard, int timer) {
+	void drawPolygon(Graphics g, boolean guard, int timer, double X, double Y) {
 		if (draw && visible) {
 			g.setColor(new Color((int) (color.getRed() * lighting), (int) (color.getGreen() * lighting),
 					(int) (color.getBlue() * lighting)));
@@ -156,9 +158,18 @@ public class Polygon {
 			if (guard) {
 				for (int i = 0; i < x.length; i++) {
 					String s = "*";
-					//System.out.println("timer is now: " + timer);
 
+					if ((int)x[i]-(int)X == 0 && (int)y[i]-(int)Y == 0 ) {
+						System.out.println("I AM HERE");
+						  g.setColor(Color.red);
+						  s = "\u25CF";
+						  g.drawString(s, (int) x[i] / 2, (int) y[i] / 2);
+						  break;
+					}
+					else {
+						g.setColor(Color.black);
 					g.drawString(s, (int) x[i] / 2, (int) y[i] / 2);
+					}
 				}
 			}
 

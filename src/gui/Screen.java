@@ -168,6 +168,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         }
         //System.out.println(timer);
         polyDrawer.drawPolygons(g, guard, otherPlayer, timer);
+     
 
 
         // Draw the cross in the center of the screen
