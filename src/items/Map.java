@@ -72,4 +72,6 @@ public class Map extends Item implements Interactable, Movable {
 	public List<Polygon> getPolygons() {
 		return null;
 	}
+
+	
 }

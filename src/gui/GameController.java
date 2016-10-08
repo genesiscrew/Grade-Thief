@@ -1,77 +1,137 @@
 package gui;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.io.InputStream;
+import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+import characters.GuardBot;
 
 /**
  * Created by wareinadam on 28/09/16.
  */
 public class GameController {
 
-    // Players
+	// Players
 
-    private static Screen player;
+	private static Screen player;
 
-    //private Screen guard;
-    // Position is stored using x, y, z
-    private static double[] playerPosition = new double[]{15, 5, 10};
-    private static double[] guardPosition = new double[]{100, 100, 10};
+	// private Screen guard;
+	// Position is stored using x, y, z
+	private static double[] playerPosition = new double[] { 50, 100, 10 };
+	private static double[] guardPosition = new double[] { 100, 100, 10 };
+	GuardBot gaurd1;
+	GuardBot guard2;
 
-    static Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private static boolean isGuard;
+	private ArrayList<GuardBot> guardList1;
+	private ArrayList<GuardBot> guardList2;
 
-    public GameController(boolean isGuard) {
-        this.isGuard = isGuard;
-        player = createNewGame(isGuard);
-        //guard = createNewGame(!isGuard);
+	private Screen screenObject;
 
-    }
+	private JFrame frame;
 
-    /**
-     * Create a new game and launch in full screen
-     */
-    public Screen createNewGame(boolean guard) {
-        JFrame F = new JFrame();
-        Screen screenObject = new Screen(this, guard);
-        F.add(screenObject);
-        F.setUndecorated(true);
-        F.setSize(ScreenSize);
-        F.setVisible(true);
-        F.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        return screenObject;
-    }
+	static Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	private static boolean isGuard;
 
-    /**
-     * Update the controllers understanding of the players
-     *
-     * @param isGuard  true: updates guard pos, false: updates players pos.
-     * @param viewFrom [x,y,z] position of the player
-     */
-    public void updatePosition(boolean isGuard, double[] viewFrom) {
-        if (isGuard) {
-            guardPosition = viewFrom;
-        } else {
-            playerPosition = viewFrom;
-        }
-    }
+	public GameController(boolean isGuard) {
+		guardList1 = new ArrayList<>();
+		this.isGuard = isGuard;
+		player = createNewGame(isGuard);
 
-    public double[] getOtherPlayersPosition(boolean isGuard) {
-        if (isGuard) {
-            return playerPosition;
-        } else {
-            return guardPosition;
-        }
-    }
+		// guard = createNewGame(!isGuard);
 
+		/*
+		 * InputStream is =
+		 * getClass().getClassLoader().getResourceAsStream("bg-music.wav");
+		 * MakeSound ms = new MakeSound(); ms.playSound(
+		 * "/am/state-opera/home1/javahemans/workspace/grade-thief/src/bg-music.wav"
+		 * );
+		 */
+		/*InputStream is = getClass().getClassLoader().getResourceAsStream("bg-music.wav");
+		MakeSound ms = new MakeSound();
+		ms.playSound("src/bg-music.wav");*/
+	}
 
+	public GuardBot getGuardBot(String guardName) {
 
-	/*========================================================================*
-	 *                                                                        *
-	 * 						SETERS AND GETTERS								  *
-	 *                                                                        *
-	 *========================================================================*/
+		for (GuardBot g : guardList1) {
+			if (g.getName().equals(guardName)) {
+				// System.out.println(guardName);
+				return g;
+			}
+		}
+		return null;
 
+	}
+
+	/**
+	 * Create a new game and launch in full screen
+	 */
+	public Screen createNewGame(boolean guard) {
+		frame = new JFrame();
+		frame.setTitle("Grade Thief");
+		screenObject = new Screen(this, guard, "level");
+		frame.add(screenObject);
+		/// starts all guardbots movements
+
+		JLabel onScreenText = new JLabel("This is some example text");
+		onScreenText.setFont(new Font("Courier New", Font.BOLD, 12));
+		// frame.add(onScreenText, SwingConstants.CENTER);
+		frame.setUndecorated(true);
+		frame.setSize(ScreenSize);
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//this.setupGuardbots(screenObject);
+		return screenObject;
+	}
+
+	public void setupGuardbots(String map, Screen screen) {
+		int[] dist = { 10, 10, 10, 10 };
+		gaurd1 = new GuardBot(12, "guard1", 14, dist, 0, 47 * 10, 25 * 10, 0, 5, 3, 12, new Color(0, 0, 0));
+		gaurd1.setScreen(screen);
+		int[] dist2 = { 12, 35 };
+		guard2 = new GuardBot(12, "guard2", 5, dist2, 0, 47 * 10, 2 * 10, 0, 5, 3, 12, new Color(0, 0, 0));
+		guard2.setScreen(screen);
+		guardList1.add(gaurd1);
+		guardList1.add(guard2);
+
+	}
+
+	/**
+	 * Update the controllers understanding of the players
+	 *
+	 * @param isGuard
+	 *            true: updates guard pos, false: updates players pos.
+	 * @param viewFrom
+	 *            [x,y,z] position of the player
+	 */
+	public void updatePosition(boolean isGuard, double[] viewFrom) {
+		if (isGuard) {
+			guardPosition = viewFrom;
+		} else {
+			playerPosition = viewFrom;
+		}
+	}
+
+	public double[] getOtherPlayersPosition(boolean isGuard) {
+		if (isGuard) {
+			return playerPosition;
+		} else {
+			return guardPosition;
+		}
+
+	}
+
+	/*
+	 * ========================================================================*
+	 * * SETERS AND GETTERS * *
+	 * ========================================================================
+	 */
 
 	public static Screen getPlayer() {
 		return player;
@@ -113,5 +173,28 @@ public class GameController {
 		GameController.isGuard = isGuard;
 	}
 
+	public Thread createGuardThread(GuardBot gaurd, int delay) {
+		Thread guardThread = new Thread() {
+			public void run() {
+				// move the guard in a fixed loop, once he reaches certain
+				// coordinate on the Map, change destination
+				// if () {}
+				// gaurd will keep moving
+
+			}
+
+		};
+
+		// return new double[]{g.getX(), g.getY(), g.getZ()};
+		return null;
+	}
+
+	public ArrayList<GuardBot> getGuardList() {
+		return this.guardList1;
+	}
+
+	public double[] getOtherBotPosition(String guardName) {
+		return null;
+	}
 
 }

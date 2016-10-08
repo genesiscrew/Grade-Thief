@@ -96,11 +96,11 @@ public class Floor {
      */
     public List<Door> parseDoors(Tile[][] tileMap) {
         List<Door> doors = new ArrayList<>();
-
+        int doorCount = 0;
         for (int x = 0; x < tileMap.length; x++) {
             for (int y = 0; y < tileMap[x].length; y++) {
                 if (tileMap[x][y] instanceof DoorTile) {
-                    Door door = new Door(0, "", x * tileSize, y * tileSize, 0, tileSize, tileSize, WALL_HEIGHT, DOOR_COLOR);
+                    Door door = new Door(doorCount++, "", x * tileSize, y * tileSize, 0, tileSize, tileSize, WALL_HEIGHT, DOOR_COLOR);
                     doors.add(door);
                 }
             }

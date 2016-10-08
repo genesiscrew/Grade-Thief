@@ -9,12 +9,10 @@ import java.util.List;
 public class Door extends Item {
     public int code;
     private String itemType = "Door";
-    private Cube cube;
-    private boolean draw; // false when the door is open, true when closed
 
     public Door(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
         super(itemID, itemType, x, y, z, width, length, height, c);
-        this.cube = new Cube(x, y, z, width, length, height, c);
+        cubes.add(new Cube(x, y, z, width, length, height, c));
         this.draw = true;
     }
 
@@ -50,12 +48,14 @@ public class Door extends Item {
 
     @Override
     public boolean containsPoint(int x, int y, int z) {
-        return false;
+        if(!draw)
+            return false;
+        return (this.x + this.width) > x && (this.y + this.length) > y && this.x < x && this.y < y;
     }
 
     @Override
     public List<Polygon> getPolygons() {
-        return cube.getPolygons();
+        return cubes.get(0).getPolygons();
     }
 
     public void changeState(){
@@ -65,4 +65,6 @@ public class Door extends Item {
     public boolean isDraw() {
         return draw;
     }
+
+	
 }

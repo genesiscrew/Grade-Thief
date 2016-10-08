@@ -15,7 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import characters.Guard;
+import characters.GuardBot;
 import characters.Player;
 import game.floor.EmptyTile;
 import game.floor.Floor;
@@ -543,7 +543,7 @@ public class Game {
  * @param delay between each movement of guard
  * @return
  */
-	public Thread createGuardThread(Guard gaurd, int delay) {
+	public Thread createGuardThread(GuardBot gaurd, int delay) {
 		Thread guardThread = new Thread() {
 			public void run() {
 				// move the guard in a fixed loop, once he reaches certain
@@ -557,9 +557,8 @@ public class Game {
 
 				try {
 					Thread.sleep(delay);
-					gaurd.move(Game.this);
 
-
+					//gaurd.move(Game.this);
 
 				} catch(InterruptedException e) {
 					// should never happen

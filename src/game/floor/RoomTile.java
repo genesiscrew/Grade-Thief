@@ -4,7 +4,7 @@ package game.floor;
 * @author Stefan Vrecic
 *
 */
-public class RoomTile implements Tile {
+public class RoomTile extends EmptyTile implements Tile  {
 
 	Location location;
 	private boolean isOccupied = false;

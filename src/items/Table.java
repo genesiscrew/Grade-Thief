@@ -3,6 +3,7 @@ package items;
 import gui.Cube;
 import gui.Drawable;
 import gui.Polygon;
+import items.Item.Interaction;
 
 import java.awt.*;
 import java.util.*;
@@ -14,12 +15,9 @@ import java.util.List;
 public class Table extends Item {
 
     private final int TABLE_THICKNESS = 1;
-    private java.util.List<Cube> cubes;
-
 
     public Table(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
         super(itemID, itemType, x, y, z, width, length, height, c);
-        cubes = new ArrayList<>();
 
         // First make the legs
         int legWidth = (int) (width / 4);
@@ -71,4 +69,9 @@ public class Table extends Item {
         return allPolys;
     }
 
+    @Override
+    public void addInteractions() {
+        interactionsAvaliable = new ArrayList<>();
+        interactionsAvaliable.add(Interaction.SIT);
+    }
 }

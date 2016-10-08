@@ -1,7 +1,8 @@
 package game.floor;
 
-import characters.Guard;
+import characters.GuardBot;
 import characters.Player;
+import items.KeyDraw;
 import items.Keys;
 import model.Character;
 /**
@@ -51,16 +52,16 @@ public class EmptyTile implements Tile {
 	public void addObjectToTile(Object o){
 		this.o = o;
 
-		if (o instanceof Guard) {
+		if (o instanceof GuardBot) {
 			this.name = "G";
 			isOccupied = true;
 		}
-		else if (o instanceof Player) {
-			this.name = ((Player) o).getName();
+		else if (o instanceof items.Player) {
+			this.name = "P";
 			isOccupied = true;
 		}
-		else if (o instanceof Keys) {
-			this.name = ((Keys) o).itemType();
+		else if (o instanceof KeyDraw) {
+			this.name = ((KeyDraw) o).itemType();
 			isOccupied = true;
 		}
 
@@ -88,7 +89,7 @@ public class EmptyTile implements Tile {
  */
 	public void resetEmptyTile() {
 		this.o = null;
-		this.name = "E";
+		this.name = "e";
 		isOccupied = false;
 
 	}
@@ -102,7 +103,7 @@ public class EmptyTile implements Tile {
 	@Override
 	public String name() {
 		if (occupied())
-			return this.name;
+			return this.name.substring(0, 1);
 		return "E";
 	}
 }
