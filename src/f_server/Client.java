@@ -81,6 +81,10 @@ public class Client {
 		output.flush();
 		output.writeDouble(playerPos[2]);
 		output.flush();
+		int timer = player.getPlayer().timer;
+		//System.err.println(timer);
+		output.writeInt(timer);
+		output.flush();
 	}
 
 	private void recieveData() throws IOException {

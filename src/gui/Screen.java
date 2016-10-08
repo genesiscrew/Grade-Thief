@@ -166,7 +166,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         if (timer > 0) {
         	timer--;
         }
-        System.out.println(timer);
+        //System.out.println(timer);
         polyDrawer.drawPolygons(g, guard, otherPlayer, timer);
 
 

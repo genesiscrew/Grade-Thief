@@ -174,7 +174,8 @@ public class GuardBot extends Player implements Drawable {
 			;
 		}
 		else {
-			this.screen.timer = 3000;
+			// intruder detected, so we set timer for map to display on guards screen
+			this.screen.timer = 200;
 		}
 
 	}
@@ -290,7 +291,7 @@ public class GuardBot extends Player implements Drawable {
 				if ((playerlocation - guardlocation) > 0
 						&& (playerlocation - guardlocation) < 100 & Math.abs(yOffset) < 100) {
 					System.out.println("we have found an intruder");
-					
+
 					return true;
 
 				}
@@ -303,7 +304,7 @@ public class GuardBot extends Player implements Drawable {
 				if ((guardlocation - playerlocation) > 0
 						&& (guardlocation - playerlocation) < 100 & Math.abs(yOffset) < 100) {
 					System.out.println("we have found an intruder");
-					
+
 					return true;
 
 				}
@@ -317,7 +318,7 @@ public class GuardBot extends Player implements Drawable {
 				if ((guardlocation - playerlocation) > 0
 						&& (guardlocation - playerlocation) < 100 & Math.abs(xOffset) < 100) {
 					System.out.println("we have found an intruder");
-					
+
 					return true;
 
 				}
@@ -329,8 +330,8 @@ public class GuardBot extends Player implements Drawable {
 				int xOffset = (int) Math.round(this.screen.getPlayerView()[0]) - (int) Math.round(this.x);
 				if ((playerlocation - guardlocation) > 0 && (playerlocation - guardlocation) < 100
 						&& Math.abs(xOffset) < 100) {
-					System.out.println("we have found an intruder" + xOffset);
-					
+					System.out.println("we have found an intruder");
+
 					return true;
 
 				}
