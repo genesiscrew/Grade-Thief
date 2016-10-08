@@ -74,7 +74,7 @@ public class Server{
 			double playerPosX = (double) input.readDouble();
 			double playerPosY = (double) input.readDouble();
 			double playerPosZ = (double) input.readDouble();
-			double[] newPos = new double[]{playerPosX,playerPosY,playerPosZ};
+			double[] newPos = new double[]{playerPosX,playerPosY,0};
 			guard.setPlayerPosition(newPos);
 
 		} catch (Exception e) {
