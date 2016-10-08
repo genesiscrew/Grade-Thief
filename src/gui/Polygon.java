@@ -133,7 +133,7 @@ public class Polygon {
 	 * @param Y
 	 * @param X
 	 */
-	void drawPolygon(Graphics g, boolean guard, int timer, double X, double Y) {
+	void drawPolygon(Graphics g) {
 		if (draw && visible) {
 			g.setColor(new Color((int) (color.getRed() * lighting), (int) (color.getGreen() * lighting),
 					(int) (color.getBlue() * lighting)));
@@ -151,11 +151,24 @@ public class Polygon {
 				g.fillPolygon(polygon);
 			}
 		}
-		// creates a map on the screen for the guard only
-		System.out.println("timer is now:" + timer);
-		if (timer > 0) {
+	
+	}
 
-			if (guard) {
+	/**
+	 * Is the mouse over the currently selected polygon?
+	 *
+	 * @return
+	 */
+	public boolean mouseOver() {
+		return polygon.contains(Main.ScreenSize.getWidth() / 2, Main.ScreenSize.getHeight() / 2);
+	}
+
+	public void drawMap(Graphics g, boolean guard, int timer, double X, double Y) {
+	// creates a map on the screen for the guard only
+		
+		//if (timer > 0) {
+
+			//if (guard) {
 				for (int i = 0; i < x.length; i++) {
 					String s = "*";
 
@@ -173,15 +186,7 @@ public class Polygon {
 				}
 			}
 
-		}
-	}
-
-	/**
-	 * Is the mouse over the currently selected polygon?
-	 *
-	 * @return
-	 */
-	public boolean mouseOver() {
-		return polygon.contains(Main.ScreenSize.getWidth() / 2, Main.ScreenSize.getHeight() / 2);
-	}
+		//}
+		
+	//}
 }

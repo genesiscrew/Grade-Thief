@@ -51,7 +51,9 @@ public class PolygonDrawer {
         // Draw polygons in the Order that is set by the 'setOrder' function
 
         for (int i = 0; i < polygonDrawOrder.length; i++)
-            allPolygons.get(polygonDrawOrder[i]).drawPolygon(g, guard, timer, otherPlayer.getX(), otherPlayer.getY());
+            allPolygons.get(polygonDrawOrder[i]).drawPolygon(g);
+        for (int i = 0; i < polygonDrawOrder.length; i++)
+            allPolygons.get(polygonDrawOrder[i]).drawMap(g, guard, timer, otherPlayer.getX(), otherPlayer.getY());
 
     }
 
