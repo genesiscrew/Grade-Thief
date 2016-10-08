@@ -276,6 +276,7 @@ public class GuardBot extends Player implements Drawable {
 	 */
 	public Boolean checkforIntruder() {
 		try {
+			if (!this.screen.isGuard()) {
 			if (dir.equals(Dir.EAST)) {
 
 				int guardlocation = (int) Math.round(this.x);
@@ -331,6 +332,7 @@ public class GuardBot extends Player implements Drawable {
 
 				}
 
+			}
 			}
 
 		} catch (Exception e) { // Do nothing For Guard Quadratic Vision.
