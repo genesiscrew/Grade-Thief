@@ -48,6 +48,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     private Room room;
     private Room room1 = new Room("level", 0, 0);
     private Room room2 = new Room("co238", 0, 0);
+    public int timer;
 
     // The polygon that the mouse is currently over
     static Polygon polygonOver = null;
@@ -162,9 +163,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         // Calculated all that is general for this camera position
         Calculator.setPredeterminedInfo(this);
         Calculator.controlSunAndLight(lightDir, room.getWidth(), sunPos);
+        if (timer > 0) {
+        	timer--;
 
-        polyDrawer.drawPolygons(g, guard, otherPlayer);
-        g.drawString("Hello", 1, 8);
+        }
+        polyDrawer.drawPolygons(g, guard, otherPlayer, timer);
 
         // Draw the cross in the center of the screen
         screenUtil.drawMouseAim(g);

@@ -131,11 +131,7 @@ public class Polygon {
 	 *
 	 * @param g
 	 */
-	void drawPolygon(Graphics g) {
-		for (int i = 0; i < x.length; i++) {
-			String s = "*";
-			g.drawString(s, (int) x[i] / 2, (int) y[i] / 2);
-		}
+	void drawPolygon(Graphics g, boolean guard, int timer) {
 		if (draw && visible) {
 			g.setColor(new Color((int) (color.getRed() * lighting), (int) (color.getGreen() * lighting),
 					(int) (color.getBlue() * lighting)));
@@ -153,10 +149,16 @@ public class Polygon {
 				g.fillPolygon(polygon);
 			}
 		}
+		// creates a map on the screen for the guard only
+		if (timer > 0) {
+			if (guard) {
+				for (int i = 0; i < x.length; i++) {
+					String s = "*";
 
-		// g.drawString("Hello", (int)x[2], (int)y[9]);
-		// creates a map on the screen
-
+					g.drawString(s, (int) x[i] / 2, (int) y[i] / 2);
+				}
+			}
+		}
 	}
 	/*
 	 * public static void wrapTextToPolygon(Graphics g, String text, Font font,

@@ -169,7 +169,7 @@ public class GuardBot extends Player implements Drawable {
 				updatePosition(0, 0.5, 0);
 				u++;
 
-			} 
+			}
 
 			;
 		}
@@ -270,7 +270,7 @@ public class GuardBot extends Player implements Drawable {
 <<<<<<< HEAD
 	 *
 =======
-	 * 
+	 *
 >>>>>>> 2d70b7b8245372138344437e41ff988dd0455bd9
 	 * @return
 	 */
@@ -286,6 +286,7 @@ public class GuardBot extends Player implements Drawable {
 				if ((playerlocation - guardlocation) > 0
 						&& (playerlocation - guardlocation) < 100 & Math.abs(yOffset) < 100) {
 					System.out.println("we have found an intruder");
+					this.screen.timer = 3000;
 					return true;
 
 				}
@@ -298,6 +299,7 @@ public class GuardBot extends Player implements Drawable {
 				if ((guardlocation - playerlocation) > 0
 						&& (guardlocation - playerlocation) < 100 & Math.abs(yOffset) < 100) {
 					System.out.println("we have found an intruder");
+					this.screen.timer = 3000;
 					return true;
 
 				}
@@ -311,6 +313,7 @@ public class GuardBot extends Player implements Drawable {
 				if ((guardlocation - playerlocation) > 0
 						&& (guardlocation - playerlocation) < 100 & Math.abs(xOffset) < 100) {
 					System.out.println("we have found an intruder");
+					this.screen.timer = 3000;
 					return true;
 
 				}
@@ -323,6 +326,7 @@ public class GuardBot extends Player implements Drawable {
 				if ((playerlocation - guardlocation) > 0 && (playerlocation - guardlocation) < 100
 						&& Math.abs(xOffset) < 100) {
 					System.out.println("we have found an intruder" + xOffset);
+					this.screen.timer = 3000;
 					return true;
 
 				}
@@ -422,7 +426,7 @@ public class GuardBot extends Player implements Drawable {
 					directionList.add(Dir.NORTH);
 					directionList.add(Dir.EAST);
 					directionList.add(Dir.SOUTH);
-				
+
 			if (moveStrategy == 15) {
 				directionList.add(Dir.WEST);
 				directionList.add(Dir.NORTH);
