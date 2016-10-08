@@ -165,9 +165,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         Calculator.controlSunAndLight(lightDir, room.getWidth(), sunPos);
         if (timer > 0) {
         	timer--;
-
         }
+        System.out.println(timer);
         polyDrawer.drawPolygons(g, guard, otherPlayer, timer);
+
 
         // Draw the cross in the center of the screen
         screenUtil.drawMouseAim(g);
@@ -191,10 +192,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         // Redraw
         sleepAndRefresh();
     }
-    
+
     public boolean isGuard() {
     	return this.guard;
-    	
+
     }
 
     /**

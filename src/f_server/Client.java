@@ -89,7 +89,7 @@ public class Client {
 			double guardPosX = (double) input.readDouble();
 			double guardPosY = (double) input.readDouble();
 			double guardPosZ = (double) input.readDouble();
-			System.out.println(guardPosZ);
+			//System.out.println(guardPosZ);
 			double[] newPos = new double[] { guardPosX, guardPosY, 0 };
 			player.setGuardPosition(newPos);
 

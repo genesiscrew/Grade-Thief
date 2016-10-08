@@ -150,14 +150,18 @@ public class Polygon {
 			}
 		}
 		// creates a map on the screen for the guard only
+		System.out.println("timer is now:" + timer);
 		if (timer > 0) {
-		if (guard) {
-			for (int i = 0; i < x.length; i++) {
-				String s = "*";
 
-				g.drawString(s, (int) x[i] / 2, (int) y[i] / 2);
+			if (guard) {
+				for (int i = 0; i < x.length; i++) {
+					String s = "*";
+					//System.out.println("timer is now: " + timer);
+
+					g.drawString(s, (int) x[i] / 2, (int) y[i] / 2);
+				}
 			}
-		}
+
 		}
 	}
 
