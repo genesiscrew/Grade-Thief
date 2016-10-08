@@ -85,6 +85,8 @@ public class Client {
 		//System.err.println(timer);
 		output.writeInt(timer);
 		output.flush();
+		output.writeObject(player.getPlayer().getCurrentPlayer().getRoomName());
+		output.flush();
 	}
 
 	private void recieveData() throws IOException {
@@ -96,6 +98,8 @@ public class Client {
 			//System.out.println(guardPosZ);
 			double[] newPos = new double[] { guardPosX, guardPosY, 0 };
 			player.setGuardPosition(newPos);
+			String room = (String) input.readObject();
+			player.getPlayer().getOtherPlayer().setRoom(room);
 
 		} catch (Exception e) {
 			// TODO: handle exception

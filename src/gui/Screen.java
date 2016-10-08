@@ -107,7 +107,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             otherPlayer = new items.Player(20, 20, 0, 5, 3, 12, Color.green);
         else
             otherPlayer = new items.Player(20, 20, 0, 5, 3, 12, Color.blue);
-        
+
         otherPlayer.setRoom(roomName);
 
         this.addKeyListener(this);
@@ -197,7 +197,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         messageToDisplay2 = "";
         isPlayerDetected();
         if (!messageToDisplay2.equals("")) {
-            g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120,
+            g.drawString(messageToDisplay2, (int) screenSize.getWidth() / 2 - 120,
                     (int) screenSize.getHeight() / 2 - 50);
         }
 
@@ -209,7 +209,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		if (timer == 199) {
 			// player has been detected
 			if (guard) {
-				messageToDisplay2 = "Intruder has been detected!";
+				messageToDisplay2 = "Intruder has been detected at " + otherPlayer.getRoomName() ;
 
 			}
 
@@ -698,6 +698,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     public void setRoom2(Room room2) {
         this.room2 = room2;
     }
+
+	public items.Player getOtherPlayer() {
+		// TODO Auto-generated method stub
+		return this.otherPlayer;
+	}
 
 
 
