@@ -255,7 +255,7 @@ public class TileMap {
 //							new DoorDraw(id, type, 10 * x, 10 * y, z, w, h, l, new Color(red, green, blue), D));
 
 				}
-				if (type.equals("GuardBot")) { // Door
+			/*	if (type.equals("GuardBot")) { // Door
 					// System.out.println("===========================
 					// ddddddddddddddddddddddd");
 					int moveStrategy = sc.nextInt();
@@ -277,7 +277,7 @@ public class TileMap {
 					// room.addItemToRoom(guard);
 					room.addGuardtoRoom(guard);
 
-				}
+				}*/
 				// FOUND CONTAINER
 				else if (type.equals("C")) {
 					// container found

@@ -87,11 +87,11 @@ public class GameController {
 	}
 
 	public void setupGuardbots(String map, Screen screen) {
-		int[] dist = { 10, 10, 10, 10 };
-		gaurd1 = new GuardBot(12, "guard1", 14, dist, 0, 47 * 10, 25 * 10, 0, 5, 3, 12, new Color(0, 0, 0));
+		int[] dist = { 14, 45, 14, 45 };
+		gaurd1 = new GuardBot(12, "guard1", 16, dist, 0, 2 * 10, 8 * 10, 0, 5, 3, 12, 5, new Color(0, 0, 0));
 		gaurd1.setScreen(screen);
-		int[] dist2 = { 12, 35 };
-		guard2 = new GuardBot(12, "guard2", 5, dist2, 0, 47 * 10, 2 * 10, 0, 5, 3, 12, new Color(0, 0, 0));
+		int[] dist2 = { 35, 25, 10};
+		guard2 = new GuardBot(12, "guard2", 17, dist2, 0, 83 * 10, 6 * 10, 0, 5, 3, 12, 4, new Color(0, 0, 0));
 		guard2.setScreen(screen);
 		guardList1.add(gaurd1);
 		guardList1.add(guard2);

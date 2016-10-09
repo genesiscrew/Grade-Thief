@@ -26,6 +26,9 @@ public abstract class Item extends GameObject implements Drawable {
 	protected boolean draw = true;
 	protected java.util.List<Cube> cubes;
 
+
+	private double DETECT_PLAYER_BOUNDARY2 = 5;
+
 	public void canDraw() {
 		draw = !draw;
 	}
@@ -65,6 +68,15 @@ public abstract class Item extends GameObject implements Drawable {
 	public boolean pointNearObject(double x, double y, double z) {
 		if ((this.x + DETECT_PLAYER_BOUNDARY + this.width) > x && (this.y + DETECT_PLAYER_BOUNDARY + this.length) > y
 				&& this.x - DETECT_PLAYER_BOUNDARY < x && this.y - DETECT_PLAYER_BOUNDARY < y) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean pointNearObject2(double x, double y, double z) {
+		if ((this.x + DETECT_PLAYER_BOUNDARY2 + this.width) > x && (this.y + DETECT_PLAYER_BOUNDARY2 + this.length) > y
+				&& this.x - DETECT_PLAYER_BOUNDARY2 < x && this.y - DETECT_PLAYER_BOUNDARY2 < y) {
 			return true;
 		} else {
 			return false;

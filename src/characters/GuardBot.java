@@ -48,6 +48,8 @@ public class GuardBot extends Player implements Drawable {
 	private int u;
 	private int itemID;
 	private String itemType;
+	private double guardSpeed;
+	private double guardConst;
 
 	/**
 	 * Contructor for guard object
@@ -65,7 +67,7 @@ public class GuardBot extends Player implements Drawable {
 	 *            represents the floor number the guard belongs to
 	 */
 	public GuardBot(int itemID, String itemType, int moveStrategy, int[] distance, int floorNo, double x, double y,
-			double z, double width, double length, double height, Color c) {
+			double z, double width, double length, double height, double guardSpeed, Color c) {
 		super(x, y, z, width, length, height, c);
 		this.itemID = itemID;
 		this.itemType = itemType;
@@ -78,6 +80,8 @@ public class GuardBot extends Player implements Drawable {
 		cubes = new ArrayList<>();
 		this.x = x;
 		this.y = y;
+		this.guardSpeed = guardSpeed;
+		this.guardConst = 10/guardSpeed;
 
 		this.z = 0;
 		this.width = width;
@@ -122,10 +126,11 @@ public class GuardBot extends Player implements Drawable {
 		// the bot stops moving and alerts other player
 		// player as guard of his location
 		if (!this.checkforIntruder()) {
-			if (u == (distance[i] - 1) * 20 && i < (directionList.size() - 1)) {
+			if (u == (distance[i] - 1) * guardConst && i < (directionList.size() - 1)) {
 				i++;
 				u = 0;
-
+				System.out.println("value of i is: " + i);
+				System.out.println("value of u is: " + u);
 				this.updateDirection(x, y);
 
 
@@ -139,34 +144,35 @@ public class GuardBot extends Player implements Drawable {
 			// and
 			// run the
 			// move method again
-			else if (u == (distance[i] - 1) * 20 && i == (directionList.size() - 1)) {
+			else if (u == (distance[i] - 1) * guardConst && i == (directionList.size() - 1)) {
 				this.reverseStrategy();
+				System.out.println(" i should reverse" + this.getName());
 				i = 0;
 				u = 0;
 
 			}
 
 			if (this.dir.equals(Dir.EAST)) {
-
-				updatePosition(0.5, 0, 0);
+                 System.out.println(this.getName() + " should head east now");
+				updatePosition(guardSpeed, 0, 0);
 				this.updateDirection();
 				u++;
 
 			} else if (this.dir.equals(Dir.WEST)) {
-				updatePosition(-0.5, 0, 0);
+				updatePosition(-guardSpeed, 0, 0);
 				this.updateDirection();
 				u++;
 				;
 
 			} else if (this.dir.equals(Dir.NORTH)) {
 				this.updateDirection();
-				updatePosition(0, -0.5, 0);
+				updatePosition(0, -guardSpeed, 0);
 
 				u++;
 
 			} else if (this.dir.equals(Dir.SOUTH)) {
 				this.updateDirection();
-				updatePosition(0, 0.5, 0);
+				updatePosition(0, guardSpeed, 0);
 				u++;
 
 			}
@@ -177,10 +183,15 @@ public class GuardBot extends Player implements Drawable {
 
 			// intruder detected, so we set timer for map to display on guards screen
 			this.screen.timer = 200;
+			/*if (guardSpeed < 1)
+			guardSpeed += 0.01;*/
 		}
 
 	}
-
+/**
+ * get the floor number
+ * @return
+ */
 	public int getFloorNo() {
 
 		return this.floorNo;
@@ -264,6 +275,14 @@ public class GuardBot extends Player implements Drawable {
 			directionList = strategy.getDirectionList();
 			this.dir = directionList.get(0);
 		}
+		if (this.moveStrategy == 17) {
+			this.moveStrategy = 18;
+			strategy = new GuardStrategy(18);
+			this.revertDistance();
+			directionList = strategy.getDirectionList();
+			this.dir = directionList.get(0);
+			System.out.println(directionList.get(0));
+			}
 
 	}
 
@@ -271,13 +290,14 @@ public class GuardBot extends Player implements Drawable {
 	 * this method checks whether there are any intruders within a certain range
 	 * of view of the bot. the guard bot can only detect a player in front of
 	 * him or in his side views, but he can not detect a player behind him,
-	 * hence a player can sneak through safely if he stays behind the guard.
+	 * hence a player can sneak through safely if he moves behind the guard.
 
 	 * @return
 	 */
 	public Boolean checkforIntruder() {
 		try {
-			if (!this.screen.isGuard()) {
+		
+			if (!this.screen.isGuard() && !this.screen.getCurrentPlayer().isInRoom()) {
 			if (dir.equals(Dir.EAST)) {
 
 				int guardlocation = (int) Math.round(this.x);
@@ -419,22 +439,36 @@ public class GuardBot extends Player implements Drawable {
 				directionList.add(Dir.WEST);
 				directionList.add(Dir.NORTH);
 				directionList.add(Dir.EAST);
-
-				if (moveStrategy == 15) {
-					directionList.add(Dir.WEST);
-					directionList.add(Dir.NORTH);
-					directionList.add(Dir.EAST);
-					directionList.add(Dir.SOUTH);
-
+			}
+				
 			if (moveStrategy == 15) {
 				directionList.add(Dir.WEST);
 				directionList.add(Dir.NORTH);
 				directionList.add(Dir.EAST);
 				directionList.add(Dir.SOUTH);
 				}
+			
+			if (moveStrategy == 16) {
+				directionList.add(Dir.SOUTH);
+				directionList.add(Dir.EAST);
+				directionList.add(Dir.NORTH);
+				directionList.add(Dir.WEST);
+				}
+			
+			if (moveStrategy == 17) {
+				directionList.add(Dir.WEST);
+				directionList.add(Dir.SOUTH);
+				directionList.add(Dir.EAST);
+				}
+			
+			if (moveStrategy == 18) {
+				directionList.add(Dir.EAST);
+				directionList.add(Dir.NORTH);
+				directionList.add(Dir.WEST);
+				}
+			
 			}
-			}
-		}
+		
 
 		public ArrayList<Direction.Dir> getDirectionList() {
 

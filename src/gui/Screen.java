@@ -179,7 +179,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         }
         //System.out.println(timer);
 
-        polyDrawer.drawPolygons(g, guard, otherPlayer, timer, currentPlayer.getRoomName(), viewFrom[0], viewFrom[1]);
+        polyDrawer.drawPolygons(g, guard, otherPlayer, currentPlayer, timer, currentPlayer.getRoomName(), viewFrom[0], viewFrom[1]);
 
 
 
@@ -351,7 +351,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		room.getDoors().stream().filter(i -> i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])).forEach(i -> {
 			int n = showOptionPane(i.getInteractionsAvaliable());
 			i.performAction(i.getInteractionsAvaliable().get(n));
-
+            this.currentPlayer.inRoom(true);
+            this.currentPlayer.incrementRoomCounter();
 			if (n == 0) // doorOpened
 			{
 				Location l = getPlayerLocation();

@@ -30,8 +30,8 @@ public class PolygonDrawer {
         this.controller = controller;
     }
 
-    public void drawPolygons(Graphics g, boolean guard, Player otherPlayer, int timer, String RoomName, double X, double Y){
-        java.util.List<Polygon> allPolygons = getAllPolygonsThatNeedToBeDrawn(guard, otherPlayer, RoomName, X, Y);
+    public void drawPolygons(Graphics g, boolean guard, Player otherPlayer, Player currentPlayer, int timer, String RoomName, double X, double Y){
+        java.util.List<Polygon> allPolygons = getAllPolygonsThatNeedToBeDrawn(guard, otherPlayer, currentPlayer, RoomName, X, Y);
 
         // Updates each polygon for this camera position
         for (int i = 0; i < allPolygons.size(); i++)
@@ -58,12 +58,21 @@ public class PolygonDrawer {
     }
 
 
-    private java.util.List<Polygon> getAllPolygonsThatNeedToBeDrawn(boolean guard, Player otherPlayer, String RoomName, double X, double Y){
+    private java.util.List<Polygon> getAllPolygonsThatNeedToBeDrawn(boolean guard, Player otherPlayer, Player currentPlayer, String RoomName, double X, double Y){
         // All polygons that need to be drawn
         java.util.List<Polygon> allPolygons = new ArrayList<>();
 
         // re-closes doors previously opened by player as soon as he is not near it.
-        room.getDoors().stream().filter(i -> !i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2]) && !i.isDraw()).forEach(i -> i.changeState());
+        room.getDoors().stream().filter(i -> !i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2]) && !i.isDraw()).forEach(i ->
+        {
+        	i.changeState();
+        	if (currentPlayer.getRoomCounter() ==2 ) {
+        		currentPlayer.resetRoomCounter();
+        		currentPlayer.inRoom(false);
+        	}
+
+
+        });
 
         // Add all polygons to the list
         allPolygons.addAll(room.getFloorPolygons()); // floor tiles
@@ -84,7 +93,7 @@ public class PolygonDrawer {
         if (otherPlayer.getRoomName().equals(RoomName)) {
         allPolygons.addAll(PlayerMovement.updateOtherPlayersPosition(otherPos, otherPlayer)); // other player
         }
-      
+
         for (GuardBot r : this.controller.getGuardList()) {
             allPolygons.addAll(PlayerMovement.updateGuardBotPosition(r.getName(), controller) );
         }

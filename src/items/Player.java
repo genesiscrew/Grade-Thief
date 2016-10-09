@@ -24,6 +24,8 @@ public class Player implements Drawable {
 
     private List<Item> inventory; // = new ArrayList<Item> ();
 	private String roomName;
+	private boolean inRoom = true;
+	private int roomCounter;
 
     public Player(double x, double y, double z, double width, double length, double height, Color c) {
     	inventory = new ArrayList<Item>();
@@ -35,6 +37,7 @@ public class Player implements Drawable {
         this.length = length;
         this.height = height;
         this.color = c;
+        this.roomCounter = 1;
 
         // First make the legs
         int legWidth = (int) (width / 2.5);
@@ -166,5 +169,28 @@ public class Player implements Drawable {
 
 	public String getRoomName() {
 	return this.roomName;
+	}
+
+	public void inRoom(boolean b) {
+		this.inRoom = b;
+		
+	}
+
+	public boolean isInRoom() {
+		// TODO Auto-generated method stub
+		return inRoom;
+	}
+
+	public void incrementRoomCounter() {
+		this.roomCounter++;
+		
+	}
+	public void resetRoomCounter() {
+		this.roomCounter = 0;
+		
+	}
+	public int getRoomCounter() {
+		return this.roomCounter;
+		
 	}
 }

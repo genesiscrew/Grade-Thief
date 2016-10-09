@@ -206,9 +206,9 @@ public class Polygon {
 	 */
 	public void drawMap(Graphics g, boolean guard, int timer, double X, double Y, double X1, double Y1) {
 
-		 if (timer > 0) {
+		// if (timer > 0) {
 
-		 if (guard) {
+		// if (guard) {
 		for (int i = 0; i < x.length; i++) {
 			String s = "*";
 			double xoffset = x[i] -  X1;
@@ -220,7 +220,6 @@ public class Polygon {
 
 			}
 			else if (xoffset >= 0 && xoffset <= 10 && yoffset >= 0 && yoffset <= 10) {
-				System.out.println(xoffset + " " + " " + yoffset);
 				g.setColor(Color.green);
 				s = "\u25CF";
 				g.drawString(s, (int) x[i] / 2, (int) y[i] / 2);
@@ -232,7 +231,7 @@ public class Polygon {
 		}
 		 }
 
-		 }
+		// }
 
-	}
+	//}
 }
