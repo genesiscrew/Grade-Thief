@@ -5,7 +5,7 @@ import java.awt.*;
 public class Polygon {
 	public double[] x, y, z;
 	boolean draw = true;
-	public boolean seeThrough = false;
+	boolean seeThrough = false;
 	double[] calcPos, newX, newY;
 	double averageDistance; // average distance to the camera
 	java.awt.Polygon polygon; // the polygon we use to draw it on screen
@@ -27,8 +27,10 @@ public class Polygon {
 	 */
 	void createPolygon() {
 		polygon = new java.awt.Polygon();
-		for (int i = 0; i < x.length; i++)
+		for (int i = 0; i < x.length; i++) {
 			polygon.addPoint((int) x[i], (int) y[i]);
+		}
+
 	}
 
 	/**
@@ -128,10 +130,12 @@ public class Polygon {
 	 * Draw the polygon onto the canvas
 	 *
 	 * @param g
+	 *
 	 * @param guard
 	 * @param timer
 	 * @param Y
 	 * @param X
+	 *
 	 */
 	void drawPolygon(Graphics g) {
 		if (draw && visible) {
@@ -153,6 +157,25 @@ public class Polygon {
 		}
 
 	}
+	/*
+	 * public static void wrapTextToPolygon(Graphics g, String text, Font font,
+	 * Color color, java.awt.Polygon shape, int x, int y, int border) {
+	 * FontMetrics m = g.getFontMetrics(font); java.awt.Shape poly = shape; int
+	 * num = 0; String[] words = new String[1]; if(text.contains(" ")) { words =
+	 * text.split(" "); } else words[0] = text; int yi = m.getHeight() + border;
+	 * num = 0; while(num != words.length) { String word = words[num]; Rectangle
+	 * rect = new Rectangle((poly.getBounds().width / 2) - (m.stringWidth(word)
+	 * / 2) + x - border - 1, y + yi, m.stringWidth(word) + (border * 2) + 2,
+	 * m.getHeight()); while(!poly.contains(rect)) { yi += m.getHeight(); rect.y
+	 * = y + yi; if(yi >= poly.getBounds().height) break; } int i = 1;
+	 * while(true) { if(words.length < num + i + 1) { num += i - 1; break; }
+	 * rect.width += m.stringWidth(words[num + i]) + (border * 2); rect.x -=
+	 * m.stringWidth(words[num + i]) / 2 - border; if(poly.contains(rect)) {
+	 * word += " " + words[num + i]; } else { num += i - 1; break; } i = i + 1;
+	 * } if(yi < poly.getBounds().height) { g.drawString(word,
+	 * (poly.getBounds().width / 2) - (m.stringWidth(word) / 2) + x, y + yi); }
+	 * else { break; } yi += m.getHeight(); num += 1; } }
+	 */
 
 	/**
 	 * Is the mouse over the currently selected polygon?
@@ -162,38 +185,54 @@ public class Polygon {
 	public boolean mouseOver() {
 		return polygon.contains(Main.ScreenSize.getWidth() / 2, Main.ScreenSize.getHeight() / 2);
 	}
-/**
- *  creates a map on the screen for the guard only. it only appears when the player is detected by a guard
- *  and is only shown for a certain amount of time.
- * @param g
- * @param guard : a boolean value to specify whether the player is guardd or not
- * @param timer : timer to determine the period the map will appear for
- * @param X : x coordinate of other player, this is needed to determine where to draw the red circle
- * @param Y : y coordinate of other player, this is needed to determine where to draw the red circle
- */
-	public void drawMap(Graphics g, boolean guard, int timer, double X, double Y) {
 
+	/**
+	 * creates a map on the screen for the guard only. it only appears when the
+	 * player is detected by a guard and is only shown for a certain amount of
+	 * time.
+	 *
+	 * @param g
+	 * @param guard
+	 *            : a boolean value to specify whether the player is guardd or
+	 *            not
+	 * @param timer
+	 *            : timer to determine the period the map will appear for
+	 * @param X
+	 *            : x coordinate of other player, this is needed to determine
+	 *            where to draw the red circle
+	 * @param Y
+	 *            : y coordinate of other player, this is needed to determine
+	 *            where to draw the red circle
+	 */
+	public void drawMap(Graphics g, boolean guard, int timer, double X, double Y, double X1, double Y1) {
 
-		if (timer > 0) {
+		// if (timer > 0) {
 
-			if (guard) {
-				for (int i = 0; i < x.length; i++) {
-					String s = "*";
+		// if (guard) {
+		for (int i = 0; i < x.length; i++) {
+			String s = "*";
+			double xoffset = x[i] -  X1;
+			double yoffset = y[i] -  Y1;
+			if ((int) x[i] - (int) X == 0 && (int) y[i] - (int) Y == 0) {
+				g.setColor(Color.red);
+				s = "\u25CF";
+				g.drawString(s, (int) x[i] / 2, (int) y[i] / 2);
 
-					if ((int) x[i] - (int) X == 0 && (int) y[i] - (int) Y == 0) {
-						System.out.println("I AM HERE");
-						g.setColor(Color.red);
-						s = "\u25CF";
-						g.drawString(s, (int) x[i] / 2, (int) y[i] / 2);
-						break;
-					} else {
-						g.setColor(Color.black);
-						g.drawString(s, (int) x[i] / 2, (int) y[i] / 2);
-					}
-				}
 			}
+			else if (xoffset == 0 && yoffset == 0) {
+				//System.out.println(xoffset + " " + " " + yoffset);
+				g.setColor(Color.yellow);
+				s = "\u25CF";
+				g.drawString(s, (int) x[i] / 2, (int) y[i] / 2);
 
+			} else {
+				g.setColor(Color.black);
+				g.drawString(s, (int) x[i] / 2, (int) y[i] / 2);
+			}
 		}
+		// }
+
+		// }
 
 	}
 }

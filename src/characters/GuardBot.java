@@ -174,6 +174,7 @@ public class GuardBot extends Player implements Drawable {
 			;
 		}
 		else {
+
 			// intruder detected, so we set timer for map to display on guards screen
 			this.screen.timer = 200;
 		}
@@ -271,11 +272,7 @@ public class GuardBot extends Player implements Drawable {
 	 * of view of the bot. the guard bot can only detect a player in front of
 	 * him or in his side views, but he can not detect a player behind him,
 	 * hence a player can sneak through safely if he stays behind the guard.
-<<<<<<< HEAD
-	 *
-=======
-	 *
->>>>>>> 2d70b7b8245372138344437e41ff988dd0455bd9
+
 	 * @return
 	 */
 	public Boolean checkforIntruder() {
@@ -328,8 +325,6 @@ public class GuardBot extends Player implements Drawable {
 				int xOffset = (int) Math.round(this.screen.getPlayerView()[0]) - (int) Math.round(this.x);
 				if ((playerlocation - guardlocation) > 0 && (playerlocation - guardlocation) < 100
 						&& Math.abs(xOffset) < 100) {
-
-
 					return true;
 
 				}

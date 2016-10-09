@@ -45,11 +45,12 @@ public class GameController {
 
 		// guard = createNewGame(!isGuard);
 
-		InputStream is = getClass().getClassLoader().getResourceAsStream("bg-music.wav");
-		MakeSound ms = new MakeSound();
-		if (!isGuard) {
-		ms.playSound("src/bg-music.wav");
-		}
+		/*
+		 * InputStream is =
+		 * getClass().getClassLoader().getResourceAsStream("bg-music.wav");
+		 * MakeSound ms = new MakeSound(); if (!isGuard) {
+		 * ms.playSound("src/bg-music.wav");
+		 */
 	}
 
 	public GuardBot getGuardBot(String guardName) {

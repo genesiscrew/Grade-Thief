@@ -1,3 +1,4 @@
+
 package gui;
 
 import java.awt.AWTException;
@@ -95,112 +96,125 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 	private String messageToDisplay = "";
 	private String messageToDisplay2;
 
-	/**
-	 * Create a new screen
-	 */
-	public Screen(GameController controller, boolean guard, String roomName) {
-		this.controller = controller;
-		this.guard = guard;
-		this.currentPlayer = new Player(0, 0, 0, 0, 0, 0, null);
-		this.currentPlayer.setRoom(roomName);
-		if (guard)
-			otherPlayer = new items.Player(20, 20, 0, 5, 3, 12, Color.green);
-		else
-			otherPlayer = new items.Player(20, 20, 0, 5, 3, 12, Color.blue);
 
-		otherPlayer.setRoom(roomName);
 
-		this.addKeyListener(this);
-		setFocusable(true);
-		this.addMouseListener(this);
-		this.addMouseMotionListener(this);
-		this.addMouseWheelListener(this);
-		Cursor cursor = screenUtil.invisibleMouse();
-		setCursor(cursor);
 
-		// Load the section of the map
-		room = new Room(roomName, startX, startY);
-		this.polyDrawer = new PolygonDrawer(room, lightDir, viewFrom, controller);
 
-		if (guard) {
-			viewFrom[0] = 100;
-			viewFrom[1] = 100;
-			viewFrom[2] = 10;
-		} else {
-			viewFrom[0] = startX;
-			viewFrom[1] = startY;
-			viewFrom[2] = startZ;
-		}
-	}
 
-	public Location getPlayerLocation() {
-		return new Location((int) (viewFrom[0] / 10), (int) (viewFrom[1] / 10));
 
-	}
+    /**
+     * Create a new screen
+     */
+    public Screen(GameController controller, boolean guard, String roomName) {
+        this.controller = controller;
+        this.guard = guard;
+        this.currentPlayer = new Player(0, 0, 0, 0, 0, 0, null);
+        this.currentPlayer.setRoom(roomName);
+        if (guard)
+            otherPlayer = new items.Player(20, 20, 0, 5, 3, 12, Color.green);
+        else
+            otherPlayer = new items.Player(20, 20, 0, 5, 3, 12, Color.blue);
 
-	@Override
-	public void paintComponent(Graphics g) {
-		// Clear screen and draw background color
-		g.setColor(new Color(140, 180, 180));
-		g.fillRect(0, 0, (int) GameController.ScreenSize.getWidth(), (int) GameController.ScreenSize.getHeight());
-		// resets tile the user is currently located at
-		try {
-			((EmptyTile) this.room.getTileMap().getTileMap()[(int) (viewFrom[0] / 10)][(int) (viewFrom[1] / 10)])
-					.resetEmptyTile();
-		} catch (Exception e) {
+        otherPlayer.setRoom(roomName);
 
-		}
-		PlayerMovement.cameraMovement(viewTo, viewFrom, keys, room);
-		controller.updatePosition(guard, viewFrom);
-		updateView();
-		// adds the player to his new coordinate on tilemap
-		try {
-			((EmptyTile) this.room.getTileMap().getTileMap()[(int) (viewFrom[0] / 10)][(int) (viewFrom[1] / 10)])
-					.addObjectToTile(this.currentPlayer);
-		} catch (Exception e) {
+        this.addKeyListener(this);
+        setFocusable(true);
+        this.addMouseListener(this);
+        this.addMouseMotionListener(this);
+        this.addMouseWheelListener(this);
+        Cursor cursor = screenUtil.invisibleMouse();
+        setCursor(cursor);
 
-		}
+        // Load the section of the map
+        room = new Room(roomName, startX, startY);
+        this.polyDrawer = new PolygonDrawer(room, lightDir, viewFrom, controller);
 
-		// Calculated all that is general for this camera position
-		Calculator.setPredeterminedInfo(this);
-		Calculator.controlSunAndLight(lightDir, room.getWidth(), sunPos);
-		if (timer > 0) {
-			timer--;
-		}
-		// System.out.println(timer);
-		polyDrawer.drawPolygons(g, guard, otherPlayer, timer, currentPlayer.getRoomName());
+        if (guard) {
+            viewFrom[0] = 100;
+            viewFrom[1] = 100;
+            viewFrom[2] = 10;
+        } else {
+            viewFrom[0] = startX;
+            viewFrom[1] = startY;
+            viewFrom[2] = startZ;
+        }
+    }
 
-		// Draw the cross in the center of the screen
-		screenUtil.drawMouseAim(g);
+    public Location getPlayerLocation() {
+        return new Location((int) (viewFrom[0]/10), (int) (viewFrom[1]/10));
 
-		// FPS display
-		g.setColor(Color.WHITE);
-		g.drawString("FPS: " + (int) drawFPS + "(Benchmark)", 40, 40);
+    }
 
-		Location l = getPlayerLocation();
-		if (l != null)
-			g.drawString("Loc" + l.row() + " , " + l.column(), 40, 60);
+    @Override
+    public void paintComponent(Graphics g) {
+        // Clear screen and draw background color
+        g.setColor(new Color(140, 180, 180));
+        g.fillRect(0, 0, (int) GameController.ScreenSize.getWidth(), (int) GameController.ScreenSize.getHeight());
+        // resets tile the user is currently located at
+        try {
+        ((EmptyTile) this.room.getTileMap().getTileMap()[(int) (viewFrom[0]/10)][(int) (viewFrom[1]/10)])
+        .resetEmptyTile();
+        }
+        catch (Exception e) {
 
-		// Message display
-		g.setFont(new Font("Arial", Font.BOLD, 20));
-		messageToDisplay = "";
-		isPlayerNearObject();
-		if (!messageToDisplay.equals("")) {
-			g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120,
-					(int) screenSize.getHeight() / 2 - 50);
-		}
-		messageToDisplay2 = "";
-		isPlayerDetected();
-		if (!messageToDisplay2.equals("")) {
-			g.drawString(messageToDisplay2, (int) screenSize.getWidth() / 2 - 120,
-					(int) screenSize.getHeight() / 2 - 50);
-		}
 
-		// Redraw
-		sleepAndRefresh();
-	}
+        }
+        PlayerMovement.cameraMovement(viewTo, viewFrom, keys, room);
+        controller.updatePosition(guard, viewFrom);
+        updateView();
+        // adds the player to his new coordinate on tilemap
+        try {
+        ((EmptyTile) this.room.getTileMap().getTileMap()[(int) (viewFrom[0]/10)][(int) (viewFrom[1]/10)])
+        .addObjectToTile(this.currentPlayer);
+        }
+        catch (Exception e) {
 
-	private void isPlayerDetected() {
+        }
+
+        // Calculated all that is general for this camera position
+        Calculator.setPredeterminedInfo(this);
+        Calculator.controlSunAndLight(lightDir, room.getWidth(), sunPos);
+        if (timer > 0) {
+        	timer--;
+        }
+        //System.out.println(timer);
+
+        polyDrawer.drawPolygons(g, guard, otherPlayer, timer, currentPlayer.getRoomName(), viewFrom[0], viewFrom[1]);
+
+
+
+        // Draw the cross in the center of the screen
+        screenUtil.drawMouseAim(g);
+
+        // FPS display
+        g.setColor(Color.WHITE);
+        g.drawString("FPS: " + (int) drawFPS + "(Benchmark)", 40, 40);
+
+        Location l = getPlayerLocation();
+        if (l != null)
+            g.drawString("Loc" + l.row() + " , " + l.column(), 40, 60);
+
+        // Message display
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        messageToDisplay = "";
+        isPlayerNearObject();
+        if (!messageToDisplay.equals("")) {
+            g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120,
+                    (int) screenSize.getHeight() / 2 - 50);
+        }
+        messageToDisplay2 = "";
+        isPlayerDetected();
+        if (!messageToDisplay2.equals("")) {
+            g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120,
+                    (int) screenSize.getHeight() / 2 - 50);
+        }
+
+        // Redraw
+        sleepAndRefresh();
+    }
+
+    private void isPlayerDetected() {
+
 		if (timer == 199) {
 			// player has been detected
 			if (guard) {
@@ -255,6 +269,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		viewTo[0] = viewFrom[0] + r * Math.cos(horizontalLook);
 		viewTo[1] = viewFrom[1] + r * Math.sin(horizontalLook);
 		viewTo[2] = viewFrom[2] + verticalLook;
+	
 
 	}
 
@@ -479,6 +494,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 			e.printStackTrace();
 		}
 
+
 	}
 
 	private String SelecFile() {
@@ -613,6 +629,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 	public static void setStartX(int startX) {
 		Screen.startX = startX;
 	}
+
+
 
 	public static int getStartY() {
 		return startY;

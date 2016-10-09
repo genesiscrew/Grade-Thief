@@ -30,8 +30,8 @@ public class PolygonDrawer {
         this.controller = controller;
     }
 
-    public void drawPolygons(Graphics g, boolean guard, Player otherPlayer, int timer, String RoomName){
-        java.util.List<Polygon> allPolygons = getAllPolygonsThatNeedToBeDrawn(guard, otherPlayer, RoomName);
+    public void drawPolygons(Graphics g, boolean guard, Player otherPlayer, int timer, String RoomName, double X, double Y){
+        java.util.List<Polygon> allPolygons = getAllPolygonsThatNeedToBeDrawn(guard, otherPlayer, RoomName, X, Y);
 
         // Updates each polygon for this camera position
         for (int i = 0; i < allPolygons.size(); i++)
@@ -53,12 +53,12 @@ public class PolygonDrawer {
             allPolygons.get(polygonDrawOrder[i]).drawPolygon(g);
         // draws a 2D map of game based on polygons drawn
         for (int i = 0; i < polygonDrawOrder.length; i++)
-            allPolygons.get(polygonDrawOrder[i]).drawMap(g, guard, timer, otherPlayer.getX(), otherPlayer.getY());
+            allPolygons.get(polygonDrawOrder[i]).drawMap(g, guard, timer, otherPlayer.getX(), otherPlayer.getY(), X, Y);
 
     }
 
 
-    private java.util.List<Polygon> getAllPolygonsThatNeedToBeDrawn(boolean guard, Player otherPlayer, String RoomName){
+    private java.util.List<Polygon> getAllPolygonsThatNeedToBeDrawn(boolean guard, Player otherPlayer, String RoomName, double X, double Y){
         // All polygons that need to be drawn
         java.util.List<Polygon> allPolygons = new ArrayList<>();
 
@@ -84,7 +84,7 @@ public class PolygonDrawer {
         if (otherPlayer.getRoomName().equals(RoomName)) {
         allPolygons.addAll(PlayerMovement.updateOtherPlayersPosition(otherPos, otherPlayer)); // other player
         }
-        // Adds polygons from all guard bots
+      
         for (GuardBot r : this.controller.getGuardList()) {
             allPolygons.addAll(PlayerMovement.updateGuardBotPosition(r.getName(), controller) );
         }
