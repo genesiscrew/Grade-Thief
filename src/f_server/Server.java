@@ -75,10 +75,14 @@ public class Server{
 			double playerPosX = (double) input.readDouble();
 			double playerPosY = (double) input.readDouble();
 			double playerPosZ = (double) input.readDouble();
-
-			double[] newPos = new double[]{playerPosX,playerPosY,playerPosZ};
+			double[] newPos = new double[]{playerPosX,playerPosY,0};
+			/*int timer = (int) input.readInt();
+			guard.getPlayer().timer = timer;*/
 			guard.setPlayerPosition(newPos);
-
+			/*String room = (String) input.readObject();
+			System.out.println(room);
+			guard.getPlayer().getOtherPlayer().setRoom(room);*/
+			//System.err.println(timer);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
