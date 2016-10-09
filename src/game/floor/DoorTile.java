@@ -1,72 +1,86 @@
 package game.floor;
 
 import items.Door;
+
 /**
- *
  * @author Stefan Vrecic
- * DoorTile.java instance of Tile which represents a space occupied by a door. Useful for the floor map.
- *
+ *         DoorTile.java instance of Tile which represents a space occupied by a door. Useful for the floor map.
  */
 
-public class DoorTile implements Tile  {
+public class DoorTile extends EmptyTile {
 
-	Door door;
-	Location location;
-	private boolean isOccupied = false;
-
-
-	public void setDoor(Door door) {
-		this.door = door;
-	}
-
-	@Override
-	public Location tileLocation() {
-
-		return location;
-	}
-	public Object getObjectonTile(){
-		return null;
-	}
-	@Override
-	public boolean occupied() {
-		return isOccupied;
-	}
-
-	@Override
-	public void setLocation(Location l) {
-		this.location = l;
-
-	}
-
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return "D";
-	}
+    private Door door;
+    private int doorCode = 0;
+    Location location;
+    private boolean isOccupied = false;
 
 
-	public String toString() {
-		return this.getClass().getSimpleName() + " " + location.toString();
-	}
+    public int doorCode() {
+    	return this.doorCode;
+    }
+
+    public void setDoorCode(int doorCode) {
+    	this.doorCode = doorCode;
+    }
 
 
-	@Override
-	public String name() {
-		if (occupied())
-			return "P";
-		return "D";
-	}
+    public Door getDoor() {
+        return this.door;
+    }
 
-	@Override
-	public void setOccupied() {
-		isOccupied = true;
+    public void setDoor(Door door) {
+        this.door = door;
+    }
 
-	}
+    @Override
+    public Location tileLocation() {
 
-	@Override
-	public void setUnoccupied() {
-		isOccupied = false;
+        return location;
+    }
 
-	}
+    public Object getObjectonTile() {
+        return null;
+    }
 
+    @Override
+    public boolean occupied() {
+        return isOccupied;
+    }
+
+    @Override
+    public void setLocation(Location l) {
+        this.location = l;
+
+    }
+
+    @Override
+    public String getName() {
+        // TODO Auto-generated method stub
+        return "D";
+    }
+
+
+    public String toString() {
+        return this.getClass().getSimpleName() + " " + location.toString();
+    }
+
+
+    @Override
+    public String name() {
+        if (occupied())
+            return "viewTo";
+        return "D";
+    }
+
+    @Override
+    public void setOccupied() {
+        isOccupied = true;
+
+    }
+
+    @Override
+    public void setUnoccupied() {
+        isOccupied = false;
+    }
 }
+

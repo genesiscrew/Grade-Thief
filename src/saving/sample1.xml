@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Players>
+   <Player CharachterID="100" CharachterName="Mansour" Floor="1">
+      <items>
+         <item itemColor="NULL" itemHeight="NULL" itemID="NULL" itemLength="NULL" itemType="NULL" itemWidth="NULL" itemX="NULL" itemY="NULL" itemZ="NULL" />
+      </items>
+      <Location X="50" Y="0">Message</Location>
+   </Player>
+</Players>

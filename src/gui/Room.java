@@ -1,106 +1,169 @@
 package gui;
 
-import items.Chair;
-import items.Laptop;
-import items.Table;
+import game.floor.Location;
+import game.floor.TileMap;
+import items.Door;
+import items.Item;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import characters.GuardBot;
+
 /**
- * Created by wareinadam on 24/09/16.
+ * @Author Adam Wareing
  */
 public class Room {
+    private Door door;
+    private int sx = -1;
+    private int sy = -1;
+    private int width = -1;
+    private int h = -1;
+    List<GuardBot> guardList;
+    Location playerStart;
+
+    private List<Door> doors = new ArrayList<>();
 
     /**
      * This is all the individual polygons that will be drawn
      */
-    List<ThreeDPolygon> polygons = new ArrayList<>();
+    private List<Polygon> polygons = new ArrayList<>();
 
     /**
      * The polygons floorPolygons
      */
-    List<ThreeDPolygon> floorPolygons;
+    private List<Polygon> floorPolygons;
 
     /**
      * The roomObjects in the room
      */
-    ArrayList<Drawable> roomObjects = new ArrayList<Drawable>();
+    private ArrayList<Item> roomObjects = new ArrayList<>();
 
-    Floor floor;
+    /**
+     * The Walls in the room
+     */
+    private List<Item> walls = new ArrayList<>();
+
+    Floor floor = new Floor(0, 0, 10, 10);
+
+    Color floorColor = new Color(0,0,0);
+    TileMap tileMap;
+
+
+    /**
+     * The padding on the inside of the wall. It stops the player from getting too close and preventing
+     * the graphics to not draw
+     */
+
+    private final double ROOM_PADDING = 10;
 
     /**
      *
      */
-    public Room(int type){
-        floor = new Floor();
+    public Room(String roomName, int xOffset, int yOffset) {
+        floor = new Floor(xOffset, yOffset, 20, 20);
         this.floorPolygons = floor.generateMap();
         this.polygons = new ArrayList<>();
+        this.guardList = new ArrayList<GuardBot>();
 
-        if(type == 1)
-            addObjectsToMap();
-        else
-            addObjectsToMap2();
+        this.setTileMap(System.getProperty("user.dir") + "/src/game/floor/" + roomName);
 
+      //  System.out.println("" + tileMap.getItems());
+
+
+
+
+        tileMap.populateRoom(this, tileMap.getItems(), null);
+
+
+
+
+
+
+        floor = new Floor(0, 0, tileMap.getMapWidth(), tileMap.getMapHeight());
+        this.floorPolygons = floor.generateMap();
+        this.walls = floor.parseWalls(this.tileMap.getTileMap());
+        this.doors = floor.parseDoors(this.tileMap.getTileMap());
     }
 
-    private void addObjectsToMap() {
-        int wallLength = (int) (floor.getMapHeight() * floor.getTileSize()) - 5;
-        int wallHeight = 50;
+    /**
+     * Is position x, y, z outside of the floorPolygons.
+     * Currently it doesn't take the z value into account, as its not required.
+     *
+     * @param x
+     * @param y
+     * @param z
+     */
+    public boolean positionOutOfBounds(double x, double y, double z) {
 
-        roomObjects.add(new Cube(0, 0, 0, 5, wallLength, wallHeight, Color.blue));
-        roomObjects.add(new Cube(5, 0, 0, wallLength - 10, 5, wallHeight, Color.blue));
-        roomObjects.add(new Cube(wallLength - 5, 0, 0, 5, wallLength, wallHeight, Color.blue));
-        roomObjects.add(new Cube(0, wallLength, 0, wallLength - 5, 5, wallHeight, Color.blue));
+        double mapWidth = floor.getMapWidth() * floor.getTileSize();
+        double mapHeight = floor.getMapHeight() * floor.getTileSize();
 
-        roomObjects.add(new Table(50, 50, 0, 20, 50, 7, Color.red));
-        roomObjects.add(new Laptop(55, 50, 7, 5, 3, 4, Color.black));
-
-        // Chairs
-        roomObjects.add(new Chair(40, 60, 0, 5, 5, 5, Color.red));
-        roomObjects.add(new Chair(40, 70, 0, 5, 5, 5, Color.red));
-        roomObjects.add(new Chair(40, 80, 0, 5, 5, 5, Color.red));
-
-        roomObjects.add(new Chair(75, 60, 0, 5, 5, 5, Color.red));
-        roomObjects.add(new Chair(75, 70, 0, 5, 5, 5, Color.red));
-        roomObjects.add(new Chair(75, 80, 0, 5, 5, 5, Color.red));
+        if (x < floor.getxOffset() + ROOM_PADDING || y < floor.getyOffset() + ROOM_PADDING)
+            return true;
+        if ((x + ROOM_PADDING) > (Screen.startX + mapWidth - floor.getxOffset()))
+            return true;
+        if ((y + ROOM_PADDING) > (Screen.startY + mapHeight - floor.getyOffset()))
+            return true;
+        return false;
     }
 
-    private void addObjectsToMap2() {
-        int wallLength = (int) (floor.getMapHeight() * floor.getTileSize()) - 5;
-        int wallHeight = 50;
 
-        roomObjects.add(new Cube(0, 0, 0, 5, wallLength, wallHeight, Color.blue));
-        roomObjects.add(new Cube(5, 0, 0, wallLength - 10, 5, wallHeight, Color.blue));
-        roomObjects.add(new Cube(wallLength - 5, 0, 0, 5, wallLength, wallHeight, Color.blue));
-        roomObjects.add(new Cube(0, wallLength, 0, wallLength - 5, 5, wallHeight, Color.blue));
+    /**
+     * Check to see if the player is moving into an object.
+     *
+     * @return True if the player is moving into an object, false otherwise.
+     */
+    public boolean movingIntoAnObject(double x, double y, double z) {
+        if(isPointInAnyObjects(x,y,z, doors))
+            return true;
+        if(isPointInAnyObjects(x,y,z,walls))
+            return true;
+        if(isPointInAnyObjects(x,y,z, roomObjects))
+            return true;
 
-        roomObjects.add(new Table(50, 50, 0, 20, 50, 7, Color.red));
-        roomObjects.add(new Laptop(55, 50, 7, 5, 3, 4, Color.black));
+        return false;
     }
 
-    public ArrayList<Drawable> getRoomObjects() {
+    private boolean isPointInAnyObjects(double x, double y, double z, List<? extends Item> objects){
+        for (Drawable o : objects) {
+            if (o.containsPoint((int) x, (int) y, (int) z))
+                return true;
+        }
+        return false;
+    }
+
+    public void removeRoomObject(Item item) {
+    	roomObjects.remove(item);
+    }
+    public void setTileMap(String f) {
+        System.out.println("generating tileMap for " + f);
+        TileMap t = new TileMap(null, this);
+        this.tileMap = t.createTileMap(f);
+    }
+
+    public ArrayList<Item> getRoomObjects() {
         return roomObjects;
     }
 
-    public void setRoomObjects(ArrayList<Drawable> roomObjects) {
+    public void setRoomObjects(ArrayList<Item> roomObjects) {
         this.roomObjects = roomObjects;
     }
 
-    public List<ThreeDPolygon> getPolygons() {
+    public List<Polygon> getPolygons() {
         return polygons;
     }
 
-    public void setPolygons(List<ThreeDPolygon> polygons) {
+    public void setPolygons(List<Polygon> polygons) {
         this.polygons = polygons;
     }
 
-    public List<ThreeDPolygon> getFloorPolygons() {
+    public List<Polygon> getFloorPolygons() {
         return floorPolygons;
     }
 
-    public void setFloorPolygons(List<ThreeDPolygon> floorPolygons) {
+    public void setFloorPolygons(List<Polygon> floorPolygons) {
         this.floorPolygons = floorPolygons;
     }
 
@@ -111,4 +174,82 @@ public class Room {
     public void setFloor(Floor floor) {
         this.floor = floor;
     }
+
+    public void addItemToRoom(Item drawableItems) {
+        this.roomObjects.add(drawableItems);
+    }
+
+    public TileMap getTileMap() {
+        return tileMap;
+    }
+
+    public void setTileMap(TileMap tileMap) {
+        this.tileMap = tileMap;
+    }
+
+    /**
+     * @param sx -- start x,y
+     * @param sy
+     * @param w  -- width, height
+     * @param h  this sets the dimensions of the room RELATIVE to the floor
+     *           for malleability; the room will know it's global position on the floor and the floor will also know the bounding
+     *           box of the room.
+     */
+    public void setBoundingBox(int sx, int sy, int w, int h) {
+        this.sx = sx;
+        this.sy = sy;
+        this.width = w;
+        this.h = h;
+    }
+
+    public List<Door> getDoors() {
+        return this.doors;
+    }
+
+    public int[] getBoundingBox() {
+        return new int[]{sx, sy, width, h};
+    }
+
+    public int roomGetCode() {
+        return this.door.code;
+    }
+
+    public Door getDoor() {
+        return door;
+    }
+
+    public int getSx() {
+        return sx;
+    }
+
+    public int getSy() {
+        return sy;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getH() {
+        return h;
+    }
+
+    public List<Item> getWalls() {
+        return walls;
+    }
+
+	public void addGuardtoRoom(GuardBot guard) {
+
+		guardList.add(guard);
+
+	}
+	  public List<Door> getGuards() {
+	        return this.doors;
+	    }
+	  public void setPlayerStart(int x, int y) {
+		  playerStart = new Location(x,y);
+	  }
+	  public Location getPlayerStart() {
+		  return playerStart;
+	  }
 }

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import items.Item;
 
 /**
- * This represents a character in the Game
+ * This represents a character in the GameController
  */
 public class Character {
 	// player name
@@ -24,6 +24,10 @@ public class Character {
 	public String getName() {
 
 		return this.name;
+	}
+	public int getCharacterID() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 

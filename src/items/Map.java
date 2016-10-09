@@ -1,6 +1,12 @@
 package items;
 
-import java.awt.Image;
+import gui.*;
+import gui.Polygon;
+
+import java.awt.*;
+import java.util.*;
+import java.util.List;
+
 /**
  * this class represents a map item,
  * @author abubakhami
@@ -9,8 +15,8 @@ import java.awt.Image;
 public class Map extends Item implements Interactable, Movable {
 	Image mapIMG;
 
-	public Map(int itemID, Image mapIMG, String itemType) {
-		super(itemID, itemType);
+	public Map(int itemID, Image mapIMG, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
+		super(itemID, itemType, x, y, z, width, length, height, c);
 		this.mapIMG = mapIMG;
 	}
 
@@ -37,4 +43,35 @@ public class Map extends Item implements Interactable, Movable {
 
 	}
 
+	@Override
+	public void updateDirection(double toX, double toY) {
+
+	}
+
+	@Override
+	public void updatePoly() {
+
+	}
+
+	@Override
+	public void setRotAdd() {
+
+	}
+
+	@Override
+	public void removeCube() {
+
+	}
+
+	@Override
+	public boolean containsPoint(int x, int y, int z) {
+		return false;
+	}
+
+	@Override
+	public List<Polygon> getPolygons() {
+		return null;
+	}
+
+	
 }

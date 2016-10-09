@@ -1,27 +1,70 @@
 package items;
 
-public class Door extends GameObject {
-	public int code;
-	public int keyID;
-	public String itemType = "Door";
-	public int itemID = 1111;
+import gui.Cube;
+import gui.Polygon;
 
-	public Door(int itemID, String itemType, int keyID) { //, int code, int keyID) {
-		super(itemID, itemType);
-		this.itemType = itemType;
-		this.itemID = itemID;
-		this.code = code;
-		this.keyID = keyID;
-	}
+import java.awt.*;
+import java.util.List;
 
-	public String itemType() {
-		return itemType;
-	}
+public class Door extends Item {
+    public int code;
+    private String itemType = "Door";
 
-	public static Door getDoor(int doorCode) {
-		// read map for door Code
-		// return door
-		return null;
-	}
+    public Door(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
+        super(itemID, itemType, x, y, z, width, length, height, c);
+        cubes.add(new Cube(x, y, z, width, length, height, c));
+        this.draw = true;
+    }
 
+    public String itemType() {
+        return itemType;
+    }
+
+    public static Door getDoor(int doorCode) {
+        // read map for door Code
+        // return door
+        return null;
+    }
+
+    @Override
+    public void updateDirection(double toX, double toY) {
+
+    }
+
+    @Override
+    public void updatePoly() {
+
+    }
+
+    @Override
+    public void setRotAdd() {
+
+    }
+
+    @Override
+    public void removeCube() {
+
+    }
+
+    @Override
+    public boolean containsPoint(int x, int y, int z) {
+        if(!draw)
+            return false;
+        return (this.x + this.width) > x && (this.y + this.length) > y && this.x < x && this.y < y;
+    }
+
+    @Override
+    public List<Polygon> getPolygons() {
+        return cubes.get(0).getPolygons();
+    }
+
+    public void changeState(){
+        draw = !draw;
+    }
+
+    public boolean isDraw() {
+        return draw;
+    }
+
+	
 }

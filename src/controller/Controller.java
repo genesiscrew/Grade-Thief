@@ -1,5 +1,8 @@
 package controller;
 
+import java.io.File;
+import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -7,21 +10,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import model.Character;
 import model.Game;
 import model.GameLoader;
-
-import java.io.File;
-import java.io.IOException;
-
-import characters.Guard;
-import characters.Player;
-import game.floor.EmptyTile;
-import items.Direction;
-import items.Direction.Dir;
-import items.Distance;
-import items.GameObject;
-import items.Keys;
 
 /**
  * @Author Adam Wareing This is the controller that handles logic from when
@@ -39,7 +29,7 @@ public class Controller  {
 		Stage stage = (Stage) node.getScene().getWindow();
 		Parent root = null;
 		try {
-			root = new FXMLLoader().load(getClass().getResource("/scenes/new_game.fxml"));
+			root = new FXMLLoader().load(getClass().getResource("/unused/scenes/new_game.fxml"));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -77,7 +67,7 @@ public class Controller  {
 		Stage stage = (Stage) node.getScene().getWindow();
 		Parent root = null;
 		try {
-			root = new FXMLLoader().load(getClass().getResource("/scenes/settings.fxml"));
+			root = new FXMLLoader().load(getClass().getResource("/unused/scenes/settings.fxml"));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -96,7 +86,7 @@ public class Controller  {
 		Stage stage = (Stage) node.getScene().getWindow();
 		Parent root = null;
 		try {
-			root = new FXMLLoader().load(getClass().getResource("/scenes/home_screen.fxml"));
+			root = new FXMLLoader().load(getClass().getResource("/unused/scenes/home_screen.fxml"));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -110,7 +100,7 @@ public class Controller  {
 		Stage stage = (Stage) node.getScene().getWindow();
 		Parent root = null;
 		try {
-			root = new FXMLLoader().load(getClass().getResource("/scenes/game.fxml"));
+			root = new FXMLLoader().load(getClass().getResource("/unused/scenes/game.fxml"));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -140,12 +130,12 @@ public class Controller  {
 		// create new gaurd object
 
 		// setup guard for floor 1
-		game.setupGuards(1);
+		//game.setupGuards(1);
 		//set up player on map
 		//game.setupPlayers();
-	
 
 
+return null;
 
 	}
 }

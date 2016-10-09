@@ -1,13 +1,15 @@
-package gui;
 
+package gui;
 
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.Robot;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -15,465 +17,701 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
+import game.floor.EmptyTile;
+import game.floor.Location;
+import game.floor.Tile;
+import game.floor.TileMap;
+import items.Item;
+import items.Item.Interaction;
+import items.Player;
+import saving.FastLoad;
+import saving.FastSaving;
+
+/**
+ * The screen itself is a JPanel which runs the game. It has all the input
+ * listeners for mouse, wheel and keys.
+ */
 public class Screen extends JPanel implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 
-    private Room room;
+	private Room room;
+	private Room room1 = new Room("level", 0, 0);
+	private Room room2 = new Room("co238", 0, 0);
+	public int timer;
 
-    private Room room1 = new Room(1);
-    private Room room2 = new Room(2);
+	// The polygon that the mouse is currently over
+	static Polygon polygonOver = null;
+
+	public static int startX = 120;
+	public static int startY = 150;
+	public static int startZ = 10;
+
+	Robot r; // Used for keeping mouse in center
+	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+	/**
+	 * This is the co-ordinates of where the player is (x, y, z)
+	 */
+	double[] viewFrom = new double[] { 15, 5, 10 }, viewTo = new double[] { 0, 0, 0 },
+			lightDir = new double[] { 1, 1, 1 };
+
+	// The smaller the zoom the more zoomed out you are and visa versa, although
+	// altering too far from 1000 will make it look pretty weird
+	static double zoom = 1000;
+	static double minZoom = 500;
+	static double maxZoom = 2500;
+	static double mouseX = 0;
+	static double mouseY = 0;
+
+	// FPS
+	double drawFPS = 0;
+	double maxFPS = 30;
+	double lastRefresh = 0;
+	double lastFPSCheck = 0;
+	double fpsCheck = 0;
+
+	private ScreenUtil screenUtil = new ScreenUtil();
+	private PolygonDrawer polyDrawer;
+	double sunPos = 0;
+
+	static boolean drawOutlines = true;
+	boolean[] keys = new boolean[4];
+
+	private GameController controller;
+	private boolean guard;
+	private items.Player currentPlayer;
+	private items.Player otherPlayer;
+	private String messageToDisplay = "";
+	private String messageToDisplay2;
 
 
-    // The polygon that the mouse is currently over
-    static PolygonObject polygonOver = null;
-
-    final int startX = 15;
-    final int startY = 5;
-    final int startZ = 10;
-
-    // Used for keeping mouse in center
-    Robot r;
-
-    /**
-     * This is the co-ordinates of where the player is  (x, y, z)
-     */
-    double[] ViewFrom = new double[]{15, 5, 10},
-            ViewTo = new double[]{0, 0, 0},
-            LightDir = new double[]{1, 1, 1};
 
 
-    // The smaller the zoom the more zoomed out you are and visa versa, although altering too far from 1000 will make it look pretty weird
-    static double zoom = 1000;
-    static double minZoom = 500;
-    static double maxZoom = 2500;
-    static double mouseX = 0;
-    static double mouseY = 0;
-    static double movementSpeed = 0.5;
-
-    //FPS is a bit primitive, you can set the MaxFPS as high as u want
-    double drawFPS = 0, MaxFPS = 1000, SleepTime = 1000.0 / MaxFPS, LastRefresh = 0, StartTime = System.currentTimeMillis(), LastFPSCheck = 0, Checks = 0;
 
 
-    double VertLook = -0.9;  // Goes from 0.999 to -0.999, minus being looking down and + looking up
-    double HorLook = 0;     // takes any number and goes round in radians
-    double aimSight = 4; // Changes the size of the center-cross.
-
-    // The lower HorRotSpeed or VertRotSpeed, the faster the camera will rotate in those directions
-    double HorRotSpeed = 900;
-    double VertRotSpeed = 2200;
-    double SunPos = 0;
-
-    /**
-     * Will hold the order that the polygons in the ArrayList DPolygon should be drawn meaning
-     * DPolygon.get(polygonDrawOrder[0]) gets drawn first
-     */
-    int[] polygonDrawOrder;
-
-    static boolean drawOutlines = true;
-    boolean[] Keys = new boolean[4];
 
     /**
      * Create a new screen
      */
-    public Screen() {
+    public Screen(GameController controller, boolean guard, String roomName) {
+        this.controller = controller;
+        this.guard = guard;
+        this.currentPlayer = new Player(0, 0, 0, 0, 0, 0, null);
+        this.currentPlayer.setRoom(roomName);
+        if (guard)
+            otherPlayer = new items.Player(20, 20, 0, 5, 3, 12, Color.green);
+        else
+            otherPlayer = new items.Player(20, 20, 0, 5, 3, 12, Color.blue);
+
+        otherPlayer.setRoom(roomName);
+
         this.addKeyListener(this);
         setFocusable(true);
-
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
         this.addMouseWheelListener(this);
-        invisibleMouse();
+        Cursor cursor = screenUtil.invisibleMouse();
+        setCursor(cursor);
 
         // Load the section of the map
-        room = new Room(1);
+        room = new Room(roomName, startX, startY);
+        this.polyDrawer = new PolygonDrawer(room, lightDir, viewFrom, controller);
 
-        ViewFrom[0] = startX;
-        ViewFrom[1] = startY;
-        ViewFrom[2] = startZ;
+        if (guard) {
+            viewFrom[0] = 100;
+            viewFrom[1] = 100;
+            viewFrom[2] = 10;
+        } else {
+            viewFrom[0] = startX;
+            viewFrom[1] = startY;
+            viewFrom[2] = startZ;
+        }
     }
 
+    public Location getPlayerLocation() {
+        return new Location((int) (viewFrom[0]/10), (int) (viewFrom[1]/10));
 
+    }
+
+    @Override
     public void paintComponent(Graphics g) {
-        //Clear screen and draw background color
+        // Clear screen and draw background color
         g.setColor(new Color(140, 180, 180));
-        g.fillRect(0, 0, (int) Main.ScreenSize.getWidth(), (int) Main.ScreenSize.getHeight());
+        g.fillRect(0, 0, (int) GameController.ScreenSize.getWidth(), (int) GameController.ScreenSize.getHeight());
+        // resets tile the user is currently located at
+        try {
+        ((EmptyTile) this.room.getTileMap().getTileMap()[(int) (viewFrom[0]/10)][(int) (viewFrom[1]/10)])
+        .resetEmptyTile();
+        }
+        catch (Exception e) {
 
-        cameraMovement();
 
-        //Calculated all that is general for this camera position
+        }
+        PlayerMovement.cameraMovement(viewTo, viewFrom, keys, room);
+        controller.updatePosition(guard, viewFrom);
+        updateView();
+        // adds the player to his new coordinate on tilemap
+        try {
+        ((EmptyTile) this.room.getTileMap().getTileMap()[(int) (viewFrom[0]/10)][(int) (viewFrom[1]/10)])
+        .addObjectToTile(this.currentPlayer);
+        }
+        catch (Exception e) {
+
+        }
+
+        // Calculated all that is general for this camera position
         Calculator.setPredeterminedInfo(this);
-        controlSunAndLight();
+        Calculator.controlSunAndLight(lightDir, room.getWidth(), sunPos);
+        if (timer > 0) {
+        	timer--;
+        }
+        //System.out.println(timer);
 
-        List<ThreeDPolygon> allPolygons = new ArrayList<>();
-        // Add all polygons
-        allPolygons.addAll(room.getFloorPolygons());
-        room.getRoomObjects().forEach(o -> allPolygons.addAll(o.getPolygons()));
+        polyDrawer.drawPolygons(g, guard, otherPlayer, currentPlayer, timer, currentPlayer.getRoomName(), viewFrom[0], viewFrom[1]);
 
-        //Updates each polygon for this camera position
-        for (int i = 0; i < allPolygons.size(); i++)
-            allPolygons.get(i).updatePolygon(this);
 
-        //Set drawing order so closest polygons gets drawn last
-        setOrder(allPolygons);
 
-        //Set the polygon that the mouse is currently over
-        // setPolygonOver();
+        // Draw the cross in the center of the screen
+        screenUtil.drawMouseAim(g);
 
-        //draw polygons in the Order that is set by the 'setOrder' function
-        for (int i = 0; i < polygonDrawOrder.length; i++)
-            allPolygons.get(polygonDrawOrder[i]).drawablePolygon.drawPolygon(g);
+        // FPS display
+        g.setColor(Color.WHITE);
+        g.drawString("FPS: " + (int) drawFPS + "(Benchmark)", 40, 40);
 
-        //draw the cross in the center of the screen
-        drawMouseAim(g);
+        Location l = getPlayerLocation();
+        if (l != null)
+            g.drawString("Loc" + l.row() + " , " + l.column(), 40, 60);
 
-        //FPS display
-        g.drawString("FPS: " + (int) drawFPS + " (Benchmark)", 40, 40);
+        // Message display
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        messageToDisplay = "";
+        isPlayerNearObject();
+        if (!messageToDisplay.equals("")) {
+            g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120,
+                    (int) screenSize.getHeight() / 2 - 50);
+        }
+        messageToDisplay2 = "";
+        isPlayerDetected();
+        if (!messageToDisplay2.equals("")) {
+            g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120,
+                    (int) screenSize.getHeight() / 2 - 50);
+        }
+
+        // Redraw
         sleepAndRefresh();
     }
 
-    /**
-     * This sets the order that the polygons are drawn in
-     */
-    private void setOrder(List<ThreeDPolygon> polys) {
-        double[] k = new double[polys.size()];
-        polygonDrawOrder = new int[polys.size()];
+    private void isPlayerDetected() {
 
-        for (int i = 0; i < polys.size(); i++) {
-            k[i] = polys.get(i).averageDistance;
-            polygonDrawOrder[i] = i;
-        }
+		if (timer == 200) {
+			// player has been detected
+			if (guard) {
+				messageToDisplay2 = "Intruder has been detected at " + otherPlayer.getRoomName();
 
-        double temp;
-        int tempr;
-        for (int a = 0; a < k.length - 1; a++)
-            for (int b = 0; b < k.length - 1; b++)
-                if (k[b] < k[b + 1]) {
-                    temp = k[b];
-                    tempr = polygonDrawOrder[b];
-                    polygonDrawOrder[b] = polygonDrawOrder[b + 1];
-                    k[b] = k[b + 1];
+			}
 
-                    polygonDrawOrder[b + 1] = tempr;
-                    k[b + 1] = temp;
-                }
-    }
+		}
 
-    /**
-     * This hides the mouse cursor so we can use the cross hairs instead
-     */
-    private void invisibleMouse() {
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        BufferedImage cursorImage = new BufferedImage(1, 1, BufferedImage.TRANSLUCENT);
-        Cursor invisibleCursor = toolkit.createCustomCursor(cursorImage, new Point(0, 0), "InvisibleCursor");
-        setCursor(invisibleCursor);
-    }
+	}
 
-    /**
-     * This aims the mouse on the graphics
-     *
-     * @param g
-     */
-    private void drawMouseAim(Graphics g) {
-        g.setColor(Color.black);
-        g.drawLine((int) (Main.ScreenSize.getWidth() / 2 - aimSight), (int) (Main.ScreenSize.getHeight() / 2), (int) (Main.ScreenSize.getWidth() / 2 + aimSight), (int) (Main.ScreenSize.getHeight() / 2));
-        g.drawLine((int) (Main.ScreenSize.getWidth() / 2), (int) (Main.ScreenSize.getHeight() / 2 - aimSight), (int) (Main.ScreenSize.getWidth() / 2), (int) (Main.ScreenSize.getHeight() / 2 + aimSight));
-    }
+	public boolean isGuard() {
+		return this.guard;
 
-    /**
-     * This calculates the frame rate
-     */
-    private void sleepAndRefresh() {
-        long timeSLU = (long) (System.currentTimeMillis() - LastRefresh);
+	}
 
-        Checks++;
-        if (Checks >= 15) {
-            drawFPS = Checks / ((System.currentTimeMillis() - LastFPSCheck) / 1000.0);
-            LastFPSCheck = System.currentTimeMillis();
-            Checks = 0;
-        }
+	/**
+	 * This refreshes the display when required. In the meantime it simply
+	 * sleeps.
+	 */
+	private void sleepAndRefresh() {
+		long timeSLU = (long) (System.currentTimeMillis() - lastRefresh);
 
-        if (timeSLU < 1000.0 / MaxFPS) {
-            try {
-                Thread.sleep((long) (1000.0 / MaxFPS - timeSLU));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+		fpsCheck++;
+		if (fpsCheck >= 15) {
+			drawFPS = fpsCheck / ((System.currentTimeMillis() - lastFPSCheck) / 1000.0);
+			lastFPSCheck = System.currentTimeMillis();
+			fpsCheck = 0;
+		}
 
-        LastRefresh = System.currentTimeMillis();
+		if (timeSLU < 1000.0 / maxFPS) {
+			try {
+				Thread.sleep((long) (1000.0 / maxFPS - timeSLU));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 
-        repaint();
-    }
+		lastRefresh = System.currentTimeMillis();
+		repaint();
+	}
 
-    /**
-     * Sets the the values for the light direction
-     */
-    void controlSunAndLight() {
-        SunPos += 0.005;
-        double mapSize = room.getFloor().getMapWidth() * room.getFloor().getMapWidth();
-        LightDir[0] = mapSize / 2 - (mapSize / 2 + Math.cos(SunPos) * mapSize * 10);
-        LightDir[1] = mapSize / 2 - (mapSize / 2 + Math.sin(SunPos) * mapSize * 10);
-        LightDir[2] = -200;
-    }
+	/**
+	 * Sets the x, y, z that the player is looking at
+	 */
+	void updateView() {
 
-    /**
-     * Called when the camera is moved
-     */
-    void cameraMovement() {
-        Vector ViewVector = new Vector(ViewTo[0] - ViewFrom[0], ViewTo[1] - ViewFrom[1], ViewTo[2] - ViewFrom[2]);
-        double xMove = 0, yMove = 0, zMove = 0;
-        Vector VerticalVector = new Vector(0, 0, 1);
-        Vector SideViewVector = ViewVector.CrossProduct(VerticalVector);
+		double verticalLook = screenUtil.getVerticalLook();
+		double horizontalLook = screenUtil.getHorizontalLook();
+		double r = Math.sqrt(1 - (verticalLook * verticalLook));
 
-        if (Keys[0]) {
-            xMove += ViewVector.x;
-            yMove += ViewVector.y;
-        }
+		viewTo[0] = viewFrom[0] + r * Math.cos(horizontalLook);
+		viewTo[1] = viewFrom[1] + r * Math.sin(horizontalLook);
+		viewTo[2] = viewFrom[2] + verticalLook;
+	
 
-        if (Keys[2]) {
-            xMove -= ViewVector.x;
-            yMove -= ViewVector.y;
-        }
+	}
 
-        if (Keys[1]) {
-            xMove += SideViewVector.x;
-            yMove += SideViewVector.y;
-        }
+	/**
+	 * Centre the mouse in the centre of the screen
+	 */
+	void centerMouse() {
+		try {
+			r = new Robot();
+			r.mouseMove((int) Main.ScreenSize.getWidth() / 2, (int) Main.ScreenSize.getHeight() / 2);
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}
+	}
 
-        if (Keys[3]) {
-            xMove -= SideViewVector.x;
-            yMove -= SideViewVector.y;
-        }
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_W)
+			keys[0] = true;
+		if (e.getKeyCode() == KeyEvent.VK_A)
+			keys[1] = true;
+		if (e.getKeyCode() == KeyEvent.VK_S)
+			keys[2] = true;
+		if (e.getKeyCode() == KeyEvent.VK_D)
+			keys[3] = true;
+		if (e.getKeyCode() == KeyEvent.VK_O)
+			drawOutlines = !drawOutlines;
+		if (e.getKeyCode() == KeyEvent.VK_SPACE)
+			currentPlayer.jump(viewFrom);
+		if (e.getKeyCode() == KeyEvent.VK_R)
+			// loadMap();
+			if (e.getKeyCode() == KeyEvent.VK_U)
+			changeAllDoorState();
+		if (e.getKeyCode() == KeyEvent.VK_E)
+			playerWantingToInteractWithItem();
+		if (e.getKeyCode() == KeyEvent.VK_I)
+			showInventory();
+		if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+			gameOptionPane();
+	}
 
-        Vector MoveVector = new Vector(xMove, yMove, zMove);
-        moveTo(ViewFrom[0] + MoveVector.x * movementSpeed, ViewFrom[1] + MoveVector.y * movementSpeed, ViewFrom[2] + MoveVector.z * movementSpeed);
-    }
+	private void showInventory() {
+		String[] inventoryItems = new String[currentPlayer.getInventory().size()];
+		int c = 0;
+		for (Item i : currentPlayer.getInventory()) {
+			inventoryItems[c] = i.toString();
+			c++;
+		}
 
-    /**
-     * Move the player to x, y, z
-     *
-     * @param x
-     * @param y
-     * @param z
-     */
-    void moveTo(double x, double y, double z) {
-        System.out.println(x + " " + y + " " + z);
+		int n = JOptionPane.showOptionDialog(this, "What would you like to do?", "Select option",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, inventoryItems,
+				inventoryItems[0]);
+		Item selectedItem = currentPlayer.getInventory().get(n);
+		// at this point; shou;d get the position directly infront of player
+		// should make sure that it will not obstruct another item
+		selectedItem.moveItemBy(viewFrom[0] - selectedItem.getX(), viewFrom[1] - selectedItem.getY(), 0);
 
-        // Check that the player isn't out of the maps floorPolygons
-        if (positionOutOfBounds(x, y, z))
-            return;
+		room.addItemToRoom(selectedItem);
+		selectedItem.canDraw();
 
-        // Check that the player isn't moving into any roomObjects
-        if (movingIntoAnObject(x, y, z))
-            return;
+		currentPlayer.removeFromInventory(selectedItem);
+	}
 
-        ViewFrom[0] = x;
-        ViewFrom[1] = y;
-        ViewFrom[2] = z;
-        updateView();
-    }
+	private void playerWantingToInteractWithItem() {
 
-    /**
-     * Is position x, y, z outside of the floorPolygons?
-     *
-     * @param x
-     * @param y
-     * @param z
-     * @return
-     */
-    private boolean positionOutOfBounds(double x, double y, double z) {
-        double mapSize = room.getFloor().getMapWidth() * room.getFloor().getTileSize();
-        if (x < 0 || y < 0 || z < 0)
-            return true;
-        if (x > startX + mapSize || y > startY + mapSize || z > startZ + mapSize)
-            return true;
-        return false;
-    }
+		room.getRoomObjects().stream().filter(i -> i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2]))
+				.forEach(i -> {
 
-    /**
-     * Checks to see if the
-     *
-     * @return
-     */
-    private boolean movingIntoAnObject(double x, double y, double z) {
-        for (Drawable o : room.getRoomObjects()) {
-            if (o.containsPoint((int) x, (int) y, (int) z)) {
-                return true;
-            }
-        }
-        return false;
-    }
+					int n = showOptionPane(i.getInteractionsAvaliable());
+					i.performAction(i.getInteractionsAvaliable().get(n));
+					System.out.println(i.getInteractionsAvaliable().get(n).toString());
+					if (i.getInteractionsAvaliable().get(n).equals(Interaction.TAKE)) {
+						currentPlayer.addToInventory(i);
+						System.out.println("add to inventory here");
+						currentPlayer.getInventory().forEach(System.out::println);
+					}
+				});
 
-    /**
-     * Highlights the polygon that the cursor is on
-     */
-    void setPolygonOver() {
-        polygonOver = null;
-        for (int i = polygonDrawOrder.length - 1; i >= 0; i--)
-            if (room.getPolygons().get(polygonDrawOrder[i]).drawablePolygon.mouseOver() && room.getPolygons().get(polygonDrawOrder[i]).draw
-                    && room.getPolygons().get(polygonDrawOrder[i]).drawablePolygon.visible) {
-                polygonOver = room.getPolygons().get(polygonDrawOrder[i]).drawablePolygon;
-                break;
-            }
-    }
+		room.getDoors().stream().filter(i -> i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])).forEach(i -> {
+			int n = showOptionPane(i.getInteractionsAvaliable());
+			i.performAction(i.getInteractionsAvaliable().get(n));
+            this.currentPlayer.inRoom(true);
+            this.currentPlayer.incrementRoomCounter();
+			if (n == 0) // doorOpened
+			{
+				Location l = getPlayerLocation();
 
-    /**
-     * Called when the mouse is moved, calculates the amount it was moved and sets the vert and horizontal looking angles
-     * It also updates the view
-     *
-     * @param NewMouseX
-     * @param NewMouseY
-     */
-    void mouseMovement(double NewMouseX, double NewMouseY) {
-        double difX = (NewMouseX - Main.ScreenSize.getWidth() / 2);
-        double difY = (NewMouseY - Main.ScreenSize.getHeight() / 2);
-        difY *= 6 - Math.abs(VertLook) * 5;
-        VertLook -= difY / VertRotSpeed;
-        HorLook += difX / HorRotSpeed;
+				if (l.row() == 80 && l.column() == 5) // hard coded to switch
+														// floor
+					loadMap("level2", 1);
+				else if (l.row() == 80 && l.column() == 29)
+					loadMap("level2", 2);
+				else if (l.row() == 1 && l.column() == 5)
+					loadMap("level", 1);
+				else if (l.row() == 1 && l.column() == 21)
+					loadMap("level", 2);
 
-        if (VertLook > 0.999)
-            VertLook = 0.999;
+			}
+		});
+	}
 
-        if (VertLook < -0.999)
-            VertLook = -0.999;
+	public void loadMap(String map, int id) {
 
-        updateView();
-    }
+		maxFPS = drawFPS;
+		room = new Room(map, 20, 20);
 
-    /**
-     * Sets the x, y, z that the player is looking at
-     */
-    void updateView() {
-        double r = Math.sqrt(1 - (VertLook * VertLook));
-        ViewTo[0] = ViewFrom[0] + r * Math.cos(HorLook);
-        ViewTo[1] = ViewFrom[1] + r * Math.sin(HorLook);
-        ViewTo[2] = ViewFrom[2] + VertLook;
-    }
+		if (map.equals("level2") && id == 1) {
+			this.currentPlayer.setRoom("level2");
+			room.setPlayerStart(2 * 10, 6 * 10);
+		} else if (map.equals("level2") && id == 2) {
+			this.currentPlayer.setRoom("level2");
+			room.setPlayerStart(2 * 10, 22 * 10);
+		} else if (map.equals("level") && id == 1) {
+			this.currentPlayer.setRoom("level");
+			room.setPlayerStart(80 * 10, 5 * 10);
+		} else if (map.equals("level") && id == 2) {
+			this.currentPlayer.setRoom("level");
+			room.setPlayerStart(80 * 10, 29 * 10);
+		}
+		viewFrom[0] = room.getPlayerStart().row();
+		viewFrom[1] = room.getPlayerStart().column();
+		this.controller.setupGuardbots(map, this);
+		polyDrawer.updateRoom(room);
+	}
 
-    /**
-     * Centre the mouse in the centre of the screen
-     */
-    void centerMouse() {
-        try {
-            r = new Robot();
-            r.mouseMove((int) Main.ScreenSize.getWidth() / 2, (int) Main.ScreenSize.getHeight() / 2);
-        } catch (AWTException e) {
-            e.printStackTrace();
-        }
-    }
+	private void changeAllDoorState() {
+		room.getDoors().forEach(d -> d.changeState());
+	}
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_W)
-            Keys[0] = true;
-        if (e.getKeyCode() == KeyEvent.VK_A)
-            Keys[1] = true;
-        if (e.getKeyCode() == KeyEvent.VK_S)
-            Keys[2] = true;
-        if (e.getKeyCode() == KeyEvent.VK_D)
-            Keys[3] = true;
-        if (e.getKeyCode() == KeyEvent.VK_O)
-            drawOutlines = !drawOutlines;
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
-            System.exit(0);
-        if (e.getKeyCode() == KeyEvent.VK_SPACE)
-            jump();
-        if (e.getKeyCode() == KeyEvent.VK_R)
-            loadMap();
-    }
+	private void isPlayerNearObject() {
+		List<Item> removeItems = new ArrayList<Item>();
+		for (Item i : room.getRoomObjects()) {
+			if (!i.isDraw()) {// nothing to display if item not rendered
+				removeItems.add(i);
+				continue;
+			}
 
-    public void loadMap(){
-        if(room == room1)
-            room = room2;
-        else
-            room = room1;
-    }
+			if (i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
+				// messageToDisplay = "Press e To Interact With The " +
+				// i.getClass().getSimpleName();
 
-    public void jump() {
-        for (int i = 1; i < 10; i++) {
-            ViewFrom[2] += 1;
-            updateView();
-        }
+				messageToDisplay = "Door" + i.getItemID();
+			}
+		}
 
-//        for (int i = 1; i < 10; i++) {
-//            ViewFrom[2] -= 1;
-//            updateView();
-//        }
-    }
+		for (Item i2 : removeItems) {
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_W)
-            Keys[0] = false;
-        if (e.getKeyCode() == KeyEvent.VK_A)
-            Keys[1] = false;
-        if (e.getKeyCode() == KeyEvent.VK_S)
-            Keys[2] = false;
-        if (e.getKeyCode() == KeyEvent.VK_D)
-            Keys[3] = false;
-    }
+			room.removeRoomObject(i2);
+			((EmptyTile) room.getTileMap().getTileMap()[(int) i2.getX() / 10][(int) i2.getY() / 10]).resetEmptyTile();
 
-    @Override
-    public void keyTyped(KeyEvent e) {
+		}
 
-    }
+		for (Item i : room.getDoors()) {
+			if (i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
+				// messageToDisplay = "Press e To Open The Door";
+				// Location l = getPlayerLocation();
+				// if (this.room.getTileMap().getTileMap()[l.row()][l.column()];
+				messageToDisplay = "Press e " + i.itemID;
+			}
+		}
+	}
 
-    @Override
-    public void mouseDragged(MouseEvent arg0) {
-        mouseMovement(arg0.getX(), arg0.getY());
-        mouseX = arg0.getX();
-        mouseY = arg0.getY();
-        centerMouse();
-    }
+	private int showOptionPane(List<Item.Interaction> optionsList) {
+		String[] options = new String[optionsList.size()];
+		for (int i = 0; i < optionsList.size(); i++) {
+			options[i] = optionsList.get(i).toString();
+		}
 
-    @Override
-    public void mouseMoved(MouseEvent arg0) {
-        mouseMovement(arg0.getX(), arg0.getY());
-        mouseX = arg0.getX();
-        mouseY = arg0.getY();
-        centerMouse();
-    }
+		int n = JOptionPane.showOptionDialog(this, "What would you like to do?", "Select option",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 
-    @Override
-    public void mouseClicked(MouseEvent arg0) {
-    }
+		return n;
+	}
 
-    @Override
-    public void mouseEntered(MouseEvent arg0) {
-    }
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_W)
+			keys[0] = false;
+		if (e.getKeyCode() == KeyEvent.VK_A)
+			keys[1] = false;
+		if (e.getKeyCode() == KeyEvent.VK_S)
+			keys[2] = false;
+		if (e.getKeyCode() == KeyEvent.VK_D)
+			keys[3] = false;
+	}
 
-    @Override
-    public void mouseExited(MouseEvent arg0) {
-    }
+	public void gameOptionPane() {
+		// Custom button text
+		Object[] options = { "Resume", "Chat", "Save", "Load", "Help", "About Us", "Exit" };
+		int n = JOptionPane.showOptionDialog(this, "Please select the prefer optin?", "Grade Thief",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
+		if (n == 0) {
+			// Nothing for skipping the Modal and continue game.
+		} else if (n == 1) {
+			chat();
+		} else if (n == 2) {
+			saveGame();
+		} else if (n == 3) {
+			loadGame();
+		} else if (n == 4) {
+			Help();
+		} else if (n == 5) {
+			AboutUs();
+		} else if (n == 6) {
+			System.exit(0);
+		}
+	}
 
-    @Override
-    public void mousePressed(MouseEvent arg0) {
-        if (arg0.getButton() == MouseEvent.BUTTON1)
-            if (polygonOver != null)
-                polygonOver.seeThrough = false;
+	private void loadGame() {
+		// TODO: Needs To load the Game
+		FastLoad loadGame = new FastLoad(SelecFile(), this);
+		loadGame.load();
+	}
 
-        if (arg0.getButton() == MouseEvent.BUTTON3)
-            if (polygonOver != null)
-                polygonOver.seeThrough = false;
-    }
+	private void saveGame() {
+		// TODO: Needs to Save the game
+		FastSaving saveGame;
+		try {
+			saveGame = new FastSaving(SelecFile());
+			saveGame.save();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-    @Override
-    public void mouseReleased(MouseEvent arg0) {
-    }
 
-    @Override
-    public void mouseWheelMoved(MouseWheelEvent arg0) {
-        if (arg0.getUnitsToScroll() > 0) {
-            if (zoom > minZoom)
-                zoom -= 25 * arg0.getUnitsToScroll();
-        } else {
-            if (zoom < maxZoom)
-                zoom -= 25 * arg0.getUnitsToScroll();
-        }
-    }
+	}
+
+	private String SelecFile() {
+		JFileChooser fileChooser = new JFileChooser(".");
+		int status = fileChooser.showOpenDialog(null);
+		if (status == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = fileChooser.getSelectedFile();
+			// System.out.println(selectedFile);
+			return selectedFile.getParent() + "/" + selectedFile.getName();
+		} else if (status == JFileChooser.CANCEL_OPTION) {
+			System.out.println("canceled");
+		}
+		return "Cancelled";
+	}
+
+	private void Help() {
+		// Help: Instruction for playing game and rules
+		String rules = "Rules for Game is as follow : Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, ";
+		JTextArea textArea = new JTextArea(rules, 6, 20);
+		textArea.setFont(new Font("Serif", Font.ITALIC, 16));
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+		textArea.setOpaque(false);
+		textArea.setEditable(false);
+		textArea.setSize(new Dimension(400, 500));
+		OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
+	}
+
+	private void AboutUs() {
+		// Help: Instruction for playing game and rules
+		String rules = "Grade Thief is a Software Engineering Group Project which leads by Victoria University of Wellington. Team members are: Adam Wareing, Hamid Osman, Stefan Vrecic, Mostafa Shenavaei, Mansour Javaher";
+		JTextArea textArea = new JTextArea(rules, 6, 20);
+		textArea.setFont(new Font("Serif", Font.BOLD, 16));
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+		textArea.setOpaque(false);
+		textArea.setEditable(false);
+		textArea.setSize(new Dimension(400, 500));
+		OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
+	}
+
+	private void chat() {
+		// Help: Instruction for playing game and rules
+		System.err.println("CHAT CODES HERE");
+	}
+
+	public void restart() {
+		StringBuilder cmd = new StringBuilder();
+		cmd.append(System.getProperty("Main.home") + File.separator + "bin" + File.separator + "java ");
+		for (String jvmArg : ManagementFactory.getRuntimeMXBean().getInputArguments()) {
+			cmd.append(jvmArg + " ");
+		}
+		cmd.append("-cp ").append(ManagementFactory.getRuntimeMXBean().getClassPath()).append(" ");
+		cmd.append(Window.class.getName()).append(" ");
+		try {
+			Runtime.getRuntime().exec(cmd.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.exit(0);
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+		screenUtil.mouseMovement(arg0.getX(), arg0.getY());
+		mouseX = arg0.getX();
+		mouseY = arg0.getY();
+		centerMouse();
+		updateView();
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent arg0) {
+		screenUtil.mouseMovement(arg0.getX(), arg0.getY());
+		mouseX = arg0.getX();
+		mouseY = arg0.getY();
+		centerMouse();
+		updateView();
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		if (arg0.getButton() == MouseEvent.BUTTON1)
+			if (polygonOver != null)
+				polygonOver.seeThrough = false;
+
+		if (arg0.getButton() == MouseEvent.BUTTON3)
+			if (polygonOver != null)
+				polygonOver.seeThrough = false;
+	}
+
+	public Tile[][] getRoomMap() {
+		return this.room.getTileMap().getTileMap();
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+	}
+
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent arg0) {
+		if (arg0.getUnitsToScroll() > 0) {
+			if (zoom > minZoom)
+				zoom -= 25 * arg0.getUnitsToScroll();
+		} else {
+			if (zoom < maxZoom)
+				zoom -= 25 * arg0.getUnitsToScroll();
+		}
+	}
+
+	public static int getStartX() {
+		return startX;
+	}
+
+	public static void setStartX(int startX) {
+		Screen.startX = startX;
+	}
+
+
+
+	public static int getStartY() {
+		return startY;
+	}
+
+	public static void setStartY(int startY) {
+		Screen.startY = startY;
+	}
+
+	public static int getStartZ() {
+		return startZ;
+	}
+
+	public static void setStartZ(int startZ) {
+		Screen.startZ = startZ;
+	}
+
+	public void setStartX(double startX) {
+		this.startX = (int) startX;
+	}
+
+	public void setStartY(double startY) {
+		this.startY = (int) startY;
+	}
+
+	public void setViewFrom(double[] viewFrom) {
+		this.viewFrom = viewFrom;
+	}
+
+	public double[] getPlayerView() {
+		return this.viewFrom;
+	}
+
+	public double[] getViewFrom() {
+		return viewFrom;
+	}
+
+	public void setX(double x) {
+		viewFrom[0] = x;
+	}
+
+	public void setY(double x) {
+		viewFrom[1] = x;
+	}
+
+	public items.Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	public void setCurrentPlayer(items.Player currentPlayer) {
+		this.currentPlayer = currentPlayer;
+	}
+
+	public Room getRoom() {
+		return room;
+	}
+
+	public void setRoom(Room room) {
+		this.room = room;
+	}
+
+	public Room getRoom1() {
+		return room1;
+	}
+
+	public void setRoom1(Room room1) {
+		this.room1 = room1;
+	}
+
+	public Room getRoom2() {
+		return room2;
+	}
+
+	public void setRoom2(Room room2) {
+		this.room2 = room2;
+	}
+
+	public items.Player getOtherPlayer() {
+		// TODO Auto-generated method stub
+		return this.otherPlayer;
+	}
+
 }

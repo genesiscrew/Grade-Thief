@@ -10,8 +10,8 @@ public class FloorMap {
 	// final int COTTON_FLOOR_WIDTH = 112; // DO NOT EDIT
 	// final int COTTON_FLOOR_HEIGHT = 67; // DO NOT EDIT
 	// grid size = 67 * 112 = 7504.
-	final int FLOOR_WIDTH = 50;
-	final int FLOOR_HEIGHT = 50;
+	public final int FLOOR_WIDTH = 50;
+	public final int FLOOR_HEIGHT = 50;
 
 	public FloorMap(Tile[][] floorTiles) {
 		this.floorTiles = floorTiles;

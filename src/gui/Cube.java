@@ -13,11 +13,11 @@ public class Cube implements Drawable {
     double[] RotAdd = new double[4];
     Color c;
     double x1, x2, x3, x4, y1, y2, y3, y4;
-    ThreeDPolygon[] polygons = new ThreeDPolygon[6];
+    Polygon[] polygons = new Polygon[6];
     double[] angle;
 
     /**
-     * Create a new cube
+     * Make a new cube at position x, y, z. with the specified width, length, height and colour
      *
      * @param x
      * @param y
@@ -28,12 +28,12 @@ public class Cube implements Drawable {
      * @param c
      */
     public Cube(double x, double y, double z, double width, double length, double height, Color c) {
-        polygons[0] = new ThreeDPolygon(new double[]{x, x + width, x + width, x}, new double[]{y, y, y + length, y + length}, new double[]{z, z, z, z}, c, false);
-        polygons[1] = new ThreeDPolygon(new double[]{x, x + width, x + width, x}, new double[]{y, y, y + length, y + length}, new double[]{z + height, z + height, z + height, z + height}, c, false);
-        polygons[2] = new ThreeDPolygon(new double[]{x, x, x + width, x + width}, new double[]{y, y, y, y}, new double[]{z, z + height, z + height, z}, c, false);
-        polygons[3] = new ThreeDPolygon(new double[]{x + width, x + width, x + width, x + width}, new double[]{y, y, y + length, y + length}, new double[]{z, z + height, z + height, z}, c, false);
-        polygons[4] = new ThreeDPolygon(new double[]{x, x, x + width, x + width}, new double[]{y + length, y + length, y + length, y + length}, new double[]{z, z + height, z + height, z}, c, false);
-        polygons[5] = new ThreeDPolygon(new double[]{x, x, x, x}, new double[]{y, y, y + length, y + length}, new double[]{z, z + height, z + height, z}, c, false);
+        polygons[0] = new Polygon(new double[]{x, x + width, x + width, x}, new double[]{y, y, y + length, y + length}, new double[]{z, z, z, z}, c, false);
+        polygons[1] = new Polygon(new double[]{x, x + width, x + width, x}, new double[]{y, y, y + length, y + length}, new double[]{z + height, z + height, z + height, z + height}, c, false);
+        polygons[2] = new Polygon(new double[]{x, x, x + width, x + width}, new double[]{y, y, y, y}, new double[]{z, z + height, z + height, z}, c, false);
+        polygons[3] = new Polygon(new double[]{x + width, x + width, x + width, x + width}, new double[]{y, y, y + length, y + length}, new double[]{z, z + height, z + height, z}, c, false);
+        polygons[4] = new Polygon(new double[]{x, x, x + width, x + width}, new double[]{y + length, y + length, y + length, y + length}, new double[]{z, z + height, z + height, z}, c, false);
+        polygons[5] = new Polygon(new double[]{x, x, x, x}, new double[]{y, y, y + length, y + length}, new double[]{z, z + height, z + height, z}, c, false);
 
         this.c = c;
         this.x = x;
@@ -89,8 +89,24 @@ public class Cube implements Drawable {
         RotAdd[1] = angle[1] + 0.25 * Math.PI;
         RotAdd[2] = angle[2] + 0.25 * Math.PI;
         RotAdd[3] = angle[3] + 0.25 * Math.PI;
-
     }
+
+    /**
+     * Update the cubes position by the amount specified.
+     * @param dx
+     * @param dy
+     * @param dz
+     */
+    public void updatePosition(double dx, double dy, double dz){
+        this.x += dx;
+        this.y += dy;
+        this.z += dz;
+
+        for(Polygon p : polygons){
+            p.updatePosition(dx, dy, dz);
+        }
+    }
+
 
     /**
      * Update the direction the polygon is facing
@@ -162,7 +178,7 @@ public class Cube implements Drawable {
                 (this.z + this.height) > z && this.z > z;
     }
 
-    public List<ThreeDPolygon> getPolygons(){
+    public List<Polygon> getPolygons() {
         return Arrays.asList(polygons);
 
     }
