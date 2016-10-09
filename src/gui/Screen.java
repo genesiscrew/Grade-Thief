@@ -215,7 +215,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     private void isPlayerDetected() {
 
-		if (timer == 199) {
+		if (timer == 200) {
 			// player has been detected
 			if (guard) {
 				messageToDisplay2 = "Intruder has been detected at " + otherPlayer.getRoomName();
