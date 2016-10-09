@@ -82,7 +82,6 @@ public class Client {
 		output.writeDouble(playerPos[2]);
 		output.flush();
 		int timer = player.getPlayer().timer;
-		//System.err.println(timer);
 		output.writeInt(timer);
 		output.flush();
 	}
@@ -93,7 +92,6 @@ public class Client {
 			double guardPosX = (double) input.readDouble();
 			double guardPosY = (double) input.readDouble();
 			double guardPosZ = (double) input.readDouble();
-			//System.out.println(guardPosZ);
 			double[] newPos = new double[] { guardPosX, guardPosY, 0 };
 			player.setGuardPosition(newPos);
 

@@ -30,8 +30,8 @@ public class PolygonDrawer {
         this.controller = controller;
     }
 
-    public void drawPolygons(Graphics g, boolean guard, Player otherPlayer, int timer){
-        java.util.List<Polygon> allPolygons = getAllPolygonsThatNeedToBeDrawn(guard, otherPlayer);
+    public void drawPolygons(Graphics g, boolean guard, Player otherPlayer, int timer, String RoomName){
+        java.util.List<Polygon> allPolygons = getAllPolygonsThatNeedToBeDrawn(guard, otherPlayer, RoomName);
 
         // Updates each polygon for this camera position
         for (int i = 0; i < allPolygons.size(); i++)
@@ -58,7 +58,7 @@ public class PolygonDrawer {
     }
 
 
-    private java.util.List<Polygon> getAllPolygonsThatNeedToBeDrawn(boolean guard, Player otherPlayer){
+    private java.util.List<Polygon> getAllPolygonsThatNeedToBeDrawn(boolean guard, Player otherPlayer, String RoomName){
         // All polygons that need to be drawn
         java.util.List<Polygon> allPolygons = new ArrayList<>();
 
@@ -80,7 +80,10 @@ public class PolygonDrawer {
         });
 
         double[] otherPos = controller.getOtherPlayersPosition(guard);
+        // gets the other player's polygons only if he is in same room as current player
+        if (otherPlayer.getRoomName().equals(RoomName)) {
         allPolygons.addAll(PlayerMovement.updateOtherPlayersPosition(otherPos, otherPlayer)); // other player
+        }
         // Adds polygons from all guard bots
         for (GuardBot r : this.controller.getGuardList()) {
             allPolygons.addAll(PlayerMovement.updateGuardBotPosition(r.getName(), controller) );

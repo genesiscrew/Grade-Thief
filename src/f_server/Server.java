@@ -68,6 +68,7 @@ public class Server{
 		output.writeDouble(guardPos[2]);
 		output.flush();
 
+
 	}
 
 	private void recieveData() throws IOException {
@@ -78,9 +79,7 @@ public class Server{
 			double[] newPos = new double[]{playerPosX,playerPosY,0};
 			int timer = (int) input.readInt();
 			guard.getPlayer().timer = timer;
-
 			guard.setPlayerPosition(newPos);
-			//System.err.println(timer);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
