@@ -72,9 +72,6 @@ public class Door extends Item {
 	 * @return
 	 */
 	public boolean passedThrough() {
-		System.out.println(locations[0][0] + " " + locations[0][1]);
-		System.out.println(locations[1][0] + " " + locations[1][1]);
-		System.out.println(x + " " + y);
 		double xOffset = Math.abs(locations[0][0] - locations[1][0]);
 		double yOffset = Math.abs(locations[0][1] - locations[1][1]);
 		if (xOffset + x > Math.max(locations[0][0], locations[1][0])
