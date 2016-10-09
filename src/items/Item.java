@@ -74,15 +74,6 @@ public abstract class Item extends GameObject implements Drawable {
 		}
 	}
 	
-	public boolean pointNearObject2(double x, double y, double z) {
-		if ((this.x + DETECT_PLAYER_BOUNDARY2 + this.width) > x && (this.y + DETECT_PLAYER_BOUNDARY2 + this.length) > y
-				&& this.x - DETECT_PLAYER_BOUNDARY2 < x && this.y - DETECT_PLAYER_BOUNDARY2 < y) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public void performAction(Interaction interaction) {
 		switch (interaction) {
 		case PICK_UP:

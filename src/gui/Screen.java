@@ -269,7 +269,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		viewTo[0] = viewFrom[0] + r * Math.cos(horizontalLook);
 		viewTo[1] = viewFrom[1] + r * Math.sin(horizontalLook);
 		viewTo[2] = viewFrom[2] + verticalLook;
-	
+
 
 	}
 
@@ -351,10 +351,14 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		room.getDoors().stream().filter(i -> i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])).forEach(i -> {
 			int n = showOptionPane(i.getInteractionsAvaliable());
 			i.performAction(i.getInteractionsAvaliable().get(n));
-            this.currentPlayer.inRoom(true);
-            this.currentPlayer.incrementRoomCounter();
+
+
 			if (n == 0) // doorOpened
 			{
+				// player has entered a room so we set a boolean value inRoom to true
+
+
+	            i.setLocations(viewFrom[0], viewFrom[1]);
 				Location l = getPlayerLocation();
 
 				if (l.row() == 80 && l.column() == 5) // hard coded to switch

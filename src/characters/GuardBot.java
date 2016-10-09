@@ -129,8 +129,8 @@ public class GuardBot extends Player implements Drawable {
 			if (u == (distance[i] - 1) * guardConst && i < (directionList.size() - 1)) {
 				i++;
 				u = 0;
-				System.out.println("value of i is: " + i);
-				System.out.println("value of u is: " + u);
+			//	System.out.println("value of i is: " + i);
+			//	System.out.println("value of u is: " + u);
 				this.updateDirection(x, y);
 
 
@@ -146,14 +146,14 @@ public class GuardBot extends Player implements Drawable {
 			// move method again
 			else if (u == (distance[i] - 1) * guardConst && i == (directionList.size() - 1)) {
 				this.reverseStrategy();
-				System.out.println(" i should reverse" + this.getName());
+				//System.out.println(" i should reverse" + this.getName());
 				i = 0;
 				u = 0;
 
 			}
 
 			if (this.dir.equals(Dir.EAST)) {
-                 System.out.println(this.getName() + " should head east now");
+                // System.out.println(this.getName() + " should head east now");
 				updatePosition(guardSpeed, 0, 0);
 				this.updateDirection();
 				u++;
@@ -296,7 +296,7 @@ public class GuardBot extends Player implements Drawable {
 	 */
 	public Boolean checkforIntruder() {
 		try {
-		
+		 // intrusion only works if current player is a guard and if the other player is not in room
 			if (!this.screen.isGuard() && !this.screen.getCurrentPlayer().isInRoom()) {
 			if (dir.equals(Dir.EAST)) {
 

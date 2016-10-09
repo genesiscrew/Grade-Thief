@@ -37,7 +37,6 @@ public class Player implements Drawable {
         this.length = length;
         this.height = height;
         this.color = c;
-        this.roomCounter = 1;
 
         // First make the legs
         int legWidth = (int) (width / 2.5);
