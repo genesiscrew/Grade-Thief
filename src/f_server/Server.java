@@ -68,6 +68,9 @@ public class Server{
 		output.writeDouble(guardPos[2]);
 		output.flush();
 
+		String room = guard.getPlayer().getCurrentPlayer().getRoomName();
+		output.writeObject(room);
+		output.flush();
 
 	}
 
@@ -78,8 +81,11 @@ public class Server{
 			double playerPosZ = (double) input.readDouble();
 			double[] newPos = new double[]{playerPosX,playerPosY,0};
 			int timer = (int) input.readInt();
+			String room = (String) input.readObject();
+			guard.getPlayer().getOtherPlayer().setRoom(room);
 			guard.getPlayer().timer = timer;
 			guard.setPlayerPosition(newPos);
+
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
