@@ -16,6 +16,18 @@ import org.w3c.dom.Element;
 import gui.GameController;
 import gui.Screen;
 
+/**
+ * This class is responsible for saving the game and player. It gets the name of
+ * the file that user wants to save the game into it and then, if the file was
+ * there it will re-write the file and if the file is not there it will create
+ * new file with that name. This class had been encapsulated via private fields,
+ * setters and getters. This class has better performance and functionality than
+ * SaveGame which use XML.
+ *
+ * @author Mansour Javaher
+ * @see FastLoad
+ * @see FastSaving
+ */
 public class SaveGame {
 
 	String fileName;
@@ -28,17 +40,14 @@ public class SaveGame {
 	public void save() {
 		try {
 
-
-
-
 			double[] tmp = GameController.getPlayerPosition();
 			double x = tmp[0];
 			double y = tmp[1];
 			double z = tmp[2];
 
-
-
-			System.err.println("===================================" + x + " " + y + " " + z + " " + "==========================");
+			// Printing Player position for debugging purpose.
+			System.err.println(
+					"===================================" + x + " " + y + " " + z + " " + "==========================");
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.newDocument();

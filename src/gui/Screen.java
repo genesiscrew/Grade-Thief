@@ -448,6 +448,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		return n;
 	}
 
+	/**
+	 * Moving Ability for the camera(Player)
+	 * this function will set the keys array which use to
+	 * update the camera and game vision for the player.
+	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_W)
@@ -460,6 +465,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 			keys[3] = false;
 	}
 
+	/**
+	 * Creating an Modal and User Interface buttons for user
+	 * to have options to select when they want to SAVE, LOAD,
+	 * EXIT and READ more about instruction and game,
+	 */
 	public void gameOptionPane() {
 		// Custom button text
 		Object[] options = { "Resume", "Chat", "Save", "Load", "Help", "About Us", "Exit" };
@@ -482,39 +492,78 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		}
 	}
 
+	/**
+	 * Loading game based on the selected file that user select This method use
+	 * SelectFile() method in order to get the name of the selected file in
+	 * order to have low coupled code.
+	 */
 	private void loadGame() {
-		// TODO: Needs To load the Game
-		FastLoad loadGame = new FastLoad(SelecFile(), this);
+		String fileName = SelecFile();
+
+		if (fileName.equals("Cancelled"))
+			return;
+
+		FastLoad loadGame = new FastLoad(fileName, this);
 		loadGame.load();
 	}
 
+	/**
+	 * Saving game based into the selected file that user select This method use
+	 * SelectFile() method in order to get the name of the selected file that
+	 * user wants to save the game in.
+	 */
 	private void saveGame() {
-		// TODO: Needs to Save the game
 		FastSaving saveGame;
 		try {
-			saveGame = new FastSaving(SelecFile());
+			String fileName = SelecFile();
+			if (fileName.equals("Cancelled"))
+				return;
+			saveGame = new FastSaving(fileName);
 			saveGame.save();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+			// custom title, error icon for uncompatable chema of lodaed file.
+			JOptionPane.showMessageDialog(this,
+					"Please select saved version of the Grade Thief Game, This file is not belong to Grade-Thief",
+					"Grade-Thief Loading", JOptionPane.ERROR_MESSAGE);
+		} catch (Exception e) {
+			// custom title, error icon for uncompatable chema of lodaed file.
+			JOptionPane.showMessageDialog(this,
+					"Please select saved version of the Grade Thief Game, This file is not belong to Grade-Thief",
+					"Grade-Thief Loading", JOptionPane.ERROR_MESSAGE);
+
 		}
-
-
 	}
 
+	/**
+	 * This method use JFileChooser for better User Experience and User
+	 * interface in order to select the proper file for loading and saving the
+	 * file
+	 *
+	 * @return String: FileName
+	 */
 	private String SelecFile() {
+		// Creating JFileChooser
 		JFileChooser fileChooser = new JFileChooser(".");
 		int status = fileChooser.showOpenDialog(null);
+
 		if (status == JFileChooser.APPROVE_OPTION) {
+			// getting the name of the file.
 			File selectedFile = fileChooser.getSelectedFile();
 			// System.out.println(selectedFile);
 			return selectedFile.getParent() + "/" + selectedFile.getName();
 		} else if (status == JFileChooser.CANCEL_OPTION) {
-			System.out.println("canceled");
+			// If the didn't select any file
+			// default title and icon
+			JOptionPane.showMessageDialog(this, "Choosing file operation cancelled");
 		}
 		return "Cancelled";
 	}
 
+	/**
+	 * Setting an Help and instruction for the ease of use for users and players
+	 * on ESCAPE button.
+	 */
 	private void Help() {
 		// Help: Instruction for playing game and rules
 		String rules = "Rules for Game is as follow : Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, ";
@@ -525,9 +574,13 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		textArea.setOpaque(false);
 		textArea.setEditable(false);
 		textArea.setSize(new Dimension(400, 500));
-		OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
+		//OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
 	}
 
+	/**
+	 * About Us Button for getting more information about the Creators and the
+	 * students whom created this game
+	 */
 	private void AboutUs() {
 		// Help: Instruction for playing game and rules
 		String rules = "Grade Thief is a Software Engineering Group Project which leads by Victoria University of Wellington. Team members are: Adam Wareing, Hamid Osman, Stefan Vrecic, Mostafa Shenavaei, Mansour Javaher";
@@ -538,13 +591,17 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		textArea.setOpaque(false);
 		textArea.setEditable(false);
 		textArea.setSize(new Dimension(400, 500));
-		OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
+		//OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
 	}
 
+	/**
+	 * For adding chat ability to Game.
+	 */
 	private void chat() {
-		// Help: Instruction for playing game and rules
+		// TODO: Adding chat ability to the game
 		System.err.println("CHAT CODES HERE");
 	}
+
 
 	public void restart() {
 		StringBuilder cmd = new StringBuilder();
