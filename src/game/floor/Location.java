@@ -56,6 +56,21 @@ public class Location {
 			return false;
 		return true;
 	}
+	
+	/**
+	 * returns the X coordinate of the location
+	 * @return
+	 */
+		public int locX() {
+			return x;
+		}
+		/**
+		 * returns the Y coordinate of the location
+		 * @return
+		 */
+		public int locY() {
+			return y;
+		}
 
 
 }

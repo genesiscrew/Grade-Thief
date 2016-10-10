@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import characters.GuardBot;
-import items.CameraDraw;
+//import items.CameraDraw;
 import items.Chair;
 import items.Container;
 import items.Dog;
@@ -293,7 +293,7 @@ public class TileMap {
 					//							new DoorDraw(id, type, 10 * x, 10 * y, z, w, h, l, new Color(red, green, blue), D));
 
 				}
-				if (type.equals("GuardBot")) { // Door
+				/*if (type.equals("GuardBot")) { // Door
 					// System.out.println("===========================
 					// ddddddddddddddddddddddd");
 					int moveStrategy = sc.nextInt();
@@ -316,6 +316,7 @@ public class TileMap {
 					room.addGuardtoRoom(guard);
 
 				}
+				*/
 				// FOUND CONTAINER
 				else if (type.equals("C")) {
 					// container found

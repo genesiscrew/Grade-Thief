@@ -49,7 +49,14 @@ public class Room {
 
     Color floorColor = new Color(0,0,0);
     TileMap tileMap;
-
+   
+    /**
+     * 
+     * @param d
+     */
+    public void addDoor(Door d) {
+    	this.doors.add(d);
+    }
 
     /**
      * The padding on the inside of the wall. It stops the player from getting too close and preventing

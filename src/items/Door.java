@@ -12,6 +12,7 @@ public class Door extends Item {
 	private int pass;
 	int i;
 	private double[][] locations = new double[2][2];
+	private boolean locked;
 
 	public Door(int itemID, String itemType, double x, double y, double z, double width, double length, double height,
 			Color c) {
@@ -29,6 +30,13 @@ public class Door extends Item {
 		// return door
 		return null;
 	}
+	 public void setLock() {
+	    	this.locked = true;
+	    }
+
+	    public void unlock() {
+	    	this.locked = false;
+	    }
 
 	@Override
 	public void updateDirection(double toX, double toY) {
