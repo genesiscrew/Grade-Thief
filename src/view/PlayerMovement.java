@@ -1,9 +1,12 @@
 package view;
 
+import java.util.List;
+
+import controller.GameController;
 import model.characters.GuardBot;
 import model.characters.Player;
-
-import java.util.List;
+import model.rendering.Polygon;
+import model.rendering.Vector;
 
 /**
  * @Author Adam Wareing

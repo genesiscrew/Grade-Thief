@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import view.Cube;
-import view.Polygon;
+import model.rendering.Cube;
+import model.rendering.Polygon;
 
 /**
  * Created by wareinadam on 29/09/16.

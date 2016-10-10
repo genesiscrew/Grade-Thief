@@ -1,10 +1,12 @@
 package view;
 
-import game.floor.Location;
-import game.floor.TileMap;
 import model.characters.GuardBot;
+import model.floor.Location;
+import model.floor.TileMap;
 import model.items.Door;
 import model.items.Item;
+import model.rendering.Drawable;
+import model.rendering.Polygon;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -48,9 +50,9 @@ public class Room {
 
     Color floorColor = new Color(0,0,0);
     TileMap tileMap;
-   
+
     /**
-     * 
+     *
      * @param d
      */
     public void addDoor(Door d) {
@@ -73,7 +75,7 @@ public class Room {
         this.polygons = new ArrayList<>();
         this.guardList = new ArrayList<GuardBot>();
 
-        this.setTileMap(System.getProperty("user.dir") + "/src/game/floor/" + roomName);
+        this.setTileMap(System.getProperty("user.dir") + "/src/model/floor/" + roomName);
 
       //  System.out.println("" + tileMap.getItems());
 

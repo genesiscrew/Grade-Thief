@@ -1,11 +1,11 @@
-package view;
+package model.rendering;
 
 /**
  * This is a single vector used to assist rendering, its made up of three values being x, y and z
  * @Author Adam Wareing
  */
 public class Vector {
-    double x, y, z;
+    public double x, y, z;
 
     /**
      * Make a new Vector and normalise it so we can perform calculations on it later.

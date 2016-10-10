@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.tools.DocumentationTool.Location;
 
-import view.GameController;
+import controller.GameController;
 
 public class Client {
 	private JTextField userText;

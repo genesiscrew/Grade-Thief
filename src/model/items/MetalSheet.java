@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import view.Cube;
-import view.Polygon;
+import model.rendering.Cube;
+import model.rendering.Polygon;
 
 /**
  * Created by Stefan Vrecic on 22/09/16.
@@ -55,7 +55,7 @@ public class MetalSheet extends Item {
 	}
 
 	@Override
-	public List<view.Polygon> getPolygons() {
+	public List<model.rendering.Polygon> getPolygons() {
 		List<Polygon> allPolys = new ArrayList<>();
 		// Add all the cubes polygons
 		cubes.forEach(c -> allPolys.addAll(c.getPolygons()));

@@ -1,4 +1,4 @@
-package game.floor;
+package model.floor;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -6,9 +6,9 @@ import java.util.List;
 
 import model.items.Door;
 import model.items.Item;
-import view.Cube;
-import view.Drawable;
-import view.Polygon;
+import model.rendering.Cube;
+import model.rendering.Drawable;
+import model.rendering.Polygon;
 
 public class DoorDraw extends Item {
 
@@ -81,7 +81,7 @@ public class DoorDraw extends Item {
     }
 
     @Override
-    public List<view.Polygon> getPolygons() {
+    public List<model.rendering.Polygon> getPolygons() {
         List<Polygon> allPolys = new ArrayList<>();
         // Add all the cubes polygons
         cubes.forEach(c -> allPolys.addAll(c.getPolygons()));

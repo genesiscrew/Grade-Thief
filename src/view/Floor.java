@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import game.floor.*;
-import game.floor.Room;
+import model.floor.*;
 import model.items.Door;
 import model.items.Item;
 import model.items.Wall;
+import model.rendering.Polygon;
 
 /**
  * @Author Adam Wareing
@@ -44,13 +44,13 @@ public class Floor {
         this.yOffset = yOffset;
 
         String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
-        Room room_co237 = new Room(null, null);
+        /*Room room_co237 = new Room(null, null);
         try {
             room_co237.setTileMap(co237);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+*/
         System.out.printf("Width: %d, Height: %d \n", mapWidth, mapHeight);
         System.out.printf("x: %d, y: %d \n", xOffset, yOffset);
     }

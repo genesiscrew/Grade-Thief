@@ -3,8 +3,8 @@ package model.items;
 import java.awt.*;
 import java.util.List;
 
-import view.Cube;
-import view.Polygon;
+import model.rendering.Cube;
+import model.rendering.Polygon;
 
 public class Door extends Item {
 	public int code;

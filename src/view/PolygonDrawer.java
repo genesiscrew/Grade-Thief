@@ -1,11 +1,14 @@
 package view;
 
-import game.floor.Location;
 import model.characters.GuardBot;
 import model.characters.Player;
+import model.floor.Location;
+import model.rendering.Polygon;
 
 import java.awt.*;
 import java.util.*;
+
+import controller.GameController;
 
 /**
  * @Author Adam Wareing

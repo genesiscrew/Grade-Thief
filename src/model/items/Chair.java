@@ -3,9 +3,9 @@ package model.items;
 import java.awt.*;
 import java.util.*;
 
-import view.Cube;
-import view.Drawable;
-import view.Polygon;
+import model.rendering.Cube;
+import model.rendering.Drawable;
+import model.rendering.Polygon;
 
 /**
  * Created by wareinadam on 22/09/16.

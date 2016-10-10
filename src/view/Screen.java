@@ -25,18 +25,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import game.floor.EmptyTile;
-import game.floor.Location;
-import game.floor.Tile;
-import game.floor.TileMap;
+import controller.GameController;
+import controller.Main;
+import controller.ScreenUtil;
 import model.characters.Player;
+import model.floor.EmptyTile;
+import model.floor.Location;
+import model.floor.Tile;
 import model.items.Item;
 import model.items.Item.Interaction;
+import model.rendering.Polygon;
 import model.saving.FastLoad;
 import model.saving.FastSaving;
 
@@ -48,18 +50,18 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
 	private Room room;
 	private Room room1 = new Room("level", 0, 0);
-	private Room room2 = new Room("co238", 0, 0);
+	private Room room2 = new Room("level2", 0, 0);
 	public int timer;
 
 	// The polygon that the mouse is currently over
-	static Polygon polygonOver = null;
+	public static Polygon polygonOver = null;
 
 	public static int startX = 120;
 	public static int startY = 150;
 	public static int startZ = 10;
 
 	Robot r; // Used for keeping mouse in center
-	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
 	/**
 	 * This is the co-ordinates of where the player is (x, y, z)
@@ -69,11 +71,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
 	// The smaller the zoom the more zoomed out you are and visa versa, although
 	// altering too far from 1000 will make it look pretty weird
-	static double zoom = 1000;
-	static double minZoom = 500;
-	static double maxZoom = 2500;
-	static double mouseX = 0;
-	static double mouseY = 0;
+	public static double zoom = 1000;
+	public static double minZoom = 500;
+	public static double maxZoom = 2500;
+	public static double mouseX = 0;
+	public static double mouseY = 0;
 
 	// FPS
 	double drawFPS = 0;
@@ -86,7 +88,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 	private PolygonDrawer polyDrawer;
 	double sunPos = 0;
 
-	static boolean drawOutlines = true;
+	public static boolean drawOutlines = true;
 	boolean[] keys = new boolean[4];
 
 	private GameController controller;
@@ -149,7 +151,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     public void paintComponent(Graphics g) {
         // Clear screen and draw background color
         g.setColor(new Color(140, 180, 180));
-        g.fillRect(0, 0, (int) GameController.ScreenSize.getWidth(), (int) GameController.ScreenSize.getHeight());
+        g.fillRect(0, 0, (int) screenSize.getWidth(), (int) screenSize.getHeight());
         // resets tile the user is currently located at
         try {
         ((EmptyTile) this.room.getTileMap().getTileMap()[(int) (viewFrom[0]/10)][(int) (viewFrom[1]/10)])

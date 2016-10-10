@@ -2,8 +2,8 @@ package model.items;
 
 import java.util.List;
 
-import view.Drawable;
-import view.Polygon;
+import model.rendering.Drawable;
+import model.rendering.Polygon;
 
 public class Keys implements Interactable, Movable, Drawable {
 

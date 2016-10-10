@@ -1,7 +1,7 @@
 package model.items;
 
-import game.floor.Location;
-import game.floor.TileMap;
+import model.floor.Location;
+import model.floor.TileMap;
 
 public abstract class GameObject {
 

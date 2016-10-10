@@ -1,4 +1,4 @@
-package game.floor;
+package model.floor;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.items.Door;
-import view.Drawable;
+import model.rendering.Drawable;
 /**
 *
 * @author Stefan Vrecic

@@ -13,7 +13,7 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import view.GameController;
+import controller.GameController;
 import view.Screen;
 
 /**

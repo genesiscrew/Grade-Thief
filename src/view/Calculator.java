@@ -1,17 +1,20 @@
 package view;
 
+import model.rendering.Plane;
+import model.rendering.Vector;
+
 /**
  * This performs calculations for the 3D graphics using vectors
  */
 public class Calculator {
-    static double t = 0;
-    private static Vector w1;
+	public static double t = 0;
+    static Vector w1;
     private static Vector w2;
     private static Vector viewVector; // The vector we are looking along (viewTo - viewFrom)
     private static Vector rotationVector;
     private static Vector directionVector = new Vector(1, 1, 1);
     private static Plane plane;
-    static double[] calculatorFocusPosition = new double[2];
+    public static double[] calculatorFocusPosition = new double[2];
 
     /**
      *
@@ -21,7 +24,7 @@ public class Calculator {
      * @param z
      * @return
      */
-    static double[] calculatePositionP(double[] ViewFrom, double x, double y, double z) {
+    public static double[] calculatePositionP(double[] ViewFrom, double x, double y, double z) {
         double[] projP = getProjection(ViewFrom, x, y, z, plane);
         double[] drawP = getDrawP(projP[0], projP[1], projP[2]);
         return drawP;
@@ -72,7 +75,7 @@ public class Calculator {
      * @param viewTo
      * @return
      */
-    static Vector getRotationVector(double[] viewFrom, double[] viewTo) {
+    public static Vector getRotationVector(double[] viewFrom, double[] viewTo) {
         double dx = Math.abs(viewFrom[0] - viewTo[0]);
         double dy = Math.abs(viewFrom[1] - viewTo[1]);
         double xRot, yRot;
@@ -93,7 +96,7 @@ public class Calculator {
      *
      * @param screen
      */
-    static void setPredeterminedInfo(Screen screen) {
+    public static void setPredeterminedInfo(Screen screen) {
 
         viewVector = new Vector(screen.viewTo[0] - screen.viewFrom[0], screen.viewTo[1] - screen.viewFrom[1], screen.viewTo[2] - screen.viewFrom[2]);
         Vector planeVector1 = viewVector.crossProduct(directionVector);
@@ -112,8 +115,8 @@ public class Calculator {
     /**
      * Sets the the values for the light direction
      */
-    static void controlSunAndLight(double[] lightDir, double mapSize, double sunPos) {
-        //sunPos += 0.005;
+    public static void controlSunAndLight(double[] lightDir, double mapSize, double sunPos) {
+        sunPos += 0.01;
         lightDir[0] = mapSize / 2 - (mapSize / 2 + Math.cos(sunPos) * mapSize * 10);
         lightDir[1] = mapSize / 2 - (mapSize / 2 + Math.sin(sunPos) * mapSize * 10);
         lightDir[2] = -200;

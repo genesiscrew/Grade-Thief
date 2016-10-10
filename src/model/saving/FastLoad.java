@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import controller.GameController;
 import model.items.Chair;
 import model.items.Dog;
 import model.items.Item;
@@ -19,7 +20,6 @@ import model.items.MapDraw;
 import model.items.Marker;
 import model.items.MetalSheet;
 import model.items.Table;
-import view.GameController;
 import view.Screen;
 
 /**

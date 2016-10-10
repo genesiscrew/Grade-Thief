@@ -1,9 +1,9 @@
 package model.characters;
 
 import model.items.Item;
-import view.Cube;
-import view.Drawable;
-import view.Polygon;
+import model.rendering.Cube;
+import model.rendering.Drawable;
+import model.rendering.Polygon;
 
 import java.awt.*;
 import java.util.*;

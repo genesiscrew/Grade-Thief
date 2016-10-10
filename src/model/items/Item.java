@@ -4,8 +4,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import view.Cube;
-import view.Drawable;
+import model.rendering.Cube;
+import model.rendering.Drawable;
 
 /**
  * @Author Adam Wareing

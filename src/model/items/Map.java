@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Image;
 import java.util.List;
 
-import view.Polygon;
+import model.rendering.Polygon;
 
 /**
  * this class represents a map item,

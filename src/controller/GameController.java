@@ -1,4 +1,4 @@
-package view;
+package controller;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import model.characters.GuardBot;
+import view.Screen;
 
 /**
  * Created by wareinadam on 28/09/16.

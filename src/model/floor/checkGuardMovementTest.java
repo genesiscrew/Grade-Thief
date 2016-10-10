@@ -1,4 +1,4 @@
-package game.floor;
+package model.floor;
 
 public class checkGuardMovementTest {
 

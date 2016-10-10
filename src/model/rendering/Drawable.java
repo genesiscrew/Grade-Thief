@@ -1,4 +1,4 @@
-package view;
+package model.rendering;
 
 import java.util.List;
 

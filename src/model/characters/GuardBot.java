@@ -12,16 +12,16 @@ import java.util.List;
 
 import javax.swing.plaf.SliderUI;
 
-import game.floor.EmptyTile;
-import game.floor.Location;
+import model.floor.EmptyTile;
+import model.floor.Location;
 import model.items.Direction;
 import model.items.Distance;
 import model.items.GameObject;
 import model.items.Item;
 import model.items.Direction.Dir;
-import view.Cube;
-import view.Drawable;
-import view.Polygon;
+import model.rendering.Cube;
+import model.rendering.Drawable;
+import model.rendering.Polygon;
 import view.Screen;
 
 public class GuardBot extends Player implements Drawable {

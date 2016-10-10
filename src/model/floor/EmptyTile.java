@@ -1,4 +1,4 @@
-package game.floor;
+package model.floor;
 
 import model.characters.GuardBot;
 import model.items.KeyDraw;

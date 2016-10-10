@@ -1,4 +1,4 @@
-package view;
+package model.rendering;
 
 /**
  * This is a simple plane which consists of the two vectors that make up the plane.

@@ -1,6 +1,7 @@
 package model.items;
 
 import model.items.Item.Interaction;
+import model.rendering.Cube;
 import view.*;
 
 import java.awt.*;
@@ -65,7 +66,7 @@ public class MapDraw extends Item {
     }
 
     @Override
-    public List<view.Polygon> getPolygons() {
+    public List<model.rendering.Polygon> getPolygons() {
         // TODO Auto-generated method stub
         return null;
     }

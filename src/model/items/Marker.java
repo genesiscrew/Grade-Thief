@@ -1,6 +1,7 @@
 package model.items;
 
 import model.items.Item.Interaction;
+import model.rendering.Cube;
 import view.*;
 
 import java.awt.*;
@@ -51,8 +52,8 @@ public class Marker extends Item {
     }
 
     @Override
-    public List<view.Polygon> getPolygons() {
-        List<view.Polygon> allPolys = new ArrayList<>();
+    public List<model.rendering.Polygon> getPolygons() {
+        List<model.rendering.Polygon> allPolys = new ArrayList<>();
         // Add all the cubes polygons
         cubes.forEach(c -> allPolys.addAll(c.getPolygons()));
         return allPolys;

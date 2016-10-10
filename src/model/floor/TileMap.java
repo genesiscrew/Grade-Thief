@@ -1,4 +1,4 @@
-package game.floor;
+package model.floor;
 
 import java.awt.Color;
 import java.io.BufferedReader;
