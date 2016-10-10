@@ -26,7 +26,11 @@ import model.rendering.Cube;
 import model.rendering.Drawable;
 import model.rendering.Polygon;
 import view.Screen;
-
+/**
+ * 
+ * @author Hamid Abubakr
+ *
+ */
 
 public class GuardBot extends Player implements Drawable {
 

@@ -26,22 +26,13 @@ public class GameController {
 	// Position is stored using x, y, z
 	private static double[] playerPosition = new double[] { 50, 100, 10 };
 	private static double[] guardPosition = new double[] { 100, 100, 10 };
-	GuardBot gaurd1;
-	GuardBot guard2;
 
 	private ArrayList<GuardBot> guardList1;
-	private ArrayList<GuardBot> guardList2;
-
 
 	private Screen screenObject;
 
 	private JFrame frame;
 
-    GuardBot guard3;
-
-	private GuardBot guard4;
-
-	private GuardBot guard5;
 
 	static Dimension ScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	private static boolean isGuard;
@@ -50,15 +41,6 @@ public class GameController {
 		guardList1 = new ArrayList<>();
 		this.isGuard = isGuard;
 		player = createNewGame(isGuard);
-
-		// guard = createNewGame(!isGuard);
-
-		/*
-		 * InputStream is =
-		 * getClass().getClassLoader().getResourceAsStream("bg-music.wav");
-		 * MakeSound ms = new MakeSound(); if (!isGuard) {
-		 * ms.playSound("src/bg-music.wav");
-		 */
 	}
 
 	public GuardBot getGuardBot(String guardName) {
@@ -90,22 +72,37 @@ public class GameController {
 		frame.setSize(ScreenSize);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setupGuardbots("level", screenObject);
+		this.setupGuardbots(screenObject);
 		return screenObject;
 	}
 
-	public void setupGuardbots(String map, Screen screen) {
+	/**
+	 * sets up guard bots onto specified locations within each level of the game
+	 * 
+	 * @param parameter
+	 *            is the screen object on which the bots will be drawn.
+	 */
+	public void setupGuardbots(Screen screen) {
 		int[] dist = { 14, 45, 14, 45 };
+		GuardBot gaurd1;
+		GuardBot guard2;
+		GuardBot guard3;
+		GuardBot guard4;
+		GuardBot guard5;
 		gaurd1 = new GuardBot(12, "guard1", "level", 16, dist, 0, 2 * 10, 8 * 10, 0, 5, 3, 12, 0.4, new Color(0, 0, 0));
 		gaurd1.setScreen(screen);
-		int[] dist2 = { 32, 29};
-		guard2 = new GuardBot(12, "guard2", "level", 12, dist2, 0, 81 * 10, 6 * 10, 0, 5, 3, 12, 0.3, new Color(0, 0, 0));
-		int[] dist3 = {35, 29};
-		guard3 = new GuardBot(12, "guard3", "level", 10, dist3, 0, 81 * 10, 30 * 10, 0, 5, 3, 12, 0.3, new Color(0, 0, 0));
-		int[] dist4 = {25, 25};
-		guard4 = new GuardBot(12, "guard4", "level2", 4, dist4, 0, 48 * 10, 2 * 10, 0, 5, 3, 12, 0.1, new Color(0, 0, 0));
-		int[] dist5 = {35, 35};
-		guard5 = new GuardBot(12, "guard5", "level2", 1, dist5, 0, 2 * 10, 6 * 10, 0, 5, 3, 12, 0.1, new Color(0, 0, 0));
+		int[] dist2 = { 32, 29 };
+		guard2 = new GuardBot(12, "guard2", "level", 12, dist2, 0, 81 * 10, 6 * 10, 0, 5, 3, 12, 0.3,
+				new Color(0, 0, 0));
+		int[] dist3 = { 35, 29 };
+		guard3 = new GuardBot(12, "guard3", "level", 10, dist3, 0, 81 * 10, 30 * 10, 0, 5, 3, 12, 0.3,
+				new Color(0, 0, 0));
+		int[] dist4 = { 25, 25 };
+		guard4 = new GuardBot(12, "guard4", "level2", 4, dist4, 0, 48 * 10, 2 * 10, 0, 5, 3, 12, 0.1,
+				new Color(0, 0, 0));
+		int[] dist5 = { 35, 35 };
+		guard5 = new GuardBot(12, "guard5", "level2", 1, dist5, 0, 2 * 10, 6 * 10, 0, 5, 3, 12, 0.1,
+				new Color(0, 0, 0));
 		guard2.setScreen(screen);
 		guard3.setScreen(screen);
 		guard4.setScreen(screen);
@@ -134,6 +131,14 @@ public class GameController {
 		}
 	}
 
+	/**
+	 * gets the other player's position, relative to each other
+	 * 
+	 * @param isGuard,
+	 *            a boolean parameter, if true then the player is a guard, else
+	 *            he is a normal player.
+	 * @return
+	 */
 	public double[] getOtherPlayersPosition(boolean isGuard) {
 		if (isGuard) {
 			return playerPosition;
@@ -187,22 +192,6 @@ public class GameController {
 
 	public static void setGuard(boolean isGuard) {
 		GameController.isGuard = isGuard;
-	}
-
-	public Thread createGuardThread(GuardBot gaurd, int delay) {
-		Thread guardThread = new Thread() {
-			public void run() {
-				// move the guard in a fixed loop, once he reaches certain
-				// coordinate on the Map, change destination
-				// if () {}
-				// gaurd will keep moving
-
-			}
-
-		};
-
-		// return new double[]{g.getX(), g.getY(), g.getZ()};
-		return null;
 	}
 
 	public ArrayList<GuardBot> getGuardList() {

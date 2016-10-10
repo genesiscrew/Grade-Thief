@@ -51,6 +51,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 	private Room room;
 	private Room room1 = new Room("level", 0, 0);
 	private Room room2 = new Room("level2", 0, 0);
+	public static final int PLAYING = 2;
+	public static final int GAMEOVER = 3;
+	public static final int GAMEWON = 4;
 	public int timer;
 
 	// The polygon that the mouse is currently over
@@ -97,125 +100,153 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 	private model.characters.Player otherPlayer;
 	private String messageToDisplay = "";
 	private String messageToDisplay2;
+	private int GAMESTATUS;
 
+	/**
+	 * Create a new screen
+	 */
+	public Screen(GameController controller, boolean guard, String roomName) {
+		this.controller = controller;
+		this.guard = guard;
+		this.currentPlayer = new Player(0, 0, 0, 0, 0, 0, null);
+		this.currentPlayer.setRoom(roomName);
+		this.GAMESTATUS = this.PLAYING;
+		if (guard)
+			otherPlayer = new model.characters.Player(20, 20, 0, 5, 3, 12, Color.green);
+		else
+			otherPlayer = new model.characters.Player(20, 20, 0, 5, 3, 12, Color.blue);
 
+		otherPlayer.setRoom(roomName);
 
+		this.addKeyListener(this);
+		setFocusable(true);
+		this.addMouseListener(this);
+		this.addMouseMotionListener(this);
+		this.addMouseWheelListener(this);
+		Cursor cursor = screenUtil.invisibleMouse();
+		setCursor(cursor);
 
+		// Load the section of the map
+		room = new Room(roomName, startX, startY);
+		this.polyDrawer = new PolygonDrawer(room, lightDir, viewFrom, controller);
 
+		if (guard) {
+			viewFrom[0] = 100;
+			viewFrom[1] = 100;
+			viewFrom[2] = 10;
+		} else {
+			viewFrom[0] = startX;
+			viewFrom[1] = startY;
+			viewFrom[2] = startZ;
+		}
+	}
 
+	public Location getPlayerLocation() {
+		return new Location((int) (viewFrom[0] / 10), (int) (viewFrom[1] / 10));
 
-    /**
-     * Create a new screen
-     */
-    public Screen(GameController controller, boolean guard, String roomName) {
-        this.controller = controller;
-        this.guard = guard;
-        this.currentPlayer = new Player(0, 0, 0, 0, 0, 0, null);
-        this.currentPlayer.setRoom(roomName);
-        if (guard)
-            otherPlayer = new model.characters.Player(20, 20, 0, 5, 3, 12, Color.green);
-        else
-            otherPlayer = new model.characters.Player(20, 20, 0, 5, 3, 12, Color.blue);
+	}
 
-        otherPlayer.setRoom(roomName);
+	@Override
+	public void paintComponent(Graphics g) {
+		// Clear screen and draw background color
+		g.setColor(new Color(140, 180, 180));
+		g.fillRect(0, 0, (int) screenSize.getWidth(), (int) screenSize.getHeight());
+		// resets tile the user is currently located at
+		try {
+			((EmptyTile) this.room.getTileMap().getTileMap()[(int) (viewFrom[0] / 10)][(int) (viewFrom[1] / 10)])
+					.resetEmptyTile();
+		} catch (Exception e) {
 
-        this.addKeyListener(this);
-        setFocusable(true);
-        this.addMouseListener(this);
-        this.addMouseMotionListener(this);
-        this.addMouseWheelListener(this);
-        Cursor cursor = screenUtil.invisibleMouse();
-        setCursor(cursor);
+		}
+		PlayerMovement.cameraMovement(viewTo, viewFrom, keys, room);
+		controller.updatePosition(guard, viewFrom);
+		updateView();
+		// adds the player to his new coordinate on tilemap
+		try {
+			((EmptyTile) this.room.getTileMap().getTileMap()[(int) (viewFrom[0] / 10)][(int) (viewFrom[1] / 10)])
+					.addObjectToTile(this.currentPlayer);
+		} catch (Exception e) {
 
-        // Load the section of the map
-        room = new Room(roomName, startX, startY);
-        this.polyDrawer = new PolygonDrawer(room, lightDir, viewFrom, controller);
+		}
 
-        if (guard) {
-            viewFrom[0] = 100;
-            viewFrom[1] = 100;
-            viewFrom[2] = 10;
-        } else {
-            viewFrom[0] = startX;
-            viewFrom[1] = startY;
-            viewFrom[2] = startZ;
-        }
-    }
+		// Calculated all that is general for this camera position
+		Calculator.setPredeterminedInfo(this);
+		Calculator.controlSunAndLight(lightDir, room.getWidth(), sunPos);
+		if (timer > 0) {
+			timer--;
+		}
+		// System.out.println(timer);
 
-    public Location getPlayerLocation() {
-        return new Location((int) (viewFrom[0]/10), (int) (viewFrom[1]/10));
+		polyDrawer.drawPolygons(g, guard, otherPlayer, currentPlayer, timer, currentPlayer.getLevelName(), viewFrom[0],
+				viewFrom[1]);
 
-    }
+		// Draw the cross in the center of the screen
+		screenUtil.drawMouseAim(g);
 
-    @Override
-    public void paintComponent(Graphics g) {
-        // Clear screen and draw background color
-        g.setColor(new Color(140, 180, 180));
-        g.fillRect(0, 0, (int) screenSize.getWidth(), (int) screenSize.getHeight());
-        // resets tile the user is currently located at
-        try {
-        ((EmptyTile) this.room.getTileMap().getTileMap()[(int) (viewFrom[0]/10)][(int) (viewFrom[1]/10)])
-        .resetEmptyTile();
-        }
-        catch (Exception e) {
+		// FPS display
+		g.setColor(Color.WHITE);
+		g.drawString("FPS: " + (int) drawFPS + "(Benchmark)", 40, 40);
 
+		Location l = getPlayerLocation();
+		if (l != null)
+			g.drawString("Loc" + l.row() + " , " + l.column(), 40, 60);
 
-        }
-        PlayerMovement.cameraMovement(viewTo, viewFrom, keys, room);
-        controller.updatePosition(guard, viewFrom);
-        updateView();
-        // adds the player to his new coordinate on tilemap
-        try {
-        ((EmptyTile) this.room.getTileMap().getTileMap()[(int) (viewFrom[0]/10)][(int) (viewFrom[1]/10)])
-        .addObjectToTile(this.currentPlayer);
-        }
-        catch (Exception e) {
+		// Message display
+		g.setFont(new Font("Arial", Font.BOLD, 20));
+		messageToDisplay = "";
+		isPlayerNearObject();
+		if (!messageToDisplay.equals("")) {
+			g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120,
+					(int) screenSize.getHeight() / 2 - 50);
+		}
+		messageToDisplay2 = "";
+		isPlayerDetected();
+		if (!messageToDisplay2.equals("")) {
+			g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120,
+					(int) screenSize.getHeight() / 2 - 50);
+		}
+		//check if game is still playing or is over
+		this.updateGameStatus();
+		if (this.GAMESTATUS == this.GAMEOVER) {
+			// game is over so display certain message that game is lost
+		}
 
-        }
+		// Redraw
+		sleepAndRefresh();
+	}
 
-        // Calculated all that is general for this camera position
-        Calculator.setPredeterminedInfo(this);
-        Calculator.controlSunAndLight(lightDir, room.getWidth(), sunPos);
-        if (timer > 0) {
-        	timer--;
-        }
-        //System.out.println(timer);
+	private void updateGameStatus() {
+		if (!this.guard) {
+			// check whether player coordinate correspond with other player,
+			// hence he is caught
+			if (viewFrom[0] == this.otherPlayer.getX() && viewFrom[1] == this.otherPlayer.getY()) {
+				this.GAMESTATUS = this.GAMEOVER;
 
-        polyDrawer.drawPolygons(g, guard, otherPlayer, currentPlayer, timer, currentPlayer.getLevelName(), viewFrom[0], viewFrom[1]);
+			}
 
+			if (this.currentPlayer.getInventory().contains(null)) {
+				// player has unlocked davids computer using a key and has a unique item added to his inventory, his modified grade sheet
+				// if this item exists in inventory you win the game
+				this.GAMESTATUS = this.GAMEWON;
 
+			}
 
-        // Draw the cross in the center of the screen
-        screenUtil.drawMouseAim(g);
+		} else {
+			if (viewFrom[0] == this.otherPlayer.getX() && viewFrom[1] == this.otherPlayer.getY()) {
+				this.GAMESTATUS = this.GAMEWON;
+			}
+			if (this.otherPlayer.getInventory().contains(null)) {
+				// player has unlocked davids computer using a key and has a unique item added to his inventory, his modified grade sheet
+				// if this item exists in inventory you win the game
+				this.GAMESTATUS = this.GAMEWON;
 
-        // FPS display
-        g.setColor(Color.WHITE);
-        g.drawString("FPS: " + (int) drawFPS + "(Benchmark)", 40, 40);
+			}
 
-        Location l = getPlayerLocation();
-        if (l != null)
-            g.drawString("Loc" + l.row() + " , " + l.column(), 40, 60);
+		}
 
-        // Message display
-        g.setFont(new Font("Arial", Font.BOLD, 20));
-        messageToDisplay = "";
-        isPlayerNearObject();
-        if (!messageToDisplay.equals("")) {
-            g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120,
-                    (int) screenSize.getHeight() / 2 - 50);
-        }
-        messageToDisplay2 = "";
-        isPlayerDetected();
-        if (!messageToDisplay2.equals("")) {
-            g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120,
-                    (int) screenSize.getHeight() / 2 - 50);
-        }
+	}
 
-        // Redraw
-        sleepAndRefresh();
-    }
-
-    private void isPlayerDetected() {
+	private void isPlayerDetected() {
 
 		if (timer == 200) {
 			// player has been detected
@@ -272,7 +303,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		viewTo[1] = viewFrom[1] + r * Math.sin(horizontalLook);
 		viewTo[2] = viewFrom[2] + verticalLook;
 
-
 	}
 
 	/**
@@ -314,7 +344,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 	}
 
 	/**
-	 * This brings up the inventory window which contains all of the items the player currently has.
+	 * This brings up the inventory window which contains all of the items the
+	 * player currently has.
 	 */
 	private void showInventory() {
 		String[] inventoryItems = new String[currentPlayer.getInventory().size()];
@@ -324,7 +355,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		}
 		if (inventoryItems.length == 0)
 			return; // No items to show
-		String stringItem = Inventory.showDialog(this, null, "Select an item to interact with", "Inventory", inventoryItems, inventoryItems[0], inventoryItems[0]);
+		String stringItem = Inventory.showDialog(this, null, "Select an item to interact with", "Inventory",
+				inventoryItems, inventoryItems[0], inventoryItems[0]);
 		System.out.println(stringItem);
 		int itemLocation = 0;
 		for (int i = 0; i < inventoryItems.length; i++) {
@@ -336,6 +368,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		Item selectedItem = currentPlayer.getInventory().get(itemLocation);
 		performActionOnItem(selectedItem);
 	}
+
 	/**
 	 * When the player is near an item and wants to interact with it.
 	 */
@@ -350,8 +383,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 			return;
 		});
 	}
+
 	/**
-	 * This calls showOptionPanel() which gets the interaction chosen and this executes it.
+	 * This calls showOptionPanel() which gets the interaction chosen and this
+	 * executes it.
 	 *
 	 * @param item
 	 */
@@ -365,8 +400,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 			item.canDraw();
 			// Drop
 		} else if (interaction.equals(Interaction.DROP)) {
-			item.moveItemBy(viewFrom[0] - item.getX(),
-					viewFrom[1] - item.getY(), 0);
+			item.moveItemBy(viewFrom[0] - item.getX(), viewFrom[1] - item.getY(), 0);
 			room.addItemToRoom(item);
 			item.canDraw();
 			currentPlayer.removeFromInventory(item);
@@ -375,6 +409,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		}
 		return; // We only want to interact with one item
 	}
+
 	/**
 	 * Shows a panel with a list of interactions a player can perform on an item
 	 *
@@ -386,76 +421,65 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		for (int i = 0; i < optionsList.size(); i++) {
 			options[i] = optionsList.get(i).toString();
 		}
-		int n = JOptionPane.showOptionDialog(this, "What would you like to do?", "Select option", JOptionPane.YES_NO_CANCEL_OPTION,
-				JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+		int n = JOptionPane.showOptionDialog(this, "What would you like to do?", "Select option",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 		return n;
 	}
 
-	/*private void showInventory() {
-		String[] inventoryItems = new String[currentPlayer.getInventory().size()];
-		int c = 0;
-		for (Item i : currentPlayer.getInventory()) {
-			inventoryItems[c] = i.toString();
-			c++;
-		}
-
-		int n = JOptionPane.showOptionDialog(this, "What would you like to do?", "Select option",
-				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, inventoryItems,
-				inventoryItems[0]);
-		Item selectedItem = currentPlayer.getInventory().get(n);
-		// at this point; shou;d get the position directly infront of player
-		// should make sure that it will not obstruct another item
-		selectedItem.moveItemBy(viewFrom[0] - selectedItem.getX(), viewFrom[1] - selectedItem.getY(), 0);
-
-		room.addItemToRoom(selectedItem);
-		selectedItem.canDraw();
-
-		currentPlayer.removeFromInventory(selectedItem);
-	}
-
-
-
-	private void playerWantingToInteractWithItem() {
-
-		room.getRoomObjects().stream().filter(i -> i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2]))
-				.forEach(i -> {
-
-					int n = showOptionPane(i.getInteractionsAvailable());
-					i.performAction(i.getInteractionsAvailable().get(n));
-					System.out.println(i.getInteractionsAvailable().get(n).toString());
-					if (i.getInteractionsAvailable().get(n).equals(Interaction.TAKE)) {
-						currentPlayer.addToInventory(i);
-						System.out.println("add to inventory here");
-						currentPlayer.getInventory().forEach(System.out::println);
-					}
-				});
-
-		room.getDoors().stream().filter(i -> i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])).forEach(i -> {
-			int n = showOptionPane(i.getInteractionsAvailable());
-			i.performAction(i.getInteractionsAvailable().get(n));
-
-
-			if (n == 0) // doorOpened
-			{
-				// player has entered a room so we set a boolean value inRoom to true
-
-
-	            i.setLocations(viewFrom[0], viewFrom[1]);
-				Location l = getPlayerLocation();
-
-				if (l.row() == 80 && l.column() == 5) // hard coded to switch
-														// floor
-					loadMap("level2", 1);
-				else if (l.row() == 80 && l.column() == 29)
-					loadMap("level2", 2);
-				else if (l.row() == 1 && l.column() == 5)
-					loadMap("level", 1);
-				else if (l.row() == 1 && l.column() == 21)
-					loadMap("level", 2);
-
-			}
-		});
-	}*/
+	/*
+	 * private void showInventory() { String[] inventoryItems = new
+	 * String[currentPlayer.getInventory().size()]; int c = 0; for (Item i :
+	 * currentPlayer.getInventory()) { inventoryItems[c] = i.toString(); c++; }
+	 *
+	 * int n = JOptionPane.showOptionDialog(this, "What would you like to do?",
+	 * "Select option", JOptionPane.YES_NO_CANCEL_OPTION,
+	 * JOptionPane.QUESTION_MESSAGE, null, inventoryItems, inventoryItems[0]);
+	 * Item selectedItem = currentPlayer.getInventory().get(n); // at this
+	 * point; shou;d get the position directly infront of player // should make
+	 * sure that it will not obstruct another item
+	 * selectedItem.moveItemBy(viewFrom[0] - selectedItem.getX(), viewFrom[1] -
+	 * selectedItem.getY(), 0);
+	 *
+	 * room.addItemToRoom(selectedItem); selectedItem.canDraw();
+	 *
+	 * currentPlayer.removeFromInventory(selectedItem); }
+	 *
+	 *
+	 *
+	 * private void playerWantingToInteractWithItem() {
+	 *
+	 * room.getRoomObjects().stream().filter(i -> i.pointNearObject(viewFrom[0],
+	 * viewFrom[1], viewFrom[2])) .forEach(i -> {
+	 *
+	 * int n = showOptionPane(i.getInteractionsAvailable());
+	 * i.performAction(i.getInteractionsAvailable().get(n));
+	 * System.out.println(i.getInteractionsAvailable().get(n).toString()); if
+	 * (i.getInteractionsAvailable().get(n).equals(Interaction.TAKE)) {
+	 * currentPlayer.addToInventory(i);
+	 * System.out.println("add to inventory here");
+	 * currentPlayer.getInventory().forEach(System.out::println); } });
+	 *
+	 * room.getDoors().stream().filter(i -> i.pointNearObject(viewFrom[0],
+	 * viewFrom[1], viewFrom[2])).forEach(i -> { int n =
+	 * showOptionPane(i.getInteractionsAvailable());
+	 * i.performAction(i.getInteractionsAvailable().get(n));
+	 *
+	 *
+	 * if (n == 0) // doorOpened { // player has entered a room so we set a
+	 * boolean value inRoom to true
+	 *
+	 *
+	 * i.setLocations(viewFrom[0], viewFrom[1]); Location l =
+	 * getPlayerLocation();
+	 *
+	 * if (l.row() == 80 && l.column() == 5) // hard coded to switch // floor
+	 * loadMap("level2", 1); else if (l.row() == 80 && l.column() == 29)
+	 * loadMap("level2", 2); else if (l.row() == 1 && l.column() == 5)
+	 * loadMap("level", 1); else if (l.row() == 1 && l.column() == 21)
+	 * loadMap("level", 2);
+	 *
+	 * } }); }
+	 */
 
 	public void loadMap(String map, int id) {
 
@@ -477,7 +501,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		}
 		viewFrom[0] = room.getPlayerStart().row();
 		viewFrom[1] = room.getPlayerStart().column();
-		this.controller.setupGuardbots(map, this);
+		this.controller.setupGuardbots(this);
 		polyDrawer.updateRoom(room);
 	}
 
@@ -518,22 +542,21 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		}
 	}
 
-	/*private int showOptionPane(List<Item.Interaction> optionsList) {
-		String[] options = new String[optionsList.size()];
-		for (int i = 0; i < optionsList.size(); i++) {
-			options[i] = optionsList.get(i).toString();
-		}
-
-		int n = JOptionPane.showOptionDialog(this, "What would you like to do?", "Select option",
-				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-
-		return n;
-	}*/
+	/*
+	 * private int showOptionPane(List<Item.Interaction> optionsList) { String[]
+	 * options = new String[optionsList.size()]; for (int i = 0; i <
+	 * optionsList.size(); i++) { options[i] = optionsList.get(i).toString(); }
+	 *
+	 * int n = JOptionPane.showOptionDialog(this, "What would you like to do?",
+	 * "Select option", JOptionPane.YES_NO_CANCEL_OPTION,
+	 * JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+	 *
+	 * return n; }
+	 */
 
 	/**
-	 * Moving Ability for the camera(Player)
-	 * this function will set the keys array which use to
-	 * update the camera and game vision for the player.
+	 * Moving Ability for the camera(Player) this function will set the keys
+	 * array which use to update the camera and game vision for the player.
 	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
@@ -548,9 +571,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 	}
 
 	/**
-	 * Creating an Modal and User Interface buttons for user
-	 * to have options to select when they want to SAVE, LOAD,
-	 * EXIT and READ more about instruction and game,
+	 * Creating an Modal and User Interface buttons for user to have options to
+	 * select when they want to SAVE, LOAD, EXIT and READ more about instruction
+	 * and game,
 	 */
 	public void gameOptionPane() {
 		// Custom button text
@@ -656,7 +679,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		textArea.setOpaque(false);
 		textArea.setEditable(false);
 		textArea.setSize(new Dimension(400, 500));
-		//OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
+		// OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules,
+		// textArea);
 	}
 
 	/**
@@ -673,7 +697,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		textArea.setOpaque(false);
 		textArea.setEditable(false);
 		textArea.setSize(new Dimension(400, 500));
-		//OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
+		// OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules,
+		// textArea);
 	}
 
 	/**
@@ -683,7 +708,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		// TODO: Adding chat ability to the game
 		System.err.println("CHAT CODES HERE");
 	}
-
 
 	public void restart() {
 		StringBuilder cmd = new StringBuilder();
@@ -773,8 +797,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 	public static void setStartX(int startX) {
 		Screen.startX = startX;
 	}
-
-
 
 	public static int getStartY() {
 		return startY;
