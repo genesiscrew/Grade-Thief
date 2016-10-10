@@ -1,4 +1,4 @@
-package model.server;
+package server;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -8,6 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import controller.GameController;
+import controller.MakeSound;
 
 public class Server{
 
@@ -52,6 +53,16 @@ public class Server{
 
 
 	private void update() throws IOException {
+		Thread playMusic = new Thread(){
+			@Override
+			public void run(){
+				MakeSound ms = new MakeSound();
+				ms.playSound("/home/wareinadam/SWEN222/Cleaned-Grade-Thief/grade-thief/src/bg-music.wav");
+			}
+		};
+
+		playMusic.start();
+
 		while (true) {
 			sendData();
 			recieveData();

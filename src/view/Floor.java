@@ -25,9 +25,9 @@ public class Floor {
     private double tileSize = 10;
     private final double WALL_HEIGHT = 20;
 
-    private final Color WALL_COLOR = new Color(79, 200, 255);
-    private final Color TILE_COLOR = new Color(255, 208, 193);
-    private final Color DOOR_COLOR = new Color(0, 0, 193);
+    private final Color WALL_COLOR = new Color(183, 184, 182);
+    private final Color TILE_COLOR = new Color(78, 84, 0);
+    private final Color DOOR_COLOR = new Color(52,103 , 92);
 
     /**
      * Make a new floor with the specified parameters
@@ -43,14 +43,6 @@ public class Floor {
         this.xOffset = xOffset;
         this.yOffset = yOffset;
 
-        String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
-        /*Room room_co237 = new Room(null, null);
-        try {
-            room_co237.setTileMap(co237);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-*/
         System.out.printf("Width: %d, Height: %d \n", mapWidth, mapHeight);
         System.out.printf("x: %d, y: %d \n", xOffset, yOffset);
     }

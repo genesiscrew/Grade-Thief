@@ -26,7 +26,6 @@ public class PolygonDrawer {
 	private double[] lightDir;
 	private double[] viewFrom;
 	private GameController controller;
-	private ArrayList<Location> polygonxy;
 
 	public PolygonDrawer(Room room, double[] lightDir, double[] viewFrom, GameController controller) {
 		this.room = room;
@@ -80,13 +79,8 @@ public class PolygonDrawer {
 
 						} else {
 							currentPlayer.inRoom(true);
-
 						}
-
 					}
-
-					;
-
 				});
 
 		// Add all polygons to the list
@@ -124,7 +118,6 @@ public class PolygonDrawer {
 	private void setOrder(java.util.List<Polygon> polys) {
 		double[] k = new double[polys.size()];
 		polygonDrawOrder = new int[polys.size()];
-		// polygonxy = new ArrayList<Location>();
 
 		for (int i = 0; i < polys.size(); i++) {
 			k[i] = polys.get(i).averageDistance;

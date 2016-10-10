@@ -1,4 +1,4 @@
-package model.server;
+package server;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -10,8 +10,7 @@ import java.net.Socket;
 import java.util.Scanner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.tools.DocumentationTool.Location;
+
 
 import controller.GameController;
 
