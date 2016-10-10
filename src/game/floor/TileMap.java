@@ -10,6 +10,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import characters.GuardBot;
+import items.CameraDraw;
 import items.Chair;
 import items.Container;
 import items.Dog;
@@ -34,43 +35,73 @@ public class TileMap {
 	private int TileMapWidth = 0;
 	private int TileMapHeight = 0;
 	private int optionalCode = -1; // default value of map does not contain a
-									// door
+	// door
 	private List<Location> doorLocations = new ArrayList<Location>();
+	private List<Integer> lockedDoorNumbers = new ArrayList<Integer>();
 
+	/*
+	 * returns the width of the room parsed in from txt file
+	 */
 	public int getMapWidth() {
 		return TileMapWidth;
 	}
-
+	/*
+	 * returns the height of the room parsed in from txt file
+	 */
 	public int getMapHeight() {
 		return TileMapHeight;
 	}
 
-	public int getOptionalCode() {
-		return optionalCode;
-	}
 
 	public TileMap(Tile[][] TileMap, gui.Room room) {
 		this.TileMap = TileMap;
 		this.room = room;
 	}
-
+	/*
+	 * returns a 2D array of Tiles contained in the tileMap (part of the Room)
+	 */
 	public Tile[][] getTileMap() {
 		return this.TileMap;
 	}
 
+	/**
+	 * sets the specified Tile on the TileMap to be of a certain Tile Type, t
+	 * @param x -- specified X
+	 * @param y -- specified Y
+	 * @param t -- the tile for the map to be set to
+	 */
 	public void setTile(int x, int y, Tile t) {
 		this.TileMap[x][y] = t;
 	}
 
+	/**
+	 * returns the integer of the locked door (ie from 0 - (int) numberOfDoors)
+	 * @return
+	 */
+	public List<Integer> getLockedDoors() {
+		return this.lockedDoorNumbers;
+	}
+	/**
+	 * creates a tileMap. Converts a file into a String; which is scanned and parsed as a TileMap
+	 * @param f -- the file name as a string
+	 * @return
+	 */
 	public TileMap createTileMap(String f) {
 		String map = convertFileToTileString(f);
 		// System.out.println("creatTileMap method");
 		return convertStringToTileMap(map);
 	}
 
+	/*
+	 * Adds a door at given location
+	 */
 	public void addDoors(Location doorLocation) {
 		this.doorLocations.add(doorLocation);
 	}
+
+	/*
+	 * Gets the locations of all the doors as an ArrayList
+	 */
 
 	public List<Location> getDoors() {
 		return this.doorLocations;
@@ -115,9 +146,8 @@ public class TileMap {
 
 		Scanner s = new Scanner(Tiles);
 
-		// String scode = null, swidth = null, sheight = null;
 
-		int code = Integer.parseInt(s.nextLine());
+		int code = Integer.parseInt(s.nextLine()); // redunant old logic -- name of room. Not used.
 		int width = Integer.parseInt(s.nextLine());
 		int height = Integer.parseInt(s.nextLine());
 
@@ -130,16 +160,17 @@ public class TileMap {
 		tileMap.TileMapHeight = height;
 
 		String items = Tiles.substring(Tiles.lastIndexOf("*") + 2);
-		tileMap.setItems(items);
-		// System.out.println(items);
+		tileMap.setItems(items); // parses in the part of the txt file that are the items
+
 		s.close();
-		// System.out.println("ti" + Tiles);
+
 		Tiles = Tiles.substring(Tiles.indexOf('.') + 2); // concatenate
-															// dimensions now
-															// that they are
-															// loaded
+		// dimensions now
+		// that they are
+		// loaded
 		int count = 0;
 
+		// iterates through the txt map and adds to the tileMap based on which tile (char) has been parsed
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width + 1; x++) {
 
@@ -157,24 +188,25 @@ public class TileMap {
 					tileMap.TileMap[x][y] = e;
 				}
 
-				// added for the level
 				if (c == 'r') {
 					RoomTile r = new RoomTile();
 					r.setLocation(loc);
 					tileMap.TileMap[x][y] = r;
 				}
 
-				else if (c == 'd') {
-					// System.out.println("adding door at " + loc.toString() );
-					DoorTile d = new DoorTile();
-					d.setLocation(loc);
-					d.setDoor(Door.getDoor(code)); // gets the door with the
-													// given code
-					tileMap.TileMap[x][y] = d;
-					doorLocs.add(loc); // adds the door to list of door
-										// locations
-				}
+				else if (c == 'd') {;
 
+				doorLocs.add(loc); // adds the door to list of door
+
+
+				DoorTile d = new DoorTile();
+				d.setLocation(loc);
+				Door placeDoor = new Door(doorLocs.size(), null, 0,0,0,0,0,0,null);
+				d.setDoor(placeDoor); // gets the door with the
+				// given code
+				tileMap.TileMap[x][y] = d;
+
+				}
 				count++;
 			}
 		}
@@ -186,10 +218,23 @@ public class TileMap {
 
 	}
 
+	/**
+	 *
+	 * @param room -- the room to be populated with items
+	 * @param String -- a String parsed in which contains details of ALL the items
+	 * @param container -- a container to recursively add items to. Initially called as null
+	 */
 	public void populateRoom(gui.Room room, String String, Container container) {
 		// int count = 0;
+		System.out.println(String);
 		Scanner sc = new Scanner(String);
 		TileMap tileMap = room.getTileMap();
+
+		for (Location l: tileMap.getDoors()) {
+			DoorTile dt = (DoorTile) tileMap.TileMap[l.locX()][l.locY()];
+			Door d = dt.getDoor();
+			room.addDoor(d);
+		}
 
 		while (sc.hasNextLine()) {
 			if (!sc.equals("")) {
@@ -207,31 +252,24 @@ public class TileMap {
 					sc.close();
 					return;
 				}
+				if (id == -9) {
+					sc.next();
+					while (sc.hasNextInt()) {
+						int doorToLock = sc.nextInt();
 
-//				if (id == -1) {
-//
-//				//	System.out.println("found door" + sc.next() + "  "+ sc.next() + " code " + sc.next());
-//					int xPos = sc.nextInt();
-//					int yPos = sc.nextInt();
-//					int doorCode = sc.nextInt();
-//					Tile tile = room.getTileMap().getTileMap()[xPos][yPos];
-//					Door door = new Door(doorCode, "Door", 0, 0, 0, 0, 0, 0, null);
-//					DoorTile DT = (DoorTile) tile;
-//				//	DT.setDoorCode(doorCode);
-//					DT.setDoor(door);
-//					tileMap.setTile(xPos, yPos, DT);
-//					continue;
-//				}
+						DoorTile d = (DoorTile) tileMap.TileMap[doorLocations.get(doorToLock).locX()][doorLocations.get(doorToLock).locY()];
+						d.getDoor().setLock();
 
-				// 1 6 1 0 10 10 10 255 0 0 container1 C 0 3
+					}
+					System.out.println(sc.nextLine() + " ======================== ");
+					continue;
+				}
+
 				int x = sc.nextInt();
 				int y = sc.nextInt();
-
-				int z = sc.nextInt(); // test
-				// 6 1 0 1 10 10 10 container1 C 0 3 255 0 0
+				int z = sc.nextInt();
 				Tile tile = room.getTileMap().getTileMap()[x][y];
 
-				// test
 				int w = sc.nextInt();
 				int h = sc.nextInt();
 				int l = sc.nextInt();
@@ -239,8 +277,8 @@ public class TileMap {
 				int green = sc.nextInt();
 				int blue = sc.nextInt();
 
-				//
-				String drawableItem = sc.next();
+				sc.next(); sc.next();
+
 				String type = sc.next();
 
 				if (type.equals("D")) { // Door
@@ -251,11 +289,11 @@ public class TileMap {
 					Door D = new Door(id, type, 10 * x, 10 * y, z, w, h, l, new Color(red, green, blue));
 					DT.setDoor(D);
 					tileMap.setTile(x, y, DT);
-//					room.addItemToRoom(
-//							new DoorDraw(id, type, 10 * x, 10 * y, z, w, h, l, new Color(red, green, blue), D));
+					//					room.addItemToRoom(
+					//							new DoorDraw(id, type, 10 * x, 10 * y, z, w, h, l, new Color(red, green, blue), D));
 
 				}
-			/*	if (type.equals("GuardBot")) { // Door
+				if (type.equals("GuardBot")) { // Door
 					// System.out.println("===========================
 					// ddddddddddddddddddddddd");
 					int moveStrategy = sc.nextInt();
@@ -277,7 +315,7 @@ public class TileMap {
 					// room.addItemToRoom(guard);
 					room.addGuardtoRoom(guard);
 
-				}*/
+				}
 				// FOUND CONTAINER
 				else if (type.equals("C")) {
 					// container found
@@ -301,10 +339,10 @@ public class TileMap {
 					String fileString = sb.toString();
 
 					fileString = fileString.substring(1, fileString.length()); // trim
-																				// the
-																				// first
-																				// blank
-																				// space
+					// the
+					// first
+					// blank
+					// space
 					//System.out.println(fileString + "fileString");
 
 					Container con = new Container(id, null, "box", keyID, 0, 0, 0, 0, 0, 0, new Color(0, 0, 0));
@@ -316,7 +354,7 @@ public class TileMap {
 						//container.setContainedContainer(con);
 						sc.close();
 						return; // should return by default anyway, code placed
-								// for readability
+						// for readability
 
 						// TODO: if method called by container item, then add
 						// item into container list
@@ -326,7 +364,7 @@ public class TileMap {
 					// into the calling container, then we add it the tile map
 					else {
 						//System.out.println(
-							//	"container :: " + drawableItem + "  is not contained any containers  " + drawableItem);
+						//	"container :: " + drawableItem + "  is not contained any containers  " + drawableItem);
 						EmptyTile E = (EmptyTile) tile;
 						E.addObjectToTile(con);
 						E.setOccupied();
@@ -365,11 +403,9 @@ public class TileMap {
 				else {
 					EmptyTile E = (EmptyTile) tile;
 					Item drawItem = null;
-					// count++;
-					//System.out.println("==================================");
-					//System.out.println("type is of type  " + type + " count");
-					// System.out.println(sc.next());
 
+
+					// adds
 					switch (type) {
 					case "KeyDraw":
 						drawItem = new KeyDraw(id, type, 10 * x, 10 * y, z, w, h, l, new Color(red, green, blue));
@@ -390,7 +426,17 @@ public class TileMap {
 					case "Dog":
 						drawItem = new Dog(id, type, 10 * x, 10 * y, z, w, h, l, new Color(red, green, blue));
 						break;
+
+					case "Laptop":
+						drawItem = new Laptop(id, type, 10 * x, 10 * y, z, w, h, l, new Color(red, green, blue));
+						break;
 					}
+
+					if (drawItem != null) {
+						System.out.println("adding item!");
+
+					}
+					room.addItemToRoom(drawItem);
 					//System.out.println("==================================");
 					//System.out.println("adding item " + type);
 					//System.out.println("==================================");
@@ -435,21 +481,38 @@ public class TileMap {
 				return;
 			}
 		}
-
+		//sc.close();
 	}
 
+
+	/**
+	 * gets all the items to be parsed into populateRoom
+	 * @return
+	 */
 	public String getItems() {
 		return items;
 	}
 
+	/**
+	 *  String of all items to be parsed into populateRoom
+	 * @param items
+	 */
 	public void setItems(String items) {
 		this.items = items;
 	}
 
+	/**
+	 * returns the room the tileMap is part of
+	 * @return
+	 */
 	public gui.Room getRoom() {
 		return room;
 	}
 
+	/**
+	 * sets the room the tileMap is part of
+	 * @param room
+	 */
 	public void setRoom(gui.Room room) { // don't use?
 		this.room = room;
 	}

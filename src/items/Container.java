@@ -35,65 +35,62 @@ public class Container extends Item implements Interactable, Movable {
     public List<Item> getItems() {
         if (this.containedContainer != null) {
             System.out.println("container " + this.containedContainer);
-            this.containedContainer.getItems();
+            return this.containedItems;
+        }
+        return null;
+    }
+
+
+
+
+
+        @Override
+        public void pickUp() {
+
         }
 
-        int i = 0;
+        public String toString() {
+        	int extra = 0;
+            if (containedItems == null)
+                    extra = 0;
+            else
+            	extra += containedItems.size();
 
-        for (Item g : this.containedItems) {
-            i++;
-            System.out.println("item "); // g.toString());
+            if (getContainedContainer() != null)
+            	extra += getContainedContainer().containedItems.size() + 1; // container within container is considered item
+
+            return String.valueOf(extra);
         }
 
-        if (containedItems == null) // quick test hack
-            return containedContainer.getItems();
+        @Override
+        public void useItem(GameObject j) {
+            // TODO Auto-generated method stub
 
-        return containedItems;
-    }
+        }
 
-    @Override
-    public void pickUp() {
+        @Override
+        public void useItem() {
 
-    }
+        }
 
-    public String toString() {
-        int extra = 0;
-        if (containedItems == null)
-            extra = 0;
-        else
-            extra += containedItems.size();
+        @Override
+        public void move(Direction dir, Distance d) {
+            // TODO Auto-generated method stub
 
-        if (getContainedContainer() != null)
-            extra += getContainedContainer().containedItems.size() + 1; // container within container is considered item
+        }
+        /**
+         * add item into container
+         */
+        public void addItem(Item item) {
+            System.out.println("adding item to container" + item.toString());
+            this.containedItems.add(item);
 
-        return String.valueOf(extra);
-    }
+        }
 
-    @Override
-    public void useItem(GameObject j) {
-        // TODO Auto-generated method stub
 
-    }
 
-    @Override
-    public void useItem() {
 
-    }
 
-    @Override
-    public void move(Direction dir, Distance d) {
-        // TODO Auto-generated method stub
-
-    }
-
-    /**
-     * add item into container
-     */
-    public void addItem(Item item) {
-        System.out.println("adding item to container" + item.toString());
-        this.containedItems.add(item);
-
-    }
 
     public Container getContainedContainer() {
         return containedContainer;
@@ -135,5 +132,5 @@ public class Container extends Item implements Interactable, Movable {
     }
 
 
-	
+
 }
