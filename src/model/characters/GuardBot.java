@@ -27,8 +27,15 @@ import model.rendering.Drawable;
 import model.rendering.Polygon;
 import view.Screen;
 /**
- * 
+ *
  * @author Hamid Abubakr
+ *
+ *
+ *Guard bot class creates guard bot object that move within each map. the bots are able to detect a player, and are able to move along
+ *predefined coordinates in map. the guard bot route is created using mvoement strategies. depending on the strategy chosen certain parts of the code are used
+ *and certain routes are taken. the bots also can have different speeds at which they move. the bots are unable to detect players inside rooms, only
+ *in corridors. once a guard bot finds a player, the guard player is informed of the players level, in addition a map is temporarily displayed
+ *on his screen indicating the location of the player. once the player hides however, the map will then dissapear after a set period of time. this
  *
  */
 
