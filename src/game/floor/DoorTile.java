@@ -1,6 +1,6 @@
 package game.floor;
 
-import items.Door;
+import model.items.Door;
 
 /**
  * @author Stefan Vrecic

@@ -9,18 +9,17 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import characters.GuardBot;
-//import items.CameraDraw;
-import items.Chair;
-import items.Container;
-import items.Dog;
-import items.Door;
-import items.Item;
-import items.KeyDraw;
-import items.Keys;
-import items.Laptop;
-import items.MetalSheet;
-import items.Table;
+import model.characters.GuardBot;
+import model.items.Chair;
+import model.items.Container;
+import model.items.Dog;
+import model.items.Door;
+import model.items.Item;
+import model.items.KeyDraw;
+import model.items.Keys;
+import model.items.Laptop;
+import model.items.MetalSheet;
+import model.items.Table;
 
 /**
  * @author Stefan Vrecic Class keeps track of a room, including its height,
@@ -29,7 +28,7 @@ import items.Table;
  */
 public class TileMap {
 
-	private gui.Room room;
+	private view.Room room;
 	private String items; // text file contains items as strings
 	private Tile[][] TileMap;
 	private int TileMapWidth = 0;
@@ -53,7 +52,7 @@ public class TileMap {
 	}
 
 
-	public TileMap(Tile[][] TileMap, gui.Room room) {
+	public TileMap(Tile[][] TileMap, view.Room room) {
 		this.TileMap = TileMap;
 		this.room = room;
 	}
@@ -224,7 +223,7 @@ public class TileMap {
 	 * @param String -- a String parsed in which contains details of ALL the items
 	 * @param container -- a container to recursively add items to. Initially called as null
 	 */
-	public void populateRoom(gui.Room room, String String, Container container) {
+	public void populateRoom(view.Room room, String String, Container container) {
 		// int count = 0;
 		System.out.println(String);
 		Scanner sc = new Scanner(String);
@@ -506,7 +505,7 @@ public class TileMap {
 	 * returns the room the tileMap is part of
 	 * @return
 	 */
-	public gui.Room getRoom() {
+	public view.Room getRoom() {
 		return room;
 	}
 
@@ -514,7 +513,7 @@ public class TileMap {
 	 * sets the room the tileMap is part of
 	 * @param room
 	 */
-	public void setRoom(gui.Room room) { // don't use?
+	public void setRoom(view.Room room) { // don't use?
 		this.room = room;
 	}
 

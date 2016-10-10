@@ -4,11 +4,11 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import gui.Cube;
-import gui.Drawable;
-import gui.Polygon;
-import items.Door;
-import items.Item;
+import model.items.Door;
+import model.items.Item;
+import view.Cube;
+import view.Drawable;
+import view.Polygon;
 
 public class DoorDraw extends Item {
 
@@ -81,7 +81,7 @@ public class DoorDraw extends Item {
     }
 
     @Override
-    public List<gui.Polygon> getPolygons() {
+    public List<view.Polygon> getPolygons() {
         List<Polygon> allPolys = new ArrayList<>();
         // Add all the cubes polygons
         cubes.forEach(c -> allPolys.addAll(c.getPolygons()));

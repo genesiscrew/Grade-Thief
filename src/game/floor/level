@@ -39,4 +39,12 @@ wrrrrrrrrrrwrrrrrrrrrwrrrrrrrrrwrrrrrrrrrrrrweeeeeeewrrrrrrrrrrrwrrrrrrrrrrrrrrr
 wrrrrrrrrrrwrrrrrrrrrwrrrrrrrrrwrrrrrrrrrrrrweeeeeeewrrrrrrrrrrrwrrrrrrrrrrrrrrrrw
 wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 *
+-9 lock 0 1 2 3 4 5 lockss
+0 5 10 0 1 1 1 255 0 0 item22 I KeyDraw
+1 5 11 0 1 1 1 255 0 0 item33 I KeyDraw
+3 5 12 0 1 1 1 255 0 0 item55 I KeyDraw
+4 5 11 0 1 1 1 255 0 0 item55 I KeyDraw
+5 5 14 0 1 1 1 255 0 0 item55 I KeyDraw
+50 34 31 0 30 20 5 0 0 0 itemTable I Table
+50 34 31 6 5 5 2 255 0 255 itemLaptop I Laptop
 .

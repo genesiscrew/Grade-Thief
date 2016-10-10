@@ -1,10 +1,7 @@
 package game.floor;
 
-import characters.GuardBot;
-import characters.Player;
-import items.KeyDraw;
-import items.Keys;
-import model.Character;
+import model.characters.GuardBot;
+import model.items.KeyDraw;
 /**
 *
 * @author Stefan Vrecic
@@ -56,7 +53,7 @@ public class EmptyTile implements Tile {
 			this.name = "G";
 			isOccupied = true;
 		}
-		else if (o instanceof items.Player) {
+		else if (o instanceof model.characters.Player) {
 			this.name = "P";
 			isOccupied = true;
 		}

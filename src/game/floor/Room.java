@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import gui.Drawable;
-import items.Door;
+import model.items.Door;
+import view.Drawable;
 /**
 *
 * @author Stefan Vrecic
