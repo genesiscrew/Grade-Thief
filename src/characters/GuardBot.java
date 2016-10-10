@@ -9,6 +9,8 @@ import java.util.Arrays;
  */
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 import javax.swing.plaf.SliderUI;
 
@@ -24,6 +26,7 @@ import items.Distance;
 import items.GameObject;
 import items.Item;
 import items.Player;
+import items.Wall;
 import model.Game;
 
 public class GuardBot extends Player implements Drawable {
@@ -45,12 +48,17 @@ public class GuardBot extends Player implements Drawable {
 	protected Color color;
 	public Screen screen;
 	private int i;
-	private int u;
+	private double u;
 	private int itemID;
 	private String itemType;
-	private double guardSpeed;
-	private double guardConst;
+	private double guardVelocity;
 	private String level;
+	private int DetectionStrength;
+	private boolean foundWall;
+
+	double tmp1 = this.x;
+	double tmp2 = this.y;
+	private double guardSpeedMultiplier;
 
 	/**
 	 * Contructor for guard object
@@ -67,8 +75,8 @@ public class GuardBot extends Player implements Drawable {
 	 * @param floorNo:
 	 *            represents the floor number the guard belongs to
 	 */
-	public GuardBot(int itemID, String itemType, String level, int moveStrategy, int[] distance, int floorNo, double x, double y,
-			double z, double width, double length, double height, double guardSpeed, Color c) {
+	public GuardBot(int itemID, String itemType, String level, int moveStrategy, int[] distance, int floorNo, double x,
+			double y, double z, double width, double length, double height, double guardVelocity, Color c) {
 		super(x, y, z, width, length, height, c);
 		this.itemID = itemID;
 		this.itemType = itemType;
@@ -82,9 +90,11 @@ public class GuardBot extends Player implements Drawable {
 		cubes = new ArrayList<>();
 		this.x = x;
 		this.y = y;
-		this.guardSpeed = guardSpeed;
-		this.guardConst = 10/guardSpeed;
-
+		this.u = 0;
+		this.i = 0;
+		this.guardVelocity = guardVelocity;
+		this.guardSpeedMultiplier = guardVelocity*10;
+		this.DetectionStrength = 50;
 		this.z = 0;
 		this.width = width;
 		this.length = length;
@@ -115,32 +125,25 @@ public class GuardBot extends Player implements Drawable {
 	 * /** this method moves the guard along a path specified by the move
 	 * strategy, the method should keep running until an intruder is detected
 	 */
-public String getLevel() {
-	
-	return this.level;
-}
+	public String getLevel() {
+
+		return this.level;
+	}
+
 	public void move() {
 
 		// set Guard's direction
 		this.dir = directionList.get(i);
-    System.out.println((distance[i]-1)*guardConst);
-    System.out.println(u);
+
 		// move the guard to new location based on strategy
 		// Guard has n moves equal to distance specified in
 		// strategy, however if a player is detected within the direction he is
 		// facing,
 		// the bot stops moving and alerts other player
 		// player as guard of his location
+
 		if (!this.checkforIntruder()) {
-			if (u == Math.round((distance[i] - 1) * guardConst) && i < (directionList.size() - 1)) {
-				i++;
-				u = 0;
-				System.out.println("value of i is: " + i);
-			//	System.out.println("value of u is: " + u);
-				this.updateDirection(x, y);
 
-
-			}
 			// we reverse the movement directions (if
 			// required
 			// e.g. north south path does not require reversal
@@ -150,57 +153,78 @@ public String getLevel() {
 			// and
 			// run the
 			// move method again
-			else if (u == (distance[i] - 1) * guardConst && i == (directionList.size() - 1)) {
+			if ((u == Math.round((distance[i] - 1) * ((2/guardVelocity))/2)  && i == (directionList.size() - 1))) {
 				this.reverseStrategy();
-				System.out.println(" i should reverse" + this.getName());
 				i = 0;
 				u = 0;
-
+				return;
+			} else if ((u == Math.round((distance[i] - 1) * ((2/guardVelocity))/2)  && i < (directionList.size() - 1))) {
+				i++;
+				u = 0;
+				this.updateDirection();
+				return;
 			}
 
 			if (this.dir.equals(Dir.EAST)) {
-                // System.out.println(this.getName() + " should head east now");
-				updatePosition(guardSpeed, 0, 0);
+
+				updatePosition(guardSpeedMultiplier , 0, 0);
 				this.updateDirection();
-				u++;
-				System.out.println(u);
+				u = u + 1 ;
 
 			} else if (this.dir.equals(Dir.WEST)) {
-				updatePosition(-guardSpeed, 0, 0);
+				updatePosition(-guardSpeedMultiplier , 0, 0);
 				this.updateDirection();
-				u++;
-				;
+				u = u + 1 ;
 
 			} else if (this.dir.equals(Dir.NORTH)) {
-				
-				System.out.println(this.itemType + " : moving to " + this.dir);
-				updatePosition(0, -guardSpeed, 0);
+				updatePosition(0, -guardSpeedMultiplier, 0);
 				this.updateDirection();
-
-				u++;
+				u = u + 1 ;
 
 			} else if (this.dir.equals(Dir.SOUTH)) {
+
+				updatePosition(0, guardSpeedMultiplier , 0);
 				this.updateDirection();
-				updatePosition(0, guardSpeed, 0);
-				u++;
+				u = u + 1 ;
 
 			}
 
 			;
-		}
-		else {
+		} else {
 
-			// intruder detected, so we set timer for map to display on guards screen
+			// intruder detected, so we set timer for map to display on guards
+			// screen
 			this.screen.timer = 200;
-			/*if (guardSpeed < 1)
-			guardSpeed += 0.01;*/
+			/*
+			 * if (guardSpeed < 1) guardSpeed += 0.01;
+			 */
 		}
 
 	}
-/**
- * get the floor number
- * @return
- */
+
+	private boolean WallCheck() {
+
+		this.foundWall = false;
+
+		ArrayList<Wall> walls = new ArrayList<>();
+		this.screen.getRoom().getWalls().stream().filter(i -> !i.containsPoint((int) x, (int) y, (int) z))
+				.forEach(i -> {
+
+					foundWall = true;
+
+					;
+
+				});
+
+		return foundWall;
+
+	}
+
+	/**
+	 * get the floor number
+	 *
+	 * @return
+	 */
 	public int getFloorNo() {
 
 		return this.floorNo;
@@ -235,16 +259,14 @@ public String getLevel() {
 			this.revertDistance();
 			directionList = strategy.getDirectionList();
 			this.dir = directionList.get(0);
-		} 
-		 else if (this.moveStrategy == 10) {
-				// reverse movement
-				this.moveStrategy = 6;
-				strategy = new GuardStrategy(6);
-				this.revertDistance();
-				directionList = strategy.getDirectionList();
-				this.dir = directionList.get(0);
-			}
-		else if (this.moveStrategy == 7) {
+		} else if (this.moveStrategy == 10) {
+			// reverse movement
+			this.moveStrategy = 6;
+			strategy = new GuardStrategy(6);
+			this.revertDistance();
+			directionList = strategy.getDirectionList();
+			this.dir = directionList.get(0);
+		} else if (this.moveStrategy == 7) {
 			// reverse movement by updating the arraylist of directions based on
 			// new movement strategy
 			this.moveStrategy = 11;
@@ -299,8 +321,8 @@ public String getLevel() {
 			this.revertDistance();
 			directionList = strategy.getDirectionList();
 			this.dir = directionList.get(0);
-			System.out.println(directionList.get(0));
-			}
+			// System.out.println(directionList.get(0));
+		}
 
 	}
 
@@ -309,65 +331,65 @@ public String getLevel() {
 	 * of view of the bot. the guard bot can only detect a player in front of
 	 * him or in his side views, but he can not detect a player behind him,
 	 * hence a player can sneak through safely if he moves behind the guard.
-
+	 *
 	 * @return
 	 */
 	public Boolean checkforIntruder() {
 		try {
-		 // intrusion only works if current player is a guard and if the other player is not in room
-			if (!this.screen.isGuard() && !this.screen.getCurrentPlayer().isInRoom() && this.screen.getCurrentPlayer().getLevelName().equals(this.level)) {
-			if (dir.equals(Dir.EAST)) {
+			// intrusion only works if current player is a guard and if the
+			// other player is not in room
+			if (!this.screen.isGuard() && !this.screen.getCurrentPlayer().isInRoom()
+					&& this.screen.getCurrentPlayer().getLevelName().equals(this.level)) {
+				if (dir.equals(Dir.EAST)) {
 
-				int guardlocation = (int) Math.round(this.x);
-				int playerlocation = (int) Math.round(this.screen.getPlayerView()[0]);
-				int yOffset = (int) Math.round(this.screen.getPlayerView()[1]) - (int) Math.round(this.y);
+					int guardlocation = (int) Math.round(this.x);
+					int playerlocation = (int) Math.round(this.screen.getPlayerView()[0]);
+					int yOffset = (int) Math.round(this.screen.getPlayerView()[1]) - (int) Math.round(this.y);
 
+					if ((playerlocation - guardlocation) > 0 && (playerlocation - guardlocation) < DetectionStrength
+							& Math.abs(yOffset) < DetectionStrength) {
 
-				if ((playerlocation - guardlocation) > 0
-						&& (playerlocation - guardlocation) < 100 & Math.abs(yOffset) < 100) {
+						return true;
 
-					return true;
+					}
+
+				} else if (dir.equals(Dir.WEST)) {
+
+					int guardlocation = (int) Math.round(this.x);
+					int playerlocation = (int) Math.round(this.screen.getPlayerView()[0]);
+					int yOffset = (int) Math.round(this.screen.getPlayerView()[1]) - (int) Math.round(this.y);
+					if ((guardlocation - playerlocation) > 0 && (guardlocation - playerlocation) < DetectionStrength
+							& Math.abs(yOffset) < DetectionStrength) {
+
+						return true;
+
+					}
+
+				} else if (dir.equals(Dir.NORTH)) {
+
+					int guardlocation = (int) Math.round(this.y);
+					int playerlocation = (int) Math.round(this.screen.getPlayerView()[1]);
+					int xOffset = (int) Math.round(this.screen.getPlayerView()[0]) - (int) Math.round(this.x);
+
+					if ((guardlocation - playerlocation) > 0 && (guardlocation - playerlocation) < DetectionStrength
+							& Math.abs(xOffset) < DetectionStrength) {
+
+						return true;
+
+					}
+
+				} else if (dir.equals(Dir.SOUTH)) {
+
+					int guardlocation = (int) Math.round(this.y);
+					int playerlocation = (int) Math.round(this.screen.getPlayerView()[1]);
+					int xOffset = (int) Math.round(this.screen.getPlayerView()[0]) - (int) Math.round(this.x);
+					if ((playerlocation - guardlocation) > 0 && (playerlocation - guardlocation) < DetectionStrength
+							&& Math.abs(xOffset) < DetectionStrength) {
+						return true;
+
+					}
 
 				}
-
-			} else if (dir.equals(Dir.WEST)) {
-
-				int guardlocation = (int) Math.round(this.x);
-				int playerlocation = (int) Math.round(this.screen.getPlayerView()[0]);
-				int yOffset = (int) Math.round(this.screen.getPlayerView()[1]) - (int) Math.round(this.y);
-				if ((guardlocation - playerlocation) > 0
-						&& (guardlocation - playerlocation) < 100 & Math.abs(yOffset) < 100) {
-
-					return true;
-
-				}
-
-			} else if (dir.equals(Dir.NORTH)) {
-
-				int guardlocation = (int) Math.round(this.y);
-				int playerlocation = (int) Math.round(this.screen.getPlayerView()[1]);
-				int xOffset = (int) Math.round(this.screen.getPlayerView()[0]) - (int) Math.round(this.x);
-
-				if ((guardlocation - playerlocation) > 0
-						&& (guardlocation - playerlocation) < 100 & Math.abs(xOffset) < 100) {
-
-
-					return true;
-
-				}
-
-			} else if (dir.equals(Dir.SOUTH)) {
-
-				int guardlocation = (int) Math.round(this.y);
-				int playerlocation = (int) Math.round(this.screen.getPlayerView()[1]);
-				int xOffset = (int) Math.round(this.screen.getPlayerView()[0]) - (int) Math.round(this.x);
-				if ((playerlocation - guardlocation) > 0 && (playerlocation - guardlocation) < 100
-						&& Math.abs(xOffset) < 100) {
-					return true;
-
-				}
-
-			}
 			}
 
 		} catch (Exception e) { // Do nothing For Guard Quadratic Vision.
@@ -458,35 +480,34 @@ public String getLevel() {
 				directionList.add(Dir.NORTH);
 				directionList.add(Dir.EAST);
 			}
-				
+
 			if (moveStrategy == 15) {
 				directionList.add(Dir.WEST);
 				directionList.add(Dir.NORTH);
 				directionList.add(Dir.EAST);
 				directionList.add(Dir.SOUTH);
-				}
-			
+			}
+
 			if (moveStrategy == 16) {
 				directionList.add(Dir.SOUTH);
 				directionList.add(Dir.EAST);
 				directionList.add(Dir.NORTH);
 				directionList.add(Dir.WEST);
-				}
-			
+			}
+
 			if (moveStrategy == 17) {
 				directionList.add(Dir.WEST);
 				directionList.add(Dir.SOUTH);
 				directionList.add(Dir.EAST);
-				}
-			
+			}
+
 			if (moveStrategy == 18) {
 				directionList.add(Dir.EAST);
 				directionList.add(Dir.NORTH);
 				directionList.add(Dir.WEST);
-				}
-			
 			}
-		
+
+		}
 
 		public ArrayList<Direction.Dir> getDirectionList() {
 
@@ -510,9 +531,9 @@ public String getLevel() {
 		cubes.forEach(c -> c.updatePosition(dx, dy, dz));
 	}
 
-/**
- * changes the direction the bot is facing
- */
+	/**
+	 * changes the direction the bot is facing
+	 */
 	public void updateDirection() {
 		if (this.dir.equals(Direction.Dir.EAST) || this.dir.equals(Direction.Dir.WEST)) {
 			cubes.clear();
@@ -555,8 +576,7 @@ public String getLevel() {
 			// head
 			cubes.add(new Cube(x + (width / 4), y, z + (legHeight * 2), width / 2, width / 1.5, legHeight / 3, color));
 		}
-		}
-
+	}
 
 	@Override
 	public void updateDirection(double toX, double toY) {

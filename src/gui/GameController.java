@@ -63,7 +63,7 @@ public class GameController {
 
 		for (GuardBot g : guardList1) {
 			if (g.getName().equals(guardName)) {
-				 System.out.println(guardName);
+				// System.out.println(guardName);
 				return g;
 			}
 		}
@@ -94,16 +94,16 @@ public class GameController {
 
 	public void setupGuardbots(String map, Screen screen) {
 		int[] dist = { 14, 45, 14, 45 };
-		gaurd1 = new GuardBot(12, "guard1", "level", 16, dist, 0, 2 * 10, 8 * 10, 0, 5, 3, 12, 5, new Color(0, 0, 0));
+		gaurd1 = new GuardBot(12, "guard1", "level", 16, dist, 0, 2 * 10, 8 * 10, 0, 5, 3, 12, 0.4, new Color(0, 0, 0));
 		gaurd1.setScreen(screen);
-		int[] dist2 = { 33, 25};
-		guard2 = new GuardBot(12, "guard2", "level", 12, dist2, 0, 81 * 10, 6 * 10, 0, 5, 3, 12, 4, new Color(0, 0, 0));
-		int[] dist3 = {35, 25};
-		guard3 = new GuardBot(12, "guard3", "level", 10, dist3, 0, 81 * 10, 30 * 10, 0, 5, 3, 12, 3, new Color(0, 0, 0));
+		int[] dist2 = { 32, 29};
+		guard2 = new GuardBot(12, "guard2", "level", 12, dist2, 0, 81 * 10, 6 * 10, 0, 5, 3, 12, 0.3, new Color(0, 0, 0));
+		int[] dist3 = {35, 29};
+		guard3 = new GuardBot(12, "guard3", "level", 10, dist3, 0, 81 * 10, 30 * 10, 0, 5, 3, 12, 0.3, new Color(0, 0, 0));
 		int[] dist4 = {25, 25};
-		guard4 = new GuardBot(12, "guard4", "level2", 4, dist4, 0, 48 * 10, 2 * 10, 0, 5, 3, 12, 1, new Color(0, 0, 0));
-		int[] dist5 = {25, 25};
-		guard5 = new GuardBot(12, "guar5", "level2", 1, dist5, 0, 2 * 10, 2 * 10, 0, 5, 3, 12, 1, new Color(0, 0, 0));
+		guard4 = new GuardBot(12, "guard4", "level2", 4, dist4, 0, 48 * 10, 2 * 10, 0, 5, 3, 12, 0.1, new Color(0, 0, 0));
+		int[] dist5 = {35, 35};
+		guard5 = new GuardBot(12, "guard5", "level2", 1, dist5, 0, 2 * 10, 6 * 10, 0, 5, 3, 12, 0.1, new Color(0, 0, 0));
 		guard2.setScreen(screen);
 		guard3.setScreen(screen);
 		guard4.setScreen(screen);

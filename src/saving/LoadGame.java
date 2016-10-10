@@ -19,6 +19,17 @@ import org.xml.sax.SAXException;
 
 import gui.GameController;
 
+/**
+ *
+ * This class is responsible for loading the game and game files. It gets and
+ * file and try to parse the file in order to load the game. This class had been
+ * encapsulated via private fields, setters and getters.
+ *
+ *
+ * @author Mansour Javaher
+ * @see FastLoad
+ * @see FastSaving
+ */
 public class LoadGame {
 
 	String fileName;
@@ -81,15 +92,12 @@ public class LoadGame {
 
 					System.out.println("PlayerY: " + eElement.getAttribute("Y"));
 
+					//Parsing player position from Sting to double for game.
+
 					double x = Double.parseDouble(eElement.getAttribute("X"));
 					double y = Double.parseDouble(eElement.getAttribute("Y"));
-					/*double z = Double.parseDouble(eElement.getAttribute("Z"));*/
 
-
-					System.err.println("========================================== " + x + " =========" + y + "======== " );
-
-
-					/*GameController.setGuardPosition(new double[] { x, y, 10 });*/
+					//Setting player Position based on the loaded version
 					GameController.getPlayer().setStartX(x);
 					GameController.getPlayer().setStartY(y);
 					GameController.getPlayer().setViewFrom(new double[] { x, y, 10 });
@@ -98,10 +106,7 @@ public class LoadGame {
 
 			System.out.println(GameController.getPlayerPosition());
 
-			double[] xxxxxxxxxxxxxx = GameController.getPlayerPosition();
-
-			System.out.println("HEEEEEEEEEEEREEEEEEEEEEE");
-
+			//double[] playerPostition = GameController.getPlayerPosition();
 
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();

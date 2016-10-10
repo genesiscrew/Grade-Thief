@@ -9,10 +9,35 @@ import java.util.List;
 import gui.GameController;
 import items.Item;
 
+/**
+ *
+ * This class is responsible for saving the game and player. It gets the name of
+ * the file that user wants to save the game into it and then, if the file was
+ * there it will re-write the file and if the file is not there it will create
+ * new file with that name. This class had been encapsulated via private fields,
+ * setters and getters. This class has better performance and functionality than
+ * SaveGame which use XML.
+ *
+ *
+ * @author Mansour Javaher
+ * @see SaveGame
+ * @see LoadGame
+ * @see FastSaving
+ */
 public class FastSaving {
 
+	/**
+	 * Creating an printStream for writing to file
+	 */
 	PrintStream out;
 
+	/**
+	 * getting the file name from user in order to save save the game and
+	 * gameworld
+	 *
+	 * @param fileName
+	 * @throws FileNotFoundException
+	 */
 	public FastSaving(String fileName) throws FileNotFoundException {
 		out = new PrintStream(new File(fileName));
 	}
@@ -23,13 +48,21 @@ public class FastSaving {
 		double y = tmp[1];
 		double z = tmp[2];
 
+		// getting the items from player inventory for saving purpose
 		List<Item> items = GameController.getPlayer().getCurrentPlayer().getInventory();
 
+		// Writing the player position
 		out.println(x + "," + y + "," + z);
 
 		for (int i = 0; i < items.size(); i++) {
 
-			// Item Color
+			// Saving the Items attribute for loading later.
+			/*
+			 * itemColor itemHeight itemID itemLength itemType
+			 * itemWidth itemX itemY itemZ
+			 *
+			 */
+
 			int red = items.get(i).getColor().getRed();
 			int green = items.get(i).getColor().getGreen();
 			int blue = items.get(i).getColor().getBlue();
@@ -45,23 +78,13 @@ public class FastSaving {
 			int itemID = items.get(i).getItemID();
 			String itemType = items.get(i).getItemType();
 
-
-			out.println(red + "," + green + "," + blue + "," + itemHeight + "," + itemID + "," + length + ","
-					+ itemType + "," + itemWidth + "," + X + "," + Y + "," + Z);
+			//writing the items attributes
+			out.println(red + "," + green + "," + blue + "," + itemHeight + "," + itemID + "," + length + "," + itemType
+					+ "," + itemWidth + "," + X + "," + Y + "," + Z);
 
 		}
-
-		/*
-		 *
-		 * <item itemColor="NULL" itemHeight="NULL" itemID="NULL"
-		 * itemLength="NULL" itemType="NULL" itemWidth="NULL" itemX="NULL"
-		 * itemY="NULL" itemZ="NULL" />
-		 *
-		 * out.println("Yellow" + "," + "100" + "," + "1000" + "," + "1000" +
-		 * "," + "Drawable" + "," + "1000" + "," + "50" + "," + "50" + "," +
-		 * "5");
-		 */
-
+		//This line should be here for saving puprose because in loading = means that this is the end of the saved
+		//Version of the file
 		out.println("====================================================================");
 
 	}
