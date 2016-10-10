@@ -206,7 +206,8 @@ public class Polygon {
 	 */
 	public void drawMap(Graphics g, boolean guard, int timer, double X, double Y, double X1, double Y1) {
 
-		// if (timer > 0) {
+		int xOffset = Screen.screenSize.width-500;
+		int yOffset = 50;
 
 		// if (guard) {
 		for (int i = 0; i < x.length; i++) {
@@ -216,22 +217,28 @@ public class Polygon {
 			if ((int) x[i] - (int) X == 0 && (int) y[i] - (int) Y == 0) {
 				g.setColor(Color.blue);
 				s = "\u25CF";
-				g.drawString(s, (int) x[i] / 2, (int) y[i] / 2);
+				 g.drawString(s, xOffset + (int) x[i] / 2, yOffset + (int) y[i] / 2);
+				//g.drawRect(xOffset + (int) x[i] / 2, yOffset +  (int) y[i] / 2, 5, 5);
+
 
 			}
 			else if (xoffset >= 0 && xoffset <= 10 && yoffset >= 0 && yoffset <= 10) {
 				g.setColor(Color.green);
 				s = "\u25CF";
-				g.drawString(s, (int) x[i] / 2, (int) y[i] / 2);
+				g.drawString(s, xOffset + (int) x[i] / 2, yOffset +  (int) y[i] / 2);
+				//g.drawRect(xOffset + (int) x[i] / 2, yOffset +  (int) y[i] / 2, 5, 5);
+
 
 			} else {
 				g.setColor(Color.black);
-				g.drawString(s, (int) x[i] / 2, (int) y[i] / 2);
+				//g.drawString(s, xOffset + (int) x[i] / 2, yOffset + (int) y[i] / 2);
+				g.drawRect(xOffset + (int) x[i] / 2, yOffset +  (int) y[i] / 2, 5, 5);
+
 			}
 		}
-		 }
+	}
 
-		// }
+	// }
 
 	//}
 }

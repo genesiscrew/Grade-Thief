@@ -23,7 +23,7 @@ public class Player implements Drawable {
     protected boolean jumping;
 
     private List<Item> inventory; // = new ArrayList<Item> ();
-	private String roomName;
+	private String levelName;
 	private boolean inRoom = true;
 	private int roomCounter;
 
@@ -162,12 +162,12 @@ public class Player implements Drawable {
     }
 
 	public void setRoom(String roomName) {
-		this.roomName = roomName;
+		this.levelName = roomName;
 
 	}
 
-	public String getRoomName() {
-	return this.roomName;
+	public String getLevelName() {
+	return this.levelName;
 	}
 
 	public void inRoom(boolean b) {

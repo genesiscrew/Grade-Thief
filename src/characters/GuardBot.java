@@ -50,6 +50,7 @@ public class GuardBot extends Player implements Drawable {
 	private String itemType;
 	private double guardSpeed;
 	private double guardConst;
+	private String level;
 
 	/**
 	 * Contructor for guard object
@@ -66,11 +67,12 @@ public class GuardBot extends Player implements Drawable {
 	 * @param floorNo:
 	 *            represents the floor number the guard belongs to
 	 */
-	public GuardBot(int itemID, String itemType, int moveStrategy, int[] distance, int floorNo, double x, double y,
+	public GuardBot(int itemID, String itemType, String level, int moveStrategy, int[] distance, int floorNo, double x, double y,
 			double z, double width, double length, double height, double guardSpeed, Color c) {
 		super(x, y, z, width, length, height, c);
 		this.itemID = itemID;
 		this.itemType = itemType;
+		this.level = level;
 		this.moveStrategy = moveStrategy;
 		strategy = new GuardStrategy(moveStrategy);
 		directionList = strategy.getDirectionList();
@@ -113,12 +115,16 @@ public class GuardBot extends Player implements Drawable {
 	 * /** this method moves the guard along a path specified by the move
 	 * strategy, the method should keep running until an intruder is detected
 	 */
-
+public String getLevel() {
+	
+	return this.level;
+}
 	public void move() {
 
 		// set Guard's direction
 		this.dir = directionList.get(i);
-
+    System.out.println((distance[i]-1)*guardConst);
+    System.out.println(u);
 		// move the guard to new location based on strategy
 		// Guard has n moves equal to distance specified in
 		// strategy, however if a player is detected within the direction he is
@@ -126,10 +132,10 @@ public class GuardBot extends Player implements Drawable {
 		// the bot stops moving and alerts other player
 		// player as guard of his location
 		if (!this.checkforIntruder()) {
-			if (u == (distance[i] - 1) * guardConst && i < (directionList.size() - 1)) {
+			if (u == Math.round((distance[i] - 1) * guardConst) && i < (directionList.size() - 1)) {
 				i++;
 				u = 0;
-			//	System.out.println("value of i is: " + i);
+				System.out.println("value of i is: " + i);
 			//	System.out.println("value of u is: " + u);
 				this.updateDirection(x, y);
 
@@ -146,7 +152,7 @@ public class GuardBot extends Player implements Drawable {
 			// move method again
 			else if (u == (distance[i] - 1) * guardConst && i == (directionList.size() - 1)) {
 				this.reverseStrategy();
-				//System.out.println(" i should reverse" + this.getName());
+				System.out.println(" i should reverse" + this.getName());
 				i = 0;
 				u = 0;
 
@@ -157,6 +163,7 @@ public class GuardBot extends Player implements Drawable {
 				updatePosition(guardSpeed, 0, 0);
 				this.updateDirection();
 				u++;
+				System.out.println(u);
 
 			} else if (this.dir.equals(Dir.WEST)) {
 				updatePosition(-guardSpeed, 0, 0);
@@ -165,8 +172,10 @@ public class GuardBot extends Player implements Drawable {
 				;
 
 			} else if (this.dir.equals(Dir.NORTH)) {
-				this.updateDirection();
+				
+				System.out.println(this.itemType + " : moving to " + this.dir);
 				updatePosition(0, -guardSpeed, 0);
+				this.updateDirection();
 
 				u++;
 
@@ -226,7 +235,16 @@ public class GuardBot extends Player implements Drawable {
 			this.revertDistance();
 			directionList = strategy.getDirectionList();
 			this.dir = directionList.get(0);
-		} else if (this.moveStrategy == 7) {
+		} 
+		 else if (this.moveStrategy == 10) {
+				// reverse movement
+				this.moveStrategy = 6;
+				strategy = new GuardStrategy(6);
+				this.revertDistance();
+				directionList = strategy.getDirectionList();
+				this.dir = directionList.get(0);
+			}
+		else if (this.moveStrategy == 7) {
 			// reverse movement by updating the arraylist of directions based on
 			// new movement strategy
 			this.moveStrategy = 11;
@@ -297,7 +315,7 @@ public class GuardBot extends Player implements Drawable {
 	public Boolean checkforIntruder() {
 		try {
 		 // intrusion only works if current player is a guard and if the other player is not in room
-			if (!this.screen.isGuard() && !this.screen.getCurrentPlayer().isInRoom()) {
+			if (!this.screen.isGuard() && !this.screen.getCurrentPlayer().isInRoom() && this.screen.getCurrentPlayer().getLevelName().equals(this.level)) {
 			if (dir.equals(Dir.EAST)) {
 
 				int guardlocation = (int) Math.round(this.x);

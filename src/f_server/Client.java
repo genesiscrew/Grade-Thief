@@ -84,7 +84,7 @@ public class Client {
 		int timer = player.getPlayer().timer;
 		output.writeInt(timer);
 		output.flush();
-		String room = player.getPlayer().getCurrentPlayer().getRoomName();
+		String room = player.getPlayer().getCurrentPlayer().getLevelName();
 		output.writeObject(room);
 		output.flush();
 	}

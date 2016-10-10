@@ -68,7 +68,7 @@ public class Server{
 		output.writeDouble(guardPos[2]);
 		output.flush();
 
-		String room = guard.getPlayer().getCurrentPlayer().getRoomName();
+		String room = guard.getPlayer().getCurrentPlayer().getLevelName();
 		output.writeObject(room);
 		output.flush();
 

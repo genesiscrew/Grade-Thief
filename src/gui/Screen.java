@@ -59,7 +59,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 	public static int startZ = 10;
 
 	Robot r; // Used for keeping mouse in center
-	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
 	/**
 	 * This is the co-ordinates of where the player is (x, y, z)
@@ -179,7 +179,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         }
         //System.out.println(timer);
 
-        polyDrawer.drawPolygons(g, guard, otherPlayer, currentPlayer, timer, currentPlayer.getRoomName(), viewFrom[0], viewFrom[1]);
+        polyDrawer.drawPolygons(g, guard, otherPlayer, currentPlayer, timer, currentPlayer.getLevelName(), viewFrom[0], viewFrom[1]);
 
 
 
@@ -218,7 +218,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		if (timer == 200) {
 			// player has been detected
 			if (guard) {
-				messageToDisplay2 = "Intruder has been detected at " + otherPlayer.getRoomName();
+				messageToDisplay2 = "Intruder has been detected at " + otherPlayer.getLevelName();
 
 			}
 
