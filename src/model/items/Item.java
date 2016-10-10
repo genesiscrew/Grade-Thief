@@ -14,7 +14,6 @@ public abstract class Item extends GameObject implements Drawable {
 
 	public final double DETECT_PLAYER_BOUNDARY = 10;
 
-
 	protected double x;
 	protected double y;
 	protected double z;
@@ -22,12 +21,9 @@ public abstract class Item extends GameObject implements Drawable {
 	protected double length;
 	protected double height;
 	protected Color color;
-	protected List<Interaction> interactionsAvaliable;
+	protected List<Interaction> interactionsAvailable;
 	protected boolean draw = true;
 	protected java.util.List<Cube> cubes;
-
-
-	private double DETECT_PLAYER_BOUNDARY2 = 5;
 
 	public void canDraw() {
 		draw = !draw;
@@ -60,9 +56,9 @@ public abstract class Item extends GameObject implements Drawable {
 	}
 
 	public void addInteractions() {
-		interactionsAvaliable = new ArrayList<>();
-		interactionsAvaliable.add(Interaction.OPEN);
-		interactionsAvaliable.add(Interaction.CLOSE);
+		interactionsAvailable = new ArrayList<>();
+		interactionsAvailable.add(Interaction.OPEN);
+		interactionsAvailable.add(Interaction.CLOSE);
 	}
 
 	public boolean pointNearObject(double x, double y, double z) {
@@ -119,9 +115,6 @@ public abstract class Item extends GameObject implements Drawable {
 		return length;
 	}
 
-//	public int getItemID() {
-//		return this.itemID;
-//	}
 	public void setLength(double length) {
 		this.length = length;
 	}
@@ -150,10 +143,6 @@ public abstract class Item extends GameObject implements Drawable {
 		this.cubes = cubes;
 	}
 
-	public double getDETECT_PLAYER_BOUNDARY() {
-		return DETECT_PLAYER_BOUNDARY;
-	}
-
 	public void setX(double x) {
 		this.x = x;
 	}
@@ -166,20 +155,21 @@ public abstract class Item extends GameObject implements Drawable {
 		this.z = z;
 	}
 
-	public void setInteractionsAvaliable(List<Interaction> interactionsAvaliable) {
-		this.interactionsAvaliable = interactionsAvaliable;
-	}
 
 	public void setDraw(boolean draw) {
 		this.draw = draw;
 	}
 
-	// Model file
-	public enum Interaction {
-		OPEN, UNLOCK, CLOSE, PICK_UP, SIT, TAKE
+	public String getName() {
+		return getClass().getName().toLowerCase();
 	}
 
-	public List<Interaction> getInteractionsAvaliable() {
-		return interactionsAvaliable;
+	// Model file
+	public enum Interaction {
+		OPEN, CLOSE, PICK_UP, SIT, TAKE, DROP
+	}
+
+	public List<Interaction> getInteractionsAvailable() {
+		return interactionsAvailable;
 	}
 }

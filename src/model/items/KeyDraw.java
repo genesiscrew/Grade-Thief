@@ -69,7 +69,7 @@ public class KeyDraw extends Item {
 
     @Override
     public void addInteractions() {
-        interactionsAvaliable = new ArrayList<>();
-        interactionsAvaliable.add(Interaction.TAKE);
+        interactionsAvailable = new ArrayList<>();
+        interactionsAvailable.add(Interaction.TAKE);
     }
 }

@@ -1,8 +1,6 @@
 package model.items;
 
-import model.items.Item.Interaction;
 import model.rendering.Cube;
-import model.rendering.Drawable;
 import model.rendering.Polygon;
 
 import java.awt.*;
@@ -71,7 +69,7 @@ public class Table extends Item {
 
     @Override
     public void addInteractions() {
-        interactionsAvaliable = new ArrayList<>();
-        interactionsAvaliable.add(Interaction.SIT);
+        interactionsAvailable = new ArrayList<>();
+        interactionsAvailable.add(Interaction.SIT);
     }
 }

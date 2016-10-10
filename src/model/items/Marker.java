@@ -1,8 +1,6 @@
 package model.items;
 
-import model.items.Item.Interaction;
 import model.rendering.Cube;
-import view.*;
 
 import java.awt.*;
 import java.util.*;
@@ -66,8 +64,8 @@ public class Marker extends Item {
 
     @Override
     public void addInteractions() {
-        interactionsAvaliable = new ArrayList<>();
-        interactionsAvaliable.add(Interaction.TAKE);
+        interactionsAvailable = new ArrayList<>();
+        interactionsAvailable.add(Interaction.TAKE);
     }
 
 

@@ -32,6 +32,7 @@ public class GameController {
 	private ArrayList<GuardBot> guardList1;
 	private ArrayList<GuardBot> guardList2;
 
+
 	private Screen screenObject;
 
 	private JFrame frame;

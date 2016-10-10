@@ -1,6 +1,5 @@
 package model.items;
 
-import model.items.Item.Interaction;
 import model.rendering.Cube;
 import model.rendering.Drawable;
 import model.rendering.Polygon;
@@ -65,7 +64,7 @@ public class Laptop extends Item implements Drawable{
 
     @Override
     public void addInteractions() {
-        interactionsAvaliable = new ArrayList<>();
+        interactionsAvailable = new ArrayList<>();
     }
 
 

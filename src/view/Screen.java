@@ -313,7 +313,85 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 			gameOptionPane();
 	}
 
+	/**
+	 * This brings up the inventory window which contains all of the items the player currently has.
+	 */
 	private void showInventory() {
+		String[] inventoryItems = new String[currentPlayer.getInventory().size()];
+		int c = 0;
+		for (Item i : currentPlayer.getInventory()) {
+			inventoryItems[c++] = i.getName();
+		}
+		if (inventoryItems.length == 0)
+			return; // No items to show
+		String stringItem = Inventory.showDialog(this, null, "Select an item to interact with", "Inventory", inventoryItems, inventoryItems[0], inventoryItems[0]);
+		System.out.println(stringItem);
+		int itemLocation = 0;
+		for (int i = 0; i < inventoryItems.length; i++) {
+			if (inventoryItems[i] == stringItem) {
+				itemLocation = i;
+				break;
+			}
+		}
+		Item selectedItem = currentPlayer.getInventory().get(itemLocation);
+		performActionOnItem(selectedItem);
+	}
+	/**
+	 * When the player is near an item and wants to interact with it.
+	 */
+	private void playerWantingToInteractWithItem() {
+		for (Item item : room.getRoomObjects()) {
+			if (item.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
+				performActionOnItem(item);
+			}
+		}
+		room.getDoors().stream().filter(i -> i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])).forEach(i -> {
+			performActionOnItem(i);
+			return;
+		});
+	}
+	/**
+	 * This calls showOptionPanel() which gets the interaction chosen and this executes it.
+	 *
+	 * @param item
+	 */
+	public void performActionOnItem(Item item) {
+		int n = showOptionPane(item.getInteractionsAvailable());
+		Interaction interaction = item.getInteractionsAvailable().get(n);
+		// Take
+		if (interaction.equals(Interaction.TAKE)) {
+			currentPlayer.addToInventory(item);
+			room.removeRoomObject(item);
+			item.canDraw();
+			// Drop
+		} else if (interaction.equals(Interaction.DROP)) {
+			item.moveItemBy(viewFrom[0] - item.getX(),
+					viewFrom[1] - item.getY(), 0);
+			room.addItemToRoom(item);
+			item.canDraw();
+			currentPlayer.removeFromInventory(item);
+		} else {
+			item.performAction(interaction);
+		}
+		return; // We only want to interact with one item
+	}
+	/**
+	 * Shows a panel with a list of interactions a player can perform on an item
+	 *
+	 * @param optionsList
+	 * @return
+	 */
+	private int showOptionPane(List<Item.Interaction> optionsList) {
+		String[] options = new String[optionsList.size()];
+		for (int i = 0; i < optionsList.size(); i++) {
+			options[i] = optionsList.get(i).toString();
+		}
+		int n = JOptionPane.showOptionDialog(this, "What would you like to do?", "Select option", JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+		return n;
+	}
+
+	/*private void showInventory() {
 		String[] inventoryItems = new String[currentPlayer.getInventory().size()];
 		int c = 0;
 		for (Item i : currentPlayer.getInventory()) {
@@ -335,15 +413,17 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		currentPlayer.removeFromInventory(selectedItem);
 	}
 
+
+
 	private void playerWantingToInteractWithItem() {
 
 		room.getRoomObjects().stream().filter(i -> i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2]))
 				.forEach(i -> {
 
-					int n = showOptionPane(i.getInteractionsAvaliable());
-					i.performAction(i.getInteractionsAvaliable().get(n));
-					System.out.println(i.getInteractionsAvaliable().get(n).toString());
-					if (i.getInteractionsAvaliable().get(n).equals(Interaction.TAKE)) {
+					int n = showOptionPane(i.getInteractionsAvailable());
+					i.performAction(i.getInteractionsAvailable().get(n));
+					System.out.println(i.getInteractionsAvailable().get(n).toString());
+					if (i.getInteractionsAvailable().get(n).equals(Interaction.TAKE)) {
 						currentPlayer.addToInventory(i);
 						System.out.println("add to inventory here");
 						currentPlayer.getInventory().forEach(System.out::println);
@@ -351,8 +431,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 				});
 
 		room.getDoors().stream().filter(i -> i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])).forEach(i -> {
-			int n = showOptionPane(i.getInteractionsAvaliable());
-			i.performAction(i.getInteractionsAvaliable().get(n));
+			int n = showOptionPane(i.getInteractionsAvailable());
+			i.performAction(i.getInteractionsAvailable().get(n));
 
 
 			if (n == 0) // doorOpened
@@ -375,7 +455,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
 			}
 		});
-	}
+	}*/
 
 	public void loadMap(String map, int id) {
 
@@ -438,7 +518,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		}
 	}
 
-	private int showOptionPane(List<Item.Interaction> optionsList) {
+	/*private int showOptionPane(List<Item.Interaction> optionsList) {
 		String[] options = new String[optionsList.size()];
 		for (int i = 0; i < optionsList.size(); i++) {
 			options[i] = optionsList.get(i).toString();
@@ -448,7 +528,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 
 		return n;
-	}
+	}*/
 
 	/**
 	 * Moving Ability for the camera(Player)
