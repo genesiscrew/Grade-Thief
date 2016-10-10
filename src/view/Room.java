@@ -8,19 +8,15 @@ import model.items.Item;
 import model.rendering.Drawable;
 import model.rendering.Polygon;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @Author Adam Wareing
+ * The room
  */
 public class Room {
-    private Door door;
-    private int sx = -1;
-    private int sy = -1;
-    private int width = -1;
-    private int h = -1;
+    private int width = 20;
     List<GuardBot> guardList;
     Location playerStart;
 
@@ -46,17 +42,23 @@ public class Room {
      */
     private List<Item> walls = new ArrayList<>();
 
-    Floor floor = new Floor(0, 0, 10, 10);
-
-    Color floorColor = new Color(0,0,0);
-    TileMap tileMap;
+    /**
+     * The floor of the room
+     */
+    private Floor floor = new Floor(0, 0, 10, 10);
 
     /**
+     * The tileMap which stores the 2D array of the floor, and provides util methods
+     */
+    private TileMap tileMap;
+
+    /**
+     * Add a door to the room
      *
      * @param d
      */
     public void addDoor(Door d) {
-    	this.doors.add(d);
+        this.doors.add(d);
     }
 
     /**
@@ -64,30 +66,19 @@ public class Room {
      * the graphics to not draw
      */
 
-    private final double ROOM_PADDING = 10;
+    public final double ROOM_PADDING = 10;
 
     /**
+     * Create a new instance
+     *  @param roomName
      *
      */
-    public Room(String roomName, int xOffset, int yOffset) {
-        floor = new Floor(xOffset, yOffset, 20, 20);
+    public Room(String roomName) {
+        this.setTileMap(System.getProperty("user.dir") + "/src/model/floor/" + roomName);
         this.floorPolygons = floor.generateMap();
         this.polygons = new ArrayList<>();
-        this.guardList = new ArrayList<GuardBot>();
-
-        this.setTileMap(System.getProperty("user.dir") + "/src/model/floor/" + roomName);
-
-      //  System.out.println("" + tileMap.getItems());
-
-
-
-
+        this.guardList = new ArrayList<>();
         tileMap.populateRoom(this, tileMap.getItems(), null);
-
-
-
-
-
 
         floor = new Floor(0, 0, tileMap.getMapWidth(), tileMap.getMapHeight());
         this.floorPolygons = floor.generateMap();
@@ -104,7 +95,6 @@ public class Room {
      * @param z
      */
     public boolean positionOutOfBounds(double x, double y, double z) {
-
         double mapWidth = floor.getMapWidth() * floor.getTileSize();
         double mapHeight = floor.getMapHeight() * floor.getTileSize();
 
@@ -124,17 +114,26 @@ public class Room {
      * @return True if the player is moving into an object, false otherwise.
      */
     public boolean movingIntoAnObject(double x, double y, double z) {
-        if(isPointInAnyObjects(x,y,z, doors))
+        if (isPointInAnyObjects(x, y, z, doors))
             return true;
-        if(isPointInAnyObjects(x,y,z,walls))
+        if (isPointInAnyObjects(x, y, z, walls))
             return true;
-        if(isPointInAnyObjects(x,y,z, roomObjects))
+        if (isPointInAnyObjects(x, y, z, roomObjects))
             return true;
 
         return false;
     }
 
-    private boolean isPointInAnyObjects(double x, double y, double z, List<? extends Item> objects){
+    /**
+     * Do any objects in the room contain the point x,y,z
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @param objects
+     * @return - true if any object contains the point
+     */
+    private boolean isPointInAnyObjects(double x, double y, double z, List<? extends Item> objects) {
         for (Drawable o : objects) {
             if (o.containsPoint((int) x, (int) y, (int) z))
                 return true;
@@ -143,20 +142,16 @@ public class Room {
     }
 
     public void removeRoomObject(Item item) {
-    	roomObjects.remove(item);
+        roomObjects.remove(item);
     }
+
     public void setTileMap(String f) {
-        System.out.println("generating tileMap for " + f);
         TileMap t = new TileMap(null, this);
         this.tileMap = t.createTileMap(f);
     }
 
     public ArrayList<Item> getRoomObjects() {
         return roomObjects;
-    }
-
-    public void setRoomObjects(ArrayList<Item> roomObjects) {
-        this.roomObjects = roomObjects;
     }
 
     public List<Polygon> getPolygons() {
@@ -169,10 +164,6 @@ public class Room {
 
     public List<Polygon> getFloorPolygons() {
         return floorPolygons;
-    }
-
-    public void setFloorPolygons(List<Polygon> floorPolygons) {
-        this.floorPolygons = floorPolygons;
     }
 
     public Floor getFloor() {
@@ -191,73 +182,23 @@ public class Room {
         return tileMap;
     }
 
-    public void setTileMap(TileMap tileMap) {
-        this.tileMap = tileMap;
-    }
-
-    /**
-     * @param sx -- start x,y
-     * @param sy
-     * @param w  -- width, height
-     * @param h  this sets the dimensions of the room RELATIVE to the floor
-     *           for malleability; the room will know it's global position on the floor and the floor will also know the bounding
-     *           box of the room.
-     */
-    public void setBoundingBox(int sx, int sy, int w, int h) {
-        this.sx = sx;
-        this.sy = sy;
-        this.width = w;
-        this.h = h;
-    }
-
     public List<Door> getDoors() {
         return this.doors;
-    }
-
-    public int[] getBoundingBox() {
-        return new int[]{sx, sy, width, h};
-    }
-
-    public int roomGetCode() {
-        return this.door.code;
-    }
-
-    public Door getDoor() {
-        return door;
-    }
-
-    public int getSx() {
-        return sx;
-    }
-
-    public int getSy() {
-        return sy;
     }
 
     public int getWidth() {
         return width;
     }
 
-    public int getH() {
-        return h;
-    }
-
     public List<Item> getWalls() {
         return walls;
     }
 
-	public void addGuardtoRoom(GuardBot guard) {
+    public void setPlayerStart(int x, int y) {
+        playerStart = new Location(x, y);
+    }
 
-		guardList.add(guard);
-
-	}
-	  public List<Door> getGuards() {
-	        return this.doors;
-	    }
-	  public void setPlayerStart(int x, int y) {
-		  playerStart = new Location(x,y);
-	  }
-	  public Location getPlayerStart() {
-		  return playerStart;
-	  }
+    public Location getPlayerStart() {
+        return playerStart;
+    }
 }

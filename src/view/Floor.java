@@ -13,7 +13,8 @@ import model.rendering.Polygon;
 
 /**
  * @Author Adam Wareing
- * This is the floor of the games map. It can generate a new floor from the width and height specified.
+ * This is the floor of the games map. It can generate a new floor from the width and height specified, as well as
+ * parse walls and doors from a 2D array of Tile.
  */
 public class Floor {
 
@@ -48,9 +49,8 @@ public class Floor {
     }
 
     /**
-     * Return a new map being the size of the width and height set in the fields
-     *
-     * @return
+     * Generate a new map being the size of the width and height set in the fields
+     * @return - all polygon objects that make up the floor
      */
     public List<Polygon> generateMap() {
         List<Polygon> polygonFloor = new ArrayList<>();
@@ -67,7 +67,9 @@ public class Floor {
     }
 
     /**
-     *
+     *This generates a list of doors from the tile map. For every door in the tile map a door object with the
+     * position, size and colour properties is created.
+     * @return - all items in the tile map generated into objects
      */
     public List<Item> parseWalls(Tile[][] tileMap) {
         List<Item> walls = new ArrayList<>();
@@ -84,7 +86,9 @@ public class Floor {
     }
 
     /**
-     *
+     * This generates a list of doors from the tile map. For every door in the tile map a door object with the
+     * position, size and colour properties is created.
+     * @return - all doors in the tile map generated into objects
      */
     public List<Door> parseDoors(Tile[][] tileMap) {
         List<Door> doors = new ArrayList<>();
