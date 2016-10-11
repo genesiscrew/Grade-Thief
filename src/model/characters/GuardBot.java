@@ -31,17 +31,17 @@ import view.Screen;
  * @author Hamid Abubakr
  *
  *
- *         Guard bot class creates guard bot object that moves within each
+ *         Guard bot class creates a guard bot object that moves within each
  *         level. the bots are able to detect a player, and are able to move
- *         along predefined coordinates in map. the guard bot route is created
- *         using mvoement strategies. depending on the strategy chosen certain
+ *         along predefined coordinates in the map. the guard bot route is created
+ *         using predefined movement strategies. depending on the strategy chosen certain
  *         parts of the code are used and certain routes are taken. the bots
  *         also can have different speeds at which they move. the bots are
  *         unable to detect players inside rooms, they only detect players in
  *         corridors. once a guard bot finds a player, the guard player is
  *         informed of the players level, in addition a map is temporarily
  *         displayed on the other player's screen indicating the location of the
- *         player. once the player hides however, the map will then dissapear
+ *         player. once the player hides however, the map will then disappear
  *         after a set period of time.
  *
  */

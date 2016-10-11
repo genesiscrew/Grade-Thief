@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 
 
 import controller.GameController;
+import model.floor.Location;
 
 public class Client {
 	private JTextField userText;
@@ -84,6 +85,13 @@ public class Client {
 		String room = player.getPlayer().getCurrentPlayer().getLevelName();
 		output.writeObject(room);
 		output.flush();
+
+		Location loc = player.getPlayer().getCurrentPlayer().getLocation();
+		int x = loc.locX(); int y = loc.locY();
+		output.writeInt(x);
+		output.flush();
+		output.writeInt(y);
+		output.flush();
 	}
 
 	private void recieveData() throws IOException {
@@ -96,6 +104,11 @@ public class Client {
 			player.setGuardPosition(newPos);
 			String room = (String) input.readObject();
 			player.getPlayer().getOtherPlayer().setRoom(room);
+			System.out.println("whats happening");
+			int x = (int) input.readInt();
+			int y = (int) input.readInt();
+			player.getPlayer().getOtherPlayer().setLocation(new Location(x,y));
+			System.out.println("other player locatio is: " + x + "" + y);
 
 		} catch (Exception e) {
 			// TODO: handle exception

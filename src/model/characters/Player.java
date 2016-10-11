@@ -1,5 +1,6 @@
 package model.characters;
 
+import model.floor.Location;
 import model.items.Item;
 import model.rendering.Cube;
 import model.rendering.Drawable;
@@ -27,6 +28,7 @@ public class Player implements Drawable {
 	private String levelName;
 	private boolean inRoom;
 	private int roomCounter;
+	private Location location;
 
     public Player(double x, double y, double z, double width, double length, double height, Color c) {
     	inventory = new ArrayList<Item>();
@@ -182,7 +184,7 @@ public class Player implements Drawable {
 
 	public void inRoom(boolean b) {
 		this.inRoom = b;
-		
+
 	}
 
 	public boolean isInRoom() {
@@ -192,14 +194,22 @@ public class Player implements Drawable {
 
 	public void incrementRoomCounter() {
 		this.roomCounter++;
-		
+
 	}
 	public void resetRoomCounter() {
 		this.roomCounter = 0;
-		
+
 	}
 	public int getRoomCounter() {
 		return this.roomCounter;
-		
+
+	}
+
+	public Location getLocation() {
+		return this.location;
+	}
+	public void setLocation(Location location) {
+		this.location = location;
+
 	}
 }

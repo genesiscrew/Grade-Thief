@@ -45,6 +45,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     public static final int PLAYING = 2;
     public static final int GAMEOVER = 3;
     public static final int GAMEWON = 4;
+    public Location otherPlayerLocation;
     public int timer;
     private boolean displayImage = false;
 
@@ -102,12 +103,21 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         this.controller = controller;
         this.guard = guard;
         this.currentPlayer = new Player(0, 0, 0, 0, 0, 0, null);
+
         this.currentPlayer.setRoom(roomName);
         this.GAMESTATUS = this.PLAYING;
-        if (guard)
+        if (guard) {
             otherPlayer = new model.characters.Player(20, 20, 0, 5, 3, 12, Color.green);
-        else
+            otherPlayer.setLocation(new Location(startX,startY));
+            currentPlayer.setLocation(new Location(startX,startY));
+
+        }
+        else{
             otherPlayer = new model.characters.Player(20, 20, 0, 5, 3, 12, Color.blue);
+            otherPlayer.setLocation(new Location(100,100));
+            currentPlayer.setLocation(new Location(100,100));
+
+        }
 
         otherPlayer.setRoom(roomName);
 
@@ -135,7 +145,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
     public Location getPlayerLocation() {
-        return new Location((int) (viewFrom[0] / 10), (int) (viewFrom[1] / 10));
+    	Location playerLocation = new Location((int) (viewFrom[0] / 10), (int) (viewFrom[1] / 10));
+    	currentPlayer.setLocation(playerLocation);
+    	return playerLocation;
+       // return new Location((int) (viewFrom[0] / 10), (int) (viewFrom[1] / 10));
     }
 
     @Override
@@ -186,8 +199,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         g.drawString("FPS: " + (int) drawFPS , 40, 40);
 
         Location l = getPlayerLocation();
-        if (l != null)
+        Location o = otherPlayer.getLocation();
+        if (l != null && o != null)
             g.drawString("Loc" + l.row() + " , " + l.column(), 40, 60);
+
 
         // Message display
         g.setFont(new Font("Arial", Font.BOLD, 20));
@@ -216,6 +231,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         if (this.GAMESTATUS == this.GAMEOVER){
         	showLoseImage(g);
         }
+        this.currentPlayer.setLocation(new Location ((int)viewFrom[0], (int)viewFrom[1]));
+
 
         // Redraw
         sleepAndRefresh();
@@ -253,10 +270,19 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      */
     private void checkIfPlayerCaught() {
         if (!this.guard) {
+        	System.out.println("we are checking if users touched");
             // check whether player coordinate correspond with other player,
             // hence he is caught
-            if (viewFrom[0] == this.otherPlayer.getX() && viewFrom[1] == this.otherPlayer.getY()) {
+//            if (viewFrom[0] == this.otherPlayer.getX() && viewFrom[1] == this.otherPlayer.getY()) {
+        	System.out.println(this.currentPlayer.getLocation().toString() + " .current. ");
+        	System.out.println(this.otherPlayer.getLocation().toString() + " .other. ");
+        	otherPlayer.setLocation(new Location((int) Math.floor(this.otherPlayer.getLocation().row()/10),
+        			(int) Math.floor(this.otherPlayer.getLocation().column()/10)));
+
+
+        	if (this.currentPlayer.getLocation().toString().equals(otherPlayer.getLocation().toString())) {
                 this.GAMESTATUS = this.GAMEOVER;
+                System.out.println("game is over");
 
             }
 
@@ -267,6 +293,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
         }
     }
+
 
     private void isPlayerDetected() {
         if (timer == 200) {
@@ -334,7 +361,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e)  {
         if (e.getKeyCode() == KeyEvent.VK_W)
             keys[0] = true;
         if (e.getKeyCode() == KeyEvent.VK_A)
@@ -350,7 +377,12 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         if (e.getKeyCode() == KeyEvent.VK_U)
             changeAllDoorState();
         if (e.getKeyCode() == KeyEvent.VK_E)
+        	try {
             playerWantingToInteractWithItem();
+        	}
+        catch (Exception u) {
+
+        }
         if (e.getKeyCode() == KeyEvent.VK_I)
             showInventory();
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
@@ -401,6 +433,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             if (n == 0) // doorOpened
             {
                 Location l = getPlayerLocation();
+
 
                 if (l.row() == 80 && l.column() == 5) // hard coded to switch floor
                     loadMap("level2", 1);

@@ -9,6 +9,7 @@ import java.net.Socket;
 
 import controller.GameController;
 import controller.MakeSound;
+import model.floor.Location;
 
 public class Server{
 
@@ -56,12 +57,12 @@ public class Server{
 		Thread playMusic = new Thread(){
 			@Override
 			public void run(){
-				MakeSound ms = new MakeSound();
-				ms.playSound("/home/wareinadam/SWEN222/Cleaned-Grade-Thief/grade-thief/src/bg-music.wav");
+				//MakeSound ms = new MakeSound();
+				//ms.playSound("/home/wareinadam/SWEN222/Cleaned-Grade-Thief/grade-thief/src/bg-music.wav");
 			}
 		};
 
-		playMusic.start();
+		//playMusic.start();
 
 		while (true) {
 			sendData();
@@ -82,6 +83,14 @@ public class Server{
 		output.writeObject(room);
 		output.flush();
 
+		Location loc = guard.getPlayer().getCurrentPlayer().getLocation();
+		int x = loc.locX(); int y = loc.locY();
+
+		output.writeInt(x);
+		output.flush();
+		output.writeInt(y);
+		output.flush();
+
 	}
 
 	private void recieveData() throws IOException {
@@ -95,6 +104,13 @@ public class Server{
 			guard.getPlayer().getOtherPlayer().setRoom(room);
 			guard.getPlayer().timer = timer;
 			guard.setPlayerPosition(newPos);
+			System.out.println("whats happening");
+			int x = (int) input.readInt();
+			int y = (int) input.readInt();
+
+			guard.getPlayer().getOtherPlayer().setLocation(new Location(x,y));
+			System.out.println("other player locatio is: " + x + "" + y);
+
 
 		} catch (Exception e) {
 			// TODO: handle exception
