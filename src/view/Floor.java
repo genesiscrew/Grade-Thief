@@ -29,6 +29,8 @@ public class Floor {
     private final Color WALL_COLOR = new Color(183, 184, 182);
     private final Color TILE_COLOR = new Color(78, 84, 0);
     private final Color DOOR_COLOR = new Color(52,103 , 92);
+    private static int doorCount = 0;
+
 
     /**
      * Make a new floor with the specified parameters
@@ -92,7 +94,6 @@ public class Floor {
      */
     public List<Door> parseDoors(Tile[][] tileMap) {
         List<Door> doors = new ArrayList<>();
-        int doorCount = 0;
         for (int x = 0; x < tileMap.length; x++) {
             for (int y = 0; y < tileMap[x].length; y++) {
                 if (tileMap[x][y] instanceof DoorTile) {
