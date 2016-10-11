@@ -1,4 +1,4 @@
-<img src="https://gitlab.ecs.vuw.ac.nz/javahemans/grade-thief/blob/master/icons/Java.png" align="right" width="200"/>
+<img src="https://github.com/javahemans/advance-datastructure-algorithm/blob/master/icons/Java.png" align="right" width="200"/>
 # Grade Thief
  [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
 
@@ -25,17 +25,20 @@ through map on the top right.
 - S -- for moving backward
 - A -- moving left
 - D -- moving right
-- Mouse -- for looking around game world
 - E -- for interacting with items
 - I -- for checking inventory
 - ESC -- to get the option panel.
+- Mouse -- for looking around game world
 
 ### Single Player
-`Clone the repository and run the Main.java and you will be able to play`
-
+- This game using the pure java standard so if you follow the following instruction you will be able to play the game.
+- Clone the repository.
+- After cloning go to eclipse and right click on a folder or project select import and then import existing project.
+- After getting the project in your IDE (Eclipse) run the Main.java and you will be able to play.
+`If you are using eclipse make sure you have '.classpath' and '.project' for importing project` 
 
 ### MultiPlayer Version
-- For Playing in multiplayer mode 
+- For Playing in multiplayer mode.
 - User needs to run the server_run.java first.
 - then in the clinet_run.java you need to make sure to enter the server IP_Address.
 - if you are in UNIX or Linux operation system you can get your IP_ADDRESS with typing 'ip addr show'.
