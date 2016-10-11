@@ -1,4 +1,4 @@
-<img src="https://github.com/javahemans/advance-datastructure-algorithm/blob/master/icons/Java.png" align="right" width="200"/>
+<img src="https://gitlab.ecs.vuw.ac.nz/javahemans/grade-thief/blob/master/icons/Java.png" align="right" width="200"/>
 # Grade Thief
  [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
 
