@@ -208,15 +208,33 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             countSinceMessageUpdate++;
         }
 
+         this.checkIfPlayerCaught();
         // Has the player won the game?
-        if (this.GAMESTATUS == this.GAMEWON)
-            showEndImage(g);
+        if (this.GAMESTATUS == this.GAMEWON){
+            showWinImage(g);
+        }
+        if (this.GAMESTATUS == this.GAMEOVER){
+        	showLoseImage(g);
+        }
 
         // Redraw
         sleepAndRefresh();
     }
 
-    private void showEndImage(Graphics g){
+    private void showLoseImage(Graphics g) {
+    	  g.setColor(Color.RED);
+          try {
+              BufferedImage img = ImageIO.read(new File("/home/wareinadam/SWEN222/Cleaned-Grade-Thief/grade-thief/dp.jpg"));
+              g.drawImage(img, 0, 0, (int)screenSize.getWidth(), (int)screenSize.getHeight(),  null);
+          } catch (IOException e) {
+              e.printStackTrace();
+          }
+          g.drawString("You were Caught! Good luck trying to pass SWEN222 now!", (int) (screenSize.getWidth() / 2) - 100, (int) (screenSize.getHeight() / 2));
+          displayImage = true;
+
+	}
+
+	private void showWinImage(Graphics g){
         g.setColor(Color.RED);
         try {
             BufferedImage img = ImageIO.read(new File("/home/wareinadam/SWEN222/Cleaned-Grade-Thief/grade-thief/dp.jpg"));
@@ -233,7 +251,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * match those of other playing, indicating he has been caught, or whether player got a special item
      * in his inventory indicating he has succesfully got access to david's computer
      */
-    private void updateGameStatus() {
+    private void checkIfPlayerCaught() {
         if (!this.guard) {
             // check whether player coordinate correspond with other player,
             // hence he is caught
@@ -241,24 +259,12 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
                 this.GAMESTATUS = this.GAMEOVER;
 
             }
-            //TODO: need to create the special item
-            if (this.currentPlayer.getInventory().contains(null)) {
-                // player has unlocked davids computer using a key and has a unique item added to his inventory, his modified grade sheet
-                // if this item exists in inventory you win the game
-                this.GAMESTATUS = this.GAMEWON;
-
-            }
 
         } else {
             if (viewFrom[0] == this.otherPlayer.getX() && viewFrom[1] == this.otherPlayer.getY()) {
                 this.GAMESTATUS = this.GAMEWON;
             }
-            //TODO: need to create the special item
-            if (this.otherPlayer.getInventory().contains(null)) {
-                // player has unlocked davids computer using a key and has a unique item added to his inventory, his modified grade sheet
-                // if this item exists in inventory you win the game
-                this.GAMESTATUS = this.GAMEWON;
-            }
+
         }
     }
 
