@@ -195,8 +195,8 @@ public class Polygon {
 
 		int xOffset = Screen.screenSize.width-500;
 		int yOffset = 50;
-      // if (timer > 0) {
-		//if (guard) {
+       if (timer > 0) {
+		if (guard) {
 		for (int i = 0; i < x.length; i++) {
 			String s = "*";
 			double xoffset = x[i] -  X1;
@@ -225,7 +225,7 @@ public class Polygon {
 		}
 	}
 
-	// }
+	 }
 
-	//}
+	}
 }
