@@ -48,34 +48,30 @@ import view.Screen;
 
 public class GuardBot extends Player implements Drawable {
 
-	Direction.Dir dir;
-	ArrayList<Direction.Dir> directionList;
-	int moveStrategy;
-	GuardStrategy strategy;
-	Location characterLocation;
-	private int[] distance;
-	private int floorNo;
-	private java.util.List<Cube> cubes;
+	Direction.Dir dir; // direction the guard will move
+	ArrayList<Direction.Dir> directionList; // list of directions the guard will take
+	int moveStrategy; // the identifier of the strategy to be used
+	GuardStrategy strategy; // strategy the guard will use
+	Location characterLocation; // location of character
+	private int[] distance; // array of distances to take for each direction
+	private int floorNo; // floor number of the guard
+	private java.util.List<Cube> cubes; // list of cubes for the guard bot
 	protected double x;
 	protected double y;
 	protected double z;
 	protected double width;
 	protected double length;
 	protected double height;
-	protected Color color;
-	public Screen screen;
-	private int i;
-	private double u;
+	protected Color color; // color of the bot
+	public Screen screen; // screen the guard bot will apear in
+	private int i; // counter for the direction
+	private double u; // counter for steps
 	private int itemID;
 	private String itemType;
-	private double guardVelocity;
+	private double guardVelocity; // speed variable
 	private String level;
-	private int DetectionStrength;
-	private boolean foundWall;
-
-	double tmp1 = this.x;
-	double tmp2 = this.y;
-	private double guardSpeedMultiplier;
+	private int DetectionStrength; // strength of detection (distance)
+	private double guardSpeedMultiplier; //modifier of coordinate steps to account for screen pixels
 
 	/**
 	 * Contructor for guard object

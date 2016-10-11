@@ -79,7 +79,7 @@ public class Door extends Item {
 
     /**
      * this method checks whether player actually passed through a door or not
-     *
+     * author - hamid
      * @return
      */
     public boolean passedThrough() {
