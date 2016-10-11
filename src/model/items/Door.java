@@ -12,7 +12,7 @@ public class Door extends Item {
     private int pass;
     int i;
     private double[][] locations = new double[2][2];
-    private boolean locked;
+    private boolean locked = false;
 
     public Door(int itemID, String itemType, double x, double y, double z, double width, double length, double height,
                 Color c) {
@@ -83,7 +83,7 @@ public class Door extends Item {
      * @return
      */
     public boolean passedThrough() {
-    	
+
         double xOffset = Math.abs(locations[0][0] - locations[1][0]);
         double yOffset = Math.abs(locations[0][1] - locations[1][1]);
         if (xOffset + x > Math.max(locations[0][0], locations[1][0])

@@ -214,13 +214,6 @@ public class TileMap {
 
 		Scanner sc = new Scanner(String);
 		TileMap tileMap = room.getTileMap();
-		if (container == null) {
-			for (Location l : tileMap.getDoors()) {
-				DoorTile dt = (DoorTile) tileMap.TileMap[l.locX()][l.locY()];
-				Door d = dt.getDoor();
-				room.addDoor(d);
-			}
-		}
 
 		while (sc.hasNextLine()) {
 			if (!sc.equals("")) {
@@ -240,8 +233,11 @@ public class TileMap {
 					while (sc.hasNextInt()) {
 						int doorToLock = sc.nextInt();
 
-						DoorTile d = (DoorTile) tileMap.TileMap[doorLocations.get(doorToLock).locX()][doorLocations
-								.get(doorToLock).locY()];
+						for (Door o: room.getDoors()) {
+	                           if (o.getItemID() == doorToLock) {
+	                               o.setLock();
+	                           }
+	                       }
 						//d.getDoor().setLock();
 
 					}

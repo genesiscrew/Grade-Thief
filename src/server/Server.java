@@ -11,6 +11,12 @@ import controller.GameController;
 import controller.MakeSound;
 import model.floor.Location;
 
+
+/**
+ * This class is resposible to make a ServerSocket
+ * @author shenavmost
+ *
+ */
 public class Server{
 
 	private ObjectOutputStream output;
@@ -19,8 +25,21 @@ public class Server{
 	private Socket connection;
 	private GameController guard = new GameController(true);
 
+
+	/**
+	 * Game starts from here and its responsible for wait for players to connect and setup stream and update the game
+	 */
 	public void startRunning() {
 		try {
+			Thread playMusic = new Thread(){
+				@Override
+				public void run(){
+					MakeSound ms = new MakeSound();
+					ms.playSound("/am/courtenay/home1/abubakhami/workspace/grade-thief/src/bg-music.wav");
+				}
+			};
+
+			playMusic.start();
 
 			server = new ServerSocket(6789, 100);
 			while (true) {
@@ -39,12 +58,20 @@ public class Server{
 		}
 	}
 
+	/**
+	 * This method is responsible for waiting for other players to connect
+	 * @throws IOException
+	 */
 	private void waitForConnection() throws IOException {
 		System.out.println("Waiting for someone to connect...");
 		connection = server.accept();
 		System.out.println("Now connected to" + connection.getInetAddress().getHostName());
 	}
 
+	/**
+	 * This method is responsible for setup stream between server and clinet
+	 * @throws IOException
+	 */
 	private void setupStream() throws IOException {
 		output = new ObjectOutputStream(connection.getOutputStream());
 		output.flush();
@@ -53,16 +80,12 @@ public class Server{
 	}
 
 
+	/**
+	 * This method is responsible for updating the game world
+	 * @throws IOException
+	 */
 	private void update() throws IOException {
-		Thread playMusic = new Thread(){
-			@Override
-			public void run(){
-				//MakeSound ms = new MakeSound();
-				//ms.playSound("/home/wareinadam/SWEN222/Cleaned-Grade-Thief/grade-thief/src/bg-music.wav");
-			}
-		};
 
-		//playMusic.start();
 
 		while (true) {
 			sendData();
@@ -70,7 +93,13 @@ public class Server{
 		}
 	}
 
+	/**
+	 * This method is responsible for sending guard position to client
+	 * @throws IOException
+	 */
 	private void sendData() throws IOException {
+
+		//Get player's position
 		double []guardPos = guard.getGuardPosition();
 		output.writeDouble(guardPos[0]);
 		output.flush();
@@ -79,13 +108,14 @@ public class Server{
 		output.writeDouble(guardPos[2]);
 		output.flush();
 
+		//Get player's room
 		String room = guard.getPlayer().getCurrentPlayer().getLevelName();
 		output.writeObject(room);
 		output.flush();
 
+		//Get the other player's position
 		Location loc = guard.getPlayer().getCurrentPlayer().getLocation();
 		int x = loc.locX(); int y = loc.locY();
-
 		output.writeInt(x);
 		output.flush();
 		output.writeInt(y);
@@ -93,8 +123,15 @@ public class Server{
 
 	}
 
+	/**
+	 * This method is responsible for receinving data from client and update the server
+	 * @throws IOException
+	 */
 	private void recieveData() throws IOException {
 		try {
+
+
+			//Receive other player's Position
 			double playerPosX = (double) input.readDouble();
 			double playerPosY = (double) input.readDouble();
 			double playerPosZ = (double) input.readDouble();
@@ -116,6 +153,10 @@ public class Server{
 		}
 	}
 
+
+	/**
+	 * This method is responsible for closing the connection after game is finished.
+	 */
 	private void closeCrap() {
 		System.out.println("Closing connectin...");
 		try {

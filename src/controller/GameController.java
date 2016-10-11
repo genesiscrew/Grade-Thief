@@ -24,8 +24,8 @@ public class GameController {
 
 	// private Screen guard;
 	// Position is stored using x, y, z
-	private static double[] playerPosition = new double[] { 50, 100, 10 };
-	private static double[] guardPosition = new double[] { 100, 100, 10 };
+	private static double[] playerPosition = new double[] { 100, 100, 10 };
+	private static double[] guardPosition = new double[] { 150, 100, 10 };
 
 	private ArrayList<GuardBot> guardList1;
 
@@ -78,12 +78,12 @@ public class GameController {
 
 	/**
 	 * sets up guard bots onto specified locations within each level of the game
-	 * 
+	 *
 	 * @param parameter
 	 *            is the screen object on which the bots will be drawn.
 	 */
 	public void setupGuardbots(Screen screen) {
-		
+
 		GuardBot gaurd1;
 		GuardBot guard2;
 		GuardBot guard3;
@@ -134,7 +134,7 @@ public class GameController {
 
 	/**
 	 * gets the other player's position, relative to each other
-	 * 
+	 *
 	 * @param isGuard,
 	 *            a boolean parameter, if true then the player is a guard, else
 	 *            he is a normal player.

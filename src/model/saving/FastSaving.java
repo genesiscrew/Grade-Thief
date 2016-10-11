@@ -55,10 +55,22 @@ public class FastSaving {
 	}
 
 	public void save() {
-		double[] tmp = GameController.getPlayerPosition();
-		double x = tmp[0];
-		double y = tmp[1];
-		double z = tmp[2];
+
+		double x;
+		double y;
+		double z;
+		if(GameController.isGuard() == true){
+			double[] tmp = GameController.getGuardPosition();
+			x = tmp[0];
+			y = tmp[1];
+			z = tmp[2];
+		}else{
+			double[] tmp = GameController.getPlayerPosition();
+			x = tmp[0];
+			y = tmp[1];
+			z = tmp[2];
+		}
+
 
 		// getting the items from player inventory for saving purpose
 		List<Item> items = GameController.getPlayer().getCurrentPlayer().getInventory();

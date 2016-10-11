@@ -7,6 +7,11 @@ import controller.Main;
 import view.Calculator;
 import view.Screen;
 
+/**
+ * @Author Adam Wareing
+ * This is used to store all the x,y,z points of a single polygon.
+ *
+ */
 public class Polygon {
 	public double[] x, y, z;
 	boolean draw = true;
@@ -39,7 +44,7 @@ public class Polygon {
 	}
 
 	/**
-	 * Update the polygon for
+	 * Update the polygon for the light direction and where the player is viewing from
 	 *
 	 * @param screen
 	 */
@@ -48,11 +53,13 @@ public class Polygon {
 		newY = new double[x.length];
 		draw = true;
 		for (int i = 0; i < x.length; i++) {
-			calcPos = Calculator.calculatePositionP(viewFrom, x[i], y[i], z[i]);
+			// Cal
+			calcPos = Calculator.calculateProjectionFromPosition(viewFrom, x[i], y[i], z[i]);
 			newX[i] = (Main.ScreenSize.getWidth() / 2 - Calculator.calculatorFocusPosition[0])
 					+ calcPos[0] * Screen.zoom;
 			newY[i] = (Main.ScreenSize.getHeight() / 2 - Calculator.calculatorFocusPosition[1])
 					+ calcPos[1] * Screen.zoom;
+			// If its behind the camera don't draw it
 			if (Calculator.t < 0)
 				draw = false;
 		}
@@ -62,7 +69,11 @@ public class Polygon {
 		averageDistance = getDist(viewFrom);
 	}
 
-	void calcLighting(double[] lightDir) {
+	/**
+	 * Calculate the lighting for the polygon based on the current light source
+	 * @param - lightDir [x,y,z] position of the sun
+	 */
+	public void calcLighting(double[] lightDir) {
 		Plane lightingPlane = new Plane(this);
 		double angle = Math.acos(((lightingPlane.normalVector.x * lightDir[0])
 				+ (lightingPlane.normalVector.y * lightDir[1]) + (lightingPlane.normalVector.z * lightDir[2]))
@@ -91,6 +102,12 @@ public class Polygon {
 		}
 	}
 
+	/**
+	 * Set the position of the player
+	 * @param dx
+	 * @param dy
+	 * @param dz
+	 */
 	public void updatePosition2(double dx, double dy, double dz) {
 		for (int i = 0; i < x.length; i++) {
 			this.x[i] = dx;

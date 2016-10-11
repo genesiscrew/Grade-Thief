@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * @Author Adam Wareing
- * The room
+ * The room is a section of the map. It contains doors, room items, walls and a floor
  */
 public class Room {
     private int width = 20;
@@ -78,13 +78,14 @@ public class Room {
         this.floorPolygons = floor.generateMap();
         this.polygons = new ArrayList<>();
         this.guardList = new ArrayList<>();
+        this.doors = floor.parseDoors(this.tileMap.getTileMap());
+
         tileMap.populateRoom(this, tileMap.getItems(), null);
 
         floor = new Floor(0, 0, tileMap.getMapWidth(), tileMap.getMapHeight());
         this.width = tileMap.getMapWidth();
         this.floorPolygons = floor.generateMap();
         this.walls = floor.parseWalls(this.tileMap.getTileMap());
-        this.doors = floor.parseDoors(this.tileMap.getTileMap());
     }
 
     /**

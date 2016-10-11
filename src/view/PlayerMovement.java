@@ -10,6 +10,7 @@ import model.rendering.Vector;
 
 /**
  * @Author Adam Wareing
+ * This is a class used to assist player movement throughout the game
  */
 public class PlayerMovement {
 

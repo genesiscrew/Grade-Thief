@@ -27,8 +27,7 @@ public class Container extends Item implements Interactable, Movable {
             this.containedItems = new ArrayList<Item>();
         }
         this.keyID = keyID;
-        cubes.add(new Cube(x, y, z, width, length, height, c));
-        cubes.add(new Cube(x, y + (length / 4), z + height, width, length / 2, height, c.darker().darker()));
+        cubes.add(new Cube(x, y, z, width, length, height*0.5, c.GRAY));
     }
 
 

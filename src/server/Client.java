@@ -1,5 +1,4 @@
 package server;
-
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -10,30 +9,34 @@ import java.net.Socket;
 import java.util.Scanner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
+import javax.swing.SwingUtilities;
+import javax.tools.DocumentationTool.Location;
 
 import controller.GameController;
-import model.floor.Location;
+
+
 
 public class Client {
-	private JTextField userText;
-	private JTextArea chatWindow;
+
 	private ObjectOutputStream output;
 	private ObjectInputStream input;
-	private String message = "";
 	private String serverIP;
 	private Socket connection;
-	private PrintStream p;
-	private Scanner sc;
 	private GameController player = new GameController(false);
-	private Scanner getInput = new Scanner(System.in);
 
-	// Constructor
+	/**
+	 *
+	 * @param host
+	 *
+	 */
 	public Client(String host) {
 		serverIP = host;
 	}
 
-	// Connect to server
+	/**
+	 * Game starts from here
+	 * First connecting to server then setting up stream and then update client every single time
+	 */
 	public void startRunning() {
 		try {
 			connectionToServer();
@@ -49,14 +52,22 @@ public class Client {
 		}
 	}
 
-	// Connecting to Server
+	/**
+	 *
+	 * @throws IOException
+	 * This method is responsible for connecting client to server
+	 */
 	private void connectionToServer() throws IOException {
 		System.out.println("Attempting connection...");
 		connection = new Socket(InetAddress.getByName(serverIP), 6789);
 		System.out.println("Connected to: " + connection.getInetAddress().getHostName());
 	}
 
-	// set up the stream to send and receive message!
+	/**
+	 *
+	 * @throws IOException
+	 *	This method is responsible for setting up stream between client and server.
+	 */
 	private void setupStreams() throws IOException {
 		output = new ObjectOutputStream(connection.getOutputStream());
 		output.flush();
@@ -64,12 +75,22 @@ public class Client {
 		System.out.println("You are now connected");
 	}
 
+
+	/**
+	 * This method is responsible for sending data and receive the data from Server.
+	 * @throws IOException
+	 */
 	private void update() throws IOException {
 		while (true) {
 			sendData();
 			recieveData();
 		}
 	}
+
+	/**
+	 * This method is responsible for sending player's position to server.
+	 * @throws IOException
+	 */
 
 	private void sendData() throws IOException {
 		double[] playerPos = player.getPlayerPosition();
@@ -86,14 +107,17 @@ public class Client {
 		output.writeObject(room);
 		output.flush();
 
-		Location loc = player.getPlayer().getCurrentPlayer().getLocation();
+		model.floor.Location loc = player.getPlayer().getCurrentPlayer().getLocation();
 		int x = loc.locX(); int y = loc.locY();
 		output.writeInt(x);
 		output.flush();
 		output.writeInt(y);
 		output.flush();
 	}
-
+	/**
+	 * This method is responsible for receiving data from server and update the guard position
+	 * @throws IOException
+	 */
 	private void recieveData() throws IOException {
 
 		try {
@@ -106,13 +130,15 @@ public class Client {
 			player.getPlayer().getOtherPlayer().setRoom(room);
 			int x = (int) input.readInt();
 			int y = (int) input.readInt();
-			player.getPlayer().getOtherPlayer().setLocation(new Location(x,y));
+			player.getPlayer().getOtherPlayer().setLocation(new model.floor.Location(x,y));
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 	}
 
-	// close streams and sockets after you are done chatting!!
+	/**
+	 * This method is responsible for closing the connection after game is finished.
+	 */
 	private void closeCrap() {
 		System.out.println("Closing connectin...");
 		try {
@@ -125,6 +151,49 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
+
+	public ObjectOutputStream getOutput() {
+		return output;
+	}
+
+	public void setOutput(ObjectOutputStream output) {
+		this.output = output;
+	}
+
+	public ObjectInputStream getInput() {
+		return input;
+	}
+
+	public void setInput(ObjectInputStream input) {
+		this.input = input;
+	}
+
+	public String getServerIP() {
+		return serverIP;
+	}
+
+	public void setServerIP(String serverIP) {
+		this.serverIP = serverIP;
+	}
+
+	public Socket getConnection() {
+		return connection;
+	}
+
+	public void setConnection(Socket connection) {
+		this.connection = connection;
+	}
+
+	public GameController getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(GameController player) {
+		this.player = player;
+	}
+
+
+
 
 
 

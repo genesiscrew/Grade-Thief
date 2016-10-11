@@ -4,7 +4,8 @@ import model.rendering.Plane;
 import model.rendering.Vector;
 
 /**
- * This performs calculations for the 3D graphics using vectors
+ * This performs calculations for the 3D graphics using vectors.
+ *
  */
 public class Calculator {
 	public static double t = 0;
@@ -17,14 +18,14 @@ public class Calculator {
     public static double[] calculatorFocusPosition = new double[2];
 
     /**
-     *
+     * Get the projection for point x,y,z from where the player is viewing from
      * @param ViewFrom
      * @param x
      * @param y
      * @param z
      * @return
      */
-    public static double[] calculatePositionP(double[] ViewFrom, double x, double y, double z) {
+    public static double[] calculateProjectionFromPosition(double[] ViewFrom, double x, double y, double z) {
         double[] projP = getProjection(ViewFrom, x, y, z, plane);
         double[] drawP = getDrawP(projP[0], projP[1], projP[2]);
         return drawP;
@@ -58,10 +59,11 @@ public class Calculator {
     }
 
     /**
+     * Convert a 3d point to 2D form (x and y point) by scaling it
      * @param x
      * @param y
      * @param z
-     * @return
+     * @return [x,y] point
      */
     static double[] getDrawP(double x, double y, double z) {
         double DrawX = w2.x * x + w2.y * y + w2.z * z;
@@ -70,7 +72,7 @@ public class Calculator {
     }
 
     /**
-     * This calculates the rotation
+     * Calculates the rotation
      * @param viewFrom
      * @param viewTo
      * @return
@@ -107,13 +109,13 @@ public class Calculator {
         w1 = viewVector.crossProduct(rotationVector);
         w2 = viewVector.crossProduct(w1);
 
-        calculatorFocusPosition = Calculator.calculatePositionP(screen.viewFrom, screen.viewTo[0], screen.viewTo[1], screen.viewTo[2]);
+        calculatorFocusPosition = Calculator.calculateProjectionFromPosition(screen.viewFrom, screen.viewTo[0], screen.viewTo[1], screen.viewTo[2]);
         calculatorFocusPosition[0] = Screen.zoom * calculatorFocusPosition[0];
         calculatorFocusPosition[1] = Screen.zoom * calculatorFocusPosition[1];
     }
 
     /**
-     * Sets the the values for the light direction
+     * Sets the the new values for the light direction
      */
     public static double[] controlSunAndLight(double[] lightDir, double mapSize, double sunPos) {
         lightDir[0] = mapSize / 2 - (mapSize / 2 + Math.cos(sunPos) * mapSize * 10);

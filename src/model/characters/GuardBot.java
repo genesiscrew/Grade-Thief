@@ -117,23 +117,39 @@ public class GuardBot extends Player implements Drawable {
 		this.length = length;
 		this.height = height;
 		this.color = c;
-		// First make the legs
-		int legWidth = (int) (width / 2.5);
-		int legHeight = (int) (height / 2);
-		// first leg
-		cubes.add(new Cube(x, y + (legWidth / 2), z, legWidth, legWidth, legHeight, c));
-		// second leg
-		cubes.add(new Cube(x + width - legWidth, y + (legWidth / 2), z, legWidth, legWidth, legHeight, c));
+		this.height *= 0.8;
 
-		// body
-		cubes.add(new Cube(x, y, z + legHeight, width, width / 1.5, legHeight, c));
+        // First make the legs
+        int legAndArmWidth = (int) (width * 0.25); // 25 %
+        int halfWidth = (int) (width * 0.5); // 25 %
+        int bodyLength = (int)(length * 0.7);
+        int legHeight = (int) (height * 0.5); // 50 %
+        int armHeight = (int) (height * 0.40); // 40 %
+        int torsoAboveArmHeight = (int) (height * 0.15); // 40 %
+        int headHeight = (int) (height * 0.22); // 17 %
 
-		// arms
-		cubes.add(new Cube(x + width, y, z + legHeight + (legHeight / 2), width, width / 1.5, legHeight / 3, c));
-		cubes.add(new Cube(x - width, y, z + legHeight + (legHeight / 2), width, width / 1.5, legHeight / 3, c));
+        // first leg
+        cubes.add(new Cube(x, y + (legAndArmWidth / 2), z, legAndArmWidth, bodyLength, legHeight, PANTS_COLOR));
 
-		// head
-		cubes.add(new Cube(x + (width / 4), y, z + (legHeight * 2), width / 2, width / 1.5, legHeight / 3, c));
+        // second leg
+        cubes.add(new Cube(x + legAndArmWidth, y + (legAndArmWidth / 2), z, legAndArmWidth, bodyLength, legHeight, PANTS_COLOR));
+
+        // body
+        cubes.add(new Cube(x, y, z + legHeight, halfWidth, bodyLength, legHeight, TOP_COLOR));
+
+        // arms
+        cubes.add(new Cube(x + halfWidth, y, z + legHeight , legAndArmWidth, bodyLength, armHeight, SKIN_COLOR));
+        cubes.add(new Cube(x - legAndArmWidth, y, z + legHeight , legAndArmWidth, bodyLength, armHeight, SKIN_COLOR));
+
+        // above arm torso
+        cubes.add(new Cube(x + halfWidth, y, z + legHeight+armHeight , legAndArmWidth, bodyLength, torsoAboveArmHeight, TOP_COLOR));
+        cubes.add(new Cube(x - legAndArmWidth, y, z + legHeight +armHeight, legAndArmWidth, bodyLength, torsoAboveArmHeight, TOP_COLOR));
+
+        // head
+        cubes.add(new Cube(x, y, z + (legHeight * 2), bodyLength, bodyLength, headHeight, SKIN_COLOR));
+
+        // above head
+        cubes.add(new Cube(x, y, z + (legHeight * 2) + headHeight, bodyLength, bodyLength, headHeight*0.3, DARK_BROWN));
 
 	}
 
@@ -549,45 +565,75 @@ public class GuardBot extends Player implements Drawable {
 	 */
 	public void updateDirection() {
 		if (this.dir.equals(Direction.Dir.EAST) || this.dir.equals(Direction.Dir.WEST)) {
-			cubes.clear();
-			// First make the legs
-			int legWidth = (int) (width / 2.5);
-			int legHeight = (int) (height / 2);
-			// first leg
-			cubes.add(new Cube(x + (legWidth / 2), y, z, legWidth, legWidth, legHeight, color));
-			// second leg
-			cubes.add(new Cube(x + (legWidth / 2), y + width - legWidth, z, legWidth, legWidth, legHeight, color));
+			  cubes.clear();
+	            // First make the legs
+	            int legAndArmWidth = (int) (width * 0.25); // 25 %
+	            int halfWidth = (int) (width * 0.5); // 25 %
+	            int bodyLength = (int)(length * 0.7);
+	            int legHeight = (int) (height * 0.5); // 50 %
+	            int armHeight = (int) (height * 0.40); // 40 %
+	            int torsoAboveArmHeight = (int) (height * 0.15); // 40 %
+	            int headHeight = (int) (height * 0.22); // 17 %
 
-			// body
-			cubes.add(new Cube(x, y, z + legHeight, width, width, legHeight, color));
+	            // first leg
+	            cubes.add(new Cube(x , y + (legAndArmWidth / 2) , z, bodyLength, legAndArmWidth, legHeight, PANTS_COLOR));
 
-			// arms
-			cubes.add(new Cube(x, y + length, z + legHeight + (legHeight / 2), width, width / 1, legHeight / 3, color));
-			cubes.add(new Cube(x, y - length, z + legHeight + (legHeight / 2), width, width / 1, legHeight / 3, color));
+	            // second leg
+	            cubes.add(new Cube(x + (legAndArmWidth / 2), y + legAndArmWidth, z, bodyLength, legAndArmWidth, legHeight, PANTS_COLOR));
 
-			// head
-			cubes.add(new Cube(x, y + (length / 4), z + (legHeight * 2), width / 2, width / 1.5, legHeight / 3, color));
+	            // body
+	            cubes.add(new Cube(x, y, z + legHeight, bodyLength, halfWidth, legHeight, TOP_COLOR));
+
+	            // arms
+	            cubes.add(new Cube(x, y + halfWidth, z + legHeight , bodyLength, legAndArmWidth, armHeight, SKIN_COLOR));
+	            cubes.add(new Cube(x , y- legAndArmWidth, z + legHeight , bodyLength, legAndArmWidth, armHeight, SKIN_COLOR));
+
+	            // above arm torso
+	            cubes.add(new Cube(x , y+ halfWidth, z + legHeight+armHeight , bodyLength, legAndArmWidth, torsoAboveArmHeight, TOP_COLOR));
+	            cubes.add(new Cube(x , y- legAndArmWidth, z + legHeight +armHeight, bodyLength, legAndArmWidth, torsoAboveArmHeight, TOP_COLOR));
+
+	            // head
+	            cubes.add(new Cube(x, y, z + (legHeight * 2), bodyLength, bodyLength, headHeight, SKIN_COLOR));
+
+	            // above head
+	            cubes.add(new Cube(x, y, z + (legHeight * 2) + headHeight, bodyLength, bodyLength, headHeight*0.3, DARK_BROWN));
+
+	            // Eyes
+
+	            // Eyes
 		} else {
 			cubes.clear();
-			// First make the legs
-			int legWidth = (int) (width / 2.5);
-			int legHeight = (int) (height / 2);
-			// first leg
-			cubes.add(new Cube(x, y + (legWidth / 2), z, legWidth, legWidth, legHeight, color));
-			// second leg
-			cubes.add(new Cube(x + width - legWidth, y + (legWidth / 2), z, legWidth, legWidth, legHeight, color));
+            // First make the legs
+            int legAndArmWidth = (int) (width * 0.25); // 25 %
+            int halfWidth = (int) (width * 0.5); // 25 %
+            int bodyLength = (int)(length * 0.7);
+            int legHeight = (int) (height * 0.5); // 50 %
+            int armHeight = (int) (height * 0.40); // 40 %
+            int torsoAboveArmHeight = (int) (height * 0.15); // 40 %
+            int headHeight = (int) (height * 0.22); // 17 %
 
-			// body
-			cubes.add(new Cube(x, y, z + legHeight, width, width / 1.5, legHeight, color));
+            // first leg
+            cubes.add(new Cube(x + (legAndArmWidth / 2), y , z, legAndArmWidth, bodyLength, legHeight, PANTS_COLOR));
 
-			// arms
-			cubes.add(
-					new Cube(x + width, y, z + legHeight + (legHeight / 2), width, width / 1.5, legHeight / 3, color));
-			cubes.add(
-					new Cube(x - width, y, z + legHeight + (legHeight / 2), width, width / 1.5, legHeight / 3, color));
+            // second leg
+            cubes.add(new Cube(x + legAndArmWidth, y + (legAndArmWidth / 2), z, legAndArmWidth, bodyLength, legHeight, PANTS_COLOR));
 
-			// head
-			cubes.add(new Cube(x + (width / 4), y, z + (legHeight * 2), width / 2, width / 1.5, legHeight / 3, color));
+            // body
+            cubes.add(new Cube(x, y, z + legHeight, halfWidth, bodyLength, legHeight, TOP_COLOR));
+
+            // arms
+            cubes.add(new Cube(x + halfWidth, y, z + legHeight , legAndArmWidth, bodyLength, armHeight, SKIN_COLOR));
+            cubes.add(new Cube(x - legAndArmWidth, y, z + legHeight , legAndArmWidth, bodyLength, armHeight, SKIN_COLOR));
+
+            // above arm torso
+            cubes.add(new Cube(x + halfWidth, y, z + legHeight+armHeight , legAndArmWidth, bodyLength, torsoAboveArmHeight, TOP_COLOR));
+            cubes.add(new Cube(x - legAndArmWidth, y, z + legHeight +armHeight, legAndArmWidth, bodyLength, torsoAboveArmHeight, TOP_COLOR));
+
+            // head
+            cubes.add(new Cube(x, y, z + (legHeight * 2), bodyLength, bodyLength, headHeight, SKIN_COLOR));
+
+            // above head
+            cubes.add(new Cube(x, y, z + (legHeight * 2) + headHeight, bodyLength, bodyLength, headHeight*0.3, DARK_BROWN));
 		}
 	}
 

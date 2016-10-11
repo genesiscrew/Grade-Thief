@@ -13,14 +13,23 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+
+/**
+ *
+ */
 public class OptionPane extends JDialog implements ActionListener {
 
 
 	JPanel panel = new JPanel();
 
+	/**
+	 * Make a new instance
+	 * @param parent
+	 * @param title
+	 * @param message
+	 * @param Component
+	 */
 	public OptionPane(JFrame parent, String title, String message, Component Component) {
-
-
 		super(parent, title, true);
 
 		if (parent != null) {
@@ -28,8 +37,6 @@ public class OptionPane extends JDialog implements ActionListener {
 			Point p = parent.getLocation();
 			setLocation(p.x + parentSize.width, p.y + parentSize.height);
 		}
-
-
 
 		panel.add(Component);
 

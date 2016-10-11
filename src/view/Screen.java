@@ -134,11 +134,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         this.polyDrawer = new PolygonDrawer(room, lightDir, viewFrom, controller);
 
         if (guard) {
-            viewFrom[0] = 100;
-            viewFrom[1] = 100;
+            viewFrom[0] = startX;
+            viewFrom[1] = startY;
             viewFrom[2] = 10;
         } else {
-            viewFrom[0] = startX;
+            viewFrom[0] = startX+100;
             viewFrom[1] = startY;
             viewFrom[2] = startZ;
         }
@@ -550,11 +550,16 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
 				}
 			} else {
+				System.out.println("we want to unlock door");
 				if (currentPlayer.containsKeyInInventory(item.getItemID())) {
+
 					name = "Door";
 					Door d = (Door) item;
+					System.err.println(d.isLocked());
 					d.unlock();
+					System.err.println(d.isLocked());
 				} else {
+					name = "Door";
 					messageToDisplay2 = "You need the key " + item.getItemID() + ", to unlock the " + name;
 				}
 
