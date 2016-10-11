@@ -65,6 +65,7 @@ public class Laptop extends Item implements Drawable{
     @Override
     public void addInteractions() {
         interactionsAvailable = new ArrayList<>();
+        interactionsAvailable.add(Interaction.HACK);
     }
 
 

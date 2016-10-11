@@ -81,6 +81,7 @@ public class Room {
         tileMap.populateRoom(this, tileMap.getItems(), null);
 
         floor = new Floor(0, 0, tileMap.getMapWidth(), tileMap.getMapHeight());
+        this.width = tileMap.getMapWidth();
         this.floorPolygons = floor.generateMap();
         this.walls = floor.parseWalls(this.tileMap.getTileMap());
         this.doors = floor.parseDoors(this.tileMap.getTileMap());

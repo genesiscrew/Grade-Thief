@@ -168,7 +168,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
         // Calculated all that is general for this camera position
         Calculator.setPredeterminedInfo(this);
-        Calculator.controlSunAndLight(lightDir, room.getWidth(), sunPos);
+        lightDir = Calculator.controlSunAndLight(lightDir, room.getWidth(), sunPos);
+        sunPos += 0.01;
+        System.out.println(lightDir[0] + " " + lightDir[2] + " " + lightDir[2]);
         if (timer > 0) {
             timer--;
         }
@@ -332,10 +334,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             drawOutlines = !drawOutlines;
         if (e.getKeyCode() == KeyEvent.VK_SPACE)
             currentPlayer.jump(viewFrom);
-        if (e.getKeyCode() == KeyEvent.VK_R)
-            // loadMap();
-            if (e.getKeyCode() == KeyEvent.VK_U)
-                changeAllDoorState();
+//        if (e.getKeyCode() == KeyEvent.VK_R)
+//            // loadMap();
+        if (e.getKeyCode() == KeyEvent.VK_U)
+            changeAllDoorState();
         if (e.getKeyCode() == KeyEvent.VK_E)
             playerWantingToInteractWithItem();
         if (e.getKeyCode() == KeyEvent.VK_I)
@@ -367,7 +369,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             }
         }
         Item selectedItem = currentPlayer.getInventory().get(itemLocation);
-        performActionOnItem(selectedItem);
+        performActionOnItem(selectedItem, true);
     }
 
     /**
@@ -376,11 +378,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     private void playerWantingToInteractWithItem() {
         for (Item item : room.getRoomObjects()) {
             if (item.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
-                performActionOnItem(item);
+                performActionOnItem(item, false);
             }
         }
         room.getDoors().stream().filter(i -> i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])).forEach(i -> {
-            performActionOnItem(i);
+            performActionOnItem(i, false);
             return;
         });
     }
@@ -391,9 +393,21 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      *
      * @param item
      */
-    public void performActionOnItem(Item item) {
-        int n = showOptionPane(item.getInteractionsAvailable());
-        Interaction interaction = item.getInteractionsAvailable().get(n);
+    public void performActionOnItem(Item item, boolean inInventory) {
+        List<Interaction> interactions = item.getInteractionsAvailable();
+
+        if (item.isCanPickup()) {
+            if (inInventory) {
+                interactions.add(Interaction.DROP);
+                interactions.remove(Interaction.TAKE);
+            } else {
+                interactions.add(Interaction.TAKE);
+                interactions.remove(Interaction.DROP);
+            }
+        }
+
+        int n = showOptionPane(interactions);
+        Interaction interaction = interactions.get(n);
         // TAKE
         if (interaction.equals(Interaction.TAKE)) {
             currentPlayer.addToInventory(item);
