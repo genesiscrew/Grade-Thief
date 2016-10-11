@@ -115,6 +115,9 @@ public abstract class Item extends GameObject implements Drawable {
 		case TAKE:
 			draw = false;
 			break;
+			case ACCESS:
+				//draw = false;
+				break;
 		}
 	}
 
@@ -203,6 +206,7 @@ public abstract class Item extends GameObject implements Drawable {
 	}
 
 
+
 	/**
 	 * These are all the interactions that can be performed by items.
 	 * Not all items can perform all actions. What action an item can perform is determined by whats added to the
@@ -210,6 +214,6 @@ public abstract class Item extends GameObject implements Drawable {
 	 * @see Item.addInteractions()
 	 */
 	public enum Interaction {
-		OPEN, CLOSE, PICK_UP, SIT, TAKE, DROP
+		OPEN, CLOSE, PICK_UP, SIT, TAKE, DROP, ACCESS
 	}
 }
