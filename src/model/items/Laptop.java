@@ -67,6 +67,4 @@ public class Laptop extends Item implements Drawable{
         interactionsAvailable = new ArrayList<>();
         interactionsAvailable.add(Interaction.HACK);
     }
-
-
 }

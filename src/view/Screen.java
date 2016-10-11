@@ -34,6 +34,7 @@ import model.items.Door;
 import model.items.Item;
 import model.items.Item.Interaction;
 import model.items.KeyDraw;
+import model.items.Table;
 import model.rendering.Polygon;
 import model.saving.FastLoad;
 import model.saving.FastSaving;
@@ -303,7 +304,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * Sets the x, y, z that the player is looking at
      */
     void updateView() {
-
         double verticalLook = screenUtil.getVerticalLook();
         double horizontalLook = screenUtil.getHorizontalLook();
         double r = Math.sqrt(1 - (verticalLook * verticalLook));
@@ -381,7 +381,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      */
     private void playerWantingToInteractWithItem() {
         for (Item item : room.getRoomObjects()) {
-            if (item.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2]) && item.getInteractionsAvailable().size() != 0) {
+            if (item.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
+                if(item instanceof Table) // Cant interact with a table
+                    continue;
                 performActionOnItem(item, false);
             }
         }
@@ -405,7 +407,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
                     try {
                         Thread.sleep(5000);
                     } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
 
@@ -451,10 +452,12 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
         if (item.isCanPickup()) {
             if (inInventory) {
-                interactions.add(Interaction.DROP);
+                if (!interactions.contains(Interaction.DROP))
+                    interactions.add(Interaction.DROP);
                 interactions.remove(Interaction.TAKE);
             } else {
-                interactions.add(Interaction.TAKE);
+                if (!interactions.contains(Interaction.TAKE))
+                    interactions.add(Interaction.TAKE);
                 interactions.remove(Interaction.DROP);
             }
         }
@@ -529,6 +532,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         allObjects.addAll(room.getRoomObjects());
 
         for (Item i : allObjects) {
+
             // Nothing to display if item not rendered or the player isn't near it
             if (i.isDraw() && i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
 
