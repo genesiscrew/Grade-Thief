@@ -31,17 +31,18 @@ import view.Screen;
  * @author Hamid Abubakr
  *
  *
- *         Guard bot class creates guard bot object that move within each map.
- *         the bots are able to detect a player, and are able to move along
- *         predefined coordinates in map. the guard bot route is created using
- *         mvoement strategies. depending on the strategy chosen certain parts
- *         of the code are used and certain routes are taken. the bots also can
- *         have different speeds at which they move. the bots are unable to
- *         detect players inside rooms, only in corridors. once a guard bot
- *         finds a player, the guard player is informed of the players level, in
- *         addition a map is temporarily displayed on his screen indicating the
- *         location of the player. once the player hides however, the map will
- *         then dissapear after a set period of time. this
+ *         Guard bot class creates guard bot object that moves within each
+ *         level. the bots are able to detect a player, and are able to move
+ *         along predefined coordinates in map. the guard bot route is created
+ *         using mvoement strategies. depending on the strategy chosen certain
+ *         parts of the code are used and certain routes are taken. the bots
+ *         also can have different speeds at which they move. the bots are
+ *         unable to detect players inside rooms, they only detect players in
+ *         corridors. once a guard bot finds a player, the guard player is
+ *         informed of the players level, in addition a map is temporarily
+ *         displayed on the other player's screen indicating the location of the
+ *         player. once the player hides however, the map will then dissapear
+ *         after a set period of time.
  *
  */
 
@@ -138,14 +139,16 @@ public class GuardBot extends Player implements Drawable {
 
 	/*
 	 *
-	 * /** this method moves the guard along a path specified by the move
-	 * strategy, the method should keep running until an intruder is detected
+	 * /** this method returns the level in which the guard is located
 	 */
 	public String getLevel() {
 
 		return this.level;
 	}
 
+	/**
+	 * this method moves the guard to a new co-ordinate on the game world
+	 */
 	public void move() {
 
 		// set Guard's direction
@@ -156,24 +159,20 @@ public class GuardBot extends Player implements Drawable {
 		// strategy, however if a player is detected within the direction he is
 		// facing,
 		// the bot stops moving and alerts other player
-		// player as guard of his location
+		//
 
 		if (!this.checkforIntruder()) {
 
-			// we reverse the movement directions (if
-			// required
-			// e.g. north south path does not require reversal
-			// but a north west path would need to go back to origin
-			// through
-			// east south) when the guard reaches last square in path
-			// and
-			// run the
-			// move method again
-
-
-			//System.out.println("guard " + getName() + " screen " + screen.drawFPS);
-			//System.out.println("guard vel " + guardVelocity + " guard v mult " + guardSpeedMultiplier + " guard " + getName() + " on floor " + level);
 			if ((u == Math.round((distance[i] - 1) * ((2 / guardVelocity)) / 2) && i == (directionList.size() - 1))) {
+				// we reverse the movement directions (if
+				// required
+				// e.g. north south path does not require reversal
+				// but a north west path would need to go back to origin
+				// through
+				// east south) when the guard reaches last square in path
+				// and
+				// run the
+				// move method again
 
 				this.reverseStrategy();
 
@@ -182,13 +181,20 @@ public class GuardBot extends Player implements Drawable {
 				return;
 			} else if ((u == Math.round((distance[i] - 1) * ((2 / guardVelocity)) / 2)
 					&& i < (directionList.size() - 1))) {
+				// the bit has reached the final coordinate to a given
+				// direction, we update the counters
+				// and move the guard to a new direction
 
 				i++;
 				u = 0;
-				this.updateDirection();
+
+				this.updateDirection(); // this method relocates the guard bot
+										// polygons towards direction he is
+										// heading
 				return;
 			}
-
+			// the code below moves the guard by a certain amount based on
+			// direction
 			if (this.dir.equals(Dir.EAST)) {
 
 				updatePosition(guardSpeedMultiplier, 0, 0);
@@ -215,8 +221,9 @@ public class GuardBot extends Player implements Drawable {
 			;
 		} else {
 
-			// intruder detected, so we set timer for map to display on guards
-			// screen
+			// an intruder detected, so we set timer for map to display on
+			// guards
+			// screen, this timer is sent through network to other player
 			this.screen.timer = 200;
 
 		}
@@ -233,6 +240,9 @@ public class GuardBot extends Player implements Drawable {
 		return this.floorNo;
 	}
 
+	/**
+	 * reverts the distance array
+	 */
 	private void revertDistance() {
 
 		for (int i = 0; i < distance.length / 2; i++) {
@@ -535,7 +545,7 @@ public class GuardBot extends Player implements Drawable {
 	}
 
 	/**
-	 * changes the direction the bot is facing
+	 * this method changes the direction the bot is facing
 	 */
 	public void updateDirection() {
 		if (this.dir.equals(Direction.Dir.EAST) || this.dir.equals(Direction.Dir.WEST)) {
@@ -630,39 +640,14 @@ public class GuardBot extends Player implements Drawable {
 		return x;
 	}
 
-	public Thread createGuardThread(GuardBot gaurd, int delay) {
-		Thread guardThread = new Thread() {
-			public void run() {
-				// move the guard in a fixed loop, once he reaches certain
-				// coordinate on the Map, change destination
-				// if () {}
-				// gaurd will keep moving
-
-				// update direction of guard based on hardcoded route
-				// through Tilemap
-
-				try {
-					Thread.sleep(delay);
-					GuardBot.this.move();
-
-				} catch (InterruptedException e) {
-					// should never happen
-				}
-
-				// draw board intp console for debugging purposes
-				// game.drawBoard(gaurd.getFloorNo());
-
-			}
-		};
-		return guardThread;
-
-	}
-
 	public String getName() {
 
 		return this.itemType;
 	}
 
+	/**
+	 * @param screen
+	 */
 	public void setScreen(Screen screen) {
 		this.screen = screen;
 
