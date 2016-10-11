@@ -13,7 +13,8 @@ import model.rendering.Polygon;
 
 /**
  * @Author Adam Wareing
- * This is the floor of the games map. It can generate a new floor from the width and height specified.
+ * This is the floor of the games map. It can generate a new floor from the width and height specified, as well as
+ * parse walls and doors from a 2D array of Tile.
  */
 public class Floor {
 
@@ -25,9 +26,11 @@ public class Floor {
     private double tileSize = 10;
     private final double WALL_HEIGHT = 20;
 
-    private final Color WALL_COLOR = new Color(79, 200, 255);
-    private final Color TILE_COLOR = new Color(255, 208, 193);
-    private final Color DOOR_COLOR = new Color(0, 0, 193);
+    private final Color WALL_COLOR = new Color(183, 184, 182);
+    private final Color TILE_COLOR = new Color(78, 84, 0);
+    private final Color DOOR_COLOR = new Color(52,103 , 92);
+    private static int doorCount = 0;
+
 
     /**
      * Make a new floor with the specified parameters
@@ -43,22 +46,13 @@ public class Floor {
         this.xOffset = xOffset;
         this.yOffset = yOffset;
 
-        String co237 = System.getProperty("user.dir") + "/src/game/floor/co237";
-        /*Room room_co237 = new Room(null, null);
-        try {
-            room_co237.setTileMap(co237);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-*/
         System.out.printf("Width: %d, Height: %d \n", mapWidth, mapHeight);
         System.out.printf("x: %d, y: %d \n", xOffset, yOffset);
     }
 
     /**
-     * Return a new map being the size of the width and height set in the fields
-     *
-     * @return
+     * Generate a new map being the size of the width and height set in the fields
+     * @return - all polygon objects that make up the floor
      */
     public List<Polygon> generateMap() {
         List<Polygon> polygonFloor = new ArrayList<>();
@@ -75,7 +69,9 @@ public class Floor {
     }
 
     /**
-     *
+     *This generates a list of doors from the tile map. For every door in the tile map a door object with the
+     * position, size and colour properties is created.
+     * @return - all items in the tile map generated into objects
      */
     public List<Item> parseWalls(Tile[][] tileMap) {
         List<Item> walls = new ArrayList<>();
@@ -92,11 +88,12 @@ public class Floor {
     }
 
     /**
-     *
+     * This generates a list of doors from the tile map. For every door in the tile map a door object with the
+     * position, size and colour properties is created.
+     * @return - all doors in the tile map generated into objects
      */
     public List<Door> parseDoors(Tile[][] tileMap) {
         List<Door> doors = new ArrayList<>();
-        int doorCount = 0;
         for (int x = 0; x < tileMap.length; x++) {
             for (int y = 0; y < tileMap[x].length; y++) {
                 if (tileMap[x][y] instanceof DoorTile) {

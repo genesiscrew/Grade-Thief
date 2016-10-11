@@ -25,7 +25,7 @@ public class Player implements Drawable {
 
     private List<Item> inventory; // = new ArrayList<Item> ();
 	private String levelName;
-	private boolean inRoom = true;
+	private boolean inRoom;
 	private int roomCounter;
 
     public Player(double x, double y, double z, double width, double length, double height, Color c) {
@@ -121,6 +121,15 @@ public class Player implements Drawable {
 	public List<Item> getInventory() {
 		return inventory;
 	}
+
+    public boolean containsKeyInInventory(int id){
+        for(Item i : inventory){
+            if(i.getItemID() == id)
+                return true;
+        }
+
+        return false;
+    }
 
 	public void removeFromInventory(Item item) {
 		this.inventory.remove(item);

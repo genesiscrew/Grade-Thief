@@ -14,6 +14,7 @@ import java.util.List;
 public class Laptop extends Item implements Drawable{
 
     private final int LAPTOP_THICKNESS = 1;
+	private boolean locked;
 
     public String toString() {
     	return x + " " + y + " " + z + " " + width + " " + length + " " + height + " " + color;
@@ -66,6 +67,14 @@ public class Laptop extends Item implements Drawable{
     public void addInteractions() {
         interactionsAvailable = new ArrayList<>();
         interactionsAvailable.add(Interaction.ACCESS);
+    }
+    
+    public void setLock() {
+        this.locked = true;
+    }
+
+    public void unlock() {
+        this.locked = false;
     }
 
 

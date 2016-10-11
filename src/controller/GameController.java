@@ -90,7 +90,7 @@ public class GameController {
 		GuardBot guard4;
 		GuardBot guard5;
 		int[] dist = { 37, 14, 37};
-		gaurd1 = new GuardBot(12, "guard1", "level", 17, dist, 0, 40 * 10, 8 * 10, 0, 5, 3, 12, 0.7, new Color(0, 0, 0));
+		gaurd1 = new GuardBot(12, "guard1", "level", 17, dist, 0, 40 * 10, 8 * 10, 0, 5, 3, 12, 0.5, new Color(0, 0, 0));
 		gaurd1.setScreen(screen);
 		int[] dist2 = { 32, 29 };
 		guard2 = new GuardBot(12, "guard2", "level", 12, dist2, 0, 81 * 10, 6 * 10, 0, 5, 3, 12, 0.3,

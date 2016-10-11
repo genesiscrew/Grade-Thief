@@ -2,17 +2,17 @@ package view;
 
 import model.characters.GuardBot;
 import model.characters.Player;
-import model.floor.Location;
 import model.rendering.Polygon;
 
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 import controller.GameController;
 
 /**
  * @Author Adam Wareing
- *
+ * This is responsible for drawing the polygons on screen
  */
 public class PolygonDrawer {
 
@@ -22,12 +22,18 @@ public class PolygonDrawer {
 	 * and hence be on the bottom most layer
 	 */
 	private int[] polygonDrawOrder;
-	private Room room;
+	private Room room; // Needs to be manually updated when the player changes room
 	private double[] lightDir;
 	private double[] viewFrom;
 	private GameController controller;
-	private ArrayList<Location> polygonxy;
 
+	/**
+	 * Create a new instance
+	 * @param room
+	 * @param lightDir
+	 * @param viewFrom
+	 * @param controller
+     */
 	public PolygonDrawer(Room room, double[] lightDir, double[] viewFrom, GameController controller) {
 		this.room = room;
 		this.lightDir = lightDir;
@@ -35,10 +41,23 @@ public class PolygonDrawer {
 		this.controller = controller;
 	}
 
+	/**
+	 * This gets the polygons that need to be drawn, updates it for the position and lighting, sets the drawing order
+	 * and then draws all the polygons on screen
+	 * @param g
+	 * @param guard
+	 * @param otherPlayer
+	 * @param currentPlayer
+	 * @param timer
+	 * @param RoomName
+     * @param X
+     * @param Y
+     */
 	public void drawPolygons(Graphics g, boolean guard, Player otherPlayer, Player currentPlayer, int timer,
 			String RoomName, double X, double Y) {
-		java.util.List<Polygon> allPolygons = getAllPolygonsThatNeedToBeDrawn(guard, otherPlayer, currentPlayer,
-				RoomName, X, Y);
+
+		List<Polygon> allPolygons = getAllPolygonsThatNeedToBeDrawn(guard, otherPlayer, currentPlayer,
+				RoomName);
 
 		// Updates each polygon for this camera position
 		for (int i = 0; i < allPolygons.size(); i++)
@@ -46,9 +65,6 @@ public class PolygonDrawer {
 
 		// Set drawing order so closest polygons gets drawn last
 		setOrder(allPolygons);
-
-		// Set the polygon that the mouse is currently over
-		// setPolygonOver();
 
 		// Draw polygons in the Order that is set by the 'setOrder' function
 		for (int i = 0; i < polygonDrawOrder.length; i++)
@@ -59,13 +75,23 @@ public class PolygonDrawer {
 
 	}
 
-	private java.util.List<Polygon> getAllPolygonsThatNeedToBeDrawn(boolean guard, Player otherPlayer,
-			Player currentPlayer, String RoomName, double X, double Y) {
+	/**
+	 * Get all polygons that need to be drawn on screen. This includes:
+	 * 	- Doors
+	 * 	- Floors
+	 * 	- Room Objects
+	 * 	- Other player
+	 * @param guard
+	 * @param otherPlayer
+	 * @param currentPlayer
+	 * @param RoomName
+	 * @return
+     */
+	private java.util.List<Polygon> getAllPolygonsThatNeedToBeDrawn(boolean guard, Player otherPlayer, Player currentPlayer, String RoomName) {
 		// All polygons that need to be drawn
 		java.util.List<Polygon> allPolygons = new ArrayList<>();
 
-		// re-closes doors previously opened by player as soon as he is not near
-		// it.
+		// Re-closes doors previously opened by player as soon as he is not near it
 		room.getDoors().stream().filter(i -> !i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2]) && !i.isDraw())
 				.forEach(i -> {
 					i.changeState();
@@ -80,13 +106,8 @@ public class PolygonDrawer {
 
 						} else {
 							currentPlayer.inRoom(true);
-
 						}
-
 					}
-
-					;
-
 				});
 
 		// Add all polygons to the list
@@ -124,7 +145,6 @@ public class PolygonDrawer {
 	private void setOrder(java.util.List<Polygon> polys) {
 		double[] k = new double[polys.size()];
 		polygonDrawOrder = new int[polys.size()];
-		// polygonxy = new ArrayList<Location>();
 
 		for (int i = 0; i < polys.size(); i++) {
 			k[i] = polys.get(i).averageDistance;

@@ -50,7 +50,7 @@ public class PlayerMovement {
     }
 
     /**
-     * Move the player to x, y, z
+     * Move the player to x, y, z and set the new viewFrom
      *
      * @param x
      * @param y
@@ -70,25 +70,13 @@ public class PlayerMovement {
         viewFrom[2] = z;
     }
 
-
-//    /**
-//     * Highlights the polygon that the cursor is on
-//     */
-//    void setPolygonOver() {
-//        polygonOver = null;
-//        for (int i = polygonDrawOrder.length - 1; i >= 0; i--)
-//            if (room.getPolygons().get(polygonDrawOrder[i]).mouseOver() && room.getPolygons().get(polygonDrawOrder[i]).draw
-//                    && room.getPolygons().get(polygonDrawOrder[i]).visible) {
-//                polygonOver = room.getPolygons().get(polygonDrawOrder[i]);
-//                break;
-//            }
-//    }
-
-
     /**
+     * Updates the other players position
+     * @param otherPos [x, y, z]
+     * @param otherPlayer
      * @return
      */
-    public static List<Polygon> updateOtherPlayersPosition(double[] otherPos, Player otherPlayer ) {
+    public static List<Polygon> updateOtherPlayersPosition(double[] otherPos, Player otherPlayer) {
         // Lets start by getting there position from the controller and see how much they have moved
         double dx = otherPos[0] - otherPlayer.getX();
         double dy = otherPos[1] - otherPlayer.getY();

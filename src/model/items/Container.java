@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.items.Item.Interaction;
+import model.rendering.Cube;
 import model.rendering.Polygon;
 
 public class Container extends Item implements Interactable, Movable {
@@ -12,9 +14,10 @@ public class Container extends Item implements Interactable, Movable {
     private Container containedContainer;
 
     int keyID;
+	private boolean locked;
 
 
-    public Container(int itemID, List<Item> containedItems, String itemType, int keyID, double x, double y, double z,
+    public Container(int itemID, String itemType, int keyID, double x, double y, double z,
                      double width, double length, double height, Color c) {
 
         super(itemID, itemType, x, y, z, width, length, height, c);
@@ -24,6 +27,8 @@ public class Container extends Item implements Interactable, Movable {
             this.containedItems = new ArrayList<Item>();
         }
         this.keyID = keyID;
+        cubes.add(new Cube(x, y, z, width, length, height, c));
+        cubes.add(new Cube(x, y + (length / 4), z + height, width, length / 2, height, c.darker().darker()));
     }
 
 
@@ -32,14 +37,20 @@ public class Container extends Item implements Interactable, Movable {
     }
 
     public List<Item> getItems() {
-        if (this.containedContainer != null) {
+       
             System.out.println("container " + this.containedContainer);
             return this.containedItems;
-        }
-        return null;
+    
+       
     }
 
-
+    @Override
+    public void addInteractions() {
+        interactionsAvailable = new ArrayList<>();
+        interactionsAvailable.add(Interaction.UNLOCK);
+        interactionsAvailable.add(Interaction.OPEN);
+        interactionsAvailable.add(Interaction.CLOSE);
+    }
 
 
 
@@ -100,34 +111,49 @@ public class Container extends Item implements Interactable, Movable {
     }
 
 
+
+
+    @Override
+    public void setRotAdd() {
+        cubes.forEach(i -> i.setRotAdd());
+    }
+
     @Override
     public void updateDirection(double toX, double toY) {
-
+        cubes.forEach(i -> i.updateDirection(toX, toY));
     }
 
     @Override
     public void updatePoly() {
-
-    }
-
-    @Override
-    public void setRotAdd() {
-
+        cubes.forEach(i -> i.updatePoly());
     }
 
     @Override
     public void removeCube() {
-
+        cubes.forEach(i -> i.removeCube());
     }
 
     @Override
     public boolean containsPoint(int x, int y, int z) {
-        return false;
+        return (this.x + this.width) > x && (this.y + this.length) > y && this.x < x && this.y < y;
     }
 
     @Override
-    public List<Polygon> getPolygons() {
-        return null;
+    public List<model.rendering.Polygon> getPolygons() {
+        List<Polygon> allPolys = new ArrayList<>();
+        // Add all the cubes polygons
+        cubes.forEach(c -> allPolys.addAll(c.getPolygons()));
+        return allPolys;
+    }
+
+
+
+    public void setLock() {
+        this.locked = true;
+    }
+
+    public void unlock() {
+        this.locked = false;
     }
 
 
