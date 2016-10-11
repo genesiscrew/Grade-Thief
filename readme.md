@@ -30,7 +30,11 @@ through map on the top right.
 - I -- for checking inventory
 - ESC -- to get the option panel.
 
-### STARTING THE GAME
+### Single Player
+`Clone the repository and run the Main.java and you will be able to play`
+
+
+### MultiPlayer Version
 - For Playing in multiplayer mode 
 - User needs to run the server_run.java first.
 - then in the clinet_run.java you need to make sure to enter the server IP_Address.
