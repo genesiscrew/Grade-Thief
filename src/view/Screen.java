@@ -388,6 +388,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     private void playerWantingToInteractWithItem() {
         for (Item item : room.getRoomObjects()) {
             if (item.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
+
                 if (item instanceof Table) // Cant interact with a table
                     continue;
                 performActionOnItem(item, false);
@@ -659,7 +660,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             String fileName = selectFile();
             if (fileName.equals("Cancelled"))
                 return;
-            saveGame = new FastSaving(fileName);
+            saveGame = new FastSaving(fileName, this);
             saveGame.save();
         } catch (FileNotFoundException e) {
 
