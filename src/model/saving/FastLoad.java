@@ -225,9 +225,9 @@ public class FastLoad {
 								 */
 								break;
 							case "Laptop":
-								Laptop tmp5 = new Laptop(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength,
-										ItemHeight, itemColor);
-								roomObj.add(tmp5);
+								//Laptop tmp5 = new Laptop(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength,
+									//	ItemHeight, itemColor);
+								//roomObj.add(tmp5);
 								break;
 
 							case "Map":
@@ -357,9 +357,9 @@ public class FastLoad {
 						 */
 						break;
 					case "Laptop":
-						Laptop tmp5 = new Laptop(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength,
-								ItemHeight, itemColor);
-						items.add(tmp5);
+						//Laptop tmp5 = new Laptop(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength,
+							//	ItemHeight, itemColor);
+						//items.add(tmp5);
 						break;
 
 					case "Map":

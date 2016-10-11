@@ -1,14 +1,6 @@
-
 package view;
 
-import java.awt.AWTException;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Robot;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -16,11 +8,14 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import controller.GameController;
@@ -29,11 +24,13 @@ import controller.ScreenUtil;
 import model.characters.Player;
 import model.floor.EmptyTile;
 import model.floor.Location;
-import model.floor.Tile;
+import model.items.Container;
 import model.items.Door;
 import model.items.Item;
 import model.items.Item.Interaction;
 import model.items.KeyDraw;
+import model.items.Table;
+import model.items.Laptop;
 import model.rendering.Polygon;
 import model.saving.FastLoad;
 import model.saving.FastSaving;
@@ -49,6 +46,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     public static final int GAMEOVER = 3;
     public static final int GAMEWON = 4;
     public int timer;
+    private boolean displayImage = false;
 
     // The polygon that the mouse is currently over
     public static Polygon polygonOver = null;
@@ -142,6 +140,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     @Override
     public void paintComponent(Graphics g) {
+        if(displayImage)
+            return;
+
         // Clear screen and draw background color
         g.setColor(new Color(140, 180, 180));
         g.fillRect(0, 0, (int) screenSize.getWidth(), (int) screenSize.getHeight());
@@ -165,9 +166,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
         // Calculated all that is general for this camera position
         Calculator.setPredeterminedInfo(this);
+
+        // Move the suns position
         lightDir = Calculator.controlSunAndLight(lightDir, room.getWidth(), sunPos);
         sunPos += 0.01;
-        System.out.println(lightDir[0] + " " + lightDir[2] + " " + lightDir[2]);
+
         if (timer > 0) {
             timer--;
         }
@@ -180,7 +183,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
         // FPS display
         g.setColor(Color.WHITE);
-        g.drawString("FPS: " + (int) drawFPS + "(Benchmark)", 40, 40);
+        g.drawString("FPS: " + (int) drawFPS , 40, 40);
 
         Location l = getPlayerLocation();
         if (l != null)
@@ -205,25 +208,24 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             countSinceMessageUpdate++;
         }
 
-        //check if game is still playing or is over
-        // this.updateGameStatus();
-        if (this.GAMESTATUS == this.GAMEWON) {
-            for (int i = 255; i > 0; i--) {
-                g.setColor(Color.RED);
-                g.drawString("You Won!", (int) (screenSize.getWidth() / 2) - 100, (int) (screenSize.getHeight() / 2));
-                g.setColor(new Color(i, i, i));
-                g.fillRect(0, 0, (int) screenSize.getWidth(), (int) screenSize.getHeight());
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            System.exit(0);
-        }
+        // Has the player won the game?
+        if (this.GAMESTATUS == this.GAMEWON)
+            showEndImage(g);
 
         // Redraw
         sleepAndRefresh();
+    }
+
+    private void showEndImage(Graphics g){
+        g.setColor(Color.RED);
+        try {
+            BufferedImage img = ImageIO.read(new File("/home/wareinadam/SWEN222/Cleaned-Grade-Thief/grade-thief/dp.jpg"));
+            g.drawImage(img, 0, 0, (int)screenSize.getWidth(), (int)screenSize.getHeight(),  null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        g.drawString("You Won!", (int) (screenSize.getWidth() / 2) - 100, (int) (screenSize.getHeight() / 2));
+        displayImage = true;
     }
 
     /**
@@ -303,7 +305,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * Sets the x, y, z that the player is looking at
      */
     void updateView() {
-
         double verticalLook = screenUtil.getVerticalLook();
         double horizontalLook = screenUtil.getHorizontalLook();
         double r = Math.sqrt(1 - (verticalLook * verticalLook));
@@ -364,7 +365,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             return; // No items to show
         String stringItem = Inventory.showDialog(this, null, "Select an item to interact with", "Inventory",
                 inventoryItems, inventoryItems[0], inventoryItems[0]);
-        System.out.println(stringItem);
         int itemLocation = 0;
         for (int i = 0; i < inventoryItems.length; i++) {
             if (inventoryItems[i] == stringItem) {
@@ -382,6 +382,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     private void playerWantingToInteractWithItem() {
         for (Item item : room.getRoomObjects()) {
             if (item.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
+
+                if (item instanceof Table) // Cant interact with a table
+                    continue;
                 performActionOnItem(item, false);
             }
         }
@@ -405,7 +408,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
                     try {
                         Thread.sleep(5000);
                     } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
 
@@ -447,62 +449,96 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * @param item
      */
     public void performActionOnItem(Item item, boolean inInventory) {
-        List<Interaction> interactions = item.getInteractionsAvailable();
+		List<Interaction> interactions = item.getInteractionsAvailable();
 
-        if (item.isCanPickup()) {
-            if (inInventory) {
-                interactions.add(Interaction.DROP);
-                interactions.remove(Interaction.TAKE);
-            } else {
-                interactions.add(Interaction.TAKE);
-                interactions.remove(Interaction.DROP);
-            }
-        }
+		if (item.isCanPickup()) {
+			if (inInventory) {
+				interactions.add(Interaction.DROP);
+				interactions.remove(Interaction.TAKE);
+			} else {
+				interactions.add(Interaction.TAKE);
+				interactions.remove(Interaction.DROP);
+			}
+		}
 
-        int n = showOptionPane(interactions);
-        Interaction interaction = interactions.get(n);
-        // TAKE
-        if (interaction.equals(Interaction.TAKE)) {
-            currentPlayer.addToInventory(item);
-            room.removeRoomObject(item);
-            item.canDraw();
+		int n = showOptionPane(interactions);
+		Interaction interaction = interactions.get(n);
+		// TAKE
+		if (interaction.equals(Interaction.TAKE)) {
+			currentPlayer.addToInventory(item);
+			room.removeRoomObject(item);
+			item.canDraw();
 
-            // DROP
-        } else if (interaction.equals(Interaction.DROP)) {
-            item.moveItemBy(viewFrom[0] - item.getX(), viewFrom[1] - item.getY(), 0);
-            room.addItemToRoom(item);
-            item.canDraw();
-            currentPlayer.removeFromInventory(item);
+			// DROP
+		} else if (interaction.equals(Interaction.DROP)) {
+			item.moveItemBy(viewFrom[0] - item.getX(), viewFrom[1] - item.getY(), 0);
+			room.addItemToRoom(item);
+			item.canDraw();
+			currentPlayer.removeFromInventory(item);
 
+			// UNLOCK
+		} else if (interaction.equals(Interaction.UNLOCK)) {
+			String name = null;
 
-            // UNLOCK
-        } else if (interaction.equals(Interaction.UNLOCK)) {
-            if (currentPlayer.containsKeyInInventory(item.getItemID())) {
-                Door d = (Door) item;
-                d.unlock();
-            } else {
-                messageToDisplay2 = "You need the key " + item.getItemID() + ", to unlock the door";
-            }
+			if (item instanceof Container || item instanceof Laptop) {
 
-            // OPEN
-        } else if (interaction.equals(Interaction.OPEN)) {
-            Door d = (Door) item;
-            if (d.isLocked()) {
-                messageToDisplay2 = "You need to unlock the door first";
-            } else {
-                item.performAction(interaction);
-            }
+				if (item instanceof Container) {
+					name = "Container";
+					Container c = (Container) item;
+					if (currentPlayer.containsKeyInInventory(c.getKeyID())) {
+						c.unlock();
+						// add items to player inventory
+						for (Item t : c.getItems()) {
+							currentPlayer.addToInventory(t);
+						}
+						messageToDisplay2 = " container has been unlocked. " + c.getItems().size() + " items have been added to your inventory";
+					} else {
+						messageToDisplay2 = "You need the key " + c.getKeyID() + ", to unlock the " + name;
 
-            // HACK
-        } else if (interaction.equals(Interaction.HACK)) {
-            this.GAMESTATUS = GAMEWON;
+					}
 
-        } else {
-            item.performAction(interaction);
-        }
-        return; // We only want to interact with one item
-    }
+				} else if (item instanceof Laptop) {
+					name = "Laptop";
+					Laptop l = (Laptop) item;
+					if (currentPlayer.containsKeyInInventory(l.getKeyID())) {
+						// player has unlocked david's laptop, so he won the game
+						l.unlock();
+						this.GAMESTATUS = this.GAMEWON;
+					} else {
+						messageToDisplay2 = "You need the key " + l.getKeyID() + ", to unlock the " + name;
 
+					}
+
+				}
+			} else {
+				if (currentPlayer.containsKeyInInventory(item.getItemID())) {
+					name = "Door";
+					Door d = (Door) item;
+					d.unlock();
+				} else {
+					messageToDisplay2 = "You need the key " + item.getItemID() + ", to unlock the " + name;
+				}
+
+			}
+
+			// OPEN
+		} else if (interaction.equals(Interaction.OPEN)) {
+			Door d = (Door) item;
+			if (d.isLocked()) {
+				messageToDisplay2 = "You need to unlock the door first";
+			} else {
+				item.performAction(interaction);
+			}
+
+			// HACK
+		} else if (interaction.equals(Interaction.HACK)) {
+			this.GAMESTATUS = GAMEWON;
+
+		} else {
+			item.performAction(interaction);
+		}
+		return; // We only want to interact with one item
+	}
     /**
      * Shows a panel with a list of interactions a player can perform on an item
      *
@@ -529,6 +565,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         allObjects.addAll(room.getRoomObjects());
 
         for (Item i : allObjects) {
+
             // Nothing to display if item not rendered or the player isn't near it
             if (i.isDraw() && i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
 
@@ -571,8 +608,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      */
     public void gameOptionPane() {
         // Custom button text
+
         Object[] options = {"Resume", "Save", "Load", "Help", "About Us", "Exit"};
         int n = JOptionPane.showOptionDialog(this, "Please select the prefer option?", "Grade Thief",
+
                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
         if (n == 0) {
             // Nothing for skipping the Modal and continue game.
@@ -639,14 +678,13 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * @return String: FileName
      */
     private String selectFile() {
-        // Creating JFileChooser
+    	  // Creating JFileChooser
         JFileChooser fileChooser = new JFileChooser(".");
         int status = fileChooser.showOpenDialog(null);
 
         if (status == JFileChooser.APPROVE_OPTION) {
             // getting the name of the file.
             File selectedFile = fileChooser.getSelectedFile();
-            // System.out.println(selectedFile);
             return selectedFile.getParent() + "/" + selectedFile.getName();
         } else if (status == JFileChooser.CANCEL_OPTION) {
             // If the didn't select any file
@@ -661,16 +699,16 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * on ESCAPE button.
      */
     private void help() {
-        String rules = "Rules for Game is as follow : Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, ";
-        JTextArea textArea = new JTextArea(rules, 6, 20);
-        textArea.setFont(new Font("Serif", Font.ITALIC, 16));
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        textArea.setOpaque(false);
-        textArea.setEditable(false);
-        textArea.setSize(new Dimension(400, 500));
-        OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
-        dlg.setVisible(true);
+    	  String rules = "Rules for Game is as follow : Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, ";
+          JTextArea textArea = new JTextArea(rules, 6, 20);
+          textArea.setFont(new Font("Serif", Font.ITALIC, 16));
+          textArea.setLineWrap(true);
+          textArea.setWrapStyleWord(true);
+          textArea.setOpaque(false);
+          textArea.setEditable(false);
+          textArea.setSize(new Dimension(400, 500));
+          OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
+          dlg.setVisible(true);
     }
 
     /**
@@ -678,16 +716,16 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * students whom created this game
      */
     private void aboutUs() {
-        String rules = "Grade Thief is a Software Engineering Group Project which leads by Victoria University of Wellington. Team members are: Adam Wareing, Hamid Osman, Stefan Vrecic, Mostafa Shenavaei, Mansour Javaher";
-        JTextArea textArea = new JTextArea(rules, 6, 20);
-        textArea.setFont(new Font("Serif", Font.ITALIC, 16));
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        textArea.setOpaque(false);
-        textArea.setEditable(false);
-        textArea.setSize(new Dimension(400, 500));
-        OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
-        dlg.setVisible(true);
+    	  String rules = "Grade Thief is a Software Engineering Group Project which leads by Victoria University of Wellington. Team members are: Adam Wareing, Hamid Osman, Stefan Vrecic, Mostafa Shenavaei, Mansour Javaher";
+          JTextArea textArea = new JTextArea(rules, 6, 20);
+          textArea.setFont(new Font("Serif", Font.ITALIC, 16));
+          textArea.setLineWrap(true);
+          textArea.setWrapStyleWord(true);
+          textArea.setOpaque(false);
+          textArea.setEditable(false);
+          textArea.setSize(new Dimension(400, 500));
+          OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
+          dlg.setVisible(true);
     }
 
 

@@ -25,7 +25,7 @@ public class Player implements Drawable {
 
     private List<Item> inventory; // = new ArrayList<Item> ();
 	private String levelName;
-	private boolean inRoom = true;
+	private boolean inRoom;
 	private int roomCounter;
 
     public Player(double x, double y, double z, double width, double length, double height, Color c) {
