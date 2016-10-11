@@ -65,6 +65,5 @@ public class KeyDraw extends Item {
     @Override
     public void addInteractions() {
         interactionsAvailable = new ArrayList<>();
-        interactionsAvailable.add(Interaction.PICK_UP);
     }
 }

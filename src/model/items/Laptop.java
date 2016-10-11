@@ -80,9 +80,10 @@ public class Laptop extends Item implements Drawable{
 
     }
 
+
 	public int getKeyID() {
 		// TODO Auto-generated method stub
-		return this.ke
+		return this.keyID;
 	}
 
 
