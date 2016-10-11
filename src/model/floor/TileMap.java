@@ -338,6 +338,7 @@ public class TileMap {
 
 					}
 					if (container != null) {
+						drawItem.canDraw();
 						container.addItem(drawItem);
 					}
 					room.addItemToRoom(drawItem);
