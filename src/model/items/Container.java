@@ -157,5 +157,11 @@ public class Container extends Item implements Interactable, Movable {
     }
 
 
+	public int getKeyID() {
+		// TODO Auto-generated method stub
+		return this.keyID;
+	}
+
+
 
 }

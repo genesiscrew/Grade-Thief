@@ -423,7 +423,7 @@ public class TileMap {
 						break;
 
 					case "Laptop":
-						drawItem = new Laptop(id, type, 10 * x, 10 * y, keyID, w, h, l, new Color(red, green, blue));
+						drawItem = new Laptop(id, type, keyID, 10 * x, 10 * y, z,  w, h, l, new Color(red, green, blue));
 						break;
 					}
 

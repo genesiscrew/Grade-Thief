@@ -15,14 +15,15 @@ public class Laptop extends Item implements Drawable{
 
     private final int LAPTOP_THICKNESS = 1;
 	private boolean locked;
+	private int keyID;
 
     public String toString() {
     	return x + " " + y + " " + z + " " + width + " " + length + " " + height + " " + color;
     }
 
-    public Laptop(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
+    public Laptop(int itemID, String itemType, int keyID, double x, double y, double z, double width, double length, double height, Color c) {
         super(itemID, "David's Laptop", x, y, z, width, length, height, c);
-
+        this.keyID = keyID;
         // Screen
         cubes.add(new Cube(x, y+length, z, width, LAPTOP_THICKNESS, height, c));
 
@@ -78,6 +79,11 @@ public class Laptop extends Item implements Drawable{
         this.locked = false;
 
     }
+
+	public int getKeyID() {
+		// TODO Auto-generated method stub
+		return this.ke
+	}
 
 
 }
