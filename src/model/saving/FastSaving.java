@@ -6,8 +6,11 @@ import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import controller.GameController;
 import model.items.Item;
+import view.Screen;
 
 /**
  *
@@ -30,6 +33,7 @@ public class FastSaving {
 	 * Creating an printStream for writing to file
 	 */
 	PrintStream out;
+	Screen sc;
 
 	/**
 	 * getting the file name from user in order to save save the game and
@@ -38,7 +42,15 @@ public class FastSaving {
 	 * @param fileName
 	 * @throws FileNotFoundException
 	 */
-	public FastSaving(String fileName) throws FileNotFoundException {
+	public FastSaving(String fileName, Screen sc) throws FileNotFoundException {
+		super();
+
+		// Precondition of using the Loading ability,
+		// The fileName and sc shouldn't be null.
+		if (fileName == null || sc == null)
+			JOptionPane.showMessageDialog(sc, "Please Select a file in order to Load.", "Grade-Thief Loading",
+					JOptionPane.ERROR_MESSAGE);
+		this.sc = sc;
 		out = new PrintStream(new File(fileName));
 	}
 
@@ -58,8 +70,8 @@ public class FastSaving {
 
 			// Saving the Items attribute for loading later.
 			/*
-			 * itemColor itemHeight itemID itemLength itemType
-			 * itemWidth itemX itemY itemZ
+			 * itemColor itemHeight itemID itemLength itemType itemWidth itemX
+			 * itemY itemZ
 			 *
 			 */
 
@@ -78,14 +90,39 @@ public class FastSaving {
 			int itemID = items.get(i).getItemID();
 			String itemType = items.get(i).getItemType();
 
-			//writing the items attributes
+			// writing the items attributes
 			out.println(red + "," + green + "," + blue + "," + itemHeight + "," + itemID + "," + length + "," + itemType
 					+ "," + itemWidth + "," + X + "," + Y + "," + Z);
 
 		}
-		//This line should be here for saving puprose because in loading = means that this is the end of the saved
-		//Version of the file
+		// This line should be here for saving puprose because in loading =
+		// means that this is the end of the saved
+		// Version of the file
 		out.println("====================================================================");
+
+		List<Item> roomObj = sc.getRoom().getRoomObjects();
+
+		for (int i = 0; i < roomObj.size(); i++) {
+			int red = roomObj.get(i).getColor().getRed();
+			int green = roomObj.get(i).getColor().getGreen();
+			int blue = roomObj.get(i).getColor().getBlue();
+
+			double itemHeight = roomObj.get(i).getHeight();
+			double itemWidth = roomObj.get(i).getWidth();
+			double length = roomObj.get(i).getLength();
+
+			double X = roomObj.get(i).getX();
+			double Y = roomObj.get(i).getY();
+			double Z = roomObj.get(i).getZ();
+
+			int itemID = roomObj.get(i).getItemID();
+			String itemType = roomObj.get(i).getItemType();
+			out.println(red + "," + green + "," + blue + "," + itemHeight + "," + itemID + "," + length + "," + itemType
+					+ "," + itemWidth + "," + X + "," + Y + "," + Z);
+
+		}
+
+
 
 	}
 

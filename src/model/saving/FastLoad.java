@@ -263,7 +263,10 @@ public class FastLoad {
 				items.get(j).canDraw();
 
 			}
-			System.out.println("-----------End of Loading--------------");
+			System.out.println("-----------Loading Game World Items--------------");
+
+
+
 
 		} catch (Exception e) {
 			// custom title, error icon for uncompatable chema of lodaed file.

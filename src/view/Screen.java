@@ -57,7 +57,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     public static Polygon polygonOver = null;
 
     public static int startX = 120;
-    public static int startY = 150;
+    public static int startY = 90;
     public static int startZ = 10;
 
     Robot r; // Used for keeping mouse in center
@@ -600,7 +600,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             String fileName = selectFile();
             if (fileName.equals("Cancelled"))
                 return;
-            saveGame = new FastSaving(fileName);
+            saveGame = new FastSaving(fileName, this);
             saveGame.save();
         } catch (FileNotFoundException e) {
 
