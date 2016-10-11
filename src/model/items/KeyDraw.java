@@ -22,12 +22,7 @@ public class KeyDraw extends Item {
 
         cubes.add(new Cube(x, y, z, width, length, height, c));
         cubes.add(new Cube(x, y + (length / 4), z + height, width, length / 2, height, c.darker().darker()));
-
-
-        // Tube
-        // cubes.add(new Cube(x, y, z, (9/10)*width, MARKER_THICKNESS, height, c));
-        // ballpoint
-        // cubes.add(new Cube(x, (y+length) + (9/10) * width, z, width, (1/10) * length, height, c));
+        this.canPickup = true;
     }
 
     @Override
@@ -70,6 +65,5 @@ public class KeyDraw extends Item {
     @Override
     public void addInteractions() {
         interactionsAvailable = new ArrayList<>();
-        interactionsAvailable.add(Interaction.TAKE);
     }
 }

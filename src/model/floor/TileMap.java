@@ -289,30 +289,8 @@ public class TileMap {
 					//							new DoorDraw(id, type, 10 * x, 10 * y, z, w, h, l, new Color(red, green, blue), D));
 
 				}
-				/*if (type.equals("GuardBot")) { // Door
-					// System.out.println("===========================
-					// ddddddddddddddddddddddd");
-					int moveStrategy = sc.nextInt();
-					int arrSize = sc.nextInt();
-					int[] distances = new int[arrSize];
-					for (int i = 0; i < arrSize; i++) {
 
-						distances[i] = sc.nextInt();
-					}
-					int floorNo = sc.nextInt();
 
-					EmptyTile E = (EmptyTile) tile;
-					GuardBot guard = new GuardBot(id, type, moveStrategy, distances, floorNo, x * 10, y * 10, z, w * 2,
-							l * 2, h * 5, new Color(red, green, blue));
-					E.addObjectToTile(guard);
-					E.setOccupied();
-					System.out.println("e occupied" + E.isOccupied);
-					tileMap.setTile(x, y, E);
-					// room.addItemToRoom(guard);
-					room.addGuardtoRoom(guard);
-
-				}
-				*/
 				// FOUND CONTAINER
 				else if (type.equals("C")) {
 					// container found
