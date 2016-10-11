@@ -1,5 +1,5 @@
 <img src="https://github.com/javahemans/advance-datastructure-algorithm/blob/master/icons/Java.png" align="right" width="200"/>
-# Advance Data Structure and Algorithm
+# Grade Thief
  [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
 
 > Developed by: Mansour Javaher, Adam Wareing, Mostafa Shenavaei, Hamid Osman, Stefan Vrecic
