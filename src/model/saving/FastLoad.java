@@ -39,6 +39,7 @@ public class FastLoad {
 
 	String myFile;
 	Screen sc;
+	boolean gameWorld = false;
 
 	/**
 	 * Constructor which gets the fileName and a screen object in order to pop
@@ -110,10 +111,166 @@ public class FastLoad {
 
 					i++;
 				} else if (line.startsWith("=")) {
-					i = 0;
+					//i = 0;
+					this.gameWorld = true;
 					continue;
-				} else if (line.startsWith("EOF")) {
-					break;
+				}else if(gameWorld){
+
+
+
+					System.out.println("======= Item: ========");
+					String itemTokens[] = line.split(",");
+					// getting the red attribute of the item.
+					System.out.println(" itemRed :" + itemTokens[0]);
+					int ItemRed = Integer.parseInt(itemTokens[0]);
+
+					// getting the green attribute of the item.
+					System.out.println(" itemGreen :" + itemTokens[1]);
+					int ItemGreen = Integer.parseInt(itemTokens[1]);
+
+					// getting the blue attribute of the item.
+					System.out.println(" itemBlue :" + itemTokens[2]);
+					int ItemBlue = Integer.parseInt(itemTokens[2]);
+
+					// getting the height attribute of the item.
+					System.out.println(" itemHeight :" + itemTokens[3]);
+					double ItemHeight = Double.parseDouble(itemTokens[3]);
+
+					// getting the itemID attribute of the item.
+					System.out.println(" itemID :" + itemTokens[4]);
+					int ItemID = Integer.parseInt(itemTokens[4]);
+
+					// getting the length attribute of the item.
+					System.out.println(" itemLength :" + itemTokens[5]);
+					double ItemLength = Double.parseDouble(itemTokens[5]);
+
+					// getting the type attribute of the item.
+					System.out.println(" itemType :" + itemTokens[6]);
+					String ItemType = itemTokens[6];
+
+					// getting the width attribute of the item.
+					System.out.println(" itemWidth :" + itemTokens[7]);
+					double ItemWidth = Double.parseDouble(itemTokens[7]);
+
+					// getting the X attribute of the item.
+					System.out.println(" itemX :" + itemTokens[8]);
+					double ItemX = Double.parseDouble(itemTokens[8]);
+
+					// getting the Y attribute of the item.
+					System.out.println(" itemY :" + itemTokens[9]);
+					double ItemY = Double.parseDouble(itemTokens[9]);
+
+					// getting the Z attribute of the item.
+					System.out.println(" itemZ :" + itemTokens[10]);
+					double ItemZ = Double.parseDouble(itemTokens[10]);
+
+					// Generating and preparing the Color for Item.
+					Color itemColor = new Color(ItemRed, ItemGreen, ItemBlue);
+
+
+					List<Item> roomObj = sc.getRoom().getRoomObjects();
+
+					for (int j = 0; j < roomObj.size(); j++) {
+
+						double oldX = roomObj.get(j).getX();
+						double oldY = roomObj.get(j).getY();
+
+						boolean itID = roomObj.get(j).getItemID() == ItemID;
+						boolean diffPos = roomObj.get(j).getX() != ItemX && roomObj.get(j).getX() != ItemX;
+						if(itID &&  diffPos){
+
+
+							/*roomObj.get(j).setX(ItemX);
+							roomObj.get(j).setY(ItemY);
+							roomObj.get(j).setZ(ItemZ);
+							 */
+
+							// move item by [new position in file] - [current p
+
+							roomObj.remove(j);
+
+							/*
+							 * Checking and preparing Item Object for player
+							 */
+							switch (ItemType) {
+
+							case "Chair":
+								Chair tmp = new Chair(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength, ItemHeight,
+										itemColor);
+								roomObj.add(tmp);
+								break;
+
+							case "Container":
+								Chair tmp1 = new Chair(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength, ItemHeight,
+										itemColor);
+								roomObj.add(tmp1);
+								break;
+
+							case "Dog":
+								Dog tmp2 = new Dog(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength, ItemHeight,
+										itemColor);
+								roomObj.add(tmp2);
+								break;
+
+							case "KeyDraw":
+
+								KeyDraw tmp3 = new KeyDraw(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength,
+										ItemHeight, itemColor);
+								roomObj.add(tmp3);
+								break;
+
+							case "Keys":
+								/*
+								 * Currently Game doesn't have Keys
+								 */
+								break;
+							case "Laptop":
+								Laptop tmp5 = new Laptop(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength,
+										ItemHeight, itemColor);
+								roomObj.add(tmp5);
+								break;
+
+							case "Map":
+								/*
+								 * There is not Pickable Map
+								 */
+								break;
+
+							case "MapDraw":
+								MapDraw tmp7 = new MapDraw(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength,
+										ItemHeight, itemColor);
+								roomObj.add(tmp7);
+								break;
+
+							case "Marker":
+								Marker tmp8 = new Marker(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength,
+										ItemHeight, itemColor);
+								roomObj.add(tmp8);
+								break;
+
+							case "MetalSheet":
+								MetalSheet tmp9 = new MetalSheet(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength,
+										ItemHeight, itemColor);
+								roomObj.add(tmp9);
+								break;
+
+							case "Table":
+								Table tmp10 = new Table(ItemID, ItemType, ItemX, ItemY, ItemZ, ItemWidth, ItemLength,
+										ItemHeight, itemColor);
+								roomObj.add(tmp10);
+								break;
+
+							default:
+								break;
+							}
+
+
+
+						}
+
+					}
+
+					System.out.println("-----------Loading Game World Items--------------");
 				} else {
 
 					System.out.println("======= Item: ========");
@@ -263,7 +420,7 @@ public class FastLoad {
 				items.get(j).canDraw();
 
 			}
-			System.out.println("-----------Loading Game World Items--------------");
+
 
 
 

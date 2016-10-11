@@ -381,7 +381,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      */
     private void playerWantingToInteractWithItem() {
         for (Item item : room.getRoomObjects()) {
-            if (item.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2]) && item.getInteractionsAvailable().size() != 0) {
+            if (item.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
                 performActionOnItem(item, false);
             }
         }

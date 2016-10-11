@@ -419,9 +419,7 @@ public class TileMap {
 						// System.out.println("e occupied" + E.isOccupied);
 						tileMap.setTile(x, y, E);
 
-						// Item drawItem = new
-						if (drawItem != null)
-							room.addItemToRoom(drawItem);
+
 						E.addObjectToTile(drawItem);
 						// room.addItemToRoom(new KeyDraw(id,type,10*x, 10*y, z,
 						// w, h, l, new Color(red, green, blue)));
