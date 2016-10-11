@@ -8,7 +8,7 @@ import model.rendering.Vector;
  */
 public class Calculator {
 	public static double t = 0;
-    static Vector w1;
+    private static Vector w1;
     private static Vector w2;
     private static Vector viewVector; // The vector we are looking along (viewTo - viewFrom)
     private static Vector rotationVector;
@@ -115,10 +115,10 @@ public class Calculator {
     /**
      * Sets the the values for the light direction
      */
-    public static void controlSunAndLight(double[] lightDir, double mapSize, double sunPos) {
-        sunPos += 0.01;
+    public static double[] controlSunAndLight(double[] lightDir, double mapSize, double sunPos) {
         lightDir[0] = mapSize / 2 - (mapSize / 2 + Math.cos(sunPos) * mapSize * 10);
         lightDir[1] = mapSize / 2 - (mapSize / 2 + Math.sin(sunPos) * mapSize * 10);
         lightDir[2] = -200;
+        return lightDir;
     }
 }

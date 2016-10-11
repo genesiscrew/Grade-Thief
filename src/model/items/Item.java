@@ -25,6 +25,7 @@ public abstract class Item extends GameObject implements Drawable {
     protected List<Interaction> interactionsAvailable;
     protected boolean draw = true;
     protected java.util.List<Cube> cubes;
+    protected boolean canPickup = false;
 
     /**
      * This sets up the itemID, itemType, position and size of the item to be rendered in the 3D world.
@@ -200,7 +201,7 @@ public abstract class Item extends GameObject implements Drawable {
     }
 
     public String getName() {
-        return getClass().getName().toLowerCase();
+        return getClass().getSimpleName() + " " + getItemID();
     }
 
     public List<Interaction> getInteractionsAvailable() {
@@ -216,6 +217,10 @@ public abstract class Item extends GameObject implements Drawable {
      * @see Item.addInteractions()
      */
     public enum Interaction {
-        OPEN, CLOSE, PICK_UP, SIT, TAKE, DROP, ACCESS, UNLOCK
+        OPEN, CLOSE, PICK_UP, SIT, TAKE, DROP, ACCESS, HACK, UNLOCK
+    }
+
+    public boolean isCanPickup() {
+        return canPickup;
     }
 }

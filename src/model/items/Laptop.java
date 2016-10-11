@@ -66,7 +66,8 @@ public class Laptop extends Item implements Drawable{
     @Override
     public void addInteractions() {
         interactionsAvailable = new ArrayList<>();
-        interactionsAvailable.add(Interaction.ACCESS);
+        interactionsAvailable.add(Interaction.HACK);
+    ;
     }
     
     public void setLock() {
@@ -75,6 +76,7 @@ public class Laptop extends Item implements Drawable{
 
     public void unlock() {
         this.locked = false;
+
     }
 
 

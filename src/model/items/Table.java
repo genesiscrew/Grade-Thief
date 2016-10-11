@@ -70,6 +70,5 @@ public class Table extends Item {
     @Override
     public void addInteractions() {
         interactionsAvailable = new ArrayList<>();
-        interactionsAvailable.add(Interaction.SIT);
     }
 }
