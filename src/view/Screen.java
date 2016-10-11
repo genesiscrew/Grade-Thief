@@ -21,10 +21,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import javax.swing.*;
 
 import controller.GameController;
 import controller.Main;
@@ -209,15 +206,24 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         }
 
         //check if game is still playing or is over
-        this.updateGameStatus();
-        if (this.GAMESTATUS == this.GAMEOVER) {
-            // TODO game is over so display certain message that game is lost
+        // this.updateGameStatus();
+        if (this.GAMESTATUS == this.GAMEWON) {
+            for (int i = 255; i > 0; i--) {
+                g.setColor(Color.RED);
+                g.drawString("You Won!", (int)(screenSize.getWidth()/ 2) - 100, (int)(screenSize.getHeight()/ 2));
+                g.setColor(new Color(i, i, i));
+                g.fillRect(0, 0, (int) screenSize.getWidth(), (int) screenSize.getHeight());
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            System.exit(0);
         }
 
         // Redraw
         sleepAndRefresh();
-
-        g.drawString(viewFrom[0] + " " + viewFrom[1] + " " + viewFrom[2], 500, 20);
     }
 
     /**
@@ -334,8 +340,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             drawOutlines = !drawOutlines;
         if (e.getKeyCode() == KeyEvent.VK_SPACE)
             currentPlayer.jump(viewFrom);
-//        if (e.getKeyCode() == KeyEvent.VK_R)
-//            // loadMap();
         if (e.getKeyCode() == KeyEvent.VK_U)
             changeAllDoorState();
         if (e.getKeyCode() == KeyEvent.VK_E)
@@ -377,13 +381,12 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      */
     private void playerWantingToInteractWithItem() {
         for (Item item : room.getRoomObjects()) {
-            if (item.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
+            if (item.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2]) && item.getInteractionsAvailable().size() != 0) {
                 performActionOnItem(item, false);
             }
         }
         room.getDoors().stream().filter(i -> i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])).forEach(i -> {
             performActionOnItem(i, false);
-            return;
         });
     }
 
@@ -439,6 +442,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             } else {
                 item.performAction(interaction);
             }
+
+            // HACK
+        } else if (interaction.equals(Interaction.HACK)) {
+            this.GAMESTATUS = GAMEWON;
 
         } else {
             item.performAction(interaction);
@@ -512,23 +519,22 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * select when they want to SAVE, LOAD, EXIT and READ more about instruction
      * and game,
      */
-
     public void gameOptionPane() {
         // Custom button text
-        Object[] options = {"Resume", "Chat", "Save", "Load", "help", "About Us", "Exit"};
-        int n = JOptionPane.showOptionDialog(this, "Please select the prefer optin?", "Grade Thief",
+        Object[] options = {"Resume", "Save", "Load", "Help", "About Us", "Exit"};
+        int n = JOptionPane.showOptionDialog(this, "Please select the prefer option?", "Grade Thief",
                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
         if (n == 0) {
             // Nothing for skipping the Modal and continue game.
-        } else if (n == 2) {
+        } else if (n == 1) {
             saveGame();
-        } else if (n == 3) {
+        } else if (n == 2) {
             loadGame();
-        } else if (n == 4) {
+        } else if (n == 3) {
             help();
-        } else if (n == 5) {
+        } else if (n == 4) {
             aboutUs();
-        } else if (n == 6) {
+        } else if (n == 5) {
             System.exit(0);
         }
     }
@@ -572,7 +578,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             JOptionPane.showMessageDialog(this,
                     "Please select saved version of the Grade Thief Game, This file is not belong to Grade-Thief",
                     "Grade-Thief Loading", JOptionPane.ERROR_MESSAGE);
-
         }
     }
 
@@ -606,7 +611,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * on ESCAPE button.
      */
     private void help() {
-        // help: Instruction for playing game and rules
         String rules = "Rules for Game is as follow : Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, ";
         JTextArea textArea = new JTextArea(rules, 6, 20);
         textArea.setFont(new Font("Serif", Font.ITALIC, 16));
@@ -615,8 +619,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         textArea.setOpaque(false);
         textArea.setEditable(false);
         textArea.setSize(new Dimension(400, 500));
-        // OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules,
-        // textArea);
+        OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
+        dlg.setVisible(true);
     }
 
     /**
@@ -624,18 +628,18 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * students whom created this game
      */
     private void aboutUs() {
-        // help: Instruction for playing game and rules
         String rules = "Grade Thief is a Software Engineering Group Project which leads by Victoria University of Wellington. Team members are: Adam Wareing, Hamid Osman, Stefan Vrecic, Mostafa Shenavaei, Mansour Javaher";
         JTextArea textArea = new JTextArea(rules, 6, 20);
-        textArea.setFont(new Font("Serif", Font.BOLD, 16));
+        textArea.setFont(new Font("Serif", Font.ITALIC, 16));
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         textArea.setOpaque(false);
         textArea.setEditable(false);
         textArea.setSize(new Dimension(400, 500));
-        // OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules,
-        // textArea);
+        OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
+        dlg.setVisible(true);
     }
+
 
     @Override
     public void keyTyped(KeyEvent e) {
