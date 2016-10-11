@@ -198,7 +198,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 			g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120,
 					(int) screenSize.getHeight() / 2 - 50);
 		}
-		//check if game is still playing or is over
+		// check if game is still playing or is over
 		this.updateGameStatus();
 		if (this.GAMESTATUS == this.GAMEOVER) {
 			// TODO game is over so display certain message that game is lost
@@ -207,11 +207,13 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		// Redraw
 		sleepAndRefresh();
 	}
-/**
- * this method updates the status of the game, more specifically, whether the guard coordinates
- * match those of other playing, indicating he has been caught, or whether player got a special item
- * in his inventory indicating he has succesfully got access to david's computer
- */
+
+	/**
+	 * this method updates the status of the game, more specifically, whether
+	 * the guard coordinates match those of other playing, indicating he has
+	 * been caught, or whether player got a special item in his inventory
+	 * indicating he has succesfully got access to david's computer
+	 */
 	private void updateGameStatus() {
 		if (!this.guard) {
 			// check whether player coordinate correspond with other player,
@@ -220,9 +222,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 				this.GAMESTATUS = this.GAMEOVER;
 
 			}
-            //TODO: need to create the special item
+			// TODO: need to create the special item
 			if (this.currentPlayer.getInventory().contains(null)) {
-				// player has unlocked davids computer using a key and has a unique item added to his inventory, his modified grade sheet
+				// player has unlocked davids computer using a key and has a
+				// unique item added to his inventory, his modified grade sheet
 				// if this item exists in inventory you win the game
 				this.GAMESTATUS = this.GAMEWON;
 
@@ -232,9 +235,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 			if (viewFrom[0] == this.otherPlayer.getX() && viewFrom[1] == this.otherPlayer.getY()) {
 				this.GAMESTATUS = this.GAMEWON;
 			}
-			//TODO: need to create the special item
+			// TODO: need to create the special item
 			if (this.otherPlayer.getInventory().contains(null)) {
-				// player has unlocked davids computer using a key and has a unique item added to his inventory, his modified grade sheet
+				// player has unlocked davids computer using a key and has a
+				// unique item added to his inventory, his modified grade sheet
 				// if this item exists in inventory you win the game
 				this.GAMESTATUS = this.GAMEWON;
 			}
@@ -370,8 +374,58 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		}
 		room.getDoors().stream().filter(i -> i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])).forEach(i -> {
 			performActionOnItem(i);
+			int n = 0;
+			if (n == 0) // doorOpened
+			{
+				Location l = getPlayerLocation();
+
+				if (l.row() == 80 && l.column() == 5) // hard coded to switch
+														// floor
+					loadMap("level2", 1);
+				else if (l.row() == 80 && l.column() == 29)
+					loadMap("level2", 2);
+				else if (l.row() == 1 && l.column() == 5)
+					loadMap("level", 1);
+				else if (l.row() == 1 && l.column() == 21)
+					loadMap("level", 2);
+				else if (l.row() == 51 && l.column() == 25) {
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					loadMap("level2", 2);
+				}
+
+			}
 			return;
 		});
+	}
+
+	public void loadMap(String map, int id) {
+
+		maxFPS = drawFPS;
+		room = new Room(map);
+
+		if (map.equals("level2") && id == 1) {
+			this.currentPlayer.setRoom("level2");
+			room.setPlayerStart(2 * 10, 6 * 10);
+		} else if (map.equals("level2") && id == 2) {
+			this.currentPlayer.setRoom("level2");
+			room.setPlayerStart(2 * 10, 22 * 10);
+		} else if (map.equals("level") && id == 1) {
+			this.currentPlayer.setRoom("level");
+			room.setPlayerStart(80 * 10, 5 * 10);
+		} else if (map.equals("level") && id == 2) {
+			this.currentPlayer.setRoom("level");
+			room.setPlayerStart(80 * 10, 29 * 10);
+		}
+		viewFrom[0] = room.getPlayerStart().row();
+		viewFrom[1] = room.getPlayerStart().column();
+		this.controller.setupGuardbots(this);
+		polyDrawer.updateRoom(room);
 	}
 
 	/**
