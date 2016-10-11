@@ -3,20 +3,17 @@ package model.floor;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import model.characters.GuardBot;
 import model.items.Chair;
 import model.items.Container;
 import model.items.Dog;
 import model.items.Door;
 import model.items.Item;
 import model.items.KeyDraw;
-import model.items.Keys;
 import model.items.Laptop;
 import model.items.MetalSheet;
 import model.items.Table;
@@ -376,34 +373,11 @@ public class TileMap {
 					}
 
 				}
-				// FOUND KEY
-				else if (type.equals("K")) {
-					//System.out.println("adding key??");
-					// Key found
-					int keyID = sc.nextInt();
-					System.out.println(keyID);
-					// TODO: create key item and add it to floor tile map
 
-					EmptyTile E = (EmptyTile) tile;
-					Keys K = new Keys(id, type, keyID);
-					E.addObjectToTile(K);
-					E.setOccupied();
-					//System.out.println("e occupied" + E.isOccupied);
-					tileMap.setTile(x, y, E);
-
-					if (container != null) {
-						// container.addItem(K);
-						//System.out.println("container size + " + container.getItems().size());
-						// TODO: if method called by container item, then add
-						// item into container list
-					}
-
-				}
 				// FOUND ITEM
 				else {
 					EmptyTile E = (EmptyTile) tile;
 					Item drawItem = null;
-
 
 					// adds
 					switch (type) {

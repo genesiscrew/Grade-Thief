@@ -122,6 +122,15 @@ public class Player implements Drawable {
 		return inventory;
 	}
 
+    public boolean containsKeyInInventory(int id){
+        for(Item i : inventory){
+            if(i.getItemID() == id)
+                return true;
+        }
+
+        return false;
+    }
+
 	public void removeFromInventory(Item item) {
 		this.inventory.remove(item);
 	}

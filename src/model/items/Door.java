@@ -1,6 +1,7 @@
 package model.items;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import model.rendering.Cube;
@@ -11,7 +12,7 @@ public class Door extends Item {
     private int pass;
     int i;
     private double[][] locations = new double[2][2];
-    private boolean locked;
+    private boolean locked = true;
 
     public Door(int itemID, String itemType, double x, double y, double z, double width, double length, double height,
                 Color c) {
@@ -24,16 +25,20 @@ public class Door extends Item {
         return itemType;
     }
 
-    public static Door getDoor(int doorCode) {
-        return null;
-    }
-
     public void setLock() {
         this.locked = true;
     }
 
     public void unlock() {
         this.locked = false;
+    }
+
+    @Override
+    public void addInteractions() {
+        interactionsAvailable = new ArrayList<>();
+        interactionsAvailable.add(Interaction.UNLOCK);
+        interactionsAvailable.add(Interaction.OPEN);
+        interactionsAvailable.add(Interaction.CLOSE);
     }
 
     @Override
@@ -97,6 +102,10 @@ public class Door extends Item {
         } else {
             i = 0;
         }
+    }
+
+    public boolean isLocked() {
+        return locked;
     }
 
     public boolean isDraw() {

@@ -36,6 +36,7 @@ import model.floor.Tile;
 import model.items.Door;
 import model.items.Item;
 import model.items.Item.Interaction;
+import model.items.KeyDraw;
 import model.rendering.Polygon;
 import model.saving.FastLoad;
 import model.saving.FastSaving;
@@ -95,7 +96,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     private model.characters.Player currentPlayer;
     private model.characters.Player otherPlayer;
     private String messageToDisplay = "";
-    private String messageToDisplay2;
+    private String messageToDisplay2 = "";
+    private int countSinceMessageUpdate = 0;
     private int GAMESTATUS;
 
     /**
@@ -193,12 +195,17 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120,
                     (int) screenSize.getHeight() / 2 - 50);
         }
-        messageToDisplay2 = "";
-        isPlayerDetected();
-        if (!messageToDisplay2.equals("")) {
-            g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120,
-                    (int) screenSize.getHeight() / 2 - 50);
+
+        if (countSinceMessageUpdate == 30) {
+            countSinceMessageUpdate = 0;
+            messageToDisplay2 = "";
         }
+        if (!messageToDisplay2.equals("")) {
+            g.drawString(messageToDisplay2, (int) screenSize.getWidth() / 2 - 120,
+                    (int) screenSize.getHeight() / 2 - 120);
+            countSinceMessageUpdate++;
+        }
+
         //check if game is still playing or is over
         this.updateGameStatus();
         if (this.GAMESTATUS == this.GAMEOVER) {
@@ -208,11 +215,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         // Redraw
         sleepAndRefresh();
 
-        for(Item d : room.getRoomObjects())
-            System.out.println(d.getItemID());
-
-
-        System.out.println("\n \n \n \n \n");
+        g.drawString(viewFrom[0] + " " + viewFrom[1] + " " + viewFrom[2], 500, 20);
     }
 
     /**
@@ -391,17 +394,38 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     public void performActionOnItem(Item item) {
         int n = showOptionPane(item.getInteractionsAvailable());
         Interaction interaction = item.getInteractionsAvailable().get(n);
-        // Take
+        // TAKE
         if (interaction.equals(Interaction.TAKE)) {
             currentPlayer.addToInventory(item);
             room.removeRoomObject(item);
             item.canDraw();
-            // Drop
+
+            // DROP
         } else if (interaction.equals(Interaction.DROP)) {
             item.moveItemBy(viewFrom[0] - item.getX(), viewFrom[1] - item.getY(), 0);
             room.addItemToRoom(item);
             item.canDraw();
             currentPlayer.removeFromInventory(item);
+
+
+            // UNLOCK
+        } else if (interaction.equals(Interaction.UNLOCK)) {
+            if (currentPlayer.containsKeyInInventory(item.getItemID())) {
+                Door d = (Door) item;
+                d.unlock();
+            } else {
+                messageToDisplay2 = "You need the key " + item.getItemID() + ", to unlock the door";
+            }
+
+            // OPEN
+        } else if (interaction.equals(Interaction.OPEN)) {
+            Door d = (Door) item;
+            if (d.isLocked()) {
+                messageToDisplay2 = "You need to unlock the door first";
+            } else {
+                item.performAction(interaction);
+            }
+
         } else {
             item.performAction(interaction);
         }
@@ -429,35 +453,29 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
     private void isPlayerNearObject() {
-        List<Item> removeItems = new ArrayList<Item>();
-        for (Item i : room.getRoomObjects()) {
-            if (!i.isDraw()) {// nothing to display if item not rendered
-                removeItems.add(i);
-                continue;
-            }
+        List<Item> allObjects = new ArrayList<>();
+        allObjects.addAll(room.getDoors());
+        allObjects.addAll(room.getRoomObjects());
 
-            if (i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
-                // messageToDisplay = "Press e To Interact With The " +
-                // i.getClass().getSimpleName();
+        for (Item i : allObjects) {
+            // Nothing to display if item not rendered or the player isn't near it
+            if (i.isDraw() && i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
 
-                messageToDisplay = "Door" + i.getItemID();
-            }
-        }
+                if (i instanceof Door) {
+                    messageToDisplay = "Press e to interact with Door";
+                    messageToDisplay += ". Combination: " + i.getItemID();
 
-        for (Item i2 : removeItems) {
-            room.removeRoomObject(i2);
-            ((EmptyTile) room.getTileMap().getTileMap()[(int) i2.getX() / 10][(int) i2.getY() / 10]).resetEmptyTile();
-        }
+                } else if (i instanceof KeyDraw) {
+                    messageToDisplay = "Press e to interact with Key";
+                    messageToDisplay += ". Combination: " + i.getItemID();
 
-        for (Item i : room.getDoors()) {
-            if (i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
-                // messageToDisplay = "Press e To Open The Door";
-                // Location l = getPlayerLocation();
-                // if (this.room.getTileMap().getTileMap()[l.row()][l.column()];
-                messageToDisplay = "Press e " + i.itemID;
+                } else {
+                    messageToDisplay = "Press e to interact with " + i.getName();
+                }
             }
         }
     }
+
 
     /**
      * Moving Ability for the camera(Player) this function will set the keys
@@ -480,6 +498,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * select when they want to SAVE, LOAD, EXIT and READ more about instruction
      * and game,
      */
+
     public void gameOptionPane() {
         // Custom button text
         Object[] options = {"Resume", "Chat", "Save", "Load", "help", "About Us", "Exit"};
