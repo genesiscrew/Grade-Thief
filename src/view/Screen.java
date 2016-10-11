@@ -1,14 +1,7 @@
 
 package view;
 
-import java.awt.AWTException;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Robot;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -16,11 +9,14 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import controller.GameController;
@@ -50,6 +46,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     public static final int GAMEOVER = 3;
     public static final int GAMEWON = 4;
     public int timer;
+    private boolean displayImage = false;
 
     // The polygon that the mouse is currently over
     public static Polygon polygonOver = null;
@@ -143,6 +140,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
     @Override
     public void paintComponent(Graphics g) {
+        if(displayImage)
+            return;
+
         // Clear screen and draw background color
         g.setColor(new Color(140, 180, 180));
         g.fillRect(0, 0, (int) screenSize.getWidth(), (int) screenSize.getHeight());
@@ -166,9 +166,11 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
         // Calculated all that is general for this camera position
         Calculator.setPredeterminedInfo(this);
+
+        // Move the suns position
         lightDir = Calculator.controlSunAndLight(lightDir, room.getWidth(), sunPos);
         sunPos += 0.01;
-        System.out.println(lightDir[0] + " " + lightDir[2] + " " + lightDir[2]);
+
         if (timer > 0) {
             timer--;
         }
@@ -206,25 +208,24 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             countSinceMessageUpdate++;
         }
 
-        //check if game is still playing or is over
-        // this.updateGameStatus();
-        if (this.GAMESTATUS == this.GAMEWON) {
-            for (int i = 255; i > 0; i--) {
-                g.setColor(Color.RED);
-                g.drawString("You Won!", (int) (screenSize.getWidth() / 2) - 100, (int) (screenSize.getHeight() / 2));
-                g.setColor(new Color(i, i, i));
-                g.fillRect(0, 0, (int) screenSize.getWidth(), (int) screenSize.getHeight());
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            System.exit(0);
-        }
+        // Has the player won the game?
+        if (this.GAMESTATUS == this.GAMEWON)
+            showEndImage(g);
 
         // Redraw
         sleepAndRefresh();
+    }
+
+    private void showEndImage(Graphics g){
+        g.setColor(Color.RED);
+        try {
+            BufferedImage img = ImageIO.read(new File("/home/wareinadam/SWEN222/Cleaned-Grade-Thief/grade-thief/dp.jpg"));
+            g.drawImage(img, 0, 0, (int)screenSize.getWidth(), (int)screenSize.getHeight(),  null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        g.drawString("You Won!", (int) (screenSize.getWidth() / 2) - 100, (int) (screenSize.getHeight() / 2));
+        displayImage = true;
     }
 
     /**
@@ -364,7 +365,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             return; // No items to show
         String stringItem = Inventory.showDialog(this, null, "Select an item to interact with", "Inventory",
                 inventoryItems, inventoryItems[0], inventoryItems[0]);
-        System.out.println(stringItem);
         int itemLocation = 0;
         for (int i = 0; i < inventoryItems.length; i++) {
             if (inventoryItems[i] == stringItem) {
@@ -382,7 +382,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     private void playerWantingToInteractWithItem() {
         for (Item item : room.getRoomObjects()) {
             if (item.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])) {
-                if(item instanceof Table) // Cant interact with a table
+                if (item instanceof Table) // Cant interact with a table
                     continue;
                 performActionOnItem(item, false);
             }
@@ -650,7 +650,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         if (status == JFileChooser.APPROVE_OPTION) {
             // getting the name of the file.
             File selectedFile = fileChooser.getSelectedFile();
-            // System.out.println(selectedFile);
             return selectedFile.getParent() + "/" + selectedFile.getName();
         } else if (status == JFileChooser.CANCEL_OPTION) {
             // If the didn't select any file

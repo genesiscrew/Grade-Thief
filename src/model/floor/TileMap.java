@@ -29,7 +29,6 @@ public class TileMap {
     private Tile[][] TileMap;
     private int TileMapWidth = 0;
     private int TileMapHeight = 0;
-    private int optionalCode = -1; // default value of map does not contain a
     // door
     private List<Location> doorLocations = new ArrayList<Location>();
     private List<Integer> lockedDoorNumbers = new ArrayList<Integer>();
@@ -155,7 +154,6 @@ public class TileMap {
 
         TileMap tileMap = new TileMap(new Tile[width][height], null);
 
-        tileMap.optionalCode = code;
         tileMap.TileMapWidth = width;
         tileMap.TileMapHeight = height;
 
