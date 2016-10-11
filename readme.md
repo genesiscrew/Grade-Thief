@@ -35,6 +35,7 @@ through map on the top right.
 - Clone the repository.
 - After cloning go to eclipse and right click on a folder or project select import and then import existing project.
 - After getting the project in your IDE (Eclipse) run the Main.java and you will be able to play.
+
 `If you are using eclipse make sure you have '.classpath' and '.project' for importing project` 
 
 ### MultiPlayer Version
