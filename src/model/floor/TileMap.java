@@ -201,7 +201,7 @@ public class TileMap {
 	/**
 	 * this method is a parser, it sets doors in level as locked or unlocked,
 	 * and populates level with items
-	 * 
+	 *
 	 * @param room
 	 *            -- the room to be populated with items
 	 * @param String
@@ -242,7 +242,7 @@ public class TileMap {
 
 						DoorTile d = (DoorTile) tileMap.TileMap[doorLocations.get(doorToLock).locX()][doorLocations
 								.get(doorToLock).locY()];
-						d.getDoor().setLock();
+						//d.getDoor().setLock();
 
 					}
 					System.out.println(sc.nextLine() + " ======================== ");
@@ -270,7 +270,7 @@ public class TileMap {
 				if (type.equals("Container")) {
 					// container found
 					int keyID = sc.nextInt();
-					
+
 					int itemCount = sc.nextInt();
 					// loop from each item line
 					String line = sc.nextLine();
@@ -349,7 +349,7 @@ public class TileMap {
 				return;
 			}
 		}
-	
+
 	}
 
 	/**

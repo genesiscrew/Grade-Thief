@@ -12,7 +12,7 @@ import model.rendering.Polygon;
 
 /**
  * this class renders a door object into the game world
- * 
+ *
  * @author abubakhami
  *
  */
@@ -54,32 +54,32 @@ public class DoorDraw extends Item {
 		this.door = door;
 	}
 
-	@Override
+	@Override // see item.java
 	public void setRotAdd() {
 		cubes.forEach(i -> i.setRotAdd());
 	}
 
-	@Override
+	@Override // see item.java
 	public void updateDirection(double toX, double toY) {
 		cubes.forEach(i -> i.updateDirection(toX, toY));
 	}
 
-	@Override
+	@Override // see item.java
 	public void updatePoly() {
 		cubes.forEach(i -> i.updatePoly());
 	}
 
-	@Override
+	@Override // see item.java
 	public void removeCube() {
 		cubes.forEach(i -> i.removeCube());
 	}
 
-	@Override
+	@Override // see item.java
 	public boolean containsPoint(int x, int y, int z) {
 		return (this.x + this.width) > x && (this.y + this.length) > y && this.x < x && this.y < y;
 	}
 
-	@Override
+	@Override // see item.java
 	public List<model.rendering.Polygon> getPolygons() {
 		List<Polygon> allPolys = new ArrayList<>();
 		// Add all the cubes polygons

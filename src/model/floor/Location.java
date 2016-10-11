@@ -1,10 +1,10 @@
 package model.floor;
 /**
-*
-* @author Stefan Vrecic
-* Location.java specifies an x-y coordinates system in the game.
-* Used to keep track of ites, players, rooms etc.
-*/
+ *
+ * @author Stefan Vrecic
+ * Location.java specifies an x-y coordinates system in the game.
+ * Used to keep track of itesms, players, rooms etc.
+ */
 public class Location {
 
 	private int x;
@@ -19,16 +19,31 @@ public class Location {
 		return x + " " + y;
 	}
 
+	/**
+	 * increases the location by a given amount
+	 * @param i
+	 */
 	public void modX(int i) {
 		this.x += i;
 	}
+	/**
+	 * increases the location by a given amount
+	 * @param i
+	 */
 	public void modY(int i) {
 		this.y += i;
 	}
-
+	/**
+	 * returns the x value of the location
+	 * @return
+	 */
 	public int row() {
 		return x;
 	}
+	/**
+	 * returns the y value of the location
+	 * @return
+	 */
 	public int column() {
 		return y;
 	}
@@ -56,21 +71,21 @@ public class Location {
 			return false;
 		return true;
 	}
-	
+
 	/**
 	 * returns the X coordinate of the location
 	 * @return
 	 */
-		public int locX() {
-			return x;
-		}
-		/**
-		 * returns the Y coordinate of the location
-		 * @return
-		 */
-		public int locY() {
-			return y;
-		}
+	public int locX() {
+		return x;
+	}
+	/**
+	 * returns the Y coordinate of the location
+	 * @return
+	 */
+	public int locY() {
+		return y;
+	}
 
 
 }

@@ -10,7 +10,10 @@ public class WallTile extends EmptyTile implements Tile  {
 	private final boolean isOccupied = false; // wall tiles can NEVER be occupied
 	private boolean containsCamera = false;
 	private boolean cameraActivated = false;
-
+	/**
+	 * returns the location of the wall tile
+	 * @return
+     */
 	@Override
 	public Location tileLocation() {
 		return location;
@@ -20,6 +23,10 @@ public class WallTile extends EmptyTile implements Tile  {
 	public boolean occupied() {
 		return isOccupied;
 	}
+	/**
+	 * sets the location of the wall tile
+	 * @param l
+     */
 
 	@Override
 	public void setLocation(Location l) {
@@ -32,7 +39,9 @@ public class WallTile extends EmptyTile implements Tile  {
 		// TODO Auto-generated method stub
 		return "W";
 	}
-
+	/**
+ * returns the wallTile object as wallTile + location; used for debugging
+ */
 	public String toString() {
 		return this.getClass().getSimpleName() + " " + location.toString();
 	}

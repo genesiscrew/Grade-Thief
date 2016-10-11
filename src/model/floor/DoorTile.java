@@ -15,23 +15,26 @@ public class DoorTile extends EmptyTile {
     private boolean isOccupied = false;
 
 
-    public int doorCode() {
-    	return this.doorCode;
-    }
-
-    public void setDoorCode(int doorCode) {
-    	this.doorCode = doorCode;
-    }
-
-
+/**
+ * returns the door attached to the tile
+ * @return
+ */
     public Door getDoor() {
         return this.door;
     }
 
+    /**
+     * attachs the door to the doorTIle
+     * @param door
+     */
     public void setDoor(Door door) {
         this.door = door;
     }
 
+
+/**
+ * returns the location of the DoorTile
+ */
     @Override
     public Location tileLocation() {
 
@@ -42,11 +45,17 @@ public class DoorTile extends EmptyTile {
         return null;
     }
 
+    /**
+     * returns whether a player is on the dorTIle
+     */
     @Override
     public boolean occupied() {
         return isOccupied;
     }
 
+    /**
+     * sets the location of the doorTIle
+     */
     @Override
     public void setLocation(Location l) {
         this.location = l;

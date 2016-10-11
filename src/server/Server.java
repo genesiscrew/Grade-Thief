@@ -104,12 +104,11 @@ public class Server{
 			guard.getPlayer().getOtherPlayer().setRoom(room);
 			guard.getPlayer().timer = timer;
 			guard.setPlayerPosition(newPos);
-			System.out.println("whats happening");
 			int x = (int) input.readInt();
 			int y = (int) input.readInt();
 
 			guard.getPlayer().getOtherPlayer().setLocation(new Location(x,y));
-			System.out.println("other player locatio is: " + x + "" + y);
+
 
 
 		} catch (Exception e) {

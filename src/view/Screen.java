@@ -594,6 +594,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         return n;
     }
 
+    /**
+     * locks / unlocks all doors; testing purposes
+     */
     private void changeAllDoorState() {
         room.getDoors().forEach(d -> d.changeState());
     }

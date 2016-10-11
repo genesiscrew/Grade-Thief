@@ -9,18 +9,33 @@ public class RoomTile extends EmptyTile implements Tile  {
 	Location location;
 	private boolean isOccupied = false;
 
+	/**
+	 * gets the location of the roomTile
+	 */
 	@Override
 	public Location tileLocation() {
 		return location;
 	}
+	/**
+	 * returns the object on the tile -- not used since 3D
+	 */
 	public Object getObjectonTile(){
 		return null;
 	}
+
+	/**
+	 * sets the roomTile to be occupied
+	 * @return
+     */
 	@Override
 	public boolean occupied() {
 		return isOccupied;
 	}
 
+	/*
+	 * sets the location of the roomTile
+	 * @param l
+    */
 	@Override
 	public void setLocation(Location l) {
 		this.location = l;
@@ -37,6 +52,9 @@ public class RoomTile extends EmptyTile implements Tile  {
 		return this.getClass().getSimpleName() + " " + location.toString();
 	}
 
+	/**
+	 * sets the tile to be occupied
+	 */
 	@Override
 	public void setOccupied() {
 		isOccupied = true;

@@ -19,55 +19,55 @@ public class Map extends Item implements Interactable, Movable {
 		this.mapIMG = mapIMG;
 	}
 
-	@Override
+	@Override // see item.java
 	public void pickUp() {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
+	@Override // see item.java
 	public void useItem() {
 		// this will display the map
 
 	}
 
-	@Override
+	@Override // see item.java
 	public void useItem(GameObject j) {
 		useItem();
 	}
 
-	@Override
+	@Override // see item.java
 	public void move(Direction dir, Distance d) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
+	@Override // see item.java
 	public void updateDirection(double toX, double toY) {
 
 	}
 
-	@Override
+	@Override // see item.java
 	public void updatePoly() {
 
 	}
 
-	@Override
+	@Override // see item.java
 	public void setRotAdd() {
 
 	}
 
-	@Override
+	@Override // see item.java
 	public void removeCube() {
 
 	}
 
-	@Override
+	@Override // see item.java
 	public boolean containsPoint(int x, int y, int z) {
 		return false;
 	}
 
-	@Override
+	@Override // see item.java
 	public List<Polygon> getPolygons() {
 		return null;
 	}
