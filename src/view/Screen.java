@@ -176,7 +176,6 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 			timer--;
 		}
 
-
 		polyDrawer.drawPolygons(g, guard, otherPlayer, currentPlayer, timer, currentPlayer.getLevelName(), viewFrom[0],
 				viewFrom[1]);
 
@@ -205,7 +204,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 			g.drawString(messageToDisplay, (int) screenSize.getWidth() / 2 - 120,
 					(int) screenSize.getHeight() / 2 - 50);
 		}
-		//check if game is still playing or is over
+		// check if game is still playing or is over
 		this.updateGameStatus();
 		if (this.GAMESTATUS == this.GAMEOVER) {
 			// game is over so display certain message that game is lost
@@ -215,11 +214,13 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		// Redraw
 		sleepAndRefresh();
 	}
-/**
- * this method updates the status of the game, more specifically, whether the guard coordinates
- * match those of other playing, indicating he has been caught, or whether player got a special item
- * in his inventory indicating he has succesfully got access to david's computer
- */
+
+	/**
+	 * this method updates the status of the game, more specifically, whether
+	 * the guard coordinates match those of other playing, indicating he has
+	 * been caught, or whether player got a special item in his inventory
+	 * indicating he has succesfully got access to david's computer
+	 */
 	private void updateGameStatus() {
 		if (!this.guard) {
 			// check whether player coordinate correspond with other player,
@@ -228,9 +229,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 				this.GAMESTATUS = this.GAMEOVER;
 
 			}
-            //TODO: need to create the special item
+			// TODO: need to create the special item
 			if (this.currentPlayer.getInventory().contains(null)) {
-				// player has unlocked davids computer using a key and has a unique item added to his inventory, his modified grade sheet
+				// player has unlocked davids computer using a key and has a
+				// unique item added to his inventory, his modified grade sheet
 				// if this item exists in inventory you win the game
 				this.GAMESTATUS = this.GAMEWON;
 
@@ -240,9 +242,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 			if (viewFrom[0] == this.otherPlayer.getX() && viewFrom[1] == this.otherPlayer.getY()) {
 				this.GAMESTATUS = this.GAMEWON;
 			}
-			//TODO: need to create the special item
+			// TODO: need to create the special item
 			if (this.otherPlayer.getInventory().contains(null)) {
-				// player has unlocked davids computer using a key and has a unique item added to his inventory, his modified grade sheet
+				// player has unlocked davids computer using a key and has a
+				// unique item added to his inventory, his modified grade sheet
 				// if this item exists in inventory you win the game
 				this.GAMESTATUS = this.GAMEWON;
 
@@ -386,8 +389,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		}
 		room.getDoors().stream().filter(i -> i.pointNearObject(viewFrom[0], viewFrom[1], viewFrom[2])).forEach(i -> {
 			performActionOnItem(i);
+		
 			return;
 		});
+
 	}
 
 	/**
@@ -507,7 +512,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 		}
 		viewFrom[0] = room.getPlayerStart().row();
 		viewFrom[1] = room.getPlayerStart().column();
-		this.controller.setupGuardbots(this);
+		//this.controller.setupGuardbots(this);
 		polyDrawer.updateRoom(room);
 	}
 
@@ -527,7 +532,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 				// messageToDisplay = "Press e To Interact With The " +
 				// i.getClass().getSimpleName();
 
-				messageToDisplay = "Door" + i.getItemID();
+				messageToDisplay = i.getItemType();
 			}
 		}
 

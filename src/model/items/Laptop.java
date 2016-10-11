@@ -20,7 +20,7 @@ public class Laptop extends Item implements Drawable{
     }
 
     public Laptop(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
-        super(itemID, itemType, x, y, z, width, length, height, c);
+        super(itemID, "David's Laptop", x, y, z, width, length, height, c);
 
         // Screen
         cubes.add(new Cube(x, y+length, z, width, LAPTOP_THICKNESS, height, c));
@@ -65,6 +65,7 @@ public class Laptop extends Item implements Drawable{
     @Override
     public void addInteractions() {
         interactionsAvailable = new ArrayList<>();
+        interactionsAvailable.add(Interaction.ACCESS);
     }
 
 

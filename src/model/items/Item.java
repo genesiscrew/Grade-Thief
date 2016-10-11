@@ -87,6 +87,9 @@ public abstract class Item extends GameObject implements Drawable {
 		case TAKE:
 			draw = false;
 			break;
+		case ACCESS:
+			//draw = false;
+			break;
 		}
 	}
 
@@ -166,7 +169,7 @@ public abstract class Item extends GameObject implements Drawable {
 
 	// Model file
 	public enum Interaction {
-		OPEN, CLOSE, PICK_UP, SIT, TAKE, DROP
+		OPEN, CLOSE, PICK_UP, SIT, TAKE, DROP, ACCESS
 	}
 
 	public List<Interaction> getInteractionsAvailable() {
