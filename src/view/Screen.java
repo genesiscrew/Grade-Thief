@@ -25,12 +25,13 @@ import controller.ScreenUtil;
 import model.characters.Player;
 import model.floor.EmptyTile;
 import model.floor.Location;
-import model.floor.Tile;
+import model.items.Container;
 import model.items.Door;
 import model.items.Item;
 import model.items.Item.Interaction;
 import model.items.KeyDraw;
 import model.items.Table;
+import model.items.Laptop;
 import model.rendering.Polygon;
 import model.saving.FastLoad;
 import model.saving.FastSaving;
@@ -52,7 +53,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     public static Polygon polygonOver = null;
 
     public static int startX = 120;
-    public static int startY = 150;
+    public static int startY = 90;
     public static int startZ = 10;
 
     Robot r; // Used for keeping mouse in center
@@ -183,7 +184,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
         // FPS display
         g.setColor(Color.WHITE);
-        g.drawString("FPS: " + (int) drawFPS + "(Benchmark)", 40, 40);
+        g.drawString("FPS: " + (int) drawFPS , 40, 40);
 
         Location l = getPlayerLocation();
         if (l != null)
@@ -480,9 +481,24 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 
             // UNLOCK
         } else if (interaction.equals(Interaction.UNLOCK)) {
+
             if (currentPlayer.containsKeyInInventory(item.getItemID())) {
-                Door d = (Door) item;
-                d.unlock();
+            	String type = null;
+            	if (item instanceof Container) {
+            		Container c = (Container) item;
+            		c.unlock();
+            		type = "container";
+            	}
+            	if (item instanceof Laptop) {
+            		Laptop l = (Laptop) item;
+            		l.unlock();
+            		type = "container";
+            	}
+            	else {
+            		 Door d = (Door) item;
+                     d.unlock();
+            	}
+
             } else {
                 messageToDisplay2 = "You need the key " + item.getItemID() + ", to unlock the door";
             }
@@ -575,8 +591,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      */
     public void gameOptionPane() {
         // Custom button text
+
         Object[] options = {"Resume", "Save", "Load", "Help", "About Us", "Exit"};
         int n = JOptionPane.showOptionDialog(this, "Please select the prefer option?", "Grade Thief",
+
                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
         if (n == 0) {
             // Nothing for skipping the Modal and continue game.
@@ -643,7 +661,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * @return String: FileName
      */
     private String selectFile() {
-        // Creating JFileChooser
+    	  // Creating JFileChooser
         JFileChooser fileChooser = new JFileChooser(".");
         int status = fileChooser.showOpenDialog(null);
 
@@ -664,16 +682,16 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * on ESCAPE button.
      */
     private void help() {
-        String rules = "Rules for Game is as follow : Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, ";
-        JTextArea textArea = new JTextArea(rules, 6, 20);
-        textArea.setFont(new Font("Serif", Font.ITALIC, 16));
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        textArea.setOpaque(false);
-        textArea.setEditable(false);
-        textArea.setSize(new Dimension(400, 500));
-        OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
-        dlg.setVisible(true);
+    	  String rules = "Rules for Game is as follow : Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, Here is the Rule, ";
+          JTextArea textArea = new JTextArea(rules, 6, 20);
+          textArea.setFont(new Font("Serif", Font.ITALIC, 16));
+          textArea.setLineWrap(true);
+          textArea.setWrapStyleWord(true);
+          textArea.setOpaque(false);
+          textArea.setEditable(false);
+          textArea.setSize(new Dimension(400, 500));
+          OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
+          dlg.setVisible(true);
     }
 
     /**
@@ -681,16 +699,16 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * students whom created this game
      */
     private void aboutUs() {
-        String rules = "Grade Thief is a Software Engineering Group Project which leads by Victoria University of Wellington. Team members are: Adam Wareing, Hamid Osman, Stefan Vrecic, Mostafa Shenavaei, Mansour Javaher";
-        JTextArea textArea = new JTextArea(rules, 6, 20);
-        textArea.setFont(new Font("Serif", Font.ITALIC, 16));
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        textArea.setOpaque(false);
-        textArea.setEditable(false);
-        textArea.setSize(new Dimension(400, 500));
-        OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
-        dlg.setVisible(true);
+    	  String rules = "Grade Thief is a Software Engineering Group Project which leads by Victoria University of Wellington. Team members are: Adam Wareing, Hamid Osman, Stefan Vrecic, Mostafa Shenavaei, Mansour Javaher";
+          JTextArea textArea = new JTextArea(rules, 6, 20);
+          textArea.setFont(new Font("Serif", Font.ITALIC, 16));
+          textArea.setLineWrap(true);
+          textArea.setWrapStyleWord(true);
+          textArea.setOpaque(false);
+          textArea.setEditable(false);
+          textArea.setSize(new Dimension(400, 500));
+          OptionPane dlg = new OptionPane(new JFrame(), "GradeThief", rules, textArea);
+          dlg.setVisible(true);
     }
 
 

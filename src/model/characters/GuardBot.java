@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 import javax.swing.plaf.SliderUI;
 
-
 import model.floor.EmptyTile;
 import model.floor.Location;
 import model.items.Direction;
@@ -26,16 +25,23 @@ import model.rendering.Cube;
 import model.rendering.Drawable;
 import model.rendering.Polygon;
 import view.Screen;
+
 /**
  *
  * @author Hamid Abubakr
  *
  *
- *Guard bot class creates guard bot object that move within each map. the bots are able to detect a player, and are able to move along
- *predefined coordinates in map. the guard bot route is created using mvoement strategies. depending on the strategy chosen certain parts of the code are used
- *and certain routes are taken. the bots also can have different speeds at which they move. the bots are unable to detect players inside rooms, only
- *in corridors. once a guard bot finds a player, the guard player is informed of the players level, in addition a map is temporarily displayed
- *on his screen indicating the location of the player. once the player hides however, the map will then dissapear after a set period of time. this
+ *         Guard bot class creates guard bot object that move within each map.
+ *         the bots are able to detect a player, and are able to move along
+ *         predefined coordinates in map. the guard bot route is created using
+ *         mvoement strategies. depending on the strategy chosen certain parts
+ *         of the code are used and certain routes are taken. the bots also can
+ *         have different speeds at which they move. the bots are unable to
+ *         detect players inside rooms, only in corridors. once a guard bot
+ *         finds a player, the guard player is informed of the players level, in
+ *         addition a map is temporarily displayed on his screen indicating the
+ *         location of the player. once the player hides however, the map will
+ *         then dissapear after a set period of time. this
  *
  */
 
@@ -103,7 +109,7 @@ public class GuardBot extends Player implements Drawable {
 		this.u = 0;
 		this.i = 0;
 		this.guardVelocity = guardVelocity;
-		this.guardSpeedMultiplier = guardVelocity*10;
+		this.guardSpeedMultiplier = guardVelocity * 10;
 		this.DetectionStrength = 50;
 		this.z = 0;
 		this.width = width;
@@ -163,12 +169,20 @@ public class GuardBot extends Player implements Drawable {
 			// and
 			// run the
 			// move method again
-			if ((u == Math.round((distance[i] - 1) * ((2/guardVelocity))/2)  && i == (directionList.size() - 1))) {
+
+
+			//System.out.println("guard " + getName() + " screen " + screen.drawFPS);
+			//System.out.println("guard vel " + guardVelocity + " guard v mult " + guardSpeedMultiplier + " guard " + getName() + " on floor " + level);
+			if ((u == Math.round((distance[i] - 1) * ((2 / guardVelocity)) / 2) && i == (directionList.size() - 1))) {
+
 				this.reverseStrategy();
+
 				i = 0;
 				u = 0;
 				return;
-			} else if ((u == Math.round((distance[i] - 1) * ((2/guardVelocity))/2)  && i < (directionList.size() - 1))) {
+			} else if ((u == Math.round((distance[i] - 1) * ((2 / guardVelocity)) / 2)
+					&& i < (directionList.size() - 1))) {
+
 				i++;
 				u = 0;
 				this.updateDirection();
@@ -177,25 +191,24 @@ public class GuardBot extends Player implements Drawable {
 
 			if (this.dir.equals(Dir.EAST)) {
 
-				updatePosition(guardSpeedMultiplier , 0, 0);
+				updatePosition(guardSpeedMultiplier, 0, 0);
 				this.updateDirection();
-				u = u + 1 ;
+				u = u + 1;
 
 			} else if (this.dir.equals(Dir.WEST)) {
-				updatePosition(-guardSpeedMultiplier , 0, 0);
+				updatePosition(-guardSpeedMultiplier, 0, 0);
 				this.updateDirection();
-				u = u + 1 ;
+				u = u + 1;
 
 			} else if (this.dir.equals(Dir.NORTH)) {
 				updatePosition(0, -guardSpeedMultiplier, 0);
 				this.updateDirection();
-				u = u + 1 ;
+				u = u + 1;
 
 			} else if (this.dir.equals(Dir.SOUTH)) {
-
-				updatePosition(0, guardSpeedMultiplier , 0);
+				updatePosition(0, guardSpeedMultiplier, 0);
 				this.updateDirection();
-				u = u + 1 ;
+				u = u + 1;
 
 			}
 
@@ -205,13 +218,10 @@ public class GuardBot extends Player implements Drawable {
 			// intruder detected, so we set timer for map to display on guards
 			// screen
 			this.screen.timer = 200;
-			/*
-			 * if (guardSpeed < 1) guardSpeed += 0.01;
-			 */
+
 		}
 
 	}
-
 
 	/**
 	 * get the floor number
@@ -307,10 +317,17 @@ public class GuardBot extends Player implements Drawable {
 			this.revertDistance();
 			directionList = strategy.getDirectionList();
 			this.dir = directionList.get(0);
-		}
-		if (this.moveStrategy == 17) {
+		} else if (this.moveStrategy == 17) {
 			this.moveStrategy = 18;
 			strategy = new GuardStrategy(18);
+			this.revertDistance();
+			directionList = strategy.getDirectionList();
+			this.dir = directionList.get(0);
+			// System.out.println(directionList.get(0));
+		} else if (this.moveStrategy == 18) {
+
+			this.moveStrategy = 17;
+			strategy = new GuardStrategy(17);
 			this.revertDistance();
 			directionList = strategy.getDirectionList();
 			this.dir = directionList.get(0);
@@ -389,13 +406,6 @@ public class GuardBot extends Player implements Drawable {
 
 		}
 		return false;
-	}
-
-	private boolean moveIsValid(Location p, GameObject c) {
-
-		return false;
-
-		// !board.squareAt(newPosition).isOccupied()
 	}
 
 	/**
@@ -495,9 +505,9 @@ public class GuardBot extends Player implements Drawable {
 			}
 
 			if (moveStrategy == 18) {
-				directionList.add(Dir.EAST);
-				directionList.add(Dir.NORTH);
 				directionList.add(Dir.WEST);
+				directionList.add(Dir.NORTH);
+				directionList.add(Dir.EAST);
 			}
 
 		}

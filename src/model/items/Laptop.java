@@ -14,13 +14,14 @@ import java.util.List;
 public class Laptop extends Item implements Drawable{
 
     private final int LAPTOP_THICKNESS = 1;
+	private boolean locked;
 
     public String toString() {
     	return x + " " + y + " " + z + " " + width + " " + length + " " + height + " " + color;
     }
 
     public Laptop(int itemID, String itemType, double x, double y, double z, double width, double length, double height, Color c) {
-        super(itemID, itemType, x, y, z, width, length, height, c);
+        super(itemID, "David's Laptop", x, y, z, width, length, height, c);
 
         // Screen
         cubes.add(new Cube(x, y+length, z, width, LAPTOP_THICKNESS, height, c));
@@ -66,5 +67,15 @@ public class Laptop extends Item implements Drawable{
     public void addInteractions() {
         interactionsAvailable = new ArrayList<>();
         interactionsAvailable.add(Interaction.HACK);
+    ;
+    }
+    
+    public void setLock() {
+        this.locked = true;
+    }
+
+    public void unlock() {
+        this.locked = false;
+
     }
 }

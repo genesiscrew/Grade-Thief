@@ -1,6 +1,6 @@
 package model.items;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,6 +83,7 @@ public class Door extends Item {
      * @return
      */
     public boolean passedThrough() {
+    	
         double xOffset = Math.abs(locations[0][0] - locations[1][0]);
         double yOffset = Math.abs(locations[0][1] - locations[1][1]);
         if (xOffset + x > Math.max(locations[0][0], locations[1][0])
