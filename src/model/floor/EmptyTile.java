@@ -22,21 +22,32 @@ public class EmptyTile implements Tile {
 		return location;
 	}
 
+	/**
+	 * returns wheter empty tile occupied
+	 */
 	@Override
 	public boolean occupied() {
 		return isOccupied;
 	}
 
+	/**
+	 * sets the tile to be occupied
+	 */
 	public void setOccupied() {
 		this.isOccupied = true;
 	}
 
+	/**
+	 * unoccupies the tile
+	 */
 	public void setUnoccupied() {
 		this.isOccupied = false;
 	}
 
 
-
+/**
+ * sets the location of the EmptyTile;
+ */
 	@Override
 	public void setLocation(Location l) {
 		this.location = l;

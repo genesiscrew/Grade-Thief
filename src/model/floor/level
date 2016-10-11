@@ -39,13 +39,16 @@ wrrrrrrrrrrwrrrrrrrrrwrrrrrrrrrwrrrrrrrrrrrrweeeeeeewrrrrrrrrrrrwrrrrrrrrrrrrrrr
 wrrrrrrrrrrwrrrrrrrrrwrrrrrrrrrwrrrrrrrrrrrrweeeeeeewrrrrrrrrrrrwrrrrrrrrrrrrrrrrw
 wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 *
-1 5 10 0 1 1 1 255 0 0 item22 I KeyDraw
-2 5 11 0 1 1 1 255 0 0 item33 I KeyDraw
-3 5 12 0 1 1 1 255 0 0 item55 I KeyDraw
-5 5 14 0 1 1 1 255 0 0 item55 I KeyDraw
-6 5 15 0 10 10 10 255 0 0 item55 I Container 1 1
-50 5 15 0 1 1 1 255 0 0 item55 I KeyDraw
-51 5 15 0 1 1 1 255 0 0 item56 I KeyDraw
-51 34 31 6 5 5 2 255 0 255 itemLaptop I Laptop 1
+1 34 31 0 1 1 1 0 255 0 item56 I KeyDraw
+18 4 30 0 1 1 1 255 255 255 item56 I KeyDraw
+33 21 16 0 30 10 5 255 0 0 item27 I Table
+33 21 12 0 30 10 5 255 0 0 item27 I Table
+34 16 14 0 10 15 5 0 0 0 item28 I Chair
+37 5 14 0 1 1 1 255 0 0 item55 I KeyDraw
+44 5 15 0 1 1 1 255 0 0 item55 I KeyDraw
+7 5 16 0 10 10 10 255 0 0 item55 I Container 1 1
+299 5 16 0 1 1 1 255 0 0 item55 I KeyDraw
+.
+51 77 34 6 5 5 2 255 0 255 itemLaptop I Laptop 299
 
 .

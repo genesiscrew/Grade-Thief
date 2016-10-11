@@ -7,9 +7,7 @@ package model.floor;
 public class FloorMap {
 
 	private Tile[][] floorTiles;
-	// final int COTTON_FLOOR_WIDTH = 112; // DO NOT EDIT
-	// final int COTTON_FLOOR_HEIGHT = 67; // DO NOT EDIT
-	// grid size = 67 * 112 = 7504.
+
 	public final int FLOOR_WIDTH = 50;
 	public final int FLOOR_HEIGHT = 50;
 

@@ -33,43 +33,43 @@ public class MapDraw extends Item {
         cubes.add(new Cube(x, y + length, z, width, MAP_THICKNESS, height, c));
     }
 
-    @Override
+    @Override // see item.java
     public void setRotAdd() {
         // TODO Auto-generated method stub
 
     }
 
-    @Override
+    @Override // see item.java
     public void updateDirection(double toX, double toY) {
         // TODO Auto-generated method stub
 
     }
 
-    @Override
+    @Override // see item.java
     public void updatePoly() {
         // TODO Auto-generated method stub
 
     }
 
-    @Override
+    @Override // see item.java
     public void removeCube() {
         // TODO Auto-generated method stub
 
     }
 
-    @Override
+    @Override // see item.java
     public boolean containsPoint(int x, int y, int z) {
         // TODO Auto-generated method stub
         return false;
     }
 
-    @Override
+    @Override // see item.java
     public List<model.rendering.Polygon> getPolygons() {
         // TODO Auto-generated method stub
         return null;
     }
 
-    @Override
+    @Override // see item.java
     public void addInteractions() {
         interactionsAvailable = new ArrayList<>();
         interactionsAvailable.add(Interaction.TAKE);

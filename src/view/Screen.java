@@ -45,6 +45,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     public static final int PLAYING = 2;
     public static final int GAMEOVER = 3;
     public static final int GAMEWON = 4;
+    public Location otherPlayerLocation;
     public int timer;
     private boolean displayImage = false;
 
@@ -102,12 +103,21 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         this.controller = controller;
         this.guard = guard;
         this.currentPlayer = new Player(0, 0, 0, 0, 0, 0, null);
+
         this.currentPlayer.setRoom(roomName);
         this.GAMESTATUS = this.PLAYING;
-        if (guard)
+        if (guard) {
             otherPlayer = new model.characters.Player(20, 20, 0, 5, 3, 12, Color.green);
-        else
+            otherPlayer.setLocation(new Location(startX,startY));
+            currentPlayer.setLocation(new Location(startX,startY));
+
+        }
+        else{
             otherPlayer = new model.characters.Player(20, 20, 0, 5, 3, 12, Color.blue);
+            otherPlayer.setLocation(new Location(100,100));
+            currentPlayer.setLocation(new Location(100,100));
+
+        }
 
         otherPlayer.setRoom(roomName);
 
@@ -135,7 +145,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
     public Location getPlayerLocation() {
-        return new Location((int) (viewFrom[0] / 10), (int) (viewFrom[1] / 10));
+    	Location playerLocation = new Location((int) (viewFrom[0] / 10), (int) (viewFrom[1] / 10));
+    	currentPlayer.setLocation(playerLocation);
+    	return playerLocation;
+       // return new Location((int) (viewFrom[0] / 10), (int) (viewFrom[1] / 10));
     }
 
     @Override
@@ -186,8 +199,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         g.drawString("FPS: " + (int) drawFPS , 40, 40);
 
         Location l = getPlayerLocation();
-        if (l != null)
+        Location o = otherPlayer.getLocation();
+        if (l != null && o != null)
             g.drawString("Loc" + l.row() + " , " + l.column(), 40, 60);
+
 
         // Message display
         g.setFont(new Font("Arial", Font.BOLD, 20));
@@ -208,15 +223,35 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             countSinceMessageUpdate++;
         }
 
+         this.checkIfPlayerCaught();
         // Has the player won the game?
-        if (this.GAMESTATUS == this.GAMEWON)
-            showEndImage(g);
+        if (this.GAMESTATUS == this.GAMEWON){
+            showWinImage(g);
+        }
+        if (this.GAMESTATUS == this.GAMEOVER){
+        	showLoseImage(g);
+        }
+        this.currentPlayer.setLocation(new Location ((int)viewFrom[0], (int)viewFrom[1]));
+
 
         // Redraw
         sleepAndRefresh();
     }
 
-    private void showEndImage(Graphics g){
+    private void showLoseImage(Graphics g) {
+    	  g.setColor(Color.RED);
+          try {
+              BufferedImage img = ImageIO.read(new File("/home/wareinadam/SWEN222/Cleaned-Grade-Thief/grade-thief/dp.jpg"));
+              g.drawImage(img, 0, 0, (int)screenSize.getWidth(), (int)screenSize.getHeight(),  null);
+          } catch (IOException e) {
+              e.printStackTrace();
+          }
+          g.drawString("You were Caught! Good luck trying to pass SWEN222 now!", (int) (screenSize.getWidth() / 2) - 100, (int) (screenSize.getHeight() / 2));
+          displayImage = true;
+
+	}
+
+	private void showWinImage(Graphics g){
         g.setColor(Color.RED);
         try {
             BufferedImage img = ImageIO.read(new File("/home/wareinadam/SWEN222/Cleaned-Grade-Thief/grade-thief/dp.jpg"));
@@ -233,19 +268,21 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      * match those of other playing, indicating he has been caught, or whether player got a special item
      * in his inventory indicating he has succesfully got access to david's computer
      */
-    private void updateGameStatus() {
+    private void checkIfPlayerCaught() {
         if (!this.guard) {
+        	System.out.println("we are checking if users touched");
             // check whether player coordinate correspond with other player,
             // hence he is caught
-            if (viewFrom[0] == this.otherPlayer.getX() && viewFrom[1] == this.otherPlayer.getY()) {
-                this.GAMESTATUS = this.GAMEOVER;
+//            if (viewFrom[0] == this.otherPlayer.getX() && viewFrom[1] == this.otherPlayer.getY()) {
+        	System.out.println(this.currentPlayer.getLocation().toString() + " .current. ");
+        	System.out.println(this.otherPlayer.getLocation().toString() + " .other. ");
+        	otherPlayer.setLocation(new Location((int) Math.floor(this.otherPlayer.getLocation().row()/10),
+        			(int) Math.floor(this.otherPlayer.getLocation().column()/10)));
 
-            }
-            //TODO: need to create the special item
-            if (this.currentPlayer.getInventory().contains(null)) {
-                // player has unlocked davids computer using a key and has a unique item added to his inventory, his modified grade sheet
-                // if this item exists in inventory you win the game
-                this.GAMESTATUS = this.GAMEWON;
+
+        	if (this.currentPlayer.getLocation().toString().equals(otherPlayer.getLocation().toString())) {
+                this.GAMESTATUS = this.GAMEOVER;
+                System.out.println("game is over");
 
             }
 
@@ -253,14 +290,10 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             if (viewFrom[0] == this.otherPlayer.getX() && viewFrom[1] == this.otherPlayer.getY()) {
                 this.GAMESTATUS = this.GAMEWON;
             }
-            //TODO: need to create the special item
-            if (this.otherPlayer.getInventory().contains(null)) {
-                // player has unlocked davids computer using a key and has a unique item added to his inventory, his modified grade sheet
-                // if this item exists in inventory you win the game
-                this.GAMESTATUS = this.GAMEWON;
-            }
+
         }
     }
+
 
     private void isPlayerDetected() {
         if (timer == 200) {
@@ -328,7 +361,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e)  {
         if (e.getKeyCode() == KeyEvent.VK_W)
             keys[0] = true;
         if (e.getKeyCode() == KeyEvent.VK_A)
@@ -344,7 +377,12 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         if (e.getKeyCode() == KeyEvent.VK_U)
             changeAllDoorState();
         if (e.getKeyCode() == KeyEvent.VK_E)
+        	try {
             playerWantingToInteractWithItem();
+        	}
+        catch (Exception u) {
+
+        }
         if (e.getKeyCode() == KeyEvent.VK_I)
             showInventory();
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
@@ -395,6 +433,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
             if (n == 0) // doorOpened
             {
                 Location l = getPlayerLocation();
+
 
                 if (l.row() == 80 && l.column() == 5) // hard coded to switch floor
                     loadMap("level2", 1);
@@ -555,6 +594,9 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         return n;
     }
 
+    /**
+     * locks / unlocks all doors; testing purposes
+     */
     private void changeAllDoorState() {
         room.getDoors().forEach(d -> d.changeState());
     }

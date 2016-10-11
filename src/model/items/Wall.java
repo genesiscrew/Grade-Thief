@@ -19,32 +19,32 @@ public class Wall extends Item {
     }
 
 
-    @Override
+    @Override // see item.java
     public void setRotAdd() {
         cube.setRotAdd();
     }
 
-    @Override
+    @Override // see item.java
     public void updateDirection(double toX, double toY) {
         cube.updateDirection(toX, toY);
     }
 
-    @Override
+    @Override // see item.java
     public void updatePoly() {
         cube.updatePoly();
     }
 
-    @Override
+    @Override // see item.java
     public void removeCube() {
         cube.removeCube();
     }
 
-    @Override
+    @Override // see item.java
     public boolean containsPoint(int x, int y, int z) {
         return (this.x + this.width) > x && (this.y + this.length) > y && this.x < x && this.y < y ;
     }
 
-    @Override
+    @Override // see item.java
     public List<Polygon> getPolygons() {
         List<Polygon> allPolys = new ArrayList<>();
         // Add all the cubes polygons

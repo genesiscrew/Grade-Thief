@@ -1,5 +1,6 @@
 package model.characters;
 
+import model.floor.Location;
 import model.items.Item;
 import model.rendering.Cube;
 import model.rendering.Drawable;
@@ -27,6 +28,7 @@ public class Player implements Drawable {
 	private String levelName;
 	private boolean inRoom;
 	private int roomCounter;
+	private Location location;
 
     public Player(double x, double y, double z, double width, double length, double height, Color c) {
     	inventory = new ArrayList<Item>();
@@ -73,51 +75,67 @@ public class Player implements Drawable {
         cubes.forEach(c -> c.updatePosition(dx, dy, dz));
     }
 
-    @Override
+    @Override // see item.java
     public void setRotAdd() {
         cubes.forEach(i -> i.setRotAdd());
     }
 
-    @Override
+    @Override // see item.java
     public void updateDirection(double toX, double toY) {
         cubes.forEach(i -> i.updateDirection(toX, toY));
     }
 
-    @Override
+    @Override // see item.java
     public void updatePoly() {
         cubes.forEach(i -> i.updatePoly());
     }
 
-    @Override
+    @Override // see item.java
     public void removeCube() {
         cubes.forEach(i -> i.removeCube());
     }
 
-    @Override
+    @Override // see item.java
     public boolean containsPoint(int x, int y, int z) {
         return (this.x + this.width) > x && (this.y + this.length) > y && this.x < x && this.y < y;
         //  && (this.z + this.height) > z && this.z > z;
     }
 
-    @Override
+    @Override // see item.java
     public java.util.List<Polygon> getPolygons() {
         java.util.List<Polygon> allPolys = new ArrayList<>();
         // Add all the cubes cubes
         cubes.forEach(c -> allPolys.addAll(c.getPolygons()));
         return allPolys;
     }
+    /**
+     * returns the onscreen zo f the player
+     * @return
+     */
     public double getZ() {
         return z;
     }
 
+    /**
+     * returns the onscreen y of the player
+     * @return
+     */
     public double getY() {
         return y;
     }
 
+    /**
+     * returns the onscreen x of the player
+     * @return
+     */
     public double getX() {
         return x;
     }
 
+    /**
+     * returns the arraylist of the items in the inventory
+     * @return
+     */
 	public List<Item> getInventory() {
 		return inventory;
 	}
@@ -131,10 +149,18 @@ public class Player implements Drawable {
         return false;
     }
 
+    /**
+     * removes an item from the inventory by removing it from the arrayList
+     * @param item
+     */
 	public void removeFromInventory(Item item) {
 		this.inventory.remove(item);
 	}
 
+	/**
+	 * adds the item to the inventory by adding to the ArrayList
+	 * @param item
+	 */
 	public void addToInventory(Item item) {
 		this.inventory.add(item);
 	}
@@ -147,7 +173,7 @@ public class Player implements Drawable {
         if (jumping)
             return;
         Thread jumpingThread = new Thread() {
-            @Override
+            @Override // see item.java
             public void run() {
                 for (int i = 0; i < 5; i++) {
                     viewFrom[2] += 2;
@@ -182,7 +208,7 @@ public class Player implements Drawable {
 
 	public void inRoom(boolean b) {
 		this.inRoom = b;
-		
+
 	}
 
 	public boolean isInRoom() {
@@ -192,14 +218,22 @@ public class Player implements Drawable {
 
 	public void incrementRoomCounter() {
 		this.roomCounter++;
-		
+
 	}
 	public void resetRoomCounter() {
 		this.roomCounter = 0;
-		
+
 	}
 	public int getRoomCounter() {
 		return this.roomCounter;
-		
+
+	}
+
+	public Location getLocation() {
+		return this.location;
+	}
+	public void setLocation(Location location) {
+		this.location = location;
+
 	}
 }

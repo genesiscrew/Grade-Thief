@@ -33,33 +33,33 @@ public class Table extends Item {
         cubes.add(new Cube(x, y, z + legHeight, width, length, TABLE_THICKNESS, c));
     }
 
-    @Override
+    @Override // see item.java
     public void setRotAdd() {
         cubes.forEach(i -> i.setRotAdd());
     }
 
-    @Override
+    @Override // see item.java
     public void updateDirection(double toX, double toY) {
         cubes.forEach(i -> i.updateDirection(toX, toY));
     }
 
-    @Override
+    @Override // see item.java
     public void updatePoly() {
         cubes.forEach(i -> i.updatePoly());
     }
 
-    @Override
+    @Override // see item.java
     public void removeCube() {
         cubes.forEach(i -> i.removeCube());
     }
 
-    @Override
+    @Override // see item.java
     public boolean containsPoint(int x, int y, int z) {
         return (this.x + this.width) > x && (this.y + this.length) > y && this.x < x && this.y < y;
         //  && (this.z + this.height) > z && this.z > z;
     }
 
-    @Override
+    @Override // see item.java
     public List<Polygon> getPolygons() {
         java.util.List<Polygon> allPolys = new ArrayList<>();
         // Add all the cubes cubes
@@ -67,7 +67,7 @@ public class Table extends Item {
         return allPolys;
     }
 
-    @Override
+    @Override // see item.java
     public void addInteractions() {
         interactionsAvailable = new ArrayList<>();
     }
