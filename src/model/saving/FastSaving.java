@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JOptionPane;
+import javax.xml.transform.Templates;
 
 import controller.GameController;
 import model.items.Item;
@@ -56,17 +57,24 @@ public class FastSaving {
 
 	public void save() {
 
+
+
+
 		double x;
 		double y;
 		double z;
 		if(GameController.isGuard() == true){
 			double[] tmp = GameController.getGuardPosition();
 			x = tmp[0];
+
 			y = tmp[1];
+
+
 			z = tmp[2];
 		}else{
 			double[] tmp = GameController.getPlayerPosition();
 			x = tmp[0];
+
 			y = tmp[1];
 			z = tmp[2];
 		}
