@@ -1,5 +1,6 @@
 package model.items;
 
+import model.items.Item.Interaction;
 import model.rendering.Cube;
 import model.rendering.Drawable;
 import model.rendering.Polygon;
@@ -67,7 +68,7 @@ public class Laptop extends Item implements Drawable{
     @Override // see item.java
     public void addInteractions() {
         interactionsAvailable = new ArrayList<>();
-        interactionsAvailable.add(Interaction.HACK);
+        interactionsAvailable.add(Interaction.UNLOCK);
     ;
     }
 

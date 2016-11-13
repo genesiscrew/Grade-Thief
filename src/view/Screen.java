@@ -241,7 +241,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
     private void showLoseImage(Graphics g) {
     	  g.setColor(Color.RED);
           try {
-              BufferedImage img = ImageIO.read(new File("/home/wareinadam/SWEN222/Cleaned-Grade-Thief/grade-thief/dp.jpg"));
+              BufferedImage img = ImageIO.read(new File("/am/courtenay/home1/abubakhami/workspace/grade-thief/dp.jpg"));
               g.drawImage(img, 0, 0, (int)screenSize.getWidth(), (int)screenSize.getHeight(),  null);
           } catch (IOException e) {
               e.printStackTrace();
@@ -254,7 +254,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 	private void showWinImage(Graphics g){
         g.setColor(Color.RED);
         try {
-            BufferedImage img = ImageIO.read(new File("/home/wareinadam/SWEN222/Cleaned-Grade-Thief/grade-thief/dp.jpg"));
+            BufferedImage img = ImageIO.read(new File("/am/courtenay/home1/abubakhami/workspace/grade-thief/dp.jpg"));
             g.drawImage(img, 0, 0, (int)screenSize.getWidth(), (int)screenSize.getHeight(),  null);
         } catch (IOException e) {
             e.printStackTrace();
@@ -270,12 +270,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
      */
     private void checkIfPlayerCaught() {
         if (!this.guard) {
-        	System.out.println("we are checking if users touched");
-            // check whether player coordinate correspond with other player,
-            // hence he is caught
-//            if (viewFrom[0] == this.otherPlayer.getX() && viewFrom[1] == this.otherPlayer.getY()) {
-        	System.out.println(this.currentPlayer.getLocation().toString() + " .current. ");
-        	System.out.println(this.otherPlayer.getLocation().toString() + " .other. ");
+
         	otherPlayer.setLocation(new Location((int) Math.floor(this.otherPlayer.getLocation().row()/10),
         			(int) Math.floor(this.otherPlayer.getLocation().column()/10)));
 
@@ -477,7 +472,7 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
         }
         viewFrom[0] = room.getPlayerStart().row();
         viewFrom[1] = room.getPlayerStart().column();
-        this.controller.setupGuardbots(this);
+        //this.controller.setupGuardbots(this);
         polyDrawer.updateRoom(room);
     }
 
@@ -542,7 +537,8 @@ public class Screen extends JPanel implements KeyListener, MouseListener, MouseM
 					if (currentPlayer.containsKeyInInventory(l.getKeyID())) {
 						// player has unlocked david's laptop, so he won the game
 						l.unlock();
-						this.GAMESTATUS = this.GAMEWON;
+						interactions.add(Interaction.HACK);
+
 					} else {
 						messageToDisplay2 = "You need the key " + l.getKeyID() + ", to unlock the " + name;
 

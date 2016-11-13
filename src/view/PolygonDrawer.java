@@ -128,8 +128,7 @@ public class PolygonDrawer {
 		// gets the other player's polygons only if he is in same room as
 		// current player
 		if (otherPlayer.getLevelName().equals(RoomName)) {
-			allPolygons.addAll(PlayerMovement.updateOtherPlayersPosition(otherPos, otherPlayer)); // other
-																									// player
+			allPolygons.addAll(PlayerMovement.updateOtherPlayersPosition(otherPos, otherPlayer)); // other																									// player
 		}
 
 		for (GuardBot r : this.controller.getGuardList())

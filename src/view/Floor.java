@@ -46,8 +46,7 @@ public class Floor {
         this.xOffset = xOffset;
         this.yOffset = yOffset;
 
-        System.out.printf("Width: %d, Height: %d \n", mapWidth, mapHeight);
-        System.out.printf("x: %d, y: %d \n", xOffset, yOffset);
+
     }
 
     /**
@@ -97,6 +96,9 @@ public class Floor {
         for (int x = 0; x < tileMap.length; x++) {
             for (int y = 0; y < tileMap[x].length; y++) {
                 if (tileMap[x][y] instanceof DoorTile) {
+                	if (doorCount == 44){
+                		doorCount = 0;
+                	}
                     Door door = new Door(doorCount++, "", x * tileSize, y * tileSize, 0, tileSize, tileSize, WALL_HEIGHT, DOOR_COLOR);
                     doors.add(door);
                 }

@@ -140,7 +140,7 @@ public class SaveGame {
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File(this.fileName));
+			StreamResult result = new StreamResult("//am//courtenay//home1//abubakhami//workspace//grade-thief//src//model//saving//sample.xml");
 			transformer.transform(source, result);
 			// Output to console for testing
 			StreamResult consoleResult = new StreamResult(System.out);
@@ -149,5 +149,11 @@ public class SaveGame {
 			e.printStackTrace();
 		}
 	}
+
+	public static void main (String[] args){
+		SaveGame tmp = new SaveGame("sample");
+		tmp.save();
+	}
+
 
 }
